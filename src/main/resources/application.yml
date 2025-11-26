@@ -1,0 +1,148 @@
+spring:
+  application:
+    name: EduChain
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/educhain_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    open-in-view: false
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+  
+  # Jackson Configuration
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: GMT+8
+  
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+  
+  # Security Configuration
+  security:
+    user:
+      name: admin
+      password: admin123
+
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT Configuration
+jwt:
+  secret: educhain-jwt-secret-key-2024-very-long-and-secure
+  expiration: 86400000 # 24 hours in milliseconds
+  refresh-expiration: 604800000 # 7 days in milliseconds
+
+# File Storage Configuration
+file:
+  upload:
+    path: ./uploads/
+    max-size: 10485760 # 10MB
+    allowed-types: jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,mp4,avi,mov
+
+# Logging Configuration
+logging:
+  level:
+    com.example.educhain: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/educhain.log
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/educhain_db_dev?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+---
+# Test Profile
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+logging:
+  level:
+    com.example.educhain: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
