@@ -2,6 +2,8 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { message } from 'antd';
 import type { ApiResponse } from '@/types/api';
+import { TokenManager } from '@/utils/auth';
+import { Storage, STORAGE_KEYS } from '@/utils/storage';
 
 // 扩展 AxiosRequestConfig 类型以包含 metadata
 declare module 'axios' {
@@ -21,13 +23,92 @@ const api: AxiosInstance = axios.create({
   },
 });
 
+// Token刷新状态管理
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value: any) => void;
+  reject: (reason: any) => void;
+}> = [];
+
+// 处理队列中的请求
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+  
+  failedQueue = [];
+};
+
+// 刷新token
+const refreshTokenIfNeeded = async (): Promise<string | null> => {
+  const refreshToken = TokenManager.getStoredRefreshToken();
+  
+  if (!refreshToken) {
+    throw new Error('No refresh token available');
+  }
+
+  if (isRefreshing) {
+    // 如果正在刷新，将请求加入队列
+    return new Promise((resolve, reject) => {
+      failedQueue.push({ resolve, reject });
+    });
+  }
+
+  isRefreshing = true;
+
+  try {
+    const response = await axios.post('/api/auth/refresh', {
+      refreshToken: refreshToken,
+    });
+
+    const { token: newToken, refreshToken: newRefreshToken } = response.data.data;
+    
+    // 更新存储的token
+    Storage.setLocal(STORAGE_KEYS.TOKEN, newToken);
+    Storage.setLocal(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
+    
+    processQueue(null, newToken);
+    
+    return newToken;
+  } catch (error) {
+    processQueue(error, null);
+    
+    // 刷新失败，清除认证信息
+    TokenManager.clearAuthStorage();
+    
+    throw error;
+  } finally {
+    isRefreshing = false;
+  }
+};
+
 // 请求拦截器
 api.interceptors.request.use(
-  config => {
+  async config => {
     // 添加认证token
-    const token = localStorage.getItem('token');
+    const token = TokenManager.getStoredToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      // 检查token是否即将过期，如果是则尝试刷新
+      if (TokenManager.isTokenExpiringSoon(token)) {
+        try {
+          await refreshTokenIfNeeded();
+          // 获取新的token
+          const newToken = TokenManager.getStoredToken();
+          if (newToken) {
+            config.headers.Authorization = `Bearer ${newToken}`;
+          }
+        } catch (error) {
+          console.error('Failed to refresh token:', error);
+          // 如果刷新失败，仍然使用原token，让后端处理
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } else {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
 
     // 添加请求时间戳
@@ -61,7 +142,9 @@ api.interceptors.response.use(
 
     return response;
   },
-  error => {
+  async error => {
+    const originalRequest = error.config;
+    
     console.error('Response error:', error);
 
     if (error.response) {
@@ -69,9 +152,35 @@ api.interceptors.response.use(
 
       switch (status) {
         case 401:
+          // 如果是刷新token的请求失败，直接跳转登录
+          if (originalRequest.url?.includes('/auth/refresh')) {
+            message.error('登录已过期，请重新登录');
+            TokenManager.clearAuthStorage();
+            window.location.href = '/login';
+            break;
+          }
+
+          // 如果还没有尝试刷新token，则尝试刷新
+          if (!originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+              const newToken = await refreshTokenIfNeeded();
+              if (newToken) {
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return api(originalRequest);
+              }
+            } catch (refreshError) {
+              console.error('Token refresh failed:', refreshError);
+              message.error('登录已过期，请重新登录');
+              TokenManager.clearAuthStorage();
+              window.location.href = '/login';
+              break;
+            }
+          }
+
           message.error('登录已过期，请重新登录');
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
+          TokenManager.clearAuthStorage();
           window.location.href = '/login';
           break;
         case 403:
