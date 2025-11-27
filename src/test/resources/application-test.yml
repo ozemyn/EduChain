@@ -23,3 +23,8 @@ logging:
   level:
     com.example.educhain: DEBUG
     org.springframework.security: DEBUG
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr([%15.15t]){faint} %clr(%-5level){spring} %clr(%30.30logger{29}){cyan} %clr(:){faint} %m%n%wEx"
+  # 启用彩色输出
+  ansi:
+    enabled: always

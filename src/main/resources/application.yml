@@ -1,6 +1,8 @@
 spring:
   application:
     name: EduChain
+  main:
+    allow-bean-definition-overriding: true
   
   # Database Configuration
   datasource:
@@ -75,10 +77,13 @@ logging:
     org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%15.15t]){faint} %clr(%-5level){spring} %clr(%40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
   file:
     name: logs/educhain.log
+  # 启用彩色输出
+  ansi:
+    enabled: always
 
 # Swagger/OpenAPI Configuration
 springdoc:
@@ -112,6 +117,18 @@ spring:
       ddl-auto: create-drop
     show-sql: true
 
+# 开发环境日志配置
+logging:
+  level:
+    com.example.educhain: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){blue} %clr([%15.15t]){magenta} %clr(%-5level){highlight} %clr([%logger{36}]){cyan} %clr(:){faint} %clr(%msg){green}%n%clr(%wEx){red}"
+  ansi:
+    enabled: always
+
 ---
 # Test Profile
 spring:
@@ -141,8 +158,15 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: false
+
+# 生产环境日志配置
 logging:
   level:
     com.example.educhain: INFO
     org.springframework.security: WARN
     org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
+  ansi:
+    enabled: detect  # 生产环境自动检测是否支持彩色
