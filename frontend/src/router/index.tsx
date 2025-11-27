@@ -1,0 +1,143 @@
+import React, { Suspense } from 'react';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { Spin } from 'antd';
+import Layout from '@/components/layout/Layout';
+import ProtectedRoute from '@/components/common/ProtectedRoute';
+
+// 懒加载页面组件
+const HomePage = React.lazy(() => import('@/pages/Home'));
+const LoginPage = React.lazy(() => import('@/pages/auth/Login'));
+const RegisterPage = React.lazy(() => import('@/pages/auth/Register'));
+const ProfilePage = React.lazy(() => import('@/pages/user/Profile'));
+const KnowledgeListPage = React.lazy(
+  () => import('@/pages/knowledge/KnowledgeList')
+);
+const KnowledgeDetailPage = React.lazy(
+  () => import('@/pages/knowledge/KnowledgeDetail')
+);
+const CreateKnowledgePage = React.lazy(
+  () => import('@/pages/knowledge/CreateKnowledge')
+);
+const SearchPage = React.lazy(() => import('@/pages/search/Search'));
+const NotFoundPage = React.lazy(() => import('@/pages/error/NotFound'));
+
+// 加载组件包装器
+// eslint-disable-next-line react-refresh/only-export-components
+const LoadingWrapper: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => (
+  <Suspense
+    fallback={
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '200px',
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    }
+  >
+    {children}
+  </Suspense>
+);
+
+ 
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <LoadingWrapper>
+            <HomePage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'knowledge',
+        children: [
+          {
+            index: true,
+            element: (
+              <LoadingWrapper>
+                <KnowledgeListPage />
+              </LoadingWrapper>
+            ),
+          },
+          {
+            path: ':id',
+            element: (
+              <LoadingWrapper>
+                <KnowledgeDetailPage />
+              </LoadingWrapper>
+            ),
+          },
+          {
+            path: 'create',
+            element: (
+              <ProtectedRoute>
+                <LoadingWrapper>
+                  <CreateKnowledgePage />
+                </LoadingWrapper>
+              </ProtectedRoute>
+            ),
+          },
+        ],
+      },
+      {
+        path: 'search',
+        element: (
+          <LoadingWrapper>
+            <SearchPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <LoadingWrapper>
+              <ProfilePage />
+            </LoadingWrapper>
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: '/login',
+    element: (
+      <LoadingWrapper>
+        <LoginPage />
+      </LoadingWrapper>
+    ),
+  },
+  {
+    path: '/register',
+    element: (
+      <LoadingWrapper>
+        <RegisterPage />
+      </LoadingWrapper>
+    ),
+  },
+  {
+    path: '/404',
+    element: (
+      <LoadingWrapper>
+        <NotFoundPage />
+      </LoadingWrapper>
+    ),
+  },
+  {
+    path: '*',
+    element: <Navigate to="/404" replace />,
+  },
+]);
+
+ 
+export default router;
