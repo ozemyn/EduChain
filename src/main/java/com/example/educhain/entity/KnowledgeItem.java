@@ -25,7 +25,8 @@ import java.util.List;
     @Index(name = "idx_category_id", columnList = "category_id"),
     @Index(name = "idx_type", columnList = "type"),
     @Index(name = "idx_status", columnList = "status"),
-    @Index(name = "idx_created_at", columnList = "created_at")
+    @Index(name = "idx_created_at", columnList = "created_at"),
+    @Index(name = "idx_tags", columnList = "tags")
 })
 @EntityListeners(AuditingEntityListener.class)
 public class KnowledgeItem {

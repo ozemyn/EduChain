@@ -113,4 +113,37 @@ public interface KnowledgeItemRepository extends JpaRepository<KnowledgeItem, Lo
      */
     @Query("UPDATE KnowledgeItem k SET k.status = :newStatus WHERE k.id IN :ids")
     int updateStatusByIds(@Param("ids") List<Long> ids, @Param("newStatus") Integer newStatus);
+
+    /**
+     * MySQL FULLTEXT 全文搜索 - 自然语言模式
+     */
+    @Query(value = "SELECT * FROM knowledge_items WHERE " +
+                   "MATCH(title, content, tags) AGAINST(:keyword IN NATURAL LANGUAGE MODE) " +
+                   "AND status = :status " +
+                   "ORDER BY created_at DESC",
+           nativeQuery = true)
+    Page<KnowledgeItem> fullTextSearchNatural(@Param("keyword") String keyword, 
+                                            @Param("status") Integer status, 
+                                            Pageable pageable);
+
+    /**
+     * MySQL FULLTEXT 全文搜索 - 布尔模式
+     */
+    @Query(value = "SELECT * FROM knowledge_items WHERE " +
+                   "MATCH(title, content, tags) AGAINST(:keyword IN BOOLEAN MODE) " +
+                   "AND status = :status " +
+                   "ORDER BY created_at DESC",
+           nativeQuery = true)
+    Page<KnowledgeItem> fullTextSearchBoolean(@Param("keyword") String keyword, 
+                                            @Param("status") Integer status, 
+                                            Pageable pageable);
+
+    /**
+     * 获取全文搜索结果数量
+     */
+    @Query(value = "SELECT COUNT(*) FROM knowledge_items WHERE " +
+                   "MATCH(title, content, tags) AGAINST(:keyword IN NATURAL LANGUAGE MODE) " +
+                   "AND status = :status",
+           nativeQuery = true)
+    Long countFullTextSearch(@Param("keyword") String keyword, @Param("status") Integer status);
 }

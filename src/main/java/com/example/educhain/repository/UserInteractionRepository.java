@@ -128,4 +128,14 @@ public interface UserInteractionRepository extends JpaRepository<UserInteraction
      */
     boolean existsByKnowledgeIdAndIpAddressAndInteractionTypeAndCreatedAtAfter(
             Long knowledgeId, String ipAddress, UserInteraction.InteractionType interactionType, LocalDateTime time);
+
+    /**
+     * 检查用户是否已经对知识内容进行了任何互动
+     */
+    boolean existsByUserIdAndKnowledgeId(Long userId, Long knowledgeId);
+
+    /**
+     * 获取对特定知识内容有互动的其他用户（排除指定用户）
+     */
+    List<UserInteraction> findByKnowledgeIdAndUserIdNot(Long knowledgeId, Long excludeUserId);
 }
