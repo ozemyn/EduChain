@@ -1,0 +1,60 @@
+.similarContent {
+  border-radius: 8px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+
+.listItem {
+  padding: 12px 0 !important;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+.itemContent {
+  width: 100%;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1890ff;
+  text-decoration: none;
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.title:hover {
+  color: #40a9ff;
+}
+
+.meta {
+  margin-bottom: 6px;
+}
+
+.author {
+  font-size: 12px;
+}
+
+.date {
+  font-size: 12px;
+}
+
+.stats {
+  color: #999;
+  font-size: 12px;
+}
+
+.stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

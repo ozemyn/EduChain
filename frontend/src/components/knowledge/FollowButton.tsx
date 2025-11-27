@@ -41,6 +41,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
     if (user && userId !== user.id) {
       fetchFollowStats();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, user]);
 
   // 处理关注/取消关注
@@ -78,7 +79,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
         onFollowChange?.(true, newStats);
         message.success('关注成功');
       }
-    } catch (error) {
+    } catch {
       message.error('操作失败，请稍后重试');
     } finally {
       setLoading(false);

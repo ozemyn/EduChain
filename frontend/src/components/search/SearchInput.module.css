@@ -1,0 +1,93 @@
+.searchInput {
+  width: 100%;
+}
+
+.dropdown {
+  max-width: 500px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-weight: 500;
+  color: #666;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.sectionHeader .anticon {
+  margin-right: 6px;
+}
+
+.clearBtn {
+  color: #999;
+  font-size: 12px;
+  padding: 0 4px;
+  height: auto;
+}
+
+.clearBtn:hover {
+  color: #1890ff;
+}
+
+.suggestionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.count {
+  color: #999;
+  font-size: 12px;
+}
+
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.deleteBtn {
+  color: #ccc;
+  font-size: 16px;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteBtn:hover {
+  color: #ff4d4f;
+  background-color: #fff2f0;
+}
+
+.hotKeywordItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.trend {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.trend.up {
+  color: #52c41a;
+}
+
+.trend.down {
+  color: #ff4d4f;
+}
+
+.trend.stable {
+  color: #999;
+}

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Typography, Card, Row, Col, Button } from 'antd';
+import { Typography, Card, Row, Col, Button, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { BookOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, SearchOutlined, UserOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { SearchInput } from '@/components/search';
+import { RecommendationList } from '@/components/recommendation';
 
 const { Title, Paragraph } = Typography;
 
@@ -16,14 +18,31 @@ const Home: React.FC = () => {
         <Paragraph style={{ fontSize: '18px', color: '#666' }}>
           教育知识共享平台，为学习者和教育者提供便捷的知识分享、交流和学习环境
         </Paragraph>
-        <Button
-          type="primary"
-          size="large"
-          onClick={() => navigate('/knowledge')}
-          style={{ marginTop: '16px' }}
-        >
-          开始探索
-        </Button>
+        
+        {/* 搜索框 */}
+        <div style={{ maxWidth: '600px', margin: '24px auto' }}>
+          <SearchInput 
+            placeholder="搜索知识内容、用户或标签..."
+            size="large"
+          />
+        </div>
+        
+        <Space size="large">
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => navigate('/knowledge')}
+          >
+            开始探索
+          </Button>
+          <Button
+            size="large"
+            onClick={() => navigate('/recommendations')}
+            icon={<ThunderboltOutlined />}
+          >
+            个性化推荐
+          </Button>
+        </Space>
       </div>
 
       {/* 功能介绍 */}
@@ -86,6 +105,17 @@ const Home: React.FC = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* 推荐内容 */}
+      <div style={{ marginTop: '64px' }}>
+        <RecommendationList
+          title="热门推荐"
+          showTabs={false}
+          defaultTab="trending"
+          limit={8}
+          compact={true}
+        />
+      </div>
     </div>
   );
 };

@@ -71,7 +71,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       setReplyContent('');
       setShowReplyInput(false);
       message.success('回复成功');
-    } catch (error) {
+    } catch {
       message.error('回复失败');
     } finally {
       setLoading(prev => ({ ...prev, reply: false }));
@@ -90,7 +90,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       await onEdit?.(comment.id, editContent);
       setShowEditInput(false);
       message.success('编辑成功');
-    } catch (error) {
+    } catch {
       message.error('编辑失败');
     } finally {
       setLoading(prev => ({ ...prev, edit: false }));
@@ -103,7 +103,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     try {
       await onDelete?.(comment.id);
       message.success('删除成功');
-    } catch (error) {
+    } catch {
       message.error('删除失败');
     } finally {
       setLoading(prev => ({ ...prev, delete: false }));
@@ -115,7 +115,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     setLoading(prev => ({ ...prev, loadReplies: true }));
     try {
       await onLoadReplies?.(comment.id);
-    } catch (error) {
+    } catch {
       message.error('加载回复失败');
     } finally {
       setLoading(prev => ({ ...prev, loadReplies: false }));

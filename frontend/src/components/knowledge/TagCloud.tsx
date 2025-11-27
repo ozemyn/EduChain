@@ -234,6 +234,7 @@ const TagCloud: React.FC<TagCloudProps> = ({
 
   useEffect(() => {
     loadTags();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tags]);
 
   return (

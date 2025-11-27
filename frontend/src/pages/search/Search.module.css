@@ -1,0 +1,44 @@
+.searchPage {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.searchHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 0;
+  margin-bottom: 24px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.title {
+  color: white !important;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+
+.searchInputWrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .searchHeader {
+    padding: 24px 0;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .title {
+    font-size: 24px !important;
+    margin-bottom: 16px;
+  }
+}

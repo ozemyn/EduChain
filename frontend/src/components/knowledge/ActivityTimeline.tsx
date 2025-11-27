@@ -156,7 +156,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
       setHasMore(pageNum < 3); // 模拟只有3页数据
       setPage(pageNum);
-    } catch (error) {
+    } catch {
       message.error('获取动态失败');
     } finally {
       setLoading(false);

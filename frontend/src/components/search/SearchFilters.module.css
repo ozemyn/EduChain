@@ -1,0 +1,65 @@
+.searchFilters {
+  margin-bottom: 16px;
+}
+
+.filtersContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filterItem {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filterItem label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.tagContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagItem {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.tagItem:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filterActions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .filterRow {
+    flex-direction: column;
+  }
+  
+  .filterItem {
+    min-width: auto;
+  }
+  
+  .filterActions {
+    justify-content: center;
+  }
+}

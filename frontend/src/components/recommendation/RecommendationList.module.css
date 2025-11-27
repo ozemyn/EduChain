@@ -1,0 +1,63 @@
+.recommendationList {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  margin: 0 !important;
+  color: #333;
+}
+
+.refreshBtn {
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.refreshBtn:hover {
+  color: #1890ff;
+  transform: rotate(180deg);
+}
+
+.tabs {
+  margin-bottom: 16px;
+}
+
+.tabs .ant-tabs-tab {
+  font-weight: 500;
+}
+
+.tabs .ant-tabs-tab-active {
+  color: #1890ff;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 0;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .refreshBtn {
+    align-self: flex-end;
+  }
+}

@@ -7,7 +7,7 @@ export class TokenManager {
   /**
    * 解析JWT Token
    */
-  static parseToken(token: string): any {
+  static parseToken(token: string): { exp?: number; [key: string]: unknown } | null {
     try {
       const payload = token.split('.')[1];
       return JSON.parse(atob(payload));

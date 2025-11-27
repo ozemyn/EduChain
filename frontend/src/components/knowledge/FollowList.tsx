@@ -41,14 +41,14 @@ const FollowList: React.FC<FollowListProps> = ({
   const [followingList, setFollowingList] = useState<UserFollow[]>([]);
   const [followersList, setFollowersList] = useState<UserFollow[]>([]);
   const [loading, setLoading] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  // const [searchKeyword, setSearchKeyword] = useState(''); // TODO: 实现搜索功能
   const [pagination, setPagination] = useState({
     following: { current: 1, pageSize: 20, total: 0 },
     followers: { current: 1, pageSize: 20, total: 0 },
   });
 
   // 获取关注列表
-  const fetchFollowing = async (page = 1, size = 20, _keyword = '') => {
+  const fetchFollowing = async (page = 1, size = 20) => {
     setLoading(true);
     try {
       const response = await interactionService.getFollowing(userId, {
@@ -65,7 +65,7 @@ const FollowList: React.FC<FollowListProps> = ({
           total: response.data.totalElements,
         },
       }));
-    } catch (error) {
+    } catch {
       message.error('获取关注列表失败');
     } finally {
       setLoading(false);
@@ -73,7 +73,7 @@ const FollowList: React.FC<FollowListProps> = ({
   };
 
   // 获取粉丝列表
-  const fetchFollowers = async (page = 1, size = 20, _keyword = '') => {
+  const fetchFollowers = async (page = 1, size = 20) => {
     setLoading(true);
     try {
       const response = await interactionService.getFollowers(userId, {
@@ -90,7 +90,7 @@ const FollowList: React.FC<FollowListProps> = ({
           total: response.data.totalElements,
         },
       }));
-    } catch (error) {
+    } catch {
       message.error('获取粉丝列表失败');
     } finally {
       setLoading(false);
@@ -103,30 +103,32 @@ const FollowList: React.FC<FollowListProps> = ({
     } else {
       fetchFollowers();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, activeTab]);
 
   // 处理标签页切换
   const handleTabChange = (key: string) => {
     setActiveTab(key);
-    setSearchKeyword('');
+    // setSearchKeyword(''); // TODO: 实现搜索功能
   };
 
   // 处理搜索
   const handleSearch = (value: string) => {
-    setSearchKeyword(value);
+    // setSearchKeyword(value); // TODO: 实现搜索功能
+    console.log('搜索关键词:', value);
     if (activeTab === 'following') {
-      fetchFollowing(1, pagination.following.pageSize, value);
+      fetchFollowing(1, pagination.following.pageSize);
     } else {
-      fetchFollowers(1, pagination.followers.pageSize, value);
+      fetchFollowers(1, pagination.followers.pageSize);
     }
   };
 
   // 处理分页
   const handlePageChange = (page: number, pageSize?: number) => {
     if (activeTab === 'following') {
-      fetchFollowing(page, pageSize || pagination.following.pageSize, searchKeyword);
+      fetchFollowing(page, pageSize || pagination.following.pageSize);
     } else {
-      fetchFollowers(page, pageSize || pagination.followers.pageSize, searchKeyword);
+      fetchFollowers(page, pageSize || pagination.followers.pageSize);
     }
   };
 

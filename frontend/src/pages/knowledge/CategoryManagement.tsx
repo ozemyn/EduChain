@@ -236,7 +236,7 @@ const CategoryManagement: React.FC = () => {
   };
 
   // 处理创建分类
-  const handleCategoryCreate = async (parentId: number | null, categoryData: any) => {
+  const handleCategoryCreate = async (parentId: number | null, categoryData: { name: string; description?: string }) => {
     try {
       // 模拟API调用
       console.log('Creating category:', { parentId, ...categoryData });
@@ -251,7 +251,7 @@ const CategoryManagement: React.FC = () => {
   };
 
   // 处理更新分类
-  const handleCategoryUpdate = async (categoryId: number, categoryData: any) => {
+  const handleCategoryUpdate = async (categoryId: number, categoryData: { name?: string; description?: string }) => {
     try {
       // 模拟API调用
       console.log('Updating category:', { categoryId, ...categoryData });
@@ -293,6 +293,7 @@ const CategoryManagement: React.FC = () => {
 
   useEffect(() => {
     loadCategories();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!user || user.role !== 'ADMIN') {

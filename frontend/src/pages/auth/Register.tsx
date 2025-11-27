@@ -21,6 +21,7 @@ const Register: React.FC = () => {
   const onFinish = async (values: RegisterFormData) => {
     try {
       setLoading(true);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...registerData } = values;
       await register(registerData);
       message.success('注册成功！请登录');

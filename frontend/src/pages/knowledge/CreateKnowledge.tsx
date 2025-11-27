@@ -254,6 +254,7 @@ const CreateKnowledge: React.FC = () => {
     return () => {
       clearInterval(timer);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, user]);
 
   if (loading) {

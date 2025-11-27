@@ -244,6 +244,7 @@ const KnowledgeDetail: React.FC = () => {
 
   useEffect(() => {
     loadKnowledgeDetail();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (loading) {

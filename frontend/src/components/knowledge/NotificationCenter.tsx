@@ -50,7 +50,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const fetchNotifications = async (page = 1, size = 20, type?: string) => {
     setLoading(true);
     try {
-      const params: any = {
+      const params: { page: number; size: number; type?: string } = {
         page: page - 1,
         size,
       };
@@ -72,7 +72,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
       const unread = response.data.content.filter(n => !n.isRead).length;
       setUnreadCount(unread);
       onUnreadCountChange?.(unread);
-    } catch (error) {
+    } catch {
       message.error('获取通知失败');
     } finally {
       setLoading(false);
@@ -93,6 +93,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   useEffect(() => {
     fetchNotifications();
     fetchUnreadCount();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 标记单个通知为已读
@@ -114,7 +115,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
       onUnreadCountChange?.(Math.max(0, unreadCount - 1));
       
       message.success('已标记为已读');
-    } catch (error) {
+    } catch {
       message.error('操作失败');
     } finally {
       setActionLoading(prev => ({ ...prev, [notificationId]: false }));
@@ -135,7 +136,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
       onUnreadCountChange?.(0);
       
       message.success('已标记所有通知为已读');
-    } catch (error) {
+    } catch {
       message.error('操作失败');
     }
   };

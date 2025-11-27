@@ -18,8 +18,8 @@ const { confirm } = Modal;
 interface CategoryTreeProps {
   categories?: Category[];
   onCategorySelect?: (categoryId: number | null, category: Category | null) => void;
-  onCategoryCreate?: (parentId: number | null, categoryData: any) => Promise<void>;
-  onCategoryUpdate?: (categoryId: number, categoryData: any) => Promise<void>;
+  onCategoryCreate?: (parentId: number | null, categoryData: { name: string; description?: string }) => Promise<void>;
+  onCategoryUpdate?: (categoryId: number, categoryData: { name?: string; description?: string }) => Promise<void>;
   onCategoryDelete?: (categoryId: number) => Promise<void>;
   selectedCategoryId?: number | null;
   showActions?: boolean;

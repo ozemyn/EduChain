@@ -53,7 +53,7 @@ export const usePermissions = () => {
           return false;
       }
     };
-  }, [user]);
+  }, [user, isAdmin]);
 
   // 检查是否可以编辑特定内容
   const canEditContent = useMemo(() => {

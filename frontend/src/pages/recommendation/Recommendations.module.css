@@ -1,0 +1,50 @@
+.recommendationsPage {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 0;
+  margin-bottom: 24px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.title {
+  color: white !important;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 24px 0;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .title {
+    font-size: 24px !important;
+    margin-bottom: 12px;
+  }
+  
+  .description {
+    font-size: 14px;
+  }
+}

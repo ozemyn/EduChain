@@ -57,7 +57,7 @@ const CommentList: React.FC<CommentListProps> = ({
       });
       
       onCommentCountChange?.(response.data.totalElements);
-    } catch (error) {
+    } catch {
       message.error('获取评论失败');
     } finally {
       setLoading(false);
@@ -66,6 +66,7 @@ const CommentList: React.FC<CommentListProps> = ({
 
   useEffect(() => {
     fetchComments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knowledgeId]);
 
   // 提交新评论
@@ -93,7 +94,7 @@ const CommentList: React.FC<CommentListProps> = ({
       
       // 重新获取评论列表
       await fetchComments(1, pagination.pageSize);
-    } catch (error) {
+    } catch {
       message.error('评论失败');
     } finally {
       setSubmitting(false);
@@ -152,29 +153,25 @@ const CommentList: React.FC<CommentListProps> = ({
 
   // 加载回复
   const handleLoadReplies = async (commentId: number) => {
-    try {
-      const response = await interactionService.getCommentReplies(commentId, {
-        page: 0,
-        size: 20,
+    const response = await interactionService.getCommentReplies(commentId, {
+      page: 0,
+      size: 20,
+    });
+
+    // 更新评论的回复列表
+    const updateCommentReplies = (comments: CommentWithReplies[]): CommentWithReplies[] => {
+      return comments.map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            replies: response.data.content,
+          };
+        }
+        return comment;
       });
+    };
 
-      // 更新评论的回复列表
-      const updateCommentReplies = (comments: CommentWithReplies[]): CommentWithReplies[] => {
-        return comments.map(comment => {
-          if (comment.id === commentId) {
-            return {
-              ...comment,
-              replies: response.data.content,
-            };
-          }
-          return comment;
-        });
-      };
-
-      setComments(updateCommentReplies(comments));
-    } catch (error) {
-      throw error;
-    }
+    setComments(updateCommentReplies(comments));
   };
 
   // 处理分页变化

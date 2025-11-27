@@ -48,7 +48,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
     '后端', '全栈', '移动开发', '人工智能', '机器学习', '深度学习'
   ];
 
-  const handleFilterChange = (key: keyof FilterValues, value: any) => {
+  const handleFilterChange = (key: keyof FilterValues, value: unknown) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
   };
@@ -83,6 +83,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
       }, 500);
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.keyword]);
 
   return (

@@ -1,0 +1,160 @@
+.searchResults {
+  width: 100%;
+}
+
+.resultSummary {
+  padding: 16px 0;
+  color: #666;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.resultCard {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.resultCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  margin-bottom: 12px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1890ff;
+  text-decoration: none;
+  line-height: 1.4;
+  display: block;
+}
+
+.title:hover {
+  color: #40a9ff;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cardContent {
+  margin-bottom: 16px;
+}
+
+.content {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.highlight {
+  background-color: #fff2e6;
+  color: #d46b08;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.authorName {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authorName:hover {
+  color: #1890ff;
+}
+
+.date {
+  font-size: 12px;
+}
+
+.category {
+  color: #1890ff;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 2px 6px;
+  background-color: #f0f8ff;
+  border-radius: 4px;
+}
+
+.category:hover {
+  background-color: #e6f7ff;
+}
+
+.stats {
+  color: #999;
+  font-size: 14px;
+}
+
+.stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.loadMore {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.loadMore button {
+  background: #1890ff;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.loadMore button:hover:not(:disabled) {
+  background: #40a9ff;
+}
+
+.loadMore button:disabled {
+  background: #d9d9d9;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .authorInfo {
+    flex-wrap: wrap;
+  }
+  
+  .stats {
+    align-self: flex-end;
+  }
+}

@@ -145,6 +145,7 @@ const KnowledgeList: React.FC = () => {
 
   useEffect(() => {
     loadKnowledgeList(pagination.current, pagination.pageSize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

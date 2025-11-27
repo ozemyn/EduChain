@@ -122,8 +122,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   };
 
   // 过滤选项
-  const filterOption = (input: string, option: any) => {
-    return option.children.toLowerCase().includes(input.toLowerCase());
+  const filterOption = (input: string, option?: { children: string }) => {
+    return option?.children.toLowerCase().includes(input.toLowerCase()) || false;
   };
 
   useEffect(() => {

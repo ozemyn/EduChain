@@ -65,6 +65,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
     if (!initialStats) {
       fetchStats();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knowledgeId, initialStats]);
 
   // 处理点赞
@@ -97,7 +98,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         
         message.success('点赞成功');
       }
-    } catch (error) {
+    } catch {
       message.error('操作失败，请稍后重试');
     } finally {
       setLoading(prev => ({ ...prev, like: false }));
@@ -134,7 +135,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         
         message.success('收藏成功');
       }
-    } catch (error) {
+    } catch {
       message.error('操作失败，请稍后重试');
     } finally {
       setLoading(prev => ({ ...prev, favorite: false }));
@@ -154,7 +155,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         await navigator.clipboard.writeText(window.location.href);
         message.success('链接已复制到剪贴板');
       }
-    } catch (error) {
+    } catch {
       message.error('分享失败');
     }
   };
