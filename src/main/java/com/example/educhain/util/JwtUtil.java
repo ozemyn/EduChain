@@ -220,4 +220,16 @@ public class JwtUtil {
             return 0L;
         }
     }
+
+    /**
+     * 从HTTP请求中获取用户ID
+     */
+    public Long getUserIdFromRequest(jakarta.servlet.http.HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            return getUserIdFromToken(token);
+        }
+        return null;
+    }
 }
