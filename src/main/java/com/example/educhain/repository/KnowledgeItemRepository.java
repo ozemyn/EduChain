@@ -159,4 +159,24 @@ public interface KnowledgeItemRepository extends JpaRepository<KnowledgeItem, Lo
      */
     @Query("SELECT COUNT(k) FROM KnowledgeItem k WHERE DATE(k.createdAt) = :date AND k.status = 1")
     Long countByCreatedAtDate(@Param("date") LocalDate date);
+
+    /**
+     * 根据状态查找知识内容（分页）
+     */
+    Page<KnowledgeItem> findByStatus(Integer status, Pageable pageable);
+
+    /**
+     * 根据状态统计知识内容数量
+     */
+    long countByStatus(Integer status);
+
+    /**
+     * 根据创建时间范围统计知识内容数量
+     */
+    long countByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+    /**
+     * 根据创建时间范围查找知识内容列表
+     */
+    List<KnowledgeItem> findByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
 }

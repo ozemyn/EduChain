@@ -131,4 +131,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Object[]> findActiveCommenters(@Param("status") Integer status, 
                                        @Param("startTime") LocalDateTime startTime, 
                                        Pageable pageable);
+
+    /**
+     * 根据状态查找评论（分页）
+     */
+    Page<Comment> findByStatus(Integer status, Pageable pageable);
+
+    /**
+     * 根据创建时间范围统计评论数量
+     */
+    long countByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
 }

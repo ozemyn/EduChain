@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -82,4 +84,39 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @Query("SELECT u.level as level, COUNT(u) as count FROM User u GROUP BY u.level")
     Map<String, Long> getUserLevelDistribution();
+
+    /**
+     * 根据用户名或邮箱和状态查找用户
+     */
+    Page<User> findByUsernameContainingOrEmailContainingAndStatus(String username, String email, Integer status, Pageable pageable);
+
+    /**
+     * 根据用户名或邮箱查找用户
+     */
+    Page<User> findByUsernameContainingOrEmailContaining(String username, String email, Pageable pageable);
+
+    /**
+     * 根据状态统计用户数量
+     */
+    long countByStatus(Integer status);
+
+    /**
+     * 根据创建时间范围统计用户数量
+     */
+    long countByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+    /**
+     * 根据用户名或邮箱和状态查找用户列表
+     */
+    List<User> findByUsernameContainingOrEmailContainingAndStatus(String username, String email, Integer status);
+
+    /**
+     * 根据用户名或邮箱查找用户列表
+     */
+    List<User> findByUsernameContainingOrEmailContaining(String username, String email);
+
+    /**
+     * 根据状态查找用户列表
+     */
+    List<User> findByStatus(Integer status);
 }
