@@ -6,7 +6,7 @@ spring:
   
   # Database Configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/educhain_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/educhain_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&sql_mode=STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO
     username: root
     password: zzm20040517
     driver-class-name: com.mysql.cj.jdbc.Driver

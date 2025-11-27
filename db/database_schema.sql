@@ -461,5 +461,46 @@ CREATE INDEX idx_interactions_knowledge_type ON user_interactions(knowledge_id, 
 CREATE INDEX idx_comments_knowledge_created ON comments(knowledge_id, created_at DESC);
 
 -- ========================================
+-- 全文搜索索引优化
+-- ========================================
+
+-- 为 knowledge_items 表添加额外的 FULLTEXT 索引（已有基础索引）
+-- ALTER TABLE knowledge_items ADD FULLTEXT(title, content, tags); -- 已在表创建时添加
+
+-- 为 search_index 表添加 FULLTEXT 索引
+ALTER TABLE search_index ADD FULLTEXT(title, content_snippet, tags);
+
+-- 创建搜索性能优化索引
+CREATE INDEX idx_search_updated_at ON search_index(updated_at DESC);
+
+-- 创建热门关键词表的性能索引
+CREATE INDEX idx_hot_keyword_search_count ON hot_keywords(search_count DESC);
+CREATE INDEX idx_hot_keyword_last_searched ON hot_keywords(last_searched_at DESC);
+
+-- ========================================
+-- 数据库性能优化
+-- ========================================
+
+-- 注意：如果将来需要修复无效日期数据，可以使用以下语句：
+-- UPDATE users SET created_at = NOW() WHERE created_at = '0000-00-00 00:00:00' OR created_at IS NULL;
+-- UPDATE users SET updated_at = NOW() WHERE updated_at = '0000-00-00 00:00:00' OR updated_at IS NULL;
+-- UPDATE knowledge_items SET created_at = NOW() WHERE created_at = '0000-00-00 00:00:00' OR created_at IS NULL;
+-- UPDATE knowledge_items SET updated_at = NOW() WHERE updated_at = '0000-00-00 00:00:00' OR updated_at IS NULL;
+
+-- 为 TEXT 字段创建带长度限制的索引（避免索引过长问题）
+CREATE INDEX idx_knowledge_content ON knowledge_items (content(255));
+CREATE INDEX idx_search_content_snippet ON search_index (content_snippet(255));
+
+-- ========================================
+-- MySQL 全文搜索配置建议
+-- ========================================
+-- 在 MySQL 配置文件 (my.cnf) 中建议设置以下参数：
+-- ft_min_word_len = 2      # 最小索引词长度，支持中文搜索
+-- ft_max_word_len = 84     # 最大索引词长度
+-- ft_stopword_file = ''    # 停用词文件，设置为空以索引所有词
+-- innodb_ft_min_token_size = 2  # InnoDB 全文索引最小词长度
+
+-- ========================================
 -- 数据库结构创建完成 (共20张表)
+-- 包含：基础结构 + 全文索引 + 性能优化 + 问题修复
 -- ========================================

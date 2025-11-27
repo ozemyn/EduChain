@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "search_indexes", indexes = {
     @Index(name = "idx_knowledge_id", columnList = "knowledge_id"),
-    @Index(name = "idx_search_text", columnList = "search_text"),
     @Index(name = "idx_category_id", columnList = "category_id"),
     @Index(name = "idx_tags", columnList = "tags"),
     @Index(name = "idx_updated_at", columnList = "updated_at")
@@ -29,7 +28,7 @@ public class SearchIndex {
     @Column(name = "knowledge_id", nullable = false, unique = true)
     private Long knowledgeId;
 
-    @Column(name = "search_text", columnDefinition = "LONGTEXT")
+    @Column(name = "search_text", columnDefinition = "TEXT")
     private String searchText; // 合并的搜索文本（标题+内容+标签）
 
     @Column(name = "title", length = 200)
