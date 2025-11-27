@@ -6,6 +6,7 @@ import com.example.educhain.exception.BusinessException;
 import com.example.educhain.repository.*;
 import com.example.educhain.service.FileUploadService;
 import com.example.educhain.service.KnowledgeItemService;
+import com.example.educhain.util.PermissionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.github.difflib.DiffUtils;
+import com.github.difflib.patch.Patch;
 
 /**
  * 知识内容服务实现类
@@ -50,6 +55,15 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
 
     @Autowired
     private FileUploadService fileUploadService;
+
+    @Autowired
+    private UserInteractionRepository userInteractionRepository;
+
+    @Autowired
+    private PermissionChecker permissionChecker;
+
+    @Autowired
+    private jakarta.persistence.EntityManager entityManager;
 
     @Override
     public KnowledgeItemDTO create(CreateKnowledgeRequest request, Long uploaderId) {
@@ -254,8 +268,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
         KnowledgeItemDTO dto = findById(id);
         
         if (userId != null) {
-            // TODO: 查询用户互动状态（点赞、收藏、关注等）
-            // 这部分需要在用户互动功能实现后补充
+            enrichWithUserInteractionStatus(dto, userId);
         }
         
         return dto;
@@ -293,8 +306,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
         Page<KnowledgeItemDTO> result = findAll(pageable, filter);
         
         if (userId != null) {
-            // TODO: 批量查询用户互动状态
-            // 这部分需要在用户互动功能实现后补充
+            batchEnrichWithUserInteractionStatus(result.getContent(), userId);
         }
         
         return result;
@@ -382,9 +394,51 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
     @Override
     @Transactional(readOnly = true)
     public Page<KnowledgeItemDTO> getRecommendedContent(Long userId, Pageable pageable) {
-        // TODO: 实现推荐算法
-        // 暂时返回热门内容
-        return getPopularContent(pageable);
+        if (userId == null) {
+            return getPopularContent(pageable);
+        }
+        
+        try {
+            // 1. 获取用户偏好标签
+            List<String> userPreferredTags = getUserPreferredTags(userId);
+            
+            // 2. 基于标签的内容推荐 (60%)
+            int contentBasedSize = (int) (pageable.getPageSize() * 0.6);
+            List<KnowledgeItem> contentBasedRecommendations = getContentBasedRecommendations(userPreferredTags, contentBasedSize);
+            
+            // 3. 热门内容补充 (40%)
+            int popularSize = pageable.getPageSize() - contentBasedRecommendations.size();
+            List<KnowledgeItem> popularRecommendations = getPopularContentForRecommendation(popularSize);
+            
+            // 4. 合并结果并去重
+            Set<Long> addedIds = new HashSet<>();
+            List<KnowledgeItem> finalRecommendations = new ArrayList<>();
+            
+            // 先添加基于内容的推荐
+            for (KnowledgeItem item : contentBasedRecommendations) {
+                if (addedIds.add(item.getId())) {
+                    finalRecommendations.add(item);
+                }
+            }
+            
+            // 再添加热门内容推荐
+            for (KnowledgeItem item : popularRecommendations) {
+                if (addedIds.add(item.getId()) && finalRecommendations.size() < pageable.getPageSize()) {
+                    finalRecommendations.add(item);
+                }
+            }
+            
+            // 5. 转换为DTO
+            List<KnowledgeItemDTO> result = finalRecommendations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+            
+            return new PageImpl<>(result, pageable, result.size());
+            
+        } catch (Exception e) {
+            logger.warn("推荐算法执行失败，返回热门内容: " + e.getMessage());
+            return getPopularContent(pageable);
+        }
     }
 
     @Override
@@ -442,17 +496,11 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
     }
 
     private void validateUpdatePermission(KnowledgeItem knowledgeItem, Long editorId) {
-        if (!knowledgeItem.getUploaderId().equals(editorId)) {
-            // TODO: 检查是否为管理员
-            throw new BusinessException("ACCESS_DENIED", "无权限编辑此内容");
-        }
+        permissionChecker.validateEditPermission(knowledgeItem.getId(), editorId);
     }
 
     private void validateDeletePermission(KnowledgeItem knowledgeItem, Long operatorId) {
-        if (!knowledgeItem.getUploaderId().equals(operatorId)) {
-            // TODO: 检查是否为管理员
-            throw new BusinessException("ACCESS_DENIED", "无权限删除此内容");
-        }
+        permissionChecker.validateDeletePermission(knowledgeItem.getId(), operatorId);
     }
 
     private String processTagsFromRequest(CreateKnowledgeRequest request) {
@@ -704,8 +752,23 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
         
         VersionDiff diff = new VersionDiff(v1, v2);
         
-        // TODO: 实现详细的差异比较算法
-        // 这里可以使用第三方库如 java-diff-utils 来实现文本差异比较
+        // 标题差异
+        diff.setTitleDiff(computeTextDiff(
+            Optional.ofNullable(v1.getTitle()).orElse(""),
+            Optional.ofNullable(v2.getTitle()).orElse("")
+        ));
+        
+        // 内容差异
+        diff.setContentDiff(computeTextDiff(
+            Optional.ofNullable(v1.getContentSnapshot()).orElse(""),
+            Optional.ofNullable(v2.getContentSnapshot()).orElse("")
+        ));
+        
+        // 标签差异
+        diff.setTagsDiff(computeTextDiff(
+            Optional.ofNullable(v1.getTags()).orElse(""),
+            Optional.ofNullable(v2.getTags()).orElse("")
+        ));
         
         return diff;
     }
@@ -762,14 +825,302 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
     @Override
     @Transactional(readOnly = true)
     public KnowledgeStats getKnowledgeStats() {
-        // TODO: 实现统计信息查询
-        return new KnowledgeStats(0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
+        try {
+            String sql = """
+                SELECT 
+                    COUNT(*) as total_count,
+                    SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as published_count,
+                    SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as draft_count,
+                    SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as deleted_count,
+                    COALESCE(SUM(ks.views_count), 0) as total_views,
+                    COALESCE(SUM(ks.likes_count), 0) as total_likes,
+                    COALESCE(SUM(ks.favorites_count), 0) as total_favorites,
+                    COALESCE(SUM(ks.comments_count), 0) as total_comments
+                FROM knowledge_items ki
+                LEFT JOIN knowledge_stats ks ON ki.id = ks.knowledge_id
+                """;
+            
+            Object[] result = (Object[]) entityManager.createNativeQuery(sql).getSingleResult();
+            
+            return new KnowledgeStats(
+                ((Number) result[0]).longValue(),
+                ((Number) result[1]).longValue(),
+                ((Number) result[2]).longValue(),
+                ((Number) result[3]).longValue(),
+                ((Number) result[4]).longValue(),
+                ((Number) result[5]).longValue(),
+                ((Number) result[6]).longValue(),
+                ((Number) result[7]).longValue()
+            );
+        } catch (Exception e) {
+            logger.error("获取知识统计信息失败", e);
+            return new KnowledgeStats(0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserKnowledgeStats getUserKnowledgeStats(Long userId) {
-        // TODO: 实现用户统计信息查询
-        return new UserKnowledgeStats(0L, 0L, 0L, 0L, 0L, 0L, 0.0);
+        try {
+            String sql = """
+                SELECT 
+                    COUNT(CASE WHEN ki.status = 1 THEN 1 END) as published_count,
+                    COUNT(CASE WHEN ki.status = 2 THEN 1 END) as draft_count,
+                    COALESCE(SUM(ks.views_count), 0) as total_views,
+                    COALESCE(SUM(ks.likes_count), 0) as total_likes,
+                    COALESCE(SUM(ks.favorites_count), 0) as total_favorites,
+                    COALESCE(SUM(ks.comments_count), 0) as total_comments,
+                    COALESCE(AVG(ks.score), 0.0) as avg_quality_score
+                FROM knowledge_items ki
+                LEFT JOIN knowledge_stats ks ON ki.id = ks.knowledge_id
+                WHERE ki.uploader_id = ?
+                """;
+            
+            Object[] result = (Object[]) entityManager.createNativeQuery(sql)
+                .setParameter(1, userId)
+                .getSingleResult();
+            
+            return new UserKnowledgeStats(
+                ((Number) result[0]).longValue(),
+                ((Number) result[1]).longValue(),
+                ((Number) result[2]).longValue(),
+                ((Number) result[3]).longValue(),
+                ((Number) result[4]).longValue(),
+                ((Number) result[5]).longValue(),
+                ((Number) result[6]).doubleValue()
+            );
+        } catch (Exception e) {
+            logger.error("获取用户知识统计信息失败", e);
+            return new UserKnowledgeStats(0L, 0L, 0L, 0L, 0L, 0L, 0.0);
+        }
+    }
+
+    // ========== 辅助方法 ==========
+
+    /**
+     * 为单个知识内容DTO添加用户互动状态
+     */
+    private void enrichWithUserInteractionStatus(KnowledgeItemDTO dto, Long userId) {
+        if (userId == null || dto == null) {
+            return;
+        }
+        
+        try {
+            List<UserInteraction> interactions = userInteractionRepository
+                .findByKnowledgeIdAndUserId(dto.getId(), userId);
+            
+            Map<UserInteraction.InteractionType, UserInteraction> interactionMap = 
+                interactions.stream().collect(Collectors.toMap(
+                    UserInteraction::getInteractionType, 
+                    interaction -> interaction,
+                    (existing, replacement) -> existing
+                ));
+            
+            dto.setUserLiked(interactionMap.containsKey(UserInteraction.InteractionType.LIKE));
+            dto.setUserFavorited(interactionMap.containsKey(UserInteraction.InteractionType.FAVORITE));
+        } catch (Exception e) {
+            logger.warn("获取用户互动状态失败: " + e.getMessage());
+            dto.setUserLiked(false);
+            dto.setUserFavorited(false);
+        }
+    }
+
+    /**
+     * 批量为知识内容DTO添加用户互动状态
+     */
+    private void batchEnrichWithUserInteractionStatus(List<KnowledgeItemDTO> dtos, Long userId) {
+        if (userId == null || dtos == null || dtos.isEmpty()) {
+            return;
+        }
+        
+        try {
+            List<Long> knowledgeIds = dtos.stream()
+                .map(KnowledgeItemDTO::getId)
+                .collect(Collectors.toList());
+            
+            // 一次查询获取所有互动状态
+            List<UserInteraction> interactions = userInteractionRepository
+                .findByKnowledgeIdInAndUserId(knowledgeIds, userId);
+            
+            // 按知识ID和互动类型分组
+            Map<Long, Map<UserInteraction.InteractionType, Boolean>> statusMap = interactions.stream()
+                .collect(Collectors.groupingBy(
+                    UserInteraction::getKnowledgeId,
+                    Collectors.toMap(
+                        UserInteraction::getInteractionType,
+                        interaction -> true,
+                        (a, b) -> true
+                    )
+                ));
+            
+            // 设置状态
+            dtos.forEach(dto -> {
+                Map<UserInteraction.InteractionType, Boolean> userStatus = 
+                    statusMap.getOrDefault(dto.getId(), new HashMap<>());
+                dto.setUserLiked(userStatus.getOrDefault(UserInteraction.InteractionType.LIKE, false));
+                dto.setUserFavorited(userStatus.getOrDefault(UserInteraction.InteractionType.FAVORITE, false));
+            });
+        } catch (Exception e) {
+            logger.warn("批量获取用户互动状态失败: " + e.getMessage());
+            // 设置默认值
+            dtos.forEach(dto -> {
+                dto.setUserLiked(false);
+                dto.setUserFavorited(false);
+            });
+        }
+    }
+
+    /**
+     * 获取用户偏好标签
+     */
+    private List<String> getUserPreferredTags(Long userId) {
+        try {
+            // 基于用户点赞和收藏的内容分析偏好标签
+            String sql = """
+                SELECT ki.tags
+                FROM knowledge_items ki
+                INNER JOIN user_interactions ui ON ki.id = ui.knowledge_id
+                WHERE ui.user_id = ? AND ui.interaction_type IN ('LIKE', 'FAVORITE')
+                AND ki.tags IS NOT NULL AND ki.tags != ''
+                ORDER BY ui.created_at DESC
+                LIMIT 50
+                """;
+            
+            @SuppressWarnings("unchecked")
+            List<String> tagStrings = entityManager.createNativeQuery(sql)
+                .setParameter(1, userId)
+                .getResultList();
+            
+            // 解析标签并统计频率
+            Map<String, Integer> tagFrequency = new HashMap<>();
+            for (String tagString : tagStrings) {
+                if (tagString != null && !tagString.trim().isEmpty()) {
+                    String[] tags = tagString.split(",");
+                    for (String tag : tags) {
+                        String cleanTag = tag.trim();
+                        if (!cleanTag.isEmpty()) {
+                            tagFrequency.put(cleanTag, tagFrequency.getOrDefault(cleanTag, 0) + 1);
+                        }
+                    }
+                }
+            }
+            
+            // 返回频率最高的前10个标签
+            return tagFrequency.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(10)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+                
+        } catch (Exception e) {
+            logger.warn("获取用户偏好标签失败: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 基于内容的推荐
+     */
+    private List<KnowledgeItem> getContentBasedRecommendations(List<String> preferredTags, int limit) {
+        if (preferredTags.isEmpty() || limit <= 0) {
+            return new ArrayList<>();
+        }
+        
+        try {
+            // 构建标签匹配的SQL查询
+            StringBuilder tagConditions = new StringBuilder();
+            for (int i = 0; i < preferredTags.size(); i++) {
+                if (i > 0) {
+                    tagConditions.append(" OR ");
+                }
+                tagConditions.append("ki.tags LIKE ?").append(i + 1);
+            }
+            
+            String sql = String.format("""
+                SELECT DISTINCT ki.*
+                FROM knowledge_items ki
+                LEFT JOIN knowledge_stats ks ON ki.id = ks.knowledge_id
+                WHERE ki.status = 1 AND (%s)
+                ORDER BY COALESCE(ks.score, 0) DESC, ki.created_at DESC
+                LIMIT %d
+                """, tagConditions.toString(), limit);
+            
+            jakarta.persistence.Query query = entityManager.createNativeQuery(sql, KnowledgeItem.class);
+            
+            // 设置参数
+            for (int i = 0; i < preferredTags.size(); i++) {
+                query.setParameter(i + 1, "%" + preferredTags.get(i) + "%");
+            }
+            
+            @SuppressWarnings("unchecked")
+            List<KnowledgeItem> results = query.getResultList();
+            return results;
+            
+        } catch (Exception e) {
+            logger.warn("基于内容的推荐失败: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 获取热门内容用于推荐
+     */
+    private List<KnowledgeItem> getPopularContentForRecommendation(int limit) {
+        if (limit <= 0) {
+            return new ArrayList<>();
+        }
+        
+        try {
+            String sql = """
+                SELECT ki.*
+                FROM knowledge_items ki
+                LEFT JOIN knowledge_stats ks ON ki.id = ks.knowledge_id
+                WHERE ki.status = 1
+                ORDER BY COALESCE(ks.views_count, 0) + COALESCE(ks.likes_count, 0) * 2 + COALESCE(ks.favorites_count, 0) * 3 DESC,
+                         ki.created_at DESC
+                LIMIT ?
+                """;
+            
+            @SuppressWarnings("unchecked")
+            List<KnowledgeItem> results = entityManager.createNativeQuery(sql, KnowledgeItem.class)
+                .setParameter(1, limit)
+                .getResultList();
+            return results;
+            
+        } catch (Exception e) {
+            logger.warn("获取热门内容失败: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 计算文本差异
+     */
+    private List<String> computeTextDiff(String text1, String text2) {
+        try {
+            List<String> lines1 = Arrays.asList(text1.split("\n"));
+            List<String> lines2 = Arrays.asList(text2.split("\n"));
+            
+            Patch<String> patch = DiffUtils.diff(lines1, lines2);
+            
+            return patch.getDeltas().stream()
+                .map(delta -> {
+                    switch (delta.getType()) {
+                        case INSERT:
+                            return "+ " + String.join("\n+ ", delta.getTarget().getLines());
+                        case DELETE:
+                            return "- " + String.join("\n- ", delta.getSource().getLines());
+                        case CHANGE:
+                            return "~ " + String.join("\n~ ", delta.getTarget().getLines());
+                        default:
+                            return "";
+                    }
+                })
+                .filter(line -> !line.isEmpty())
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.warn("计算文本差异失败: " + e.getMessage());
+            return Arrays.asList("差异计算失败: " + e.getMessage());
+        }
     }
 }

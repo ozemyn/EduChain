@@ -260,6 +260,23 @@ public class KnowledgeItemDTO {
         this.isFollowingAuthor = isFollowingAuthor;
     }
 
+    // 便利方法
+    public void setUserLiked(Boolean userLiked) {
+        this.isLiked = userLiked;
+    }
+
+    public void setUserFavorited(Boolean userFavorited) {
+        this.isFavorited = userFavorited;
+    }
+
+    public Boolean getUserLiked() {
+        return this.isLiked;
+    }
+
+    public Boolean getUserFavorited() {
+        return this.isFavorited;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

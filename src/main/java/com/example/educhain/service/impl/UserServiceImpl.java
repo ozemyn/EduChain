@@ -14,6 +14,7 @@ import com.example.educhain.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 用户服务实现类
@@ -47,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserDTO register(RegisterRequest request) {
@@ -116,6 +122,18 @@ public class UserServiceImpl implements UserService {
             String accessToken = jwtUtil.generateToken(userPrincipal, claims);
             String refreshToken = jwtUtil.generateRefreshToken(userPrincipal);
 
+            // 将token存储到Redis用于黑名单管理
+            try {
+                String tokenKey = "user:tokens:" + user.getId();
+                redisTemplate.opsForSet().add(tokenKey, accessToken);
+                redisTemplate.opsForSet().add(tokenKey, refreshToken);
+                // 设置token集合的过期时间为7天（刷新token的有效期）
+                redisTemplate.expire(tokenKey, Duration.ofDays(7));
+            } catch (Exception e) {
+                // Redis操作失败不影响登录流程
+                System.err.println("Redis token存储失败: " + e.getMessage());
+            }
+
             // 记录登录
             recordUserLogin(user.getId());
 
@@ -159,9 +177,43 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(Long userId) {
-        // 这里可以实现令牌黑名单机制
-        // 目前只是简单的记录日志
-        // TODO: 实现Redis黑名单机制
+        if (userId == null) {
+            return;
+        }
+        
+        try {
+            // 获取当前用户的所有有效token
+            String tokenKey = "user:tokens:" + userId;
+            Set<String> tokens = redisTemplate.opsForSet().members(tokenKey);
+            
+            if (tokens != null && !tokens.isEmpty()) {
+                for (String token : tokens) {
+                    try {
+                        // 检查token是否还有效
+                        if (!jwtUtil.isTokenExpired(token)) {
+                            // 计算token剩余有效期
+                            long remainingTime = jwtUtil.getTokenRemainingTime(token);
+                            if (remainingTime > 0) {
+                                // 将token加入黑名单，设置过期时间为token剩余有效期
+                                redisTemplate.opsForValue().set(
+                                    "blacklist:token:" + token, 
+                                    "1", 
+                                    Duration.ofSeconds(remainingTime)
+                                );
+                            }
+                        }
+                    } catch (Exception e) {
+                        // 忽略无效token的异常，继续处理其他token
+                        continue;
+                    }
+                }
+                // 清除用户token集合
+                redisTemplate.delete(tokenKey);
+            }
+        } catch (Exception e) {
+            // 记录日志但不抛出异常，确保登出操作不会失败
+            System.err.println("Redis操作失败，但登出继续进行: " + e.getMessage());
+        }
     }
 
     @Override

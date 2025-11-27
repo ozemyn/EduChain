@@ -112,6 +112,13 @@
             <version>1.16.1</version>
         </dependency>
         
+        <!-- Java Diff Utils for version comparison -->
+        <dependency>
+            <groupId>io.github.java-diff-utils</groupId>
+            <artifactId>java-diff-utils</artifactId>
+            <version>4.12</version>
+        </dependency>
+        
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

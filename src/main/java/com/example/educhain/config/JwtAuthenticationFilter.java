@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, 
                                   HttpServletResponse response, 
@@ -37,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
             
-            if (StringUtils.hasText(jwt) && jwtUtil.validateTokenFormat(jwt)) {
+            if (StringUtils.hasText(jwt) && jwtUtil.validateTokenFormat(jwt) && !isTokenBlacklisted(jwt)) {
                 String username = jwtUtil.getUsernameFromToken(jwt);
                 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -89,5 +93,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                path.startsWith("/webjars/") ||
                path.equals("/favicon.ico") ||
                path.equals("/error");
+    }
+
+    /**
+     * 检查token是否在黑名单中
+     */
+    private boolean isTokenBlacklisted(String token) {
+        try {
+            return redisTemplate.hasKey("blacklist:token:" + token);
+        } catch (Exception e) {
+            // Redis连接失败时，为了安全起见，不阻止token验证
+            logger.warn("Redis blacklist check failed: " + e.getMessage());
+            return false;
+        }
     }
 }

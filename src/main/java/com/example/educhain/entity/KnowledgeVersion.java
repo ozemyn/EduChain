@@ -297,6 +297,11 @@ public class KnowledgeVersion {
         this.createdAt = createdAt;
     }
 
+    // 便利方法
+    public String getContentSnapshot() {
+        return this.content;
+    }
+
     @Override
     public String toString() {
         return "KnowledgeVersion{" +
