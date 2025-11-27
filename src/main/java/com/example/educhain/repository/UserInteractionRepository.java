@@ -138,4 +138,10 @@ public interface UserInteractionRepository extends JpaRepository<UserInteraction
      * 获取对特定知识内容有互动的其他用户（排除指定用户）
      */
     List<UserInteraction> findByKnowledgeIdAndUserIdNot(Long knowledgeId, Long excludeUserId);
+
+    /**
+     * 统计今日互动数量
+     */
+    @Query("SELECT COUNT(ui) FROM UserInteraction ui WHERE DATE(ui.createdAt) = CURRENT_DATE")
+    Long countTodayInteractions();
 }

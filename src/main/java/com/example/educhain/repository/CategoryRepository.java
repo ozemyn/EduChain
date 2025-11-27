@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -166,4 +167,12 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
            "WHERE k.status = 1 AND k.createdAt >= :since " +
            "ORDER BY k.createdAt DESC")
     List<Category> findRecentlyUsedCategories(@Param("since") java.time.LocalDateTime since);
+
+    /**
+     * 获取分类统计信息
+     */
+    @Query("SELECT c.name as categoryName, COUNT(k) as knowledgeCount " +
+           "FROM Category c LEFT JOIN KnowledgeItem k ON c.id = k.categoryId AND k.status = 1 " +
+           "GROUP BY c.id, c.name ORDER BY knowledgeCount DESC")
+    List<Map<String, Object>> getCategoryStats();
 }

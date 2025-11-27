@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -68,4 +70,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * 根据等级范围查找用户
      */
     Page<User> findByLevelBetween(Integer minLevel, Integer maxLevel, Pageable pageable);
+
+    /**
+     * 统计今日新用户数量
+     */
+    @Query("SELECT COUNT(u) FROM User u WHERE DATE(u.createdAt) = CURRENT_DATE")
+    Long countNewUsersToday();
+
+    /**
+     * 获取用户等级分布
+     */
+    @Query("SELECT u.level as level, COUNT(u) as count FROM User u GROUP BY u.level")
+    Map<String, Long> getUserLevelDistribution();
 }

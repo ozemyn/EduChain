@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -146,4 +147,16 @@ public interface KnowledgeItemRepository extends JpaRepository<KnowledgeItem, Lo
                    "AND status = :status",
            nativeQuery = true)
     Long countFullTextSearch(@Param("keyword") String keyword, @Param("status") Integer status);
+
+    /**
+     * 统计今日新知识内容数量
+     */
+    @Query("SELECT COUNT(k) FROM KnowledgeItem k WHERE DATE(k.createdAt) = CURRENT_DATE AND k.status = 1")
+    Long countNewKnowledgeToday();
+
+    /**
+     * 根据创建日期统计内容数量
+     */
+    @Query("SELECT COUNT(k) FROM KnowledgeItem k WHERE DATE(k.createdAt) = :date AND k.status = 1")
+    Long countByCreatedAtDate(@Param("date") LocalDate date);
 }

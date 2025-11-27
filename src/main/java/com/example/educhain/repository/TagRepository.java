@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -148,4 +149,11 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Modifying
     @Query("DELETE FROM Tag t WHERE t.usageCount = 0 AND t.createdAt < :before")
     int cleanupUnusedTags(@Param("before") LocalDateTime before);
+
+    /**
+     * 获取标签使用统计
+     */
+    @Query("SELECT t.name as tagName, t.usageCount as usageCount " +
+           "FROM Tag t WHERE t.status = 1 ORDER BY t.usageCount DESC")
+    List<Map<String, Object>> getTagUsageStats();
 }
