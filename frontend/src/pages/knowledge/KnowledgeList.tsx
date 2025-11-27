@@ -115,44 +115,6 @@ const KnowledgeList: React.FC = () => {
     setSearchParams(params);
   };
 
-  // 处理点赞
-  const handleLike = async (_knowledge: KnowledgeItem) => {
-    if (!user) {
-      message.warning('请先登录');
-      navigate('/login');
-      return;
-    }
-
-    try {
-      // 调用点赞API
-      message.success('点赞成功');
-      // 重新加载当前页数据
-      loadKnowledgeList(pagination.current, pagination.pageSize);
-    } catch (error) {
-      console.error('Like failed:', error);
-      message.error('点赞失败');
-    }
-  };
-
-  // 处理收藏
-  const handleFavorite = async (_knowledge: KnowledgeItem) => {
-    if (!user) {
-      message.warning('请先登录');
-      navigate('/login');
-      return;
-    }
-
-    try {
-      // 调用收藏API
-      message.success('收藏成功');
-      // 重新加载当前页数据
-      loadKnowledgeList(pagination.current, pagination.pageSize);
-    } catch (error) {
-      console.error('Favorite failed:', error);
-      message.error('收藏失败');
-    }
-  };
-
   // 处理编辑
   const handleEdit = (knowledge: KnowledgeItem) => {
     navigate(`/knowledge/edit/${knowledge.id}`);
@@ -216,8 +178,7 @@ const KnowledgeList: React.FC = () => {
                     showActions={user?.id === knowledge.uploaderId}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
-                    onLike={handleLike}
-                    onFavorite={handleFavorite}
+
                   />
                 </Col>
               ))}

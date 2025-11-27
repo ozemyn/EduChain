@@ -1,16 +1,13 @@
 import React from 'react';
 import { Card, Avatar, Tag, Space, Typography, Image, Button, Tooltip } from 'antd';
 import { 
-  EyeOutlined, 
-  LikeOutlined, 
-  StarOutlined, 
-  CommentOutlined,
   EditOutlined,
   DeleteOutlined 
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import type { KnowledgeItem } from '@/types';
 import { formatDate } from '@/utils/format';
+import InteractionButtons from './InteractionButtons';
 
 const { Text, Paragraph } = Typography;
 const { Meta } = Card;
@@ -20,8 +17,7 @@ interface KnowledgeCardProps {
   showActions?: boolean;
   onEdit?: (knowledge: KnowledgeItem) => void;
   onDelete?: (knowledge: KnowledgeItem) => void;
-  onLike?: (knowledge: KnowledgeItem) => void;
-  onFavorite?: (knowledge: KnowledgeItem) => void;
+  onCommentClick?: (knowledge: KnowledgeItem) => void;
 }
 
 const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
@@ -29,8 +25,7 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
   showActions = false,
   onEdit,
   onDelete,
-  onLike,
-  onFavorite,
+  onCommentClick,
 }) => {
   const getTypeColor = (type: string) => {
     const colors = {
@@ -151,46 +146,20 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
               ))}
             </Space>
             
-            <Space>
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<EyeOutlined />}
-                onClick={(e) => e.preventDefault()}
-              >
-                {knowledge.stats?.viewCount || 0}
-              </Button>
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<LikeOutlined />}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onLike?.(knowledge);
-                }}
-              >
-                {knowledge.stats?.likeCount || 0}
-              </Button>
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<StarOutlined />}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onFavorite?.(knowledge);
-                }}
-              >
-                {knowledge.stats?.favoriteCount || 0}
-              </Button>
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<CommentOutlined />}
-                onClick={(e) => e.preventDefault()}
-              >
-                {knowledge.stats?.commentCount || 0}
-              </Button>
-            </Space>
+            <div onClick={(e) => e.preventDefault()}>
+              <InteractionButtons
+                knowledgeId={knowledge.id}
+                initialStats={knowledge.stats ? {
+                  knowledgeId: knowledge.id,
+                  likeCount: knowledge.stats.likeCount,
+                  favoriteCount: knowledge.stats.favoriteCount,
+                  viewCount: knowledge.stats.viewCount,
+                  commentCount: knowledge.stats.commentCount,
+                } : undefined}
+                size="small"
+                onCommentClick={() => onCommentClick?.(knowledge)}
+              />
+            </div>
           </Space>
         }
       />

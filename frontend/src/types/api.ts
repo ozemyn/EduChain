@@ -149,6 +149,54 @@ export interface Notification {
   createdAt: string;
 }
 
+// 用户互动相关类型
+export interface UserInteraction {
+  id: number;
+  knowledgeId: number;
+  userId: number;
+  interactionType: 'LIKE' | 'FAVORITE' | 'VIEW';
+  ipAddress?: string;
+  createdAt: string;
+}
+
+export interface InteractionStats {
+  knowledgeId: number;
+  likeCount: number;
+  favoriteCount: number;
+  viewCount: number;
+  commentCount: number;
+  userLiked?: boolean;
+  userFavorited?: boolean;
+}
+
+export interface CreateCommentRequest {
+  knowledgeId: number;
+  content: string;
+  parentId?: number;
+}
+
+export interface CommentWithReplies extends Comment {
+  replies?: CommentWithReplies[];
+  replyCount?: number;
+}
+
+// 关注相关类型
+export interface UserFollow {
+  id: number;
+  followerId: number;
+  followingId: number;
+  createdAt: string;
+  follower?: User;
+  following?: User;
+}
+
+export interface FollowStats {
+  userId: number;
+  followingCount: number;
+  followerCount: number;
+  isFollowing?: boolean;
+}
+
 // 搜索相关类型
 export interface SearchRequest {
   keyword: string;
