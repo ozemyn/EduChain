@@ -386,9 +386,13 @@ CREATE TABLE system_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统日志表';
 
 -- ========================================
--- 初始化数据
+-- 初始化数据 (可选 - 如需要可手动执行)
 -- ========================================
 
+-- 注释掉初始化数据，避免启动时的日期问题
+-- 如需要这些数据，可以在应用启动后手动执行
+
+/*
 -- 插入默认系统设置
 INSERT INTO system_settings (setting_key, setting_value, description) VALUES
 ('site_name', 'EduChain 教育知识共享平台', '网站名称'),
@@ -414,6 +418,7 @@ INSERT INTO tags (name, description) VALUES
 ('数据结构', '数据结构相关内容'),
 ('机器学习', '机器学习相关内容'),
 ('人工智能', '人工智能相关内容');
+*/
 
 -- ========================================
 -- 创建触发器

@@ -1,5 +1,6 @@
 package com.example.educhain.util;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class Result<T> {
     private String code;
     private String message;
     private T data;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
     private String path;
 
