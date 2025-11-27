@@ -29,12 +29,15 @@ export function usePagination({
   const [current, setCurrent] = useState(defaultCurrent);
   const [pageSize, setPageSize] = useState(defaultPageSize);
 
-  const onChange = useCallback((page: number, size?: number) => {
-    setCurrent(page);
-    if (size && size !== pageSize) {
-      setPageSize(size);
-    }
-  }, [pageSize]);
+  const onChange = useCallback(
+    (page: number, size?: number) => {
+      setCurrent(page);
+      if (size && size !== pageSize) {
+        setPageSize(size);
+      }
+    },
+    [pageSize]
+  );
 
   const onShowSizeChange = useCallback((current: number, size: number) => {
     setCurrent(current);

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  Typography, 
-  Space, 
-  Button, 
-  Avatar, 
-  Tag, 
+import {
+  Card,
+  Typography,
+  Space,
+  Button,
+  Avatar,
+  Tag,
   Divider,
   Image,
   Spin,
@@ -15,7 +15,6 @@ import {
   Col,
   Statistic,
   Modal,
-
 } from 'antd';
 import {
   EyeOutlined,
@@ -31,7 +30,7 @@ import {
   CalendarOutlined,
   UserOutlined,
   TagOutlined,
-  FolderOutlined
+  FolderOutlined,
 } from '@ant-design/icons';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import type { KnowledgeItem } from '@/types';
@@ -46,7 +45,7 @@ const KnowledgeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   const [loading, setLoading] = useState(true);
   const [knowledge, setKnowledge] = useState<KnowledgeItem | null>(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -60,7 +59,7 @@ const KnowledgeDetail: React.FC = () => {
     try {
       setLoading(true);
       const response = await knowledgeService.getKnowledgeById(Number(id));
-      
+
       if (response.success && response.data) {
         setKnowledge(response.data);
         // TODO: 检查用户是否已点赞/收藏
@@ -91,12 +90,12 @@ const KnowledgeDetail: React.FC = () => {
       // 调用点赞/取消点赞API
       const newLikedState = !isLiked;
       setIsLiked(newLikedState);
-      
+
       // 更新统计数据
       if (knowledge.stats) {
         knowledge.stats.likeCount += newLikedState ? 1 : -1;
       }
-      
+
       message.success(newLikedState ? '点赞成功' : '取消点赞');
     } catch (error) {
       console.error('Like action failed:', error);
@@ -122,12 +121,12 @@ const KnowledgeDetail: React.FC = () => {
       // 调用收藏/取消收藏API
       const newFavoritedState = !isFavorited;
       setIsFavorited(newFavoritedState);
-      
+
       // 更新统计数据
       if (knowledge.stats) {
         knowledge.stats.favoriteCount += newFavoritedState ? 1 : -1;
       }
-      
+
       message.success(newFavoritedState ? '收藏成功' : '取消收藏');
     } catch (error) {
       console.error('Favorite action failed:', error);
@@ -141,11 +140,14 @@ const KnowledgeDetail: React.FC = () => {
   // 处理分享
   const handleShare = () => {
     const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      message.success('链接已复制到剪贴板');
-    }).catch(() => {
-      message.error('复制失败');
-    });
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        message.success('链接已复制到剪贴板');
+      })
+      .catch(() => {
+        message.error('复制失败');
+      });
   };
 
   // 处理编辑
@@ -232,7 +234,11 @@ const KnowledgeDetail: React.FC = () => {
         <Card size="small" style={{ marginBottom: 24 }}>
           <Space>
             <Text strong>相关链接：</Text>
-            <a href={knowledge.linkUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              href={knowledge.linkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {knowledge.linkUrl}
             </a>
           </Space>
@@ -244,7 +250,7 @@ const KnowledgeDetail: React.FC = () => {
 
   useEffect(() => {
     loadKnowledgeDetail();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (loading) {
@@ -292,10 +298,10 @@ const KnowledgeDetail: React.FC = () => {
               <Title level={1} style={{ marginBottom: 16 }}>
                 {knowledge.title}
               </Title>
-              
+
               <Space wrap>
                 <Space>
-                  <Avatar 
+                  <Avatar
                     src={knowledge.uploader.avatarUrl}
                     icon={<UserOutlined />}
                   />
@@ -303,7 +309,9 @@ const KnowledgeDetail: React.FC = () => {
                 </Space>
                 <Space>
                   <CalendarOutlined />
-                  <Text type="secondary">{formatDate(knowledge.createdAt)}</Text>
+                  <Text type="secondary">
+                    {formatDate(knowledge.createdAt)}
+                  </Text>
                 </Space>
                 {knowledge.category && (
                   <Space>
@@ -326,11 +334,11 @@ const KnowledgeDetail: React.FC = () => {
             {renderLinkContent()}
 
             {/* 正文内容 */}
-            <div 
-              style={{ 
-                fontSize: 16, 
-                lineHeight: 1.8, 
-                marginBottom: 24 
+            <div
+              style={{
+                fontSize: 16,
+                lineHeight: 1.8,
+                marginBottom: 24,
               }}
               dangerouslySetInnerHTML={{ __html: knowledge.content }}
             />
@@ -362,7 +370,7 @@ const KnowledgeDetail: React.FC = () => {
               >
                 {knowledge.stats?.likeCount || 0}
               </Button>
-              
+
               <Button
                 type={isFavorited ? 'primary' : 'default'}
                 icon={isFavorited ? <StarFilled /> : <StarOutlined />}
@@ -371,26 +379,23 @@ const KnowledgeDetail: React.FC = () => {
               >
                 {knowledge.stats?.favoriteCount || 0}
               </Button>
-              
+
               <Button icon={<CommentOutlined />}>
                 {knowledge.stats?.commentCount || 0}
               </Button>
-              
+
               <Button icon={<ShareAltOutlined />} onClick={handleShare}>
                 分享
               </Button>
 
               {user?.id === knowledge.uploaderId && (
                 <>
-                  <Button 
-                    icon={<EditOutlined />} 
-                    onClick={handleEdit}
-                  >
+                  <Button icon={<EditOutlined />} onClick={handleEdit}>
                     编辑
                   </Button>
-                  <Button 
-                    danger 
-                    icon={<DeleteOutlined />} 
+                  <Button
+                    danger
+                    icon={<DeleteOutlined />}
                     onClick={handleDelete}
                   >
                     删除
@@ -442,7 +447,7 @@ const KnowledgeDetail: React.FC = () => {
             <Card title="作者信息" size="small">
               <Space direction="vertical" style={{ width: '100%' }}>
                 <Space>
-                  <Avatar 
+                  <Avatar
                     size={48}
                     src={knowledge.uploader.avatarUrl}
                     icon={<UserOutlined />}
@@ -452,21 +457,23 @@ const KnowledgeDetail: React.FC = () => {
                       <Text strong>{knowledge.uploader.fullName}</Text>
                     </div>
                     <div>
-                      <Text type="secondary">@{knowledge.uploader.username}</Text>
+                      <Text type="secondary">
+                        @{knowledge.uploader.username}
+                      </Text>
                     </div>
                   </div>
                 </Space>
-                
+
                 {knowledge.uploader.bio && (
-                  <Paragraph 
-                    type="secondary" 
+                  <Paragraph
+                    type="secondary"
                     ellipsis={{ rows: 3 }}
                     style={{ margin: 0 }}
                   >
                     {knowledge.uploader.bio}
                   </Paragraph>
                 )}
-                
+
                 {knowledge.uploader.school && (
                   <Text type="secondary">
                     来自：{knowledge.uploader.school}

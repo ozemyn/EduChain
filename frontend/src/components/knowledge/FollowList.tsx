@@ -11,11 +11,7 @@ import {
   message,
   Input,
 } from 'antd';
-import {
-  UserOutlined,
-  TeamOutlined,
-  HeartOutlined,
-} from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, HeartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { interactionService } from '@/services';
 import type { UserFollow } from '@/types';
@@ -55,7 +51,7 @@ const FollowList: React.FC<FollowListProps> = ({
         page: page - 1,
         size,
       });
-      
+
       setFollowingList(response.data.content);
       setPagination(prev => ({
         ...prev,
@@ -80,7 +76,7 @@ const FollowList: React.FC<FollowListProps> = ({
         page: page - 1,
         size,
       });
-      
+
       setFollowersList(response.data.content);
       setPagination(prev => ({
         ...prev,
@@ -103,7 +99,7 @@ const FollowList: React.FC<FollowListProps> = ({
     } else {
       fetchFollowers();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, activeTab]);
 
   // 处理标签页切换
@@ -136,7 +132,9 @@ const FollowList: React.FC<FollowListProps> = ({
   const handleFollowChange = (targetUserId: number, isFollowing: boolean) => {
     // 如果当前用户取消关注了某人，从关注列表中移除
     if (!isFollowing && activeTab === 'following' && currentUserId === userId) {
-      setFollowingList(prev => prev.filter(item => item.following?.id !== targetUserId));
+      setFollowingList(prev =>
+        prev.filter(item => item.following?.id !== targetUserId)
+      );
       setPagination(prev => ({
         ...prev,
         following: {
@@ -159,7 +157,9 @@ const FollowList: React.FC<FollowListProps> = ({
             <FollowButton
               userId={user.id}
               size="small"
-              onFollowChange={(isFollowing) => handleFollowChange(user.id, isFollowing)}
+              onFollowChange={isFollowing =>
+                handleFollowChange(user.id, isFollowing)
+              }
             />
           ),
         ].filter(Boolean)}
@@ -193,7 +193,8 @@ const FollowList: React.FC<FollowListProps> = ({
                 </Text>
               )}
               <Text type="secondary" style={{ fontSize: '12px' }}>
-                {activeTab === 'following' ? '关注于' : '关注你于'} {formatDate(item.createdAt)}
+                {activeTab === 'following' ? '关注于' : '关注你于'}{' '}
+                {formatDate(item.createdAt)}
               </Text>
             </Space>
           }

@@ -1,5 +1,10 @@
 import { request } from './api';
-import type { LoginRequest, RegisterRequest, LoginResponse, User } from '@/types/api';
+import type {
+  LoginRequest,
+  RegisterRequest,
+  LoginResponse,
+  User,
+} from '@/types/api';
 
 export const authService = {
   // 用户登录

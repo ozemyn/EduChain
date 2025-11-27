@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  Input, 
-  Button, 
-  Space, 
-  Divider, 
-  Empty, 
-  Spin, 
+import {
+  Card,
+  Input,
+  Button,
+  Space,
+  Divider,
+  Empty,
+  Spin,
   message,
   Pagination,
-  Typography 
+  Typography,
 } from 'antd';
 import { CommentOutlined, SendOutlined } from '@ant-design/icons';
 import { interactionService } from '@/services';
@@ -48,14 +48,14 @@ const CommentList: React.FC<CommentListProps> = ({
         page: page - 1, // 后端从0开始
         size,
       });
-      
+
       setComments(response.data.content);
       setPagination({
         current: page,
         pageSize: size,
         total: response.data.totalElements,
       });
-      
+
       onCommentCountChange?.(response.data.totalElements);
     } catch {
       message.error('获取评论失败');
@@ -66,7 +66,7 @@ const CommentList: React.FC<CommentListProps> = ({
 
   useEffect(() => {
     fetchComments();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knowledgeId]);
 
   // 提交新评论
@@ -91,7 +91,7 @@ const CommentList: React.FC<CommentListProps> = ({
       await interactionService.createComment(commentData);
       setNewComment('');
       message.success('评论成功');
-      
+
       // 重新获取评论列表
       await fetchComments(1, pagination.pageSize);
     } catch {
@@ -115,7 +115,7 @@ const CommentList: React.FC<CommentListProps> = ({
     };
 
     await interactionService.createComment(commentData);
-    
+
     // 重新获取评论列表
     await fetchComments(pagination.current, pagination.pageSize);
   };
@@ -123,9 +123,11 @@ const CommentList: React.FC<CommentListProps> = ({
   // 处理编辑
   const handleEdit = async (commentId: number, content: string) => {
     await interactionService.updateComment(commentId, content);
-    
+
     // 更新本地评论内容
-    const updateCommentContent = (comments: CommentWithReplies[]): CommentWithReplies[] => {
+    const updateCommentContent = (
+      comments: CommentWithReplies[]
+    ): CommentWithReplies[] => {
       return comments.map(comment => {
         if (comment.id === commentId) {
           return { ...comment, content };
@@ -146,7 +148,7 @@ const CommentList: React.FC<CommentListProps> = ({
   // 处理删除
   const handleDelete = async (commentId: number) => {
     await interactionService.deleteComment(commentId);
-    
+
     // 重新获取评论列表
     await fetchComments(pagination.current, pagination.pageSize);
   };
@@ -159,7 +161,9 @@ const CommentList: React.FC<CommentListProps> = ({
     });
 
     // 更新评论的回复列表
-    const updateCommentReplies = (comments: CommentWithReplies[]): CommentWithReplies[] => {
+    const updateCommentReplies = (
+      comments: CommentWithReplies[]
+    ): CommentWithReplies[] => {
       return comments.map(comment => {
         if (comment.id === commentId) {
           return {
@@ -192,7 +196,7 @@ const CommentList: React.FC<CommentListProps> = ({
         <div style={{ marginBottom: 24 }}>
           <TextArea
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={e => setNewComment(e.target.value)}
             placeholder="写下你的评论..."
             rows={4}
             maxLength={1000}

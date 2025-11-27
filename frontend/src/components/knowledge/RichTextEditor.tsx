@@ -54,14 +54,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = async (e) => {
+    input.onchange = async e => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
       try {
         setIsUploading(true);
         const response = await uploadFile(file);
-        
+
         if (response.success && response.data?.url) {
           const img = `<img src="${response.data.url}" alt="uploaded image" style="max-width: 100%; height: auto;" />`;
           handleCommand('insertHTML', img);
@@ -153,11 +153,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   return (
     <div style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
       {/* 工具栏 */}
-      <div style={{ 
-        padding: '8px 12px', 
-        borderBottom: '1px solid #d9d9d9',
-        backgroundColor: '#fafafa'
-      }}>
+      <div
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid #d9d9d9',
+          backgroundColor: '#fafafa',
+        }}
+      >
         <Space size="small">
           {toolbarButtons.map((button, index) => {
             if (button.type === 'divider') {

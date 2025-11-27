@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
-import { 
-  Avatar, 
-  Button, 
-  Input, 
-  Space, 
-  Dropdown, 
+import {
+  Avatar,
+  Button,
+  Input,
+  Space,
+  Dropdown,
   message,
   Popconfirm,
   Typography,
-  Card 
+  Card,
 } from 'antd';
-import { 
-  MoreOutlined, 
-  EditOutlined, 
-  DeleteOutlined 
-} from '@ant-design/icons';
+import { MoreOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import type { CommentWithReplies } from '@/types';
 import { formatDate } from '@/utils/format';
-
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -124,7 +119,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
   // 更多操作菜单
   const menuItems: MenuProps['items'] = [];
-  
+
   if (isOwner) {
     menuItems.push(
       {
@@ -159,23 +154,25 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <Dropdown
         key="more"
         menu={{
-          items: menuItems.filter(item => item !== null).map(item => 
-            item!.key === 'delete' 
-              ? {
-                  ...item!,
-                  label: (
-                    <Popconfirm
-                      title="确定要删除这条评论吗？"
-                      onConfirm={handleDelete}
-                      okText="确定"
-                      cancelText="取消"
-                    >
-                      <span>删除</span>
-                    </Popconfirm>
-                  ),
-                }
-              : item!
-          ),
+          items: menuItems
+            .filter(item => item !== null)
+            .map(item =>
+              item!.key === 'delete'
+                ? {
+                    ...item!,
+                    label: (
+                      <Popconfirm
+                        title="确定要删除这条评论吗？"
+                        onConfirm={handleDelete}
+                        okText="确定"
+                        cancelText="取消"
+                      >
+                        <span>删除</span>
+                      </Popconfirm>
+                    ),
+                  }
+                : item!
+            ),
         }}
         trigger={['click']}
       >
@@ -200,13 +197,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 </Text>
               </Space>
             </div>
-            
+
             <div style={{ marginBottom: 12 }}>
               {showEditInput ? (
                 <div>
                   <TextArea
                     value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
+                    onChange={e => setEditContent(e.target.value)}
                     rows={3}
                     placeholder="编辑评论..."
                   />
@@ -236,18 +233,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 <Text>{comment.content}</Text>
               )}
             </div>
-            
+
             <div style={{ marginBottom: 12 }}>
-              <Space>
-                {actions}
-              </Space>
+              <Space>{actions}</Space>
             </div>
             {/* 回复输入框 */}
             {showReplyInput && (
               <div style={{ marginTop: 12 }}>
                 <TextArea
                   value={replyContent}
-                  onChange={(e) => setReplyContent(e.target.value)}
+                  onChange={e => setReplyContent(e.target.value)}
                   rows={3}
                   placeholder={`回复 ${comment.user.fullName}...`}
                 />
@@ -298,17 +293,19 @@ const CommentItem: React.FC<CommentItemProps> = ({
       )}
 
       {/* 加载更多回复按钮 */}
-      {comment.replyCount && comment.replyCount > (comment.replies?.length || 0) && (
-        <Button
-          type="link"
-          size="small"
-          loading={loading.loadReplies}
-          onClick={handleLoadReplies}
-          style={{ padding: 0, marginTop: 8, marginLeft: 40 }}
-        >
-          查看更多回复 ({comment.replyCount - (comment.replies?.length || 0)} 条)
-        </Button>
-      )}
+      {comment.replyCount &&
+        comment.replyCount > (comment.replies?.length || 0) && (
+          <Button
+            type="link"
+            size="small"
+            loading={loading.loadReplies}
+            onClick={handleLoadReplies}
+            style={{ padding: 0, marginTop: 8, marginLeft: 40 }}
+          >
+            查看更多回复 ({comment.replyCount - (comment.replies?.length || 0)}{' '}
+            条)
+          </Button>
+        )}
     </div>
   );
 };

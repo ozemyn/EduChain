@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { Spin } from 'antd';
 import Layout from '@/components/layout/Layout';
+import AdminLayout from '@/components/layout/AdminLayout';
 import ProtectedRoute from '@/components/common/ProtectedRoute';
 
 // 懒加载页面组件
@@ -20,6 +21,22 @@ const CreateKnowledgePage = React.lazy(
 );
 const SearchPage = React.lazy(() => import('@/pages/search/Search'));
 const NotFoundPage = React.lazy(() => import('@/pages/error/NotFound'));
+
+// 管理员页面
+const AdminLoginPage = React.lazy(() => import('@/pages/admin/AdminLogin'));
+const AdminDashboardPage = React.lazy(
+  () => import('@/pages/admin/AdminDashboard')
+);
+const UserManagementPage = React.lazy(
+  () => import('@/pages/admin/UserManagement')
+);
+const ContentManagementPage = React.lazy(
+  () => import('@/pages/admin/ContentManagement')
+);
+const SystemMonitoringPage = React.lazy(
+  () => import('@/pages/admin/SystemMonitoring')
+);
+const SystemLogsPage = React.lazy(() => import('@/pages/admin/SystemLogs'));
 
 // 加载组件包装器
 // eslint-disable-next-line react-refresh/only-export-components
@@ -44,7 +61,6 @@ const LoadingWrapper: React.FC<{ children: React.ReactNode }> = ({
   </Suspense>
 );
 
- 
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -125,6 +141,81 @@ export const router = createBrowserRouter([
       </LoadingWrapper>
     ),
   },
+  // 管理员路由
+  {
+    path: '/admin/login',
+    element: (
+      <LoadingWrapper>
+        <AdminLoginPage />
+      </LoadingWrapper>
+    ),
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedRoute roles={['ADMIN']}>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <LoadingWrapper>
+            <AdminDashboardPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'users',
+        element: (
+          <LoadingWrapper>
+            <UserManagementPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'knowledge',
+        element: (
+          <LoadingWrapper>
+            <ContentManagementPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'categories',
+        element: (
+          <LoadingWrapper>
+            <div style={{ padding: '24px' }}>分类管理页面开发中...</div>
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'comments',
+        element: (
+          <LoadingWrapper>
+            <div style={{ padding: '24px' }}>评论管理页面开发中...</div>
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'statistics',
+        element: (
+          <LoadingWrapper>
+            <SystemMonitoringPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'logs',
+        element: (
+          <LoadingWrapper>
+            <SystemLogsPage />
+          </LoadingWrapper>
+        ),
+      },
+    ],
+  },
   {
     path: '/404',
     element: (
@@ -139,5 +230,4 @@ export const router = createBrowserRouter([
   },
 ]);
 
- 
 export default router;

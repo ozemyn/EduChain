@@ -40,7 +40,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   const loadTags = async () => {
     try {
       setLoading(true);
-      
+
       // 模拟API调用
       const mockTags: TagInfo[] = [
         { name: 'JavaScript', count: 156, color: 'gold' },
@@ -76,11 +76,9 @@ const TagSelector: React.FC<TagSelectorProps> = ({
       ];
 
       setAllTags(mockTags);
-      
+
       // 按使用次数排序，取前20个作为热门标签
-      const popular = mockTags
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 20);
+      const popular = mockTags.sort((a, b) => b.count - a.count).slice(0, 20);
       setPopularTags(popular);
     } catch (error) {
       console.error('Failed to load tags:', error);
@@ -94,7 +92,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
     if (!tag || value.includes(tag) || value.length >= maxTags) {
       return;
     }
-    
+
     const newTags = [...value, tag];
     onChange?.(newTags);
   };
@@ -123,7 +121,9 @@ const TagSelector: React.FC<TagSelectorProps> = ({
 
   // 过滤选项
   const filterOption = (input: string, option?: { children: string }) => {
-    return option?.children.toLowerCase().includes(input.toLowerCase()) || false;
+    return (
+      option?.children.toLowerCase().includes(input.toLowerCase()) || false
+    );
   };
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
         filterOption={filterOption}
         style={{ width: '100%' }}
         maxTagCount="responsive"
-        tagRender={(props) => {
+        tagRender={props => {
           const { label, closable, onClose } = props;
           const tagInfo = allTags.find(tag => tag.name === label);
           return (
@@ -206,7 +206,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
               size="small"
               style={{ width: 200 }}
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={e => setInputValue(e.target.value)}
               onBlur={handleInputConfirm}
               onPressEnter={handleInputConfirm}
               placeholder="输入自定义标签"
@@ -230,7 +230,10 @@ const TagSelector: React.FC<TagSelectorProps> = ({
         <>
           <Divider style={{ margin: '12px 0' }} />
           <div>
-            <Text type="secondary" style={{ fontSize: 12, marginBottom: 8, display: 'block' }}>
+            <Text
+              type="secondary"
+              style={{ fontSize: 12, marginBottom: 8, display: 'block' }}
+            >
               热门标签（点击添加）：
             </Text>
             <Space wrap>
@@ -238,14 +241,17 @@ const TagSelector: React.FC<TagSelectorProps> = ({
                 <Tag.CheckableTag
                   key={tag.name}
                   checked={value.includes(tag.name)}
-                  onChange={(checked) => {
+                  onChange={checked => {
                     if (checked) {
                       addTag(tag.name);
                     } else {
                       removeTag(tag.name);
                     }
                   }}
-                  disabled={disabled || (!value.includes(tag.name) && value.length >= maxTags)}
+                  disabled={
+                    disabled ||
+                    (!value.includes(tag.name) && value.length >= maxTags)
+                  }
                 >
                   {tag.name} ({tag.count})
                 </Tag.CheckableTag>

@@ -39,14 +39,14 @@ const processQueue = (error: unknown, token: string | null = null) => {
       resolve(token);
     }
   });
-  
+
   failedQueue = [];
 };
 
 // 刷新token
 const refreshTokenIfNeeded = async (): Promise<string | null> => {
   const refreshToken = TokenManager.getStoredRefreshToken();
-  
+
   if (!refreshToken) {
     throw new Error('No refresh token available');
   }
@@ -65,21 +65,22 @@ const refreshTokenIfNeeded = async (): Promise<string | null> => {
       refreshToken: refreshToken,
     });
 
-    const { token: newToken, refreshToken: newRefreshToken } = response.data.data;
-    
+    const { token: newToken, refreshToken: newRefreshToken } =
+      response.data.data;
+
     // 更新存储的token
     Storage.setLocal(STORAGE_KEYS.TOKEN, newToken);
     Storage.setLocal(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
-    
+
     processQueue(null, newToken);
-    
+
     return newToken;
   } catch (error) {
     processQueue(error, null);
-    
+
     // 刷新失败，清除认证信息
     TokenManager.clearAuthStorage();
-    
+
     throw error;
   } finally {
     isRefreshing = false;
@@ -144,7 +145,7 @@ api.interceptors.response.use(
   },
   async error => {
     const originalRequest = error.config;
-    
+
     console.error('Response error:', error);
 
     if (error.response) {

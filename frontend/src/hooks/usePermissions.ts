@@ -59,10 +59,10 @@ export const usePermissions = () => {
   const canEditContent = useMemo(() => {
     return (contentUserId: number): boolean => {
       if (!user) return false;
-      
+
       // 管理员可以编辑所有内容
       if (user.role === 'ADMIN') return true;
-      
+
       // 用户只能编辑自己的内容
       return user.id === contentUserId;
     };
@@ -72,10 +72,10 @@ export const usePermissions = () => {
   const canDeleteContent = useMemo(() => {
     return (contentUserId: number): boolean => {
       if (!user) return false;
-      
+
       // 管理员可以删除所有内容
       if (user.role === 'ADMIN') return true;
-      
+
       // 用户只能删除自己的内容
       return user.id === contentUserId;
     };

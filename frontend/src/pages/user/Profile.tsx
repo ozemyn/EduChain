@@ -72,7 +72,7 @@ const Profile: React.FC = () => {
           // 这里应该调用获取用户统计的API
           // const response = await userService.getUserStats(user.id);
           // setUserStats(response.data);
-          
+
           // 模拟数据
           setUserStats({
             userId: user.id,
@@ -112,14 +112,14 @@ const Profile: React.FC = () => {
       setLoading(true);
       // 这里应该调用更新用户信息的API
       // const response = await userService.updateProfile(user.id, values);
-      
+
       // 模拟更新
       const updatedUser: User = {
         ...user,
         ...values,
         updatedAt: new Date().toISOString(),
       };
-      
+
       updateUser(updatedUser);
       message.success('个人信息更新成功！');
       setEditMode(false);
@@ -157,8 +157,9 @@ const Profile: React.FC = () => {
     headers: {
       authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-    beforeUpload: (file) => {
-      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    beforeUpload: file => {
+      const isJpgOrPng =
+        file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJpgOrPng) {
         message.error('只能上传 JPG/PNG 格式的图片！');
         return false;
@@ -170,7 +171,7 @@ const Profile: React.FC = () => {
       }
       return true;
     },
-    onChange: (info) => {
+    onChange: info => {
       if (info.file.status === 'done') {
         if (info.file.response?.success && user) {
           const updatedUser: User = {
@@ -236,15 +237,20 @@ const Profile: React.FC = () => {
                       border: '2px solid white',
                     }}
                   >
-                    <CameraOutlined style={{ color: 'white', fontSize: '14px' }} />
+                    <CameraOutlined
+                      style={{ color: 'white', fontSize: '14px' }}
+                    />
                   </div>
                 </div>
               </Upload>
-              
-              <Title level={3} style={{ marginTop: '16px', marginBottom: '8px' }}>
+
+              <Title
+                level={3}
+                style={{ marginTop: '16px', marginBottom: '8px' }}
+              >
                 {user.fullName}
               </Title>
-              
+
               <Space direction="vertical" size="small">
                 <Text type="secondary">@{user.username}</Text>
                 <Tag color="blue">等级 {user.level}</Tag>
@@ -354,16 +360,10 @@ const Profile: React.FC = () => {
                   />
                 </Col>
                 <Col span={8}>
-                  <Statistic
-                    title="关注"
-                    value={userStats.followingCount}
-                  />
+                  <Statistic title="关注" value={userStats.followingCount} />
                 </Col>
                 <Col span={8}>
-                  <Statistic
-                    title="粉丝"
-                    value={userStats.followerCount}
-                  />
+                  <Statistic title="粉丝" value={userStats.followerCount} />
                 </Col>
               </Row>
             </Card>
@@ -382,7 +382,11 @@ const Profile: React.FC = () => {
                   label="真实姓名"
                   rules={[
                     { required: true, message: '请输入真实姓名！' },
-                    { min: 2, max: 20, message: '姓名长度应在2-20个字符之间！' }
+                    {
+                      min: 2,
+                      max: 20,
+                      message: '姓名长度应在2-20个字符之间！',
+                    },
                   ]}
                 >
                   <Input placeholder="请输入真实姓名" />
@@ -393,16 +397,13 @@ const Profile: React.FC = () => {
                   label="邮箱"
                   rules={[
                     { required: true, message: '请输入邮箱！' },
-                    { type: 'email', message: '请输入有效的邮箱地址！' }
+                    { type: 'email', message: '请输入有效的邮箱地址！' },
                   ]}
                 >
                   <Input placeholder="请输入邮箱地址" />
                 </Form.Item>
 
-                <Form.Item
-                  name="school"
-                  label="学校"
-                >
+                <Form.Item name="school" label="学校">
                   <Select
                     placeholder="请选择或输入学校名称"
                     showSearch
@@ -420,9 +421,7 @@ const Profile: React.FC = () => {
                 <Form.Item
                   name="bio"
                   label="个人简介"
-                  rules={[
-                    { max: 200, message: '个人简介不能超过200个字符！' }
-                  ]}
+                  rules={[{ max: 200, message: '个人简介不能超过200个字符！' }]}
                 >
                   <TextArea
                     rows={4}
@@ -434,16 +433,10 @@ const Profile: React.FC = () => {
 
                 <Form.Item>
                   <Space>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      loading={loading}
-                    >
+                    <Button type="primary" htmlType="submit" loading={loading}>
                       保存修改
                     </Button>
-                    <Button onClick={() => setEditMode(false)}>
-                      取消
-                    </Button>
+                    <Button onClick={() => setEditMode(false)}>取消</Button>
                   </Space>
                 </Form.Item>
               </Form>
@@ -471,13 +464,13 @@ const Profile: React.FC = () => {
           <Form.Item
             name="oldPassword"
             label="原密码"
-            rules={[
-              { required: true, message: '请输入原密码！' }
-            ]}
+            rules={[{ required: true, message: '请输入原密码！' }]}
           >
             <Input.Password
               placeholder="请输入原密码"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={visible =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 
@@ -487,12 +480,17 @@ const Profile: React.FC = () => {
             rules={[
               { required: true, message: '请输入新密码！' },
               { min: 6, max: 20, message: '密码长度应在6-20个字符之间！' },
-              { pattern: /^(?=.*[a-zA-Z])(?=.*\d)/, message: '密码必须包含字母和数字！' }
+              {
+                pattern: /^(?=.*[a-zA-Z])(?=.*\d)/,
+                message: '密码必须包含字母和数字！',
+              },
             ]}
           >
             <Input.Password
               placeholder="请输入新密码"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={visible =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 
@@ -514,7 +512,9 @@ const Profile: React.FC = () => {
           >
             <Input.Password
               placeholder="请再次输入新密码"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={visible =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 

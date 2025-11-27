@@ -126,11 +126,11 @@
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .authorInfo {
     flex-wrap: wrap;
   }
-  
+
   .stats {
     align-self: flex-end;
   }

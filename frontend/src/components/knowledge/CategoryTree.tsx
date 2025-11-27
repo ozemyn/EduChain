@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Tree, Card, Space, Typography, Button, Input, Modal, Form, message, Tooltip } from 'antd';
+import {
+  Tree,
+  Card,
+  Space,
+  Typography,
+  Button,
+  Input,
+  Modal,
+  Form,
+  message,
+  Tooltip,
+} from 'antd';
 import {
   FolderOutlined,
-
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
@@ -17,9 +27,18 @@ const { confirm } = Modal;
 
 interface CategoryTreeProps {
   categories?: Category[];
-  onCategorySelect?: (categoryId: number | null, category: Category | null) => void;
-  onCategoryCreate?: (parentId: number | null, categoryData: { name: string; description?: string }) => Promise<void>;
-  onCategoryUpdate?: (categoryId: number, categoryData: { name?: string; description?: string }) => Promise<void>;
+  onCategorySelect?: (
+    categoryId: number | null,
+    category: Category | null
+  ) => void;
+  onCategoryCreate?: (
+    parentId: number | null,
+    categoryData: { name: string; description?: string }
+  ) => Promise<void>;
+  onCategoryUpdate?: (
+    categoryId: number,
+    categoryData: { name?: string; description?: string }
+  ) => Promise<void>;
   onCategoryDelete?: (categoryId: number) => Promise<void>;
   selectedCategoryId?: number | null;
   showActions?: boolean;
@@ -59,28 +78,30 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
       title: renderTreeNode(category),
       key: category.id,
       icon: <FolderOutlined />,
-      children: category.children ? convertToTreeData(category.children) : undefined,
+      children: category.children
+        ? convertToTreeData(category.children)
+        : undefined,
     }));
   };
 
   // 渲染树节点
   const renderTreeNode = (category: Category) => {
     const isSelected = selectedCategoryId === category.id;
-    
+
     return (
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
           padding: '2px 0',
         }}
       >
         <Space>
-          <Text 
+          <Text
             strong={isSelected}
-            style={{ 
+            style={{
               color: isSelected ? '#1890ff' : undefined,
               fontSize: 14,
             }}
@@ -93,9 +114,9 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
             </Text>
           )}
         </Space>
-        
+
         {showActions && (
-          <Space size="small" onClick={(e) => e.stopPropagation()}>
+          <Space size="small" onClick={e => e.stopPropagation()}>
             <Tooltip title="添加子分类">
               <Button
                 type="text"
@@ -128,45 +149,62 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
   };
 
   // 搜索过滤
-  const filterCategories = (categories: Category[], searchValue: string): Category[] => {
+  const filterCategories = (
+    categories: Category[],
+    searchValue: string
+  ): Category[] => {
     if (!searchValue) return categories;
-    
+
     return categories.reduce<Category[]>((filtered, category) => {
-      const matchesSearch = category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                           (category.description && category.description.toLowerCase().includes(searchValue.toLowerCase()));
-      
-      const filteredChildren = category.children ? filterCategories(category.children, searchValue) : [];
-      
+      const matchesSearch =
+        category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        (category.description &&
+          category.description
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()));
+
+      const filteredChildren = category.children
+        ? filterCategories(category.children, searchValue)
+        : [];
+
       if (matchesSearch || filteredChildren.length > 0) {
         filtered.push({
           ...category,
-          children: filteredChildren.length > 0 ? filteredChildren : category.children,
+          children:
+            filteredChildren.length > 0 ? filteredChildren : category.children,
         });
       }
-      
+
       return filtered;
     }, []);
   };
 
   // 获取所有匹配的节点key
-  const getMatchedKeys = (categories: Category[], searchValue: string): React.Key[] => {
+  const getMatchedKeys = (
+    categories: Category[],
+    searchValue: string
+  ): React.Key[] => {
     const keys: React.Key[] = [];
-    
+
     const traverse = (cats: Category[]) => {
       cats.forEach(category => {
-        const matches = category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                       (category.description && category.description.toLowerCase().includes(searchValue.toLowerCase()));
-        
+        const matches =
+          category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (category.description &&
+            category.description
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()));
+
         if (matches) {
           keys.push(category.id);
         }
-        
+
         if (category.children) {
           traverse(category.children);
         }
       });
     };
-    
+
     traverse(categories);
     return keys;
   };
@@ -174,11 +212,11 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
   // 处理搜索
   const handleSearch = (value: string) => {
     setSearchValue(value);
-    
+
     if (value) {
       const filtered = filterCategories(categories, value);
       setFilteredCategories(filtered);
-      
+
       // 展开所有匹配的节点
       const matchedKeys = getMatchedKeys(categories, value);
       setExpandedKeys(matchedKeys);
@@ -196,7 +234,10 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
   };
 
   // 查找分类
-  const findCategoryById = (categories: Category[], id: number): Category | null => {
+  const findCategoryById = (
+    categories: Category[],
+    id: number
+  ): Category | null => {
     for (const category of categories) {
       if (category.id === id) {
         return category;
@@ -235,7 +276,7 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
   const handleDeleteCategory = (category: Category) => {
     const hasChildren = category.children && category.children.length > 0;
     const hasContent = category.knowledgeCount && category.knowledgeCount > 0;
-    
+
     let content = `确定要删除分类"${category.name}"吗？`;
     if (hasChildren) {
       content += '\n\n注意：删除后其子分类也将被删除。';
@@ -243,7 +284,7 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
     if (hasContent) {
       content += `\n\n该分类下有 ${category.knowledgeCount} 个内容，删除后这些内容将变为未分类状态。`;
     }
-    
+
     confirm({
       title: '确认删除分类',
       icon: <ExclamationCircleOutlined />,
@@ -287,10 +328,12 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
   const treeData = convertToTreeData(filteredCategories);
 
   return (
-    <Card 
+    <Card
       title={
         <Space>
-          <Title level={5} style={{ margin: 0 }}>分类管理</Title>
+          <Title level={5} style={{ margin: 0 }}>
+            分类管理
+          </Title>
           {showActions && (
             <Button
               type="primary"
@@ -310,7 +353,7 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
           <Search
             placeholder="搜索分类..."
             value={searchValue}
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={e => handleSearch(e.target.value)}
             allowClear
           />
         </div>
@@ -335,19 +378,22 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
         onOk={() => form.submit()}
         destroyOnClose
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleFormSubmit}
-        >
+        <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
           {modalType === 'create' && parentCategory && (
-            <div style={{ marginBottom: 16, padding: 12, backgroundColor: '#f5f5f5', borderRadius: 4 }}>
+            <div
+              style={{
+                marginBottom: 16,
+                padding: 12,
+                backgroundColor: '#f5f5f5',
+                borderRadius: 4,
+              }}
+            >
               <Text type="secondary">
                 将在 <Text strong>"{parentCategory.name}"</Text> 下创建子分类
               </Text>
             </div>
           )}
-          
+
           <Form.Item
             name="name"
             label="分类名称"
@@ -362,25 +408,25 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
           <Form.Item
             name="description"
             label="分类描述"
-            rules={[
-              { max: 200, message: '分类描述不能超过200个字符' },
-            ]}
+            rules={[{ max: 200, message: '分类描述不能超过200个字符' }]}
           >
-            <Input.TextArea 
-              placeholder="请输入分类描述（可选）" 
-              rows={3}
-            />
+            <Input.TextArea placeholder="请输入分类描述（可选）" rows={3} />
           </Form.Item>
 
           <Form.Item
             name="sortOrder"
             label="排序顺序"
             rules={[
-              { type: 'number', min: 0, max: 999, message: '排序顺序必须在0-999之间' },
+              {
+                type: 'number',
+                min: 0,
+                max: 999,
+                message: '排序顺序必须在0-999之间',
+              },
             ]}
           >
-            <Input 
-              type="number" 
+            <Input
+              type="number"
               placeholder="数字越小排序越靠前（可选）"
               min={0}
               max={999}

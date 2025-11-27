@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Divider } from 'antd';
-import { UserOutlined, LockOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import {
+  UserOutlined,
+  LockOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+} from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import type { LoginRequest } from '@/types/api';
@@ -17,7 +22,7 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const state = location.state as LocationState;
   const from = state?.from || '/';
 
@@ -45,20 +50,22 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '20px'
-    }}>
-      <Card 
-        style={{ 
-          width: '100%', 
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '20px',
+      }}
+    >
+      <Card
+        style={{
+          width: '100%',
           maxWidth: 400,
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          borderRadius: '12px'
+          borderRadius: '12px',
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -80,7 +87,7 @@ const Login: React.FC = () => {
             name="username"
             rules={[
               { required: true, message: '请输入用户名或邮箱！' },
-              { min: 3, message: '用户名至少需要3个字符！' }
+              { min: 3, message: '用户名至少需要3个字符！' },
             ]}
           >
             <Input
@@ -94,14 +101,16 @@ const Login: React.FC = () => {
             name="password"
             rules={[
               { required: true, message: '请输入密码！' },
-              { min: 6, message: '密码至少需要6个字符！' }
+              { min: 6, message: '密码至少需要6个字符！' },
             ]}
           >
             <Input.Password
               prefix={<LockOutlined />}
               placeholder="密码"
               autoComplete="current-password"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={visible =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 

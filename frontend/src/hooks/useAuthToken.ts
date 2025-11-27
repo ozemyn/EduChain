@@ -18,7 +18,7 @@ export const useAuthToken = () => {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const currentTime = Date.now() / 1000;
       const expiryTime = payload.exp;
-      
+
       // 如果token在5分钟内过期，返回true
       return expiryTime - currentTime < 300;
     } catch (error) {

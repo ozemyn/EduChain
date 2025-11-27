@@ -75,20 +75,20 @@
   .advancedSearch {
     padding: 16px;
   }
-  
+
   .header {
     padding: 24px 16px;
     margin-bottom: 24px;
   }
-  
+
   .header h2 {
     font-size: 24px !important;
   }
-  
+
   .tagContainer {
     padding: 12px;
   }
-  
+
   .actions {
     flex-direction: column;
     align-items: center;

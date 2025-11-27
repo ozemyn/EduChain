@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { Storage, STORAGE_KEYS } from '@/utils/storage';
@@ -51,11 +46,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [mode, setModeState] = useState<ThemeMode>(() => {
     return Storage.getLocal<ThemeMode>(STORAGE_KEYS.THEME) || 'light';
   });
-  
+
   const [config, setConfig] = useState<ThemeConfig>(() => {
     const savedConfig = Storage.getLocal<ThemeConfig>('themeConfig');
-    const savedMode = Storage.getLocal<ThemeMode>(STORAGE_KEYS.THEME) || 'light';
-    
+    const savedMode =
+      Storage.getLocal<ThemeMode>(STORAGE_KEYS.THEME) || 'light';
+
     if (savedConfig) {
       return savedConfig;
     }
@@ -142,5 +138,3 @@ export const useTheme = (): ThemeContextType => {
   }
   return context;
 };
-
-

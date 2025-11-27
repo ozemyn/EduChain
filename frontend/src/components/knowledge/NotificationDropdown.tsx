@@ -41,9 +41,9 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
         page: 0,
         size: 5,
       });
-      
+
       setNotifications(response.data.content);
-      
+
       // 计算未读数量
       const unread = response.data.content.filter(n => !n.isRead).length;
       setUnreadCount(unread);
@@ -66,10 +66,10 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
 
   useEffect(() => {
     fetchUnreadCount();
-    
+
     // 定期更新未读数量
     const interval = setInterval(fetchUnreadCount, 30000); // 30秒更新一次
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -85,7 +85,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   const markAsRead = async (notificationId: number) => {
     try {
       await interactionService.markNotificationAsRead(notificationId);
-      
+
       // 更新本地状态
       setNotifications(prev =>
         prev.map(notification =>
@@ -94,7 +94,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
             : notification
         )
       );
-      
+
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
       console.error('Failed to mark as read:', error);
@@ -136,11 +136,13 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
           <List
             size="small"
             dataSource={notifications}
-            renderItem={(notification) => (
+            renderItem={notification => (
               <List.Item
                 style={{
                   padding: '12px 16px',
-                  backgroundColor: notification.isRead ? 'transparent' : '#f6ffed',
+                  backgroundColor: notification.isRead
+                    ? 'transparent'
+                    : '#f6ffed',
                   cursor: 'pointer',
                 }}
                 onClick={() => {
@@ -153,14 +155,14 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                 <List.Item.Meta
                   avatar={
                     <Badge dot={!notification.isRead}>
-                      <Avatar 
-                        size="small" 
-                        icon={getNotificationIcon(notification.type)} 
+                      <Avatar
+                        size="small"
+                        icon={getNotificationIcon(notification.type)}
                       />
                     </Badge>
                   }
                   title={
-                    <Text 
+                    <Text
                       ellipsis={{ tooltip: notification.title }}
                       strong={!notification.isRead}
                       style={{ fontSize: '13px' }}
@@ -170,8 +172,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                   }
                   description={
                     <Space direction="vertical" size={2}>
-                      <Text 
-                        type="secondary" 
+                      <Text
+                        type="secondary"
                         ellipsis={{ tooltip: notification.content }}
                         style={{ fontSize: '12px' }}
                       >

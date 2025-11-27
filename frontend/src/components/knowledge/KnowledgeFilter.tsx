@@ -3,7 +3,6 @@ import { Card, Select, Input, Button, Space, Tag, Row, Col } from 'antd';
 import { SearchOutlined, ClearOutlined } from '@ant-design/icons';
 import { CategorySelector } from '@/components/knowledge';
 
-
 const { Search } = Input;
 const { Option } = Select;
 
@@ -43,9 +42,24 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
   ];
 
   const popularTags = [
-    'JavaScript', 'React', 'Vue', 'Node.js', 'Python', 'Java',
-    'Spring Boot', 'MySQL', 'Redis', '算法', '数据结构', '前端',
-    '后端', '全栈', '移动开发', '人工智能', '机器学习', '深度学习'
+    'JavaScript',
+    'React',
+    'Vue',
+    'Node.js',
+    'Python',
+    'Java',
+    'Spring Boot',
+    'MySQL',
+    'Redis',
+    '算法',
+    '数据结构',
+    '前端',
+    '后端',
+    '全栈',
+    '移动开发',
+    '人工智能',
+    '机器学习',
+    '深度学习',
   ];
 
   const handleFilterChange = (key: keyof FilterValues, value: unknown) => {
@@ -57,7 +71,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
     const newTags = selectedTags.includes(tag)
       ? selectedTags.filter(t => t !== tag)
       : [...selectedTags, tag];
-    
+
     setSelectedTags(newTags);
     handleFilterChange('tags', newTags);
   };
@@ -73,8 +87,6 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
     onFilter(clearedFilters);
   };
 
-
-
   useEffect(() => {
     // 自动搜索当关键词变化时
     if (filters.keyword !== undefined) {
@@ -83,7 +95,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
       }, 500);
       return () => clearTimeout(timer);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.keyword]);
 
   return (
@@ -94,7 +106,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
             <Search
               placeholder="搜索知识内容..."
               value={filters.keyword}
-              onChange={(e) => handleFilterChange('keyword', e.target.value)}
+              onChange={e => handleFilterChange('keyword', e.target.value)}
               onSearch={handleSearch}
               loading={loading}
               allowClear
@@ -104,7 +116,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
             <CategorySelector
               placeholder="选择分类"
               value={filters.categoryId}
-              onChange={(value) => handleFilterChange('categoryId', value)}
+              onChange={value => handleFilterChange('categoryId', value)}
               allowClear
               showCount
             />
@@ -113,7 +125,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
             <Select
               placeholder="内容类型"
               value={filters.type}
-              onChange={(value) => handleFilterChange('type', value)}
+              onChange={value => handleFilterChange('type', value)}
               style={{ width: '100%' }}
             >
               {contentTypes.map(type => (
@@ -127,7 +139,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
             <Select
               placeholder="排序方式"
               value={filters.sortBy || 'TIME'}
-              onChange={(value) => handleFilterChange('sortBy', value)}
+              onChange={value => handleFilterChange('sortBy', value)}
               style={{ width: '100%' }}
             >
               {sortOptions.map(option => (
@@ -158,15 +170,12 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
 
         <Row justify="end">
           <Space>
-            <Button 
-              icon={<ClearOutlined />} 
-              onClick={handleClear}
-            >
+            <Button icon={<ClearOutlined />} onClick={handleClear}>
               清空筛选
             </Button>
-            <Button 
-              type="primary" 
-              icon={<SearchOutlined />} 
+            <Button
+              type="primary"
+              icon={<SearchOutlined />}
               onClick={handleSearch}
               loading={loading}
             >

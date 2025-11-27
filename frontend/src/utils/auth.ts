@@ -7,7 +7,9 @@ export class TokenManager {
   /**
    * 解析JWT Token
    */
-  static parseToken(token: string): { exp?: number; [key: string]: unknown } | null {
+  static parseToken(
+    token: string
+  ): { exp?: number; [key: string]: unknown } | null {
     try {
       const payload = token.split('.')[1];
       return JSON.parse(atob(payload));
@@ -37,7 +39,7 @@ export class TokenManager {
 
     const currentTime = Date.now() / 1000;
     const expiryTime = payload.exp;
-    
+
     // 如果token在5分钟内过期，返回true
     return expiryTime - currentTime < 300;
   }
@@ -51,7 +53,7 @@ export class TokenManager {
 
     const currentTime = Date.now() / 1000;
     const remainingTime = payload.exp - currentTime;
-    
+
     return Math.max(0, remainingTime);
   }
 
@@ -84,7 +86,7 @@ export class TokenManager {
   static isCurrentTokenValid(): boolean {
     const token = this.getStoredToken();
     if (!token) return false;
-    
+
     return !this.isTokenExpired(token);
   }
 
@@ -94,7 +96,7 @@ export class TokenManager {
   static isCurrentTokenExpiringSoon(): boolean {
     const token = this.getStoredToken();
     if (!token) return true;
-    
+
     return this.isTokenExpiringSoon(token);
   }
 }
@@ -106,7 +108,12 @@ export class PermissionManager {
   /**
    * 检查用户是否有特定权限
    */
-  static hasPermission(userRole: string, userStatus: number, userLevel: number, permission: string): boolean {
+  static hasPermission(
+    userRole: string,
+    userStatus: number,
+    userLevel: number,
+    permission: string
+  ): boolean {
     // 管理员拥有所有权限
     if (userRole === 'ADMIN') return true;
 
@@ -145,10 +152,14 @@ export class PermissionManager {
   /**
    * 检查用户是否可以编辑特定内容
    */
-  static canEditContent(userId: number, contentUserId: number, userRole: string): boolean {
+  static canEditContent(
+    userId: number,
+    contentUserId: number,
+    userRole: string
+  ): boolean {
     // 管理员可以编辑所有内容
     if (userRole === 'ADMIN') return true;
-    
+
     // 用户只能编辑自己的内容
     return userId === contentUserId;
   }
@@ -156,10 +167,14 @@ export class PermissionManager {
   /**
    * 检查用户是否可以删除特定内容
    */
-  static canDeleteContent(userId: number, contentUserId: number, userRole: string): boolean {
+  static canDeleteContent(
+    userId: number,
+    contentUserId: number,
+    userRole: string
+  ): boolean {
     // 管理员可以删除所有内容
     if (userRole === 'ADMIN') return true;
-    
+
     // 用户只能删除自己的内容
     return userId === contentUserId;
   }

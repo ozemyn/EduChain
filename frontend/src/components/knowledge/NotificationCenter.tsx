@@ -37,7 +37,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
-  const [actionLoading, setActionLoading] = useState<Record<number, boolean>>({});
+  const [actionLoading, setActionLoading] = useState<Record<number, boolean>>(
+    {}
+  );
   const [activeTab, setActiveTab] = useState<string>('all');
   const [pagination, setPagination] = useState({
     current: 1,
@@ -54,13 +56,13 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
         page: page - 1,
         size,
       };
-      
+
       if (type && type !== 'all') {
         params.type = type.toUpperCase();
       }
 
       const response = await interactionService.getNotifications(params);
-      
+
       setNotifications(response.data.content);
       setPagination({
         current: page,
@@ -93,7 +95,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   useEffect(() => {
     fetchNotifications();
     fetchUnreadCount();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 标记单个通知为已读
@@ -101,7 +103,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     setActionLoading(prev => ({ ...prev, [notificationId]: true }));
     try {
       await interactionService.markNotificationAsRead(notificationId);
-      
+
       // 更新本地状态
       setNotifications(prev =>
         prev.map(notification =>
@@ -110,10 +112,10 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             : notification
         )
       );
-      
+
       setUnreadCount(prev => Math.max(0, prev - 1));
       onUnreadCountChange?.(Math.max(0, unreadCount - 1));
-      
+
       message.success('已标记为已读');
     } catch {
       message.error('操作失败');
@@ -126,15 +128,15 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const markAllAsRead = async () => {
     try {
       await interactionService.markAllNotificationsAsRead();
-      
+
       // 更新本地状态
       setNotifications(prev =>
         prev.map(notification => ({ ...notification, isRead: true }))
       );
-      
+
       setUnreadCount(0);
       onUnreadCountChange?.(0);
-      
+
       message.success('已标记所有通知为已读');
     } catch {
       message.error('操作失败');
@@ -200,9 +202,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
         title={
           <Space>
             <Text strong={!notification.isRead}>{notification.title}</Text>
-            {!notification.isRead && (
-              <Badge status="processing" text="未读" />
-            )}
+            {!notification.isRead && <Badge status="processing" text="未读" />}
           </Space>
         }
         description={
@@ -267,10 +267,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             }}
           />
         ) : (
-          <Empty
-            description="暂无通知"
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
+          <Empty description="暂无通知" image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
       </Spin>
     </Card>

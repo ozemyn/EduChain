@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Row, 
-  Col, 
-  Pagination, 
-  Spin, 
-  Empty, 
-  Button, 
-  Space, 
+import {
+  Row,
+  Col,
+  Pagination,
+  Spin,
+  Empty,
+  Button,
+  Space,
   Typography,
   message,
-  Modal
+  Modal,
 } from 'antd';
 import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -26,7 +26,7 @@ const KnowledgeList: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
-  
+
   const [loading, setLoading] = useState(false);
   const [knowledgeList, setKnowledgeList] = useState<KnowledgeItem[]>([]);
 
@@ -59,10 +59,14 @@ const KnowledgeList: React.FC = () => {
   }, [searchParams]);
 
   // 加载知识列表
-  const loadKnowledgeList = async (page = 1, pageSize = 12, filterParams = filters) => {
+  const loadKnowledgeList = async (
+    page = 1,
+    pageSize = 12,
+    filterParams = filters
+  ) => {
     try {
       setLoading(true);
-      
+
       const params = {
         page: page - 1, // 后端从0开始
         size: pageSize,
@@ -70,7 +74,7 @@ const KnowledgeList: React.FC = () => {
       };
 
       const response = await knowledgeService.getKnowledgeList(params);
-      
+
       if (response.success && response.data) {
         setKnowledgeList(response.data.content);
         setPagination({
@@ -87,19 +91,18 @@ const KnowledgeList: React.FC = () => {
     }
   };
 
-
-
   // 处理筛选
   const handleFilter = (newFilters: FilterValues) => {
     setFilters(newFilters);
-    
+
     // 更新URL参数
     const params = new URLSearchParams();
     if (newFilters.keyword) params.set('keyword', newFilters.keyword);
-    if (newFilters.categoryId) params.set('categoryId', String(newFilters.categoryId));
+    if (newFilters.categoryId)
+      params.set('categoryId', String(newFilters.categoryId));
     if (newFilters.type) params.set('type', newFilters.type);
     if (newFilters.sortBy) params.set('sortBy', newFilters.sortBy);
-    
+
     setSearchParams(params);
     loadKnowledgeList(1, pagination.pageSize, newFilters);
   };
@@ -108,7 +111,7 @@ const KnowledgeList: React.FC = () => {
   const handlePageChange = (page: number, pageSize?: number) => {
     const newPageSize = pageSize || pagination.pageSize;
     loadKnowledgeList(page, newPageSize);
-    
+
     // 更新URL中的页码
     const params = new URLSearchParams(searchParams);
     params.set('page', String(page));
@@ -141,18 +144,21 @@ const KnowledgeList: React.FC = () => {
     });
   };
 
-
-
   useEffect(() => {
     loadKnowledgeList(pagination.current, pagination.pageSize);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
-        <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
-          <Title level={2} style={{ margin: 0 }}>知识库</Title>
+        <Space
+          align="center"
+          style={{ width: '100%', justifyContent: 'space-between' }}
+        >
+          <Title level={2} style={{ margin: 0 }}>
+            知识库
+          </Title>
           {user && (
             <Link to="/knowledge/create">
               <Button type="primary" icon={<PlusOutlined />}>
@@ -163,10 +169,7 @@ const KnowledgeList: React.FC = () => {
         </Space>
       </div>
 
-      <KnowledgeFilter
-        onFilter={handleFilter}
-        loading={loading}
-      />
+      <KnowledgeFilter onFilter={handleFilter} loading={loading} />
 
       <Spin spinning={loading}>
         {knowledgeList.length > 0 ? (
@@ -179,7 +182,6 @@ const KnowledgeList: React.FC = () => {
                     showActions={user?.id === knowledge.uploaderId}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
-
                   />
                 </Col>
               ))}
@@ -192,7 +194,7 @@ const KnowledgeList: React.FC = () => {
                 total={pagination.total}
                 showSizeChanger
                 showQuickJumper
-                showTotal={(total, range) => 
+                showTotal={(total, range) =>
                   `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
                 }
                 onChange={handlePageChange}

@@ -78,7 +78,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // 检查特定权限
   if (permissions.length > 0) {
-    const hasAllPermissions = permissions.every(permission => hasPermission(permission));
+    const hasAllPermissions = permissions.every(permission =>
+      hasPermission(permission)
+    );
     if (!hasAllPermissions) {
       if (fallback) {
         return <>{fallback}</>;

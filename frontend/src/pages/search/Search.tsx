@@ -3,7 +3,9 @@ import { Row, Col, Typography, Spin, Alert, BackTop } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 import SearchInput from '@/components/search/SearchInput';
 import SearchResults from '@/components/search/SearchResults';
-import SearchFilters, { type SearchFiltersValue } from '@/components/search/SearchFilters';
+import SearchFilters, {
+  type SearchFiltersValue,
+} from '@/components/search/SearchFilters';
 import { searchService } from '@/services/search';
 import type { KnowledgeItem } from '@/types/api';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -14,19 +16,19 @@ const { Title } = Typography;
 const Search: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // const navigate = useNavigate(); // 暂时不需要
-  
+
   const [results, setResults] = useState<KnowledgeItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
-  
+
   const keyword = searchParams.get('q') || '';
   const [filters, setFilters] = useState<SearchFiltersValue>({
     sortBy: 'RELEVANCE',
   });
-  
+
   const debouncedKeyword = useDebounce(keyword, 300);
 
   // 从URL参数初始化筛选条件
@@ -35,7 +37,7 @@ const Search: React.FC = () => {
     const type = searchParams.get('type');
     const sortBy = searchParams.get('sortBy');
     const tags = searchParams.get('tags');
-    
+
     setFilters({
       categoryId: categoryId ? Number(categoryId) : undefined,
       type: type || undefined,
@@ -65,13 +67,13 @@ const Search: React.FC = () => {
       });
 
       const newResults = response.data.content;
-      
+
       if (append) {
         setResults(prev => [...prev, ...newResults]);
       } else {
         setResults(newResults);
       }
-      
+
       setTotal(response.data.totalElements);
       setHasMore(!response.data.last);
       setCurrentPage(page);
@@ -91,7 +93,7 @@ const Search: React.FC = () => {
     if (debouncedKeyword) {
       performSearch(1, false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedKeyword, filters]);
 
   // 处理搜索
@@ -108,12 +110,16 @@ const Search: React.FC = () => {
   // 处理筛选条件变化
   const handleFiltersChange = (newFilters: SearchFiltersValue) => {
     setFilters(newFilters);
-    
+
     // 更新URL参数
     const newParams = new URLSearchParams(searchParams);
-    
+
     Object.entries(newFilters).forEach(([key, value]) => {
-      if (value !== undefined && value !== '' && (Array.isArray(value) ? value.length > 0 : true)) {
+      if (
+        value !== undefined &&
+        value !== '' &&
+        (Array.isArray(value) ? value.length > 0 : true)
+      ) {
         if (Array.isArray(value)) {
           newParams.set(key, value.join(','));
         } else {
@@ -123,7 +129,7 @@ const Search: React.FC = () => {
         newParams.delete(key);
       }
     });
-    
+
     setSearchParams(newParams);
   };
 
@@ -170,7 +176,7 @@ const Search: React.FC = () => {
               collapsed={false}
             />
           </Col>
-          
+
           <Col xs={24} lg={18}>
             {error && (
               <Alert
@@ -183,7 +189,7 @@ const Search: React.FC = () => {
                 style={{ marginBottom: 16 }}
               />
             )}
-            
+
             <Spin spinning={loading && results.length === 0}>
               <SearchResults
                 results={results}

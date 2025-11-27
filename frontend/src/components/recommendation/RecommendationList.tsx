@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Typography, Spin, Empty, Button, Alert, Tabs } from 'antd';
-import { ReloadOutlined, FireOutlined, UserOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import {
+  ReloadOutlined,
+  FireOutlined,
+  UserOutlined,
+  ThunderboltOutlined,
+} from '@ant-design/icons';
 import RecommendationCard from './RecommendationCard';
 import { searchService } from '@/services/search';
 import type { KnowledgeItem } from '@/types/api';
@@ -45,7 +50,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
 
   useEffect(() => {
     loadRecommendations();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, limit]);
 
   const loadRecommendations = async () => {
@@ -55,14 +60,17 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
     try {
       const promises = [
         // 个性化推荐（需要登录）
-        user ? searchService.getPersonalizedRecommendations(limit) : Promise.resolve({ data: [] }),
+        user
+          ? searchService.getPersonalizedRecommendations(limit)
+          : Promise.resolve({ data: [] }),
         // 热门内容
         searchService.getTrendingContent('week', limit),
         // 通用推荐
         searchService.getRecommendations(undefined, limit),
       ];
 
-      const [personalizedRes, trendingRes, generalRes] = await Promise.all(promises);
+      const [personalizedRes, trendingRes, generalRes] =
+        await Promise.all(promises);
 
       setData({
         personalized: personalizedRes.data,
@@ -81,7 +89,9 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
     if (feedback === 'not_interested') {
       setData(prev => ({
         ...prev,
-        [activeTab]: prev[activeTab as keyof RecommendationData].filter(item => item.id !== itemId),
+        [activeTab]: prev[activeTab as keyof RecommendationData].filter(
+          item => item.id !== itemId
+        ),
       }));
     }
   };
@@ -89,7 +99,9 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
   const handleRemoveItem = (itemId: number) => {
     setData(prev => ({
       ...prev,
-      [activeTab]: prev[activeTab as keyof RecommendationData].filter(item => item.id !== itemId),
+      [activeTab]: prev[activeTab as keyof RecommendationData].filter(
+        item => item.id !== itemId
+      ),
     }));
   };
 
@@ -102,22 +114,10 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
         '基于您的收藏',
         '推荐给您',
       ],
-      trending: [
-        '本周热门',
-        '正在流行',
-        '热度上升',
-        '用户热议',
-        '趋势内容',
-      ],
-      general: [
-        '编辑推荐',
-        '优质内容',
-        '精选推荐',
-        '值得一看',
-        '热门推荐',
-      ],
+      trending: ['本周热门', '正在流行', '热度上升', '用户热议', '趋势内容'],
+      general: ['编辑推荐', '优质内容', '精选推荐', '值得一看', '热门推荐'],
     };
-    
+
     const tabReasons = reasons[tab as keyof typeof reasons] || reasons.general;
     return tabReasons[index % tabReasons.length];
   };
@@ -162,17 +162,17 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
     return (
       <Row gutter={[16, 16]}>
         {items.map((item, index) => (
-          <Col 
-            key={item.id} 
-            xs={24} 
-            sm={compact ? 12 : 24} 
-            md={compact ? 8 : 12} 
+          <Col
+            key={item.id}
+            xs={24}
+            sm={compact ? 12 : 24}
+            md={compact ? 8 : 12}
             lg={compact ? 6 : 8}
           >
             <RecommendationCard
               item={item}
               reason={getReasonText(tabKey, index)}
-              onFeedback={(feedback) => handleFeedback(item.id, feedback)}
+              onFeedback={feedback => handleFeedback(item.id, feedback)}
               onRemove={() => handleRemoveItem(item.id)}
               compact={compact}
             />
@@ -200,8 +200,8 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
       </div>
 
       {showTabs ? (
-        <Tabs 
-          activeKey={activeTab} 
+        <Tabs
+          activeKey={activeTab}
           onChange={setActiveTab}
           className={styles.tabs}
         >
@@ -218,7 +218,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
               {renderContent(data.personalized, 'personalized')}
             </TabPane>
           )}
-          
+
           <TabPane
             tab={
               <span>
@@ -230,7 +230,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
           >
             {renderContent(data.trending, 'trending')}
           </TabPane>
-          
+
           <TabPane
             tab={
               <span>
@@ -249,9 +249,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
 
       {!loading && data[activeTab as keyof RecommendationData].length > 0 && (
         <div className={styles.footer}>
-          <Text type="secondary">
-            推荐算法会根据您的反馈不断优化
-          </Text>
+          <Text type="secondary">推荐算法会根据您的反馈不断优化</Text>
         </div>
       )}
     </div>

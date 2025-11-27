@@ -1,9 +1,5 @@
 import { request } from './api';
-import type {
-  SearchRequest,
-  KnowledgeItem,
-  PageResponse,
-} from '@/types/api';
+import type { SearchRequest, KnowledgeItem, PageResponse } from '@/types/api';
 
 export interface SearchSuggestion {
   keyword: string;
@@ -56,12 +52,10 @@ export const searchService = {
     }),
 
   // 清除搜索历史
-  clearSearchHistory: () =>
-    request.delete('/search/history'),
+  clearSearchHistory: () => request.delete('/search/history'),
 
   // 删除单个搜索历史
-  deleteSearchHistory: (id: number) =>
-    request.delete(`/search/history/${id}`),
+  deleteSearchHistory: (id: number) => request.delete(`/search/history/${id}`),
 
   // 获取推荐内容
   getRecommendations: (userId?: number, limit: number = 10) =>
@@ -76,7 +70,10 @@ export const searchService = {
     }),
 
   // 获取热门内容
-  getTrendingContent: (timeRange: 'day' | 'week' | 'month' = 'week', limit: number = 10) =>
+  getTrendingContent: (
+    timeRange: 'day' | 'week' | 'month' = 'week',
+    limit: number = 10
+  ) =>
     request.get<KnowledgeItem[]>('/recommendations/trending', {
       params: { timeRange, limit },
     }),
@@ -88,7 +85,10 @@ export const searchService = {
     }),
 
   // 推荐反馈
-  submitRecommendationFeedback: (knowledgeId: number, feedback: 'like' | 'dislike' | 'not_interested') =>
+  submitRecommendationFeedback: (
+    knowledgeId: number,
+    feedback: 'like' | 'dislike' | 'not_interested'
+  ) =>
     request.post('/recommendations/feedback', {
       knowledgeId,
       feedback,

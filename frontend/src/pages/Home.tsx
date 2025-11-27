@@ -1,7 +1,12 @@
 import React from 'react';
 import { Typography, Card, Row, Col, Button, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { BookOutlined, SearchOutlined, UserOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import {
+  BookOutlined,
+  SearchOutlined,
+  UserOutlined,
+  ThunderboltOutlined,
+} from '@ant-design/icons';
 import { SearchInput } from '@/components/search';
 import { RecommendationList } from '@/components/recommendation';
 
@@ -18,15 +23,12 @@ const Home: React.FC = () => {
         <Paragraph style={{ fontSize: '18px', color: '#666' }}>
           教育知识共享平台，为学习者和教育者提供便捷的知识分享、交流和学习环境
         </Paragraph>
-        
+
         {/* 搜索框 */}
         <div style={{ maxWidth: '600px', margin: '24px auto' }}>
-          <SearchInput 
-            placeholder="搜索知识内容、用户或标签..."
-            size="large"
-          />
+          <SearchInput placeholder="搜索知识内容、用户或标签..." size="large" />
         </div>
-        
+
         <Space size="large">
           <Button
             type="primary"

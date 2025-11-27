@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
-import { Upload, Button, message, Progress, Image, Card, Space, Typography } from 'antd';
-import { 
-  UploadOutlined, 
-  DeleteOutlined, 
+import {
+  Upload,
+  Button,
+  message,
+  Progress,
+  Image,
+  Card,
+  Space,
+  Typography,
+} from 'antd';
+import {
+  UploadOutlined,
+  DeleteOutlined,
   EyeOutlined,
   FileImageOutlined,
   VideoCameraOutlined,
   FilePdfOutlined,
-  FileOutlined
+  FileOutlined,
 } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { uploadFile } from '@/services/api';
@@ -32,7 +41,9 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
   disabled = false,
 }) => {
   const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [uploadProgress, setUploadProgress] = useState<{
+    [key: string]: number;
+  }>({});
 
   const getFileIcon = (fileName: string) => {
     const ext = fileName.toLowerCase().split('.').pop();
@@ -67,9 +78,9 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
     return videoExts.includes(ext || '');
   };
 
-  const handleUpload: UploadProps['customRequest'] = async (options) => {
+  const handleUpload: UploadProps['customRequest'] = async options => {
     const { file, onSuccess, onError } = options;
-    
+
     if (!file || typeof file === 'string') {
       onError?.(new Error('Invalid file'));
       return;
@@ -77,12 +88,12 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
 
     const uploadFile_ = file as File;
     const fileId = `${uploadFile_.name}_${Date.now()}`;
-    
+
     try {
       setUploading(true);
       setUploadProgress(prev => ({ ...prev, [fileId]: 0 }));
 
-      const response = await uploadFile(uploadFile_, (percent) => {
+      const response = await uploadFile(uploadFile_, percent => {
         setUploadProgress(prev => ({ ...prev, [fileId]: percent }));
       });
 
@@ -118,13 +129,13 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
       // 图片预览由 Image 组件处理
       return;
     }
-    
+
     if (isVideoFile(url)) {
       // 视频在新窗口打开
       window.open(url, '_blank');
       return;
     }
-    
+
     // 其他文件类型下载
     const link = document.createElement('a');
     link.href = url;
@@ -138,7 +149,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
     if (listType === 'picture-card') {
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {value.map((url) => (
+          {value.map(url => (
             <Card
               key={url}
               size="small"
@@ -155,30 +166,32 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
                     }}
                   />
                 ) : isVideoFile(url) ? (
-                  <div 
-                    style={{ 
-                      width: '100%', 
-                      height: 80, 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                  <div
+                    style={{
+                      width: '100%',
+                      height: 80,
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: '#f5f5f5',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                     onClick={() => handlePreview(url)}
                   >
-                    <VideoCameraOutlined style={{ fontSize: 24, color: '#666' }} />
+                    <VideoCameraOutlined
+                      style={{ fontSize: 24, color: '#666' }}
+                    />
                   </div>
                 ) : (
-                  <div 
-                    style={{ 
-                      width: '100%', 
-                      height: 80, 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                  <div
+                    style={{
+                      width: '100%',
+                      height: 80,
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: '#f5f5f5',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                     onClick={() => handlePreview(url)}
                   >
@@ -187,8 +200,14 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
                 )
               }
               actions={[
-                <EyeOutlined key="preview" onClick={() => handlePreview(url)} />,
-                <DeleteOutlined key="delete" onClick={() => handleRemove(url)} />,
+                <EyeOutlined
+                  key="preview"
+                  onClick={() => handlePreview(url)}
+                />,
+                <DeleteOutlined
+                  key="delete"
+                  onClick={() => handleRemove(url)}
+                />,
               ]}
             />
           ))}
@@ -198,22 +217,22 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
 
     return (
       <div>
-        {value.map((url) => (
+        {value.map(url => (
           <Card key={url} size="small" style={{ marginBottom: 8 }}>
             <Space>
               {getFileIcon(url)}
               <Text ellipsis style={{ flex: 1 }}>
                 {url.split('/').pop()}
               </Text>
-              <Button 
-                type="text" 
-                size="small" 
+              <Button
+                type="text"
+                size="small"
                 icon={<EyeOutlined />}
                 onClick={() => handlePreview(url)}
               />
-              <Button 
-                type="text" 
-                size="small" 
+              <Button
+                type="text"
+                size="small"
                 danger
                 icon={<DeleteOutlined />}
                 onClick={() => handleRemove(url)}
@@ -235,7 +254,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
   return (
     <div>
       {renderFileList()}
-      
+
       {value.length < maxCount && (
         <Upload
           customRequest={handleUpload}
@@ -245,18 +264,20 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
           multiple
         >
           {listType === 'picture-card' ? (
-            <div style={{ 
-              width: 104, 
-              height: 104, 
-              border: '1px dashed #d9d9d9',
-              borderRadius: 6,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              backgroundColor: '#fafafa'
-            }}>
+            <div
+              style={{
+                width: 104,
+                height: 104,
+                border: '1px dashed #d9d9d9',
+                borderRadius: 6,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                backgroundColor: '#fafafa',
+              }}
+            >
               {uploadButton}
             </div>
           ) : (

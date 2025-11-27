@@ -14,17 +14,22 @@ import {
   Divider,
   Modal,
   List,
-  Spin
+  Spin,
 } from 'antd';
 import {
   SaveOutlined,
   SendOutlined,
   EyeOutlined,
   HistoryOutlined,
-  DeleteOutlined
+  DeleteOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { RichTextEditor, MediaUpload, CategorySelector, TagSelector } from '@/components/knowledge';
+import {
+  RichTextEditor,
+  MediaUpload,
+  CategorySelector,
+  TagSelector,
+} from '@/components/knowledge';
 import type { KnowledgeItem, CreateKnowledgeRequest } from '@/types';
 import { knowledgeService } from '@/services/knowledge';
 import { useAuth } from '@/contexts/AuthContext';
@@ -49,7 +54,7 @@ const CreateKnowledge: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const [form] = Form.useForm<FormValues>();
-  
+
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [knowledge, setKnowledge] = useState<KnowledgeItem | null>(null);
@@ -67,10 +72,6 @@ const CreateKnowledge: React.FC = () => {
     { label: '外部链接', value: 'LINK' },
   ];
 
-
-
-
-
   // 加载知识详情（编辑模式）
   const loadKnowledgeDetail = async () => {
     if (!id) return;
@@ -78,11 +79,11 @@ const CreateKnowledge: React.FC = () => {
     try {
       setLoading(true);
       const response = await knowledgeService.getKnowledgeById(Number(id));
-      
+
       if (response.success && response.data) {
         const data = response.data;
         setKnowledge(data);
-        
+
         // 设置表单值
         form.setFieldsValue({
           title: data.title,
@@ -93,8 +94,6 @@ const CreateKnowledge: React.FC = () => {
           linkUrl: data.linkUrl,
           tags: data.tags,
         });
-
-
       }
     } catch (error) {
       console.error('Failed to load knowledge detail:', error);
@@ -118,7 +117,9 @@ const CreateKnowledge: React.FC = () => {
       autoSaved: true,
     };
 
-    const existingDrafts = JSON.parse(localStorage.getItem('knowledge_drafts') || '[]');
+    const existingDrafts = JSON.parse(
+      localStorage.getItem('knowledge_drafts') || '[]'
+    );
     const newDrafts = [draft, ...existingDrafts.slice(0, 9)]; // 保留最新10个草稿
     localStorage.setItem('knowledge_drafts', JSON.stringify(newDrafts));
     setDrafts(newDrafts);
@@ -129,7 +130,7 @@ const CreateKnowledge: React.FC = () => {
     try {
       setSaving(true);
       const values = form.getFieldsValue();
-      
+
       const draft: DraftVersion = {
         id: Date.now().toString(),
         title: values.title || '未命名草稿',
@@ -138,11 +139,13 @@ const CreateKnowledge: React.FC = () => {
         autoSaved: false,
       };
 
-      const existingDrafts = JSON.parse(localStorage.getItem('knowledge_drafts') || '[]');
+      const existingDrafts = JSON.parse(
+        localStorage.getItem('knowledge_drafts') || '[]'
+      );
       const newDrafts = [draft, ...existingDrafts.slice(0, 9)];
       localStorage.setItem('knowledge_drafts', JSON.stringify(newDrafts));
       setDrafts(newDrafts);
-      
+
       message.success('草稿保存成功');
     } catch (error) {
       console.error('Save draft failed:', error);
@@ -164,14 +167,16 @@ const CreateKnowledge: React.FC = () => {
 
   // 删除草稿
   const deleteDraft = (draftId: string) => {
-    const existingDrafts = JSON.parse(localStorage.getItem('knowledge_drafts') || '[]');
-    const newDrafts = existingDrafts.filter((d: DraftVersion) => d.id !== draftId);
+    const existingDrafts = JSON.parse(
+      localStorage.getItem('knowledge_drafts') || '[]'
+    );
+    const newDrafts = existingDrafts.filter(
+      (d: DraftVersion) => d.id !== draftId
+    );
     localStorage.setItem('knowledge_drafts', JSON.stringify(newDrafts));
     setDrafts(newDrafts);
     message.success('草稿删除成功');
   };
-
-
 
   // 提交表单
   const handleSubmit = async (values: FormValues) => {
@@ -183,7 +188,7 @@ const CreateKnowledge: React.FC = () => {
 
     try {
       setLoading(true);
-      
+
       const submitData: CreateKnowledgeRequest = {
         title: values.title,
         content: values.content,
@@ -204,7 +209,7 @@ const CreateKnowledge: React.FC = () => {
 
       // 清除草稿
       localStorage.removeItem('knowledge_drafts');
-      
+
       navigate('/knowledge');
     } catch (error) {
       console.error('Submit failed:', error);
@@ -229,8 +234,6 @@ const CreateKnowledge: React.FC = () => {
     });
   };
 
-
-
   useEffect(() => {
     if (!user) {
       message.warning('请先登录');
@@ -238,14 +241,14 @@ const CreateKnowledge: React.FC = () => {
       return;
     }
 
-
-    
     if (isEditing) {
       loadKnowledgeDetail();
     }
 
     // 加载草稿列表
-    const savedDrafts = JSON.parse(localStorage.getItem('knowledge_drafts') || '[]');
+    const savedDrafts = JSON.parse(
+      localStorage.getItem('knowledge_drafts') || '[]'
+    );
     setDrafts(savedDrafts);
 
     // 设置自动保存
@@ -254,7 +257,7 @@ const CreateKnowledge: React.FC = () => {
     return () => {
       clearInterval(timer);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, user]);
 
   if (loading) {
@@ -319,8 +322,8 @@ const CreateKnowledge: React.FC = () => {
                 <Col xs={24} sm={12}>
                   {/* 分类 */}
                   <Form.Item name="categoryId" label="分类">
-                    <CategorySelector 
-                      placeholder="选择分类（可选）" 
+                    <CategorySelector
+                      placeholder="选择分类（可选）"
                       allowClear
                       showCount
                     />
@@ -331,7 +334,7 @@ const CreateKnowledge: React.FC = () => {
               {/* 外部链接 */}
               <Form.Item
                 noStyle
-                shouldUpdate={(prevValues, currentValues) => 
+                shouldUpdate={(prevValues, currentValues) =>
                   prevValues.type !== currentValues.type
                 }
               >
@@ -355,7 +358,7 @@ const CreateKnowledge: React.FC = () => {
               {/* 多媒体文件 */}
               <Form.Item
                 noStyle
-                shouldUpdate={(prevValues, currentValues) => 
+                shouldUpdate={(prevValues, currentValues) =>
                   prevValues.type !== currentValues.type
                 }
               >
@@ -366,9 +369,11 @@ const CreateKnowledge: React.FC = () => {
                       <MediaUpload
                         maxCount={type === 'IMAGE' ? 9 : 3}
                         accept={
-                          type === 'IMAGE' ? 'image/*' :
-                          type === 'VIDEO' ? 'video/*' :
-                          '.pdf,.doc,.docx,.ppt,.pptx'
+                          type === 'IMAGE'
+                            ? 'image/*'
+                            : type === 'VIDEO'
+                              ? 'video/*'
+                              : '.pdf,.doc,.docx,.ppt,.pptx'
                         }
                       />
                     </Form.Item>
@@ -389,13 +394,15 @@ const CreateKnowledge: React.FC = () => {
               </Form.Item>
 
               {/* 标签管理 */}
-              <Form.Item 
-                name="tags" 
+              <Form.Item
+                name="tags"
                 label="标签"
-                getValueFromEvent={(tags) => tags.join(',')}
-                getValueProps={(value) => ({ value: value ? value.split(',').filter(Boolean) : [] })}
+                getValueFromEvent={tags => tags.join(',')}
+                getValueProps={value => ({
+                  value: value ? value.split(',').filter(Boolean) : [],
+                })}
               >
-                <TagSelector 
+                <TagSelector
                   placeholder="选择或输入标签"
                   maxTags={10}
                   showPopular
@@ -416,7 +423,7 @@ const CreateKnowledge: React.FC = () => {
                   >
                     {isEditing ? '更新' : '发布'}
                   </Button>
-                  
+
                   <Button
                     icon={<SaveOutlined />}
                     onClick={saveDraft}
@@ -425,7 +432,7 @@ const CreateKnowledge: React.FC = () => {
                   >
                     保存草稿
                   </Button>
-                  
+
                   <Button
                     icon={<EyeOutlined />}
                     onClick={handlePreview}
@@ -433,11 +440,8 @@ const CreateKnowledge: React.FC = () => {
                   >
                     预览
                   </Button>
-                  
-                  <Button
-                    onClick={() => navigate('/knowledge')}
-                    size="large"
-                  >
+
+                  <Button onClick={() => navigate('/knowledge')} size="large">
                     取消
                   </Button>
                 </Space>
@@ -451,12 +455,12 @@ const CreateKnowledge: React.FC = () => {
           <Space direction="vertical" size="middle" style={{ width: '100%' }}>
             {/* 草稿历史 */}
             {drafts.length > 0 && (
-              <Card 
-                title="草稿历史" 
+              <Card
+                title="草稿历史"
                 size="small"
                 extra={
-                  <Button 
-                    type="link" 
+                  <Button
+                    type="link"
                     size="small"
                     icon={<HistoryOutlined />}
                     onClick={() => setShowDrafts(true)}
@@ -471,13 +475,13 @@ const CreateKnowledge: React.FC = () => {
                   renderItem={draft => (
                     <List.Item
                       actions={[
-                        <Button 
-                          type="link" 
+                        <Button
+                          type="link"
                           size="small"
                           onClick={() => loadDraft(draft)}
                         >
                           加载
-                        </Button>
+                        </Button>,
                       ]}
                     >
                       <List.Item.Meta
@@ -535,20 +539,17 @@ const CreateKnowledge: React.FC = () => {
           renderItem={draft => (
             <List.Item
               actions={[
-                <Button 
-                  type="link"
-                  onClick={() => loadDraft(draft)}
-                >
+                <Button type="link" onClick={() => loadDraft(draft)}>
                   加载
                 </Button>,
-                <Button 
-                  type="link" 
+                <Button
+                  type="link"
                   danger
                   icon={<DeleteOutlined />}
                   onClick={() => deleteDraft(draft.id)}
                 >
                   删除
-                </Button>
+                </Button>,
               ]}
             >
               <List.Item.Meta
@@ -559,12 +560,9 @@ const CreateKnowledge: React.FC = () => {
                       {new Date(draft.savedAt).toLocaleString()}
                       {draft.autoSaved && ' (自动保存)'}
                     </Text>
-                    <Text 
-                      type="secondary" 
-                      ellipsis
-                      style={{ width: 400 }}
-                    >
-                      {draft.content.replace(/<[^>]*>/g, '').substring(0, 100)}...
+                    <Text type="secondary" ellipsis style={{ width: 400 }}>
+                      {draft.content.replace(/<[^>]*>/g, '').substring(0, 100)}
+                      ...
                     </Text>
                   </Space>
                 }

@@ -1,6 +1,22 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, Typography, message, Divider, Select } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined, EyeInvisibleOutlined, EyeTwoTone, BankOutlined } from '@ant-design/icons';
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  message,
+  Divider,
+  Select,
+} from 'antd';
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  BankOutlined,
+} from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import type { RegisterRequest } from '@/types/api';
@@ -59,20 +75,22 @@ const Register: React.FC = () => {
   ];
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '20px'
-    }}>
-      <Card 
-        style={{ 
-          width: '100%', 
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '20px',
+      }}
+    >
+      <Card
+        style={{
+          width: '100%',
           maxWidth: 480,
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          borderRadius: '12px'
+          borderRadius: '12px',
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -97,7 +115,10 @@ const Register: React.FC = () => {
             rules={[
               { required: true },
               { min: 3, max: 20 },
-              { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名只能包含字母、数字和下划线！' }
+              {
+                pattern: /^[a-zA-Z0-9_]+$/,
+                message: '用户名只能包含字母、数字和下划线！',
+              },
             ]}
           >
             <Input
@@ -110,10 +131,7 @@ const Register: React.FC = () => {
           <Form.Item
             name="email"
             label="邮箱"
-            rules={[
-              { required: true },
-              { type: 'email' }
-            ]}
+            rules={[{ required: true }, { type: 'email' }]}
           >
             <Input
               prefix={<MailOutlined />}
@@ -125,10 +143,7 @@ const Register: React.FC = () => {
           <Form.Item
             name="fullName"
             label="真实姓名"
-            rules={[
-              { required: true },
-              { min: 2, max: 20 }
-            ]}
+            rules={[{ required: true }, { min: 2, max: 20 }]}
           >
             <Input
               prefix={<UserOutlined />}
@@ -137,10 +152,7 @@ const Register: React.FC = () => {
             />
           </Form.Item>
 
-          <Form.Item
-            name="school"
-            label="学校"
-          >
+          <Form.Item name="school" label="学校">
             <Select
               placeholder="请选择或输入学校名称"
               showSearch
@@ -162,14 +174,19 @@ const Register: React.FC = () => {
             rules={[
               { required: true },
               { min: 6, max: 20 },
-              { pattern: /^(?=.*[a-zA-Z])(?=.*\d)/, message: '密码必须包含字母和数字！' }
+              {
+                pattern: /^(?=.*[a-zA-Z])(?=.*\d)/,
+                message: '密码必须包含字母和数字！',
+              },
             ]}
           >
             <Input.Password
               prefix={<LockOutlined />}
               placeholder="请输入密码"
               autoComplete="new-password"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={visible =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 
@@ -193,7 +210,9 @@ const Register: React.FC = () => {
               prefix={<LockOutlined />}
               placeholder="请再次输入密码"
               autoComplete="new-password"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={visible =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 

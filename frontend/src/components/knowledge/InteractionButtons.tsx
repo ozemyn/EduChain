@@ -53,7 +53,8 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
   // 获取互动统计
   const fetchStats = async () => {
     try {
-      const response = await interactionService.getInteractionStats(knowledgeId);
+      const response =
+        await interactionService.getInteractionStats(knowledgeId);
       setStats(response.data);
       onStatsChange?.(response.data);
     } catch (error) {
@@ -65,7 +66,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
     if (!initialStats) {
       fetchStats();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knowledgeId, initialStats]);
 
   // 处理点赞
@@ -91,11 +92,11 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         };
         setStats(newStats);
         onStatsChange?.(newStats);
-        
+
         // 触发动画
         setAnimating(prev => ({ ...prev, like: true }));
         setTimeout(() => setAnimating(prev => ({ ...prev, like: false })), 600);
-        
+
         message.success('点赞成功');
       }
     } catch {
@@ -128,11 +129,14 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         };
         setStats(newStats);
         onStatsChange?.(newStats);
-        
+
         // 触发动画
         setAnimating(prev => ({ ...prev, favorite: true }));
-        setTimeout(() => setAnimating(prev => ({ ...prev, favorite: false })), 600);
-        
+        setTimeout(
+          () => setAnimating(prev => ({ ...prev, favorite: false })),
+          600
+        );
+
         message.success('收藏成功');
       }
     } catch {
@@ -185,7 +189,9 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
           onClick={handleLike}
           className={`${styles.interactionButton} ${stats.userLiked ? styles.liked : ''}`}
         >
-          {showLabels && <span className={styles.count}>{formatCount(stats.likeCount)}</span>}
+          {showLabels && (
+            <span className={styles.count}>{formatCount(stats.likeCount)}</span>
+          )}
         </Button>
       </Tooltip>
 
@@ -202,7 +208,11 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
           onClick={handleFavorite}
           className={`${styles.interactionButton} ${stats.userFavorited ? styles.favorited : ''}`}
         >
-          {showLabels && <span className={styles.count}>{formatCount(stats.favoriteCount)}</span>}
+          {showLabels && (
+            <span className={styles.count}>
+              {formatCount(stats.favoriteCount)}
+            </span>
+          )}
         </Button>
       </Tooltip>
 
@@ -213,7 +223,9 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         disabled
         className={styles.interactionButton}
       >
-        {showLabels && <span className={styles.count}>{formatCount(stats.viewCount)}</span>}
+        {showLabels && (
+          <span className={styles.count}>{formatCount(stats.viewCount)}</span>
+        )}
       </Button>
 
       <Button
@@ -223,7 +235,11 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         onClick={onCommentClick}
         className={styles.interactionButton}
       >
-        {showLabels && <span className={styles.count}>{formatCount(stats.commentCount)}</span>}
+        {showLabels && (
+          <span className={styles.count}>
+            {formatCount(stats.commentCount)}
+          </span>
+        )}
       </Button>
 
       <Tooltip title="分享">

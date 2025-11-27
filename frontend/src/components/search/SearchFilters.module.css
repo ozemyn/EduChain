@@ -54,11 +54,11 @@
   .filterRow {
     flex-direction: column;
   }
-  
+
   .filterItem {
     min-width: auto;
   }
-  
+
   .filterActions {
     justify-content: center;
   }

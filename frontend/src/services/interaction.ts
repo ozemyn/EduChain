@@ -63,11 +63,9 @@ export const interactionService = {
     }),
 
   // 关注相关
-  followUser: (userId: number) =>
-    request.post<void>(`/follow/${userId}`),
+  followUser: (userId: number) => request.post<void>(`/follow/${userId}`),
 
-  unfollowUser: (userId: number) =>
-    request.delete<void>(`/follow/${userId}`),
+  unfollowUser: (userId: number) => request.delete<void>(`/follow/${userId}`),
 
   getFollowStats: (userId: number) =>
     request.get<FollowStats>(`/follow/stats/${userId}`),

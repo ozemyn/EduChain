@@ -13,10 +13,7 @@ const ActivityPage: React.FC = () => {
       <Content style={{ padding: '24px', minHeight: '100vh' }}>
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={16}>
-            <ActivityTimeline
-              title="关注动态"
-              showRefresh={true}
-            />
+            <ActivityTimeline title="关注动态" showRefresh={true} />
           </Col>
           <Col xs={24} lg={8}>
             <ActivityTimeline

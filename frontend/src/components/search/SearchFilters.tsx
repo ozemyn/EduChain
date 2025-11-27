@@ -41,8 +41,18 @@ const SORT_OPTIONS = [
 ];
 
 const POPULAR_TAGS = [
-  'JavaScript', 'React', 'Vue', 'Node.js', 'Python', 'Java',
-  '前端开发', '后端开发', '数据库', '算法', '设计模式', '机器学习'
+  'JavaScript',
+  'React',
+  'Vue',
+  'Node.js',
+  'Python',
+  'Java',
+  '前端开发',
+  '后端开发',
+  '数据库',
+  '算法',
+  '设计模式',
+  '机器学习',
 ];
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({
@@ -71,7 +81,10 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     }
   };
 
-  const handleFilterChange = (key: keyof SearchFiltersValue, newValue: unknown) => {
+  const handleFilterChange = (
+    key: keyof SearchFiltersValue,
+    newValue: unknown
+  ) => {
     const newFilters = { ...value, [key]: newValue };
     onChange?.(newFilters);
   };
@@ -89,17 +102,19 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     onReset?.();
   };
 
-  const hasActiveFilters = Object.values(value).some(v => 
-    v !== undefined && v !== '' && (Array.isArray(v) ? v.length > 0 : true)
+  const hasActiveFilters = Object.values(value).some(
+    v => v !== undefined && v !== '' && (Array.isArray(v) ? v.length > 0 : true)
   );
 
   const renderCategoryOptions = (categories: Category[], level = 0) => {
     return categories.map(category => (
       <React.Fragment key={category.id}>
         <Option value={category.id}>
-          {'　'.repeat(level)}{category.name}
+          {'　'.repeat(level)}
+          {category.name}
         </Option>
-        {category.children && renderCategoryOptions(category.children, level + 1)}
+        {category.children &&
+          renderCategoryOptions(category.children, level + 1)}
       </React.Fragment>
     ));
   };
@@ -112,7 +127,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           <Select
             placeholder="选择分类"
             value={value.categoryId}
-            onChange={(val) => handleFilterChange('categoryId', val)}
+            onChange={val => handleFilterChange('categoryId', val)}
             allowClear
             loading={loading}
             style={{ width: '100%' }}
@@ -127,7 +142,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           <Select
             placeholder="选择类型"
             value={value.type || ''}
-            onChange={(val) => handleFilterChange('type', val)}
+            onChange={val => handleFilterChange('type', val)}
             style={{ width: '100%' }}
           >
             {CONTENT_TYPES.map(type => (
@@ -142,7 +157,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           <label>排序方式</label>
           <Select
             value={value.sortBy || 'RELEVANCE'}
-            onChange={(val) => handleFilterChange('sortBy', val)}
+            onChange={val => handleFilterChange('sortBy', val)}
             style={{ width: '100%' }}
           >
             {SORT_OPTIONS.map(option => (
@@ -160,9 +175,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           <RangePicker
             placeholder={['开始时间', '结束时间']}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            value={value.dateRange ? value.dateRange as any : undefined}
-            onChange={(_, dateStrings) => 
-              handleFilterChange('dateRange', dateStrings[0] && dateStrings[1] ? dateStrings : undefined)
+            value={value.dateRange ? (value.dateRange as any) : undefined}
+            onChange={(_, dateStrings) =>
+              handleFilterChange(
+                'dateRange',
+                dateStrings[0] && dateStrings[1] ? dateStrings : undefined
+              )
             }
             style={{ width: '100%' }}
           />
@@ -189,14 +207,14 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
 
       <div className={styles.filterActions}>
         <Space>
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             icon={<FilterOutlined />}
             disabled={!hasActiveFilters}
           >
             应用筛选
           </Button>
-          <Button 
+          <Button
             icon={<ClearOutlined />}
             onClick={handleReset}
             disabled={!hasActiveFilters}
@@ -212,20 +230,26 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     return (
       <Card className={`${styles.searchFilters} ${className}`} size="small">
         <Collapse ghost>
-          <Panel 
+          <Panel
             header={
               <Space>
                 <FilterOutlined />
                 高级筛选
                 {hasActiveFilters && (
                   <Tag color="blue">
-                    {Object.values(value).filter(v => 
-                      v !== undefined && v !== '' && (Array.isArray(v) ? v.length > 0 : true)
-                    ).length} 个筛选条件
+                    {
+                      Object.values(value).filter(
+                        v =>
+                          v !== undefined &&
+                          v !== '' &&
+                          (Array.isArray(v) ? v.length > 0 : true)
+                      ).length
+                    }{' '}
+                    个筛选条件
                   </Tag>
                 )}
               </Space>
-            } 
+            }
             key="filters"
           >
             {filtersContent}
@@ -236,7 +260,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   }
 
   return (
-    <Card 
+    <Card
       className={`${styles.searchFilters} ${className}`}
       title={
         <Space>
@@ -244,9 +268,15 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           搜索筛选
           {hasActiveFilters && (
             <Tag color="blue">
-              {Object.values(value).filter(v => 
-                v !== undefined && v !== '' && (Array.isArray(v) ? v.length > 0 : true)
-              ).length} 个条件
+              {
+                Object.values(value).filter(
+                  v =>
+                    v !== undefined &&
+                    v !== '' &&
+                    (Array.isArray(v) ? v.length > 0 : true)
+                ).length
+              }{' '}
+              个条件
             </Tag>
           )}
         </Space>

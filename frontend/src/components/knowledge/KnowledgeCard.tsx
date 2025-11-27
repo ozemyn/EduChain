@@ -1,9 +1,15 @@
 import React from 'react';
-import { Card, Avatar, Tag, Space, Typography, Image, Button, Tooltip } from 'antd';
-import { 
-  EditOutlined,
-  DeleteOutlined 
-} from '@ant-design/icons';
+import {
+  Card,
+  Avatar,
+  Tag,
+  Space,
+  Typography,
+  Image,
+  Button,
+  Tooltip,
+} from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import type { KnowledgeItem } from '@/types';
 import { formatDate } from '@/utils/format';
@@ -39,7 +45,11 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
   };
 
   const renderMediaPreview = () => {
-    if (knowledge.type === 'IMAGE' && knowledge.mediaUrls && knowledge.mediaUrls.length > 0) {
+    if (
+      knowledge.type === 'IMAGE' &&
+      knowledge.mediaUrls &&
+      knowledge.mediaUrls.length > 0
+    ) {
       return (
         <div style={{ marginBottom: 12 }}>
           <Image
@@ -54,8 +64,12 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
         </div>
       );
     }
-    
-    if (knowledge.type === 'VIDEO' && knowledge.mediaUrls && knowledge.mediaUrls.length > 0) {
+
+    if (
+      knowledge.type === 'VIDEO' &&
+      knowledge.mediaUrls &&
+      knowledge.mediaUrls.length > 0
+    ) {
       return (
         <div style={{ marginBottom: 12 }}>
           <video
@@ -76,21 +90,21 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
   };
 
   const actions = [];
-  
+
   if (showActions) {
     actions.push(
       <Tooltip title="编辑">
-        <Button 
-          type="text" 
-          icon={<EditOutlined />} 
+        <Button
+          type="text"
+          icon={<EditOutlined />}
           onClick={() => onEdit?.(knowledge)}
         />
       </Tooltip>,
       <Tooltip title="删除">
-        <Button 
-          type="text" 
-          danger 
-          icon={<DeleteOutlined />} 
+        <Button
+          type="text"
+          danger
+          icon={<DeleteOutlined />}
           onClick={() => onDelete?.(knowledge)}
         />
       </Tooltip>
@@ -105,8 +119,8 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
     >
       <Meta
         avatar={
-          <Avatar 
-            src={knowledge.uploader.avatarUrl} 
+          <Avatar
+            src={knowledge.uploader.avatarUrl}
             alt={knowledge.uploader.fullName}
           >
             {knowledge.uploader.fullName?.charAt(0)}
@@ -124,38 +138,39 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
             <Text type="secondary">
               {knowledge.uploader.fullName} · {formatDate(knowledge.createdAt)}
             </Text>
-            
-            <Paragraph 
+
+            <Paragraph
               ellipsis={{ rows: 3, tooltip: knowledge.content }}
               style={{ margin: 0 }}
             >
               {knowledge.content}
             </Paragraph>
-            
+
             <Space wrap>
-              <Tag color={getTypeColor(knowledge.type)}>
-                {knowledge.type}
-              </Tag>
-              {knowledge.category && (
-                <Tag>{knowledge.category.name}</Tag>
-              )}
-              {knowledge.tags && knowledge.tags.split(',').map(tag => (
-                <Tag key={tag.trim()} color="default">
-                  {tag.trim()}
-                </Tag>
-              ))}
+              <Tag color={getTypeColor(knowledge.type)}>{knowledge.type}</Tag>
+              {knowledge.category && <Tag>{knowledge.category.name}</Tag>}
+              {knowledge.tags &&
+                knowledge.tags.split(',').map(tag => (
+                  <Tag key={tag.trim()} color="default">
+                    {tag.trim()}
+                  </Tag>
+                ))}
             </Space>
-            
-            <div onClick={(e) => e.preventDefault()}>
+
+            <div onClick={e => e.preventDefault()}>
               <InteractionButtons
                 knowledgeId={knowledge.id}
-                initialStats={knowledge.stats ? {
-                  knowledgeId: knowledge.id,
-                  likeCount: knowledge.stats.likeCount,
-                  favoriteCount: knowledge.stats.favoriteCount,
-                  viewCount: knowledge.stats.viewCount,
-                  commentCount: knowledge.stats.commentCount,
-                } : undefined}
+                initialStats={
+                  knowledge.stats
+                    ? {
+                        knowledgeId: knowledge.id,
+                        likeCount: knowledge.stats.likeCount,
+                        favoriteCount: knowledge.stats.favoriteCount,
+                        viewCount: knowledge.stats.viewCount,
+                        commentCount: knowledge.stats.commentCount,
+                      }
+                    : undefined
+                }
                 size="small"
                 onCommentClick={() => onCommentClick?.(knowledge)}
               />

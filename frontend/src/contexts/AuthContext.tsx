@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useReducer,
-  useEffect,
-} from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { User, LoginResponse } from '@/types/api';
 
@@ -248,5 +243,3 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
-
-

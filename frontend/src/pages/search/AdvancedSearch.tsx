@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Card, Form, Input, Select, DatePicker, Button, Space, Typography, Row, Col, Tag } from 'antd';
+import {
+  Card,
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  Button,
+  Space,
+  Typography,
+  Row,
+  Col,
+  Tag,
+} from 'antd';
 import { SearchOutlined, ClearOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { Category } from '@/types/api';
@@ -40,10 +52,30 @@ const SORT_OPTIONS = [
 ];
 
 const POPULAR_TAGS = [
-  'JavaScript', 'React', 'Vue', 'Node.js', 'Python', 'Java',
-  '前端开发', '后端开发', '数据库', '算法', '设计模式', '机器学习',
-  'HTML', 'CSS', 'TypeScript', 'Angular', 'Spring', 'Django',
-  '数据结构', '网络安全', '人工智能', '区块链', '云计算', '微服务'
+  'JavaScript',
+  'React',
+  'Vue',
+  'Node.js',
+  'Python',
+  'Java',
+  '前端开发',
+  '后端开发',
+  '数据库',
+  '算法',
+  '设计模式',
+  '机器学习',
+  'HTML',
+  'CSS',
+  'TypeScript',
+  'Angular',
+  'Spring',
+  'Django',
+  '数据结构',
+  '网络安全',
+  '人工智能',
+  '区块链',
+  '云计算',
+  '微服务',
 ];
 
 const AdvancedSearch: React.FC = () => {
@@ -76,42 +108,42 @@ const AdvancedSearch: React.FC = () => {
 
   const handleSearch = (values: AdvancedSearchForm) => {
     setLoading(true);
-    
+
     // 构建搜索参数
     const searchParams = new URLSearchParams();
-    
+
     // 组合关键词搜索
     const keywords = [];
     if (values.keyword) keywords.push(values.keyword);
     if (values.title) keywords.push(`title:${values.title}`);
     if (values.content) keywords.push(`content:${values.content}`);
     if (values.author) keywords.push(`author:${values.author}`);
-    
+
     if (keywords.length > 0) {
       searchParams.set('q', keywords.join(' '));
     }
-    
+
     if (values.categoryId) {
       searchParams.set('categoryId', values.categoryId.toString());
     }
-    
+
     if (values.type) {
       searchParams.set('type', values.type);
     }
-    
+
     if (values.tags && values.tags.length > 0) {
       searchParams.set('tags', values.tags.join(','));
     }
-    
+
     if (values.dateRange && values.dateRange[0] && values.dateRange[1]) {
       searchParams.set('startDate', values.dateRange[0]);
       searchParams.set('endDate', values.dateRange[1]);
     }
-    
+
     if (values.sortBy) {
       searchParams.set('sortBy', values.sortBy);
     }
-    
+
     // 跳转到搜索结果页
     navigate(`/search?${searchParams.toString()}`);
     setLoading(false);
@@ -126,9 +158,11 @@ const AdvancedSearch: React.FC = () => {
     return categories.map(category => (
       <React.Fragment key={category.id}>
         <Option value={category.id}>
-          {'　'.repeat(level)}{category.name}
+          {'　'.repeat(level)}
+          {category.name}
         </Option>
-        {category.children && renderCategoryOptions(category.children, level + 1)}
+        {category.children &&
+          renderCategoryOptions(category.children, level + 1)}
       </React.Fragment>
     ));
   };
@@ -137,9 +171,7 @@ const AdvancedSearch: React.FC = () => {
     <div className={styles.advancedSearch}>
       <div className={styles.header}>
         <Title level={2}>高级搜索</Title>
-        <Text type="secondary">
-          使用更精确的条件来搜索您需要的内容
-        </Text>
+        <Text type="secondary">使用更精确的条件来搜索您需要的内容</Text>
       </div>
 
       <Card className={styles.searchCard}>
@@ -158,77 +190,43 @@ const AdvancedSearch: React.FC = () => {
                 name="keyword"
                 tooltip="在标题和内容中搜索关键词"
               >
-                <Input
-                  placeholder="输入搜索关键词"
-                  size="large"
-                />
+                <Input placeholder="输入搜索关键词" size="large" />
               </Form.Item>
             </Col>
-            
+
             <Col xs={24} md={12}>
-              <Form.Item
-                label="标题"
-                name="title"
-                tooltip="仅在标题中搜索"
-              >
-                <Input
-                  placeholder="搜索标题中的关键词"
-                  size="large"
-                />
+              <Form.Item label="标题" name="title" tooltip="仅在标题中搜索">
+                <Input placeholder="搜索标题中的关键词" size="large" />
               </Form.Item>
             </Col>
-            
+
             <Col xs={24}>
-              <Form.Item
-                label="内容"
-                name="content"
-                tooltip="仅在内容中搜索"
-              >
-                <TextArea
-                  placeholder="搜索内容中的关键词"
-                  rows={3}
-                />
+              <Form.Item label="内容" name="content" tooltip="仅在内容中搜索">
+                <TextArea placeholder="搜索内容中的关键词" rows={3} />
               </Form.Item>
             </Col>
-            
+
             <Col xs={24} md={12}>
               <Form.Item
                 label="作者"
                 name="author"
                 tooltip="搜索特定作者的内容"
               >
-                <Input
-                  placeholder="输入作者用户名或姓名"
-                  size="large"
-                />
+                <Input placeholder="输入作者用户名或姓名" size="large" />
               </Form.Item>
             </Col>
-            
+
             <Col xs={24} md={12}>
-              <Form.Item
-                label="分类"
-                name="categoryId"
-              >
-                <Select
-                  placeholder="选择分类"
-                  size="large"
-                  allowClear
-                >
+              <Form.Item label="分类" name="categoryId">
+                <Select placeholder="选择分类" size="large" allowClear>
                   {renderCategoryOptions(categories)}
                 </Select>
               </Form.Item>
             </Col>
-            
+
             <Col xs={24} md={12}>
-              <Form.Item
-                label="内容类型"
-                name="type"
-              >
-                <Select
-                  placeholder="选择内容类型"
-                  size="large"
-                  allowClear
-                >
+              <Form.Item label="内容类型" name="type">
+                <Select placeholder="选择内容类型" size="large" allowClear>
                   {CONTENT_TYPES.map(type => (
                     <Option key={type.value} value={type.value}>
                       {type.label}
@@ -237,12 +235,9 @@ const AdvancedSearch: React.FC = () => {
                 </Select>
               </Form.Item>
             </Col>
-            
+
             <Col xs={24} md={12}>
-              <Form.Item
-                label="排序方式"
-                name="sortBy"
-              >
+              <Form.Item label="排序方式" name="sortBy">
                 <Select size="large">
                   {SORT_OPTIONS.map(option => (
                     <Option key={option.value} value={option.value}>
@@ -252,12 +247,9 @@ const AdvancedSearch: React.FC = () => {
                 </Select>
               </Form.Item>
             </Col>
-            
+
             <Col xs={24}>
-              <Form.Item
-                label="发布时间"
-                name="dateRange"
-              >
+              <Form.Item label="发布时间" name="dateRange">
                 <RangePicker
                   placeholder={['开始时间', '结束时间']}
                   size="large"
@@ -265,7 +257,7 @@ const AdvancedSearch: React.FC = () => {
                 />
               </Form.Item>
             </Col>
-            
+
             <Col xs={24}>
               <Form.Item
                 label="标签"
@@ -304,7 +296,7 @@ const AdvancedSearch: React.FC = () => {
               </Form.Item>
             </Col>
           </Row>
-          
+
           <div className={styles.actions}>
             <Space size="large">
               <Button

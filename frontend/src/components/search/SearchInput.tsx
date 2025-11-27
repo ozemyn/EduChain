@@ -1,8 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Input, AutoComplete, Button, Space } from 'antd';
-import { SearchOutlined, FilterOutlined, HistoryOutlined, FireOutlined } from '@ant-design/icons';
+import {
+  SearchOutlined,
+  FilterOutlined,
+  HistoryOutlined,
+  FireOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { searchService, type SearchSuggestion, type HotKeyword, type SearchHistory } from '@/services/search';
+import {
+  searchService,
+  type SearchSuggestion,
+  type HotKeyword,
+  type SearchHistory,
+} from '@/services/search';
 import { useDebounce } from '@/hooks/useDebounce';
 import styles from './SearchInput.module.css';
 
@@ -30,7 +40,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const debouncedSearchValue = useDebounce(searchValue, 300);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const inputRef = useRef<any>(null);
@@ -41,7 +51,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
       if (debouncedSearchValue && debouncedSearchValue.length > 1) {
         setLoading(true);
         try {
-          const response = await searchService.getSuggestions(debouncedSearchValue);
+          const response =
+            await searchService.getSuggestions(debouncedSearchValue);
           setSuggestions(response.data);
         } catch {
           console.error('获取搜索建议失败');
@@ -73,7 +84,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   const handleSearch = (value: string) => {
     if (!value.trim()) return;
-    
+
     if (onSearch) {
       onSearch(value);
     } else {
@@ -108,7 +119,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   // 构建下拉菜单选项
   const getDropdownOptions = () => {
-    const options: Array<{ label: React.ReactNode; options: Array<{ value: string; label: React.ReactNode }> }> = [];
+    const options: Array<{
+      label: React.ReactNode;
+      options: Array<{ value: string; label: React.ReactNode }>;
+    }> = [];
 
     // 搜索建议
     if (suggestions.length > 0) {
@@ -136,9 +150,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
         label: (
           <div className={styles.sectionHeader}>
             <HistoryOutlined /> 搜索历史
-            <Button 
-              type="text" 
-              size="small" 
+            <Button
+              type="text"
+              size="small"
               onClick={handleClearHistory}
               className={styles.clearBtn}
             >
@@ -154,7 +168,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
               <Button
                 type="text"
                 size="small"
-                onClick={(e) => handleDeleteHistoryItem(item.id, e)}
+                onClick={e => handleDeleteHistoryItem(item.id, e)}
                 className={styles.deleteBtn}
               >
                 ×
@@ -179,7 +193,11 @@ const SearchInput: React.FC<SearchInputProps> = ({
             <div className={styles.hotKeywordItem}>
               <span>{item.keyword}</span>
               <span className={`${styles.trend} ${styles[item.trend]}`}>
-                {item.trend === 'up' ? '↗' : item.trend === 'down' ? '↘' : '→'}
+                {item.trend === 'up'
+                  ? '↗'
+                  : item.trend === 'down'
+                    ? '↘'
+                    : '→'}
               </span>
             </div>
           ),

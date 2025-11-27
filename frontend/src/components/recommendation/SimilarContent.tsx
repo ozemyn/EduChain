@@ -29,13 +29,16 @@ const SimilarContent: React.FC<SimilarContentProps> = ({
     if (knowledgeId) {
       loadSimilarContent();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [knowledgeId, limit]);
 
   const loadSimilarContent = async () => {
     setLoading(true);
     try {
-      const response = await searchService.getSimilarContent(knowledgeId, limit);
+      const response = await searchService.getSimilarContent(
+        knowledgeId,
+        limit
+      );
       setItems(response.data);
     } catch (error) {
       console.error('加载相关内容失败:', error);
@@ -57,8 +60,8 @@ const SimilarContent: React.FC<SimilarContentProps> = ({
   if (items.length === 0) {
     return (
       <Card title={title} className={className}>
-        <Empty 
-          description="暂无相关内容" 
+        <Empty
+          description="暂无相关内容"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       </Card>
@@ -69,18 +72,18 @@ const SimilarContent: React.FC<SimilarContentProps> = ({
     <Card title={title} className={`${styles.similarContent} ${className}`}>
       <List
         dataSource={items}
-        renderItem={(item) => (
+        renderItem={item => (
           <List.Item className={styles.listItem}>
             <div className={styles.itemContent}>
               <Link to={`/knowledge/${item.id}`} className={styles.title}>
                 {item.title}
               </Link>
-              
+
               <div className={styles.meta}>
                 <Space size="small">
-                  <Avatar 
-                    size="small" 
-                    src={item.uploader.avatarUrl} 
+                  <Avatar
+                    size="small"
+                    src={item.uploader.avatarUrl}
                     icon={<UserOutlined />}
                   />
                   <Text type="secondary" className={styles.author}>
@@ -91,7 +94,7 @@ const SimilarContent: React.FC<SimilarContentProps> = ({
                   </Text>
                 </Space>
               </div>
-              
+
               <div className={styles.stats}>
                 <Space size="small">
                   <span>

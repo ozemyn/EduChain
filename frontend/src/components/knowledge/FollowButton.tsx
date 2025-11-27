@@ -41,7 +41,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
     if (user && userId !== user.id) {
       fetchFollowStats();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, user]);
 
   // 处理关注/取消关注
@@ -96,7 +96,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({
       type={followStats.isFollowing ? 'default' : type}
       size={size}
       loading={loading}
-      icon={followStats.isFollowing ? <UserDeleteOutlined /> : <UserAddOutlined />}
+      icon={
+        followStats.isFollowing ? <UserDeleteOutlined /> : <UserAddOutlined />
+      }
       onClick={handleFollowToggle}
       danger={followStats.isFollowing}
     >

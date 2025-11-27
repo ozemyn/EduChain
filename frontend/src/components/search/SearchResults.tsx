@@ -1,6 +1,20 @@
 import React from 'react';
-import { List, Card, Tag, Avatar, Space, Typography, Empty, Skeleton } from 'antd';
-import { EyeOutlined, LikeOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  List,
+  Card,
+  Tag,
+  Avatar,
+  Space,
+  Typography,
+  Empty,
+  Skeleton,
+} from 'antd';
+import {
+  EyeOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import type { KnowledgeItem } from '@/types/api';
 import { formatDate } from '@/utils/format';
@@ -28,11 +42,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   // 高亮关键词
   const highlightKeyword = (text: string, keyword?: string) => {
     if (!keyword || !text) return text;
-    
+
     const regex = new RegExp(`(${keyword})`, 'gi');
     const parts = text.split(regex);
-    
-    return parts.map((part, index) => 
+
+    return parts.map((part, index) =>
       regex.test(part) ? (
         <mark key={index} className={styles.highlight}>
           {part}
@@ -58,10 +72,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   // 渲染内容预览
   const renderContentPreview = (item: KnowledgeItem) => {
     const maxLength = 200;
-    const content = item.content.length > maxLength 
-      ? `${item.content.substring(0, maxLength)}...` 
-      : item.content;
-    
+    const content =
+      item.content.length > maxLength
+        ? `${item.content.substring(0, maxLength)}...`
+        : item.content;
+
     return (
       <Paragraph className={styles.content}>
         {highlightKeyword(content, keyword)}
@@ -116,7 +131,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
       <List
         dataSource={results}
-        renderItem={(item) => (
+        renderItem={item => (
           <Card className={styles.resultCard} hoverable>
             <div className={styles.cardHeader}>
               <div className={styles.titleSection}>
@@ -125,11 +140,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                 </Link>
                 <Space size="small" className={styles.tags}>
                   <Tag color={getTypeColor(item.type)}>{item.type}</Tag>
-                  {item.tags && item.tags.split(',').map(tag => (
-                    <Tag key={tag.trim()}>
-                      {highlightKeyword(tag.trim(), keyword)}
-                    </Tag>
-                  ))}
+                  {item.tags &&
+                    item.tags
+                      .split(',')
+                      .map(tag => (
+                        <Tag key={tag.trim()}>
+                          {highlightKeyword(tag.trim(), keyword)}
+                        </Tag>
+                      ))}
                 </Space>
               </div>
             </div>
@@ -140,19 +158,25 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
             <div className={styles.cardFooter}>
               <div className={styles.authorInfo}>
-                <Avatar 
-                  size="small" 
-                  src={item.uploader.avatarUrl} 
+                <Avatar
+                  size="small"
+                  src={item.uploader.avatarUrl}
                   icon={<UserOutlined />}
                 />
-                <Link to={`/user/${item.uploader.id}`} className={styles.authorName}>
+                <Link
+                  to={`/user/${item.uploader.id}`}
+                  className={styles.authorName}
+                >
                   {item.uploader.fullName || item.uploader.username}
                 </Link>
                 <Text type="secondary" className={styles.date}>
                   {formatDate(item.createdAt)}
                 </Text>
                 {item.category && (
-                  <Link to={`/category/${item.category.id}`} className={styles.category}>
+                  <Link
+                    to={`/category/${item.category.id}`}
+                    className={styles.category}
+                  >
                     {item.category.name}
                   </Link>
                 )}

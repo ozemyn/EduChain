@@ -200,7 +200,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   // 获取活动描述
   const getActivityDescription = (activity: ActivityItem) => {
     const { type, user, target, content } = activity;
-    
+
     switch (type) {
       case 'like':
         return (
@@ -222,9 +222,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 {target?.title}
               </Link>
             </Text>
-            {target?.type && (
-              <Tag color="blue">{target.type}</Tag>
-            )}
+            {target?.type && <Tag color="blue">{target.type}</Tag>}
           </Space>
         );
       case 'comment':
@@ -252,9 +250,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 {target?.title}
               </Link>
             </Text>
-            {target?.type && (
-              <Tag color="green">{target.type}</Tag>
-            )}
+            {target?.type && <Tag color="green">{target.type}</Tag>}
           </Space>
         );
       case 'follow':
@@ -273,14 +269,10 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
   const timelineItems = activities.map(activity => {
     const { icon, color } = getActivityIcon(activity.type);
-    
+
     return {
       dot: (
-        <Avatar
-          size="small"
-          style={{ backgroundColor: color }}
-          icon={icon}
-        />
+        <Avatar size="small" style={{ backgroundColor: color }} icon={icon} />
       ),
       children: (
         <div style={{ paddingBottom: 16 }}>
@@ -319,7 +311,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
         {activities.length > 0 ? (
           <>
             <Timeline items={timelineItems} />
-            
+
             {hasMore && (
               <div style={{ textAlign: 'center', marginTop: 16 }}>
                 <Button
@@ -334,10 +326,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             )}
           </>
         ) : (
-          <Empty
-            description="暂无动态"
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
+          <Empty description="暂无动态" image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
       </Spin>
     </Card>

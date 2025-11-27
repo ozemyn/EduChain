@@ -36,7 +36,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   const loadCategories = async () => {
     try {
       setLoading(true);
-      
+
       // 模拟API调用
       const mockCategories: Category[] = [
         {
@@ -47,34 +47,34 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
           createdAt: '2024-01-01',
           knowledgeCount: 25,
           children: [
-            { 
-              id: 11, 
-              name: 'React', 
-              description: 'React框架', 
-              sortOrder: 1, 
-              createdAt: '2024-01-01', 
+            {
+              id: 11,
+              name: 'React',
+              description: 'React框架',
+              sortOrder: 1,
+              createdAt: '2024-01-01',
               knowledgeCount: 10,
-              parentId: 1
+              parentId: 1,
             },
-            { 
-              id: 12, 
-              name: 'Vue', 
-              description: 'Vue框架', 
-              sortOrder: 2, 
-              createdAt: '2024-01-01', 
+            {
+              id: 12,
+              name: 'Vue',
+              description: 'Vue框架',
+              sortOrder: 2,
+              createdAt: '2024-01-01',
               knowledgeCount: 8,
-              parentId: 1
+              parentId: 1,
             },
-            { 
-              id: 13, 
-              name: 'Angular', 
-              description: 'Angular框架', 
-              sortOrder: 3, 
-              createdAt: '2024-01-01', 
+            {
+              id: 13,
+              name: 'Angular',
+              description: 'Angular框架',
+              sortOrder: 3,
+              createdAt: '2024-01-01',
               knowledgeCount: 7,
-              parentId: 1
+              parentId: 1,
             },
-          ]
+          ],
         },
         {
           id: 2,
@@ -84,34 +84,34 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
           createdAt: '2024-01-01',
           knowledgeCount: 30,
           children: [
-            { 
-              id: 21, 
-              name: 'Spring Boot', 
-              description: 'Spring Boot框架', 
-              sortOrder: 1, 
-              createdAt: '2024-01-01', 
+            {
+              id: 21,
+              name: 'Spring Boot',
+              description: 'Spring Boot框架',
+              sortOrder: 1,
+              createdAt: '2024-01-01',
               knowledgeCount: 15,
-              parentId: 2
+              parentId: 2,
             },
-            { 
-              id: 22, 
-              name: 'Node.js', 
-              description: 'Node.js运行时', 
-              sortOrder: 2, 
-              createdAt: '2024-01-01', 
+            {
+              id: 22,
+              name: 'Node.js',
+              description: 'Node.js运行时',
+              sortOrder: 2,
+              createdAt: '2024-01-01',
               knowledgeCount: 12,
-              parentId: 2
+              parentId: 2,
             },
-            { 
-              id: 23, 
-              name: 'Django', 
-              description: 'Django框架', 
-              sortOrder: 3, 
-              createdAt: '2024-01-01', 
+            {
+              id: 23,
+              name: 'Django',
+              description: 'Django框架',
+              sortOrder: 3,
+              createdAt: '2024-01-01',
               knowledgeCount: 3,
-              parentId: 2
+              parentId: 2,
             },
-          ]
+          ],
         },
         {
           id: 3,
@@ -121,34 +121,34 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
           createdAt: '2024-01-01',
           knowledgeCount: 18,
           children: [
-            { 
-              id: 31, 
-              name: 'MySQL', 
-              description: 'MySQL数据库', 
-              sortOrder: 1, 
-              createdAt: '2024-01-01', 
+            {
+              id: 31,
+              name: 'MySQL',
+              description: 'MySQL数据库',
+              sortOrder: 1,
+              createdAt: '2024-01-01',
               knowledgeCount: 10,
-              parentId: 3
+              parentId: 3,
             },
-            { 
-              id: 32, 
-              name: 'Redis', 
-              description: 'Redis缓存', 
-              sortOrder: 2, 
-              createdAt: '2024-01-01', 
+            {
+              id: 32,
+              name: 'Redis',
+              description: 'Redis缓存',
+              sortOrder: 2,
+              createdAt: '2024-01-01',
               knowledgeCount: 5,
-              parentId: 3
+              parentId: 3,
             },
-            { 
-              id: 33, 
-              name: 'MongoDB', 
-              description: 'MongoDB文档数据库', 
-              sortOrder: 3, 
-              createdAt: '2024-01-01', 
+            {
+              id: 33,
+              name: 'MongoDB',
+              description: 'MongoDB文档数据库',
+              sortOrder: 3,
+              createdAt: '2024-01-01',
               knowledgeCount: 3,
-              parentId: 3
+              parentId: 3,
             },
-          ]
+          ],
         },
         {
           id: 4,
@@ -158,37 +158,36 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
           createdAt: '2024-01-01',
           knowledgeCount: 12,
           children: [
-            { 
-              id: 41, 
-              name: 'React Native', 
-              description: 'React Native框架', 
-              sortOrder: 1, 
-              createdAt: '2024-01-01', 
+            {
+              id: 41,
+              name: 'React Native',
+              description: 'React Native框架',
+              sortOrder: 1,
+              createdAt: '2024-01-01',
               knowledgeCount: 6,
-              parentId: 4
+              parentId: 4,
             },
-            { 
-              id: 42, 
-              name: 'Flutter', 
-              description: 'Flutter框架', 
-              sortOrder: 2, 
-              createdAt: '2024-01-01', 
+            {
+              id: 42,
+              name: 'Flutter',
+              description: 'Flutter框架',
+              sortOrder: 2,
+              createdAt: '2024-01-01',
               knowledgeCount: 4,
-              parentId: 4
+              parentId: 4,
             },
-            { 
-              id: 43, 
-              name: 'iOS', 
-              description: 'iOS原生开发', 
-              sortOrder: 3, 
-              createdAt: '2024-01-01', 
+            {
+              id: 43,
+              name: 'iOS',
+              description: 'iOS原生开发',
+              sortOrder: 3,
+              createdAt: '2024-01-01',
               knowledgeCount: 2,
-              parentId: 4
+              parentId: 4,
             },
-          ]
+          ],
         },
       ];
-
 
       setTreeData(convertToTreeData(mockCategories));
     } catch (error) {
@@ -201,22 +200,21 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   // 转换为TreeSelect需要的数据格式
   const convertToTreeData = (categories: Category[]): TreeNode[] => {
     return categories.map(category => ({
-      title: showCount && category.knowledgeCount !== undefined 
-        ? `${category.name} (${category.knowledgeCount})`
-        : category.name,
+      title:
+        showCount && category.knowledgeCount !== undefined
+          ? `${category.name} (${category.knowledgeCount})`
+          : category.name,
       value: category.id,
       key: category.id,
-      children: category.children ? convertToTreeData(category.children) : undefined,
+      children: category.children
+        ? convertToTreeData(category.children)
+        : undefined,
     }));
   };
 
-
-
-
-
   useEffect(() => {
     loadCategories();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -232,9 +230,18 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       showSearch
       treeDefaultExpandAll
       filterTreeNode={(search, node) => {
-        return node.title?.toString().toLowerCase().includes(search.toLowerCase()) || false;
+        return (
+          node.title?.toString().toLowerCase().includes(search.toLowerCase()) ||
+          false
+        );
       }}
-      notFoundContent={loading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+      notFoundContent={
+        loading ? (
+          <Spin size="small" />
+        ) : (
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        )
+      }
       style={{ width: '100%' }}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
       treeNodeFilterProp="title"

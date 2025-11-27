@@ -30,13 +30,8 @@ const PermissionWrapper: React.FC<PermissionWrapperProps> = ({
   checkEdit = false,
   checkDelete = false,
 }) => {
-  const {
-    user,
-    hasPermission,
-    hasMinLevel,
-    canEditContent,
-    canDeleteContent,
-  } = usePermissions();
+  const { user, hasPermission, hasMinLevel, canEditContent, canDeleteContent } =
+    usePermissions();
 
   // 用户未登录
   if (!user) {
