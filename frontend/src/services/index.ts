@@ -5,3 +5,5 @@ export * from './knowledge';
 export * from './interaction';
 export * from './search';
 export * from './category';
+export * from './notification';
+export * from './user';

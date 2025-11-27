@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { UserOutlined, TeamOutlined, HeartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { interactionService } from '@/services';
+import { followService } from '@/services';
 import type { UserFollow } from '@/types';
 import { formatDate } from '@/utils/format';
 import FollowButton from './FollowButton';
@@ -47,7 +47,7 @@ const FollowList: React.FC<FollowListProps> = ({
   const fetchFollowing = async (page = 1, size = 20) => {
     setLoading(true);
     try {
-      const response = await interactionService.getFollowing(userId, {
+      const response = await followService.getFollowing(userId, {
         page: page - 1,
         size,
       });
@@ -72,7 +72,7 @@ const FollowList: React.FC<FollowListProps> = ({
   const fetchFollowers = async (page = 1, size = 20) => {
     setLoading(true);
     try {
-      const response = await interactionService.getFollowers(userId, {
+      const response = await followService.getFollowers(userId, {
         page: page - 1,
         size,
       });

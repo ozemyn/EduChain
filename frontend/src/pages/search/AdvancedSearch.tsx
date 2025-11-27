@@ -88,7 +88,7 @@ const AdvancedSearch: React.FC = () => {
   const loadCategories = async () => {
     try {
       const response = await categoryService.getCategories();
-      setCategories(response.data);
+      setCategories(response.data.content || []);
     } catch (error) {
       console.error('加载分类失败:', error);
     }

@@ -21,7 +21,7 @@ import {
   NotificationOutlined,
   CheckOutlined,
 } from '@ant-design/icons';
-import { interactionService } from '@/services';
+import { notificationService } from '@/services';
 import type { Notification } from '@/types';
 import { formatDate } from '@/utils/format';
 
@@ -61,7 +61,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
         params.type = type.toUpperCase();
       }
 
-      const response = await interactionService.getNotifications(params);
+      const response = await notificationService.getNotifications(params);
 
       setNotifications(response.data.content);
       setPagination({
@@ -71,7 +71,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
       });
 
       // 计算未读数量
-      const unread = response.data.content.filter(n => !n.isRead).length;
+      const unread = response.data.content.filter(
+        (n: Notification) => !n.isRead
+      ).length;
       setUnreadCount(unread);
       onUnreadCountChange?.(unread);
     } catch {
@@ -84,9 +86,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   // 获取未读通知数量
   const fetchUnreadCount = async () => {
     try {
-      const response = await interactionService.getUnreadNotificationCount();
-      setUnreadCount(response.data.count);
-      onUnreadCountChange?.(response.data.count);
+      const response = await notificationService.getUnreadCount();
+      setUnreadCount(response.data);
+      onUnreadCountChange?.(response.data);
     } catch (error) {
       console.error('Failed to fetch unread count:', error);
     }
@@ -102,7 +104,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const markAsRead = async (notificationId: number) => {
     setActionLoading(prev => ({ ...prev, [notificationId]: true }));
     try {
-      await interactionService.markNotificationAsRead(notificationId);
+      await notificationService.markAsRead(notificationId);
 
       // 更新本地状态
       setNotifications(prev =>
@@ -127,7 +129,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   // 标记所有通知为已读
   const markAllAsRead = async () => {
     try {
-      await interactionService.markAllNotificationsAsRead();
+      await notificationService.markAllAsRead();
 
       // 更新本地状态
       setNotifications(prev =>

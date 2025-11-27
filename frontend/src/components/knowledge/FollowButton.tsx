@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, message } from 'antd';
 import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
-import { interactionService } from '@/services';
+import { followService } from '@/services';
 import type { FollowStats } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -30,8 +30,8 @@ const FollowButton: React.FC<FollowButtonProps> = ({
   // 获取关注状态
   const fetchFollowStats = async () => {
     try {
-      const response = await interactionService.getFollowStats(userId);
-      setFollowStats(response.data);
+      const response = await followService.getFollowStats(userId);
+      setFollowStats({ ...response.data, userId });
     } catch (error) {
       console.error('Failed to fetch follow stats:', error);
     }
@@ -59,7 +59,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
     setLoading(true);
     try {
       if (followStats.isFollowing) {
-        await interactionService.unfollowUser(userId);
+        await followService.unfollowUser(userId);
         const newStats = {
           ...followStats,
           followerCount: followStats.followerCount - 1,
@@ -69,7 +69,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
         onFollowChange?.(false, newStats);
         message.success('已取消关注');
       } else {
-        await interactionService.followUser(userId);
+        await followService.followUser(userId);
         const newStats = {
           ...followStats,
           followerCount: followStats.followerCount + 1,

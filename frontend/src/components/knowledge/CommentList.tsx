@@ -12,7 +12,7 @@ import {
   Typography,
 } from 'antd';
 import { CommentOutlined, SendOutlined } from '@ant-design/icons';
-import { interactionService } from '@/services';
+import { commentService } from '@/services';
 import type { CommentWithReplies, CreateCommentRequest } from '@/types';
 import CommentItem from './CommentItem';
 import { useAuth } from '@/contexts/AuthContext';
@@ -44,12 +44,12 @@ const CommentList: React.FC<CommentListProps> = ({
   const fetchComments = async (page = 1, size = 10) => {
     setLoading(true);
     try {
-      const response = await interactionService.getComments(knowledgeId, {
+      const response = await commentService.getComments(knowledgeId, {
         page: page - 1, // 后端从0开始
         size,
       });
 
-      setComments(response.data.content);
+      setComments(response.data.content as unknown as CommentWithReplies[]);
       setPagination({
         current: page,
         pageSize: size,
@@ -88,7 +88,7 @@ const CommentList: React.FC<CommentListProps> = ({
         content: newComment.trim(),
       };
 
-      await interactionService.createComment(commentData);
+      await commentService.createComment(commentData);
       setNewComment('');
       message.success('评论成功');
 
@@ -114,7 +114,7 @@ const CommentList: React.FC<CommentListProps> = ({
       parentId,
     };
 
-    await interactionService.createComment(commentData);
+    await commentService.createComment(commentData);
 
     // 重新获取评论列表
     await fetchComments(pagination.current, pagination.pageSize);
@@ -122,7 +122,7 @@ const CommentList: React.FC<CommentListProps> = ({
 
   // 处理编辑
   const handleEdit = async (commentId: number, content: string) => {
-    await interactionService.updateComment(commentId, content);
+    await commentService.updateComment(commentId, { content });
 
     // 更新本地评论内容
     const updateCommentContent = (
@@ -147,7 +147,7 @@ const CommentList: React.FC<CommentListProps> = ({
 
   // 处理删除
   const handleDelete = async (commentId: number) => {
-    await interactionService.deleteComment(commentId);
+    await commentService.deleteComment(commentId);
 
     // 重新获取评论列表
     await fetchComments(pagination.current, pagination.pageSize);
@@ -155,7 +155,7 @@ const CommentList: React.FC<CommentListProps> = ({
 
   // 加载回复
   const handleLoadReplies = async (commentId: number) => {
-    const response = await interactionService.getCommentReplies(commentId, {
+    const response = await commentService.getCommentReplies(commentId, {
       page: 0,
       size: 20,
     });
@@ -168,7 +168,7 @@ const CommentList: React.FC<CommentListProps> = ({
         if (comment.id === commentId) {
           return {
             ...comment,
-            replies: response.data.content,
+            replies: response.data.content as unknown as CommentWithReplies[],
           };
         }
         return comment;

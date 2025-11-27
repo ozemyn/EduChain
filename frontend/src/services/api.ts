@@ -4,6 +4,7 @@ import { message } from 'antd';
 import type { ApiResponse } from '@/types/api';
 import { TokenManager } from '@/utils/auth';
 import { Storage, STORAGE_KEYS } from '@/utils/storage';
+import { generateCacheKey, withCache } from '@/utils/cache';
 
 // 扩展 AxiosRequestConfig 类型以包含 metadata
 declare module 'axios' {
@@ -210,8 +211,25 @@ api.interceptors.response.use(
 export const request = {
   get: <T = unknown>(
     url: string,
-    config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> => api.get(url, config).then(res => res.data),
+    config?: AxiosRequestConfig & { useCache?: boolean; cacheTtl?: number }
+  ): Promise<ApiResponse<T>> => {
+    const {
+      useCache = false,
+      cacheTtl = 5 * 60 * 1000,
+      ...axiosConfig
+    } = config || {};
+
+    if (useCache) {
+      const cacheKey = generateCacheKey(url, axiosConfig.params);
+      return withCache(
+        () => api.get(url, axiosConfig).then(res => res.data),
+        cacheKey,
+        cacheTtl
+      );
+    }
+
+    return api.get(url, axiosConfig).then(res => res.data);
+  },
 
   post: <T = unknown>(
     url: string,

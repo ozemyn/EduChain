@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { interactionService } from '@/services';
+import { notificationService } from '@/services';
 import type { Notification } from '@/types';
 import { formatDate } from '@/utils/format';
 
@@ -37,7 +37,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   const fetchRecentNotifications = async () => {
     setLoading(true);
     try {
-      const response = await interactionService.getNotifications({
+      const response = await notificationService.getNotifications({
         page: 0,
         size: 5,
       });
@@ -45,7 +45,9 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
       setNotifications(response.data.content);
 
       // 计算未读数量
-      const unread = response.data.content.filter(n => !n.isRead).length;
+      const unread = response.data.content.filter(
+        (n: Notification) => !n.isRead
+      ).length;
       setUnreadCount(unread);
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
@@ -57,8 +59,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   // 获取未读通知数量
   const fetchUnreadCount = async () => {
     try {
-      const response = await interactionService.getUnreadNotificationCount();
-      setUnreadCount(response.data.count);
+      const response = await notificationService.getUnreadCount();
+      setUnreadCount(response.data);
     } catch (error) {
       console.error('Failed to fetch unread count:', error);
     }
@@ -84,7 +86,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   // 标记通知为已读
   const markAsRead = async (notificationId: number) => {
     try {
-      await interactionService.markNotificationAsRead(notificationId);
+      await notificationService.markAsRead(notificationId);
 
       // 更新本地状态
       setNotifications(prev =>

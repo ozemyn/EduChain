@@ -20,12 +20,23 @@ export const authService = {
     request.post<LoginResponse>('/auth/refresh', { refreshToken }),
 
   // 登出
-  logout: () => request.post('/auth/logout'),
+  logout: (userId: number) => request.post('/auth/logout', { userId }),
 
   // 获取当前用户信息
-  getCurrentUser: () => request.get<User>('/auth/me'),
+  getCurrentUser: () => request.get<User>('/users/me'),
 
   // 修改密码
   changePassword: (data: { oldPassword: string; newPassword: string }) =>
-    request.post('/auth/change-password', data),
+    request.put('/users/me/password', data),
+
+  // 检查用户名是否可用
+  checkUsername: (username: string) =>
+    request.get<boolean>('/auth/check-username', { params: { username } }),
+
+  // 检查邮箱是否可用
+  checkEmail: (email: string) =>
+    request.get<boolean>('/auth/check-email', { params: { email } }),
+
+  // 获取活跃用户数量
+  getActiveUserCount: () => request.get<number>('/auth/stats/active-users'),
 };

@@ -74,7 +74,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
     setLoading(prev => ({ ...prev, like: true }));
     try {
       if (stats.userLiked) {
-        await interactionService.unlikeKnowledge(knowledgeId);
+        await interactionService.unlike(knowledgeId);
         const newStats = {
           ...stats,
           likeCount: stats.likeCount - 1,
@@ -84,7 +84,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         onStatsChange?.(newStats);
         message.success('已取消点赞');
       } else {
-        await interactionService.likeKnowledge(knowledgeId);
+        await interactionService.like(knowledgeId);
         const newStats = {
           ...stats,
           likeCount: stats.likeCount + 1,
@@ -111,7 +111,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
     setLoading(prev => ({ ...prev, favorite: true }));
     try {
       if (stats.userFavorited) {
-        await interactionService.unfavoriteKnowledge(knowledgeId);
+        await interactionService.unfavorite(knowledgeId);
         const newStats = {
           ...stats,
           favoriteCount: stats.favoriteCount - 1,
@@ -121,7 +121,7 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
         onStatsChange?.(newStats);
         message.success('已取消收藏');
       } else {
-        await interactionService.favoriteKnowledge(knowledgeId);
+        await interactionService.favorite(knowledgeId);
         const newStats = {
           ...stats,
           favoriteCount: stats.favoriteCount + 1,

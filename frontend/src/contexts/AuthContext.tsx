@@ -176,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // 登出
   const logout = (): void => {
     try {
-      authService.logout().catch(() => {
+      authService.logout(state.user?.id || 0).catch(() => {
         // 忽略登出接口错误
       });
     } finally {
