@@ -18,8 +18,7 @@ interface LocationState {
 
 const Login: React.FC = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,14 +27,11 @@ const Login: React.FC = () => {
 
   const onFinish = async (values: LoginRequest) => {
     try {
-      setLoading(true);
-      await login(values.username, values.password);
-      message.success('登录成功！');
+      await login(values.usernameOrEmail, values.password);
       navigate(from, { replace: true });
     } catch (error) {
       console.error('Login failed:', error);
-    } finally {
-      setLoading(false);
+      // 错误已经在AuthContext中处理了，这里不需要额外处理
     }
   };
 
@@ -191,7 +187,7 @@ const Login: React.FC = () => {
             autoComplete="off"
           >
             <Form.Item
-              name="username"
+              name="usernameOrEmail"
               rules={[
                 { required: true, message: '请输入用户名或邮箱！' },
                 { min: 3, message: '用户名至少需要3个字符！' },

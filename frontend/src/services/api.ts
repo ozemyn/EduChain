@@ -66,7 +66,7 @@ const refreshTokenIfNeeded = async (): Promise<string | null> => {
       refreshToken: refreshToken,
     });
 
-    const { token: newToken, refreshToken: newRefreshToken } =
+    const { accessToken: newToken, refreshToken: newRefreshToken } =
       response.data.data;
 
     // 更新存储的token

@@ -84,13 +84,17 @@ public class UserServiceImpl implements UserService {
         user.setLevel(1); // 默认等级1
 
         // 保存用户
-        User savedUser = userRepository.save(user);
+        try {
+            User savedUser = userRepository.save(user);
 
-        // 创建用户统计记录
-        UserStats userStats = new UserStats(savedUser.getId());
-        userStatsRepository.save(userStats);
+            // 创建用户统计记录
+            UserStats userStats = new UserStats(savedUser.getId());
+            userStatsRepository.save(userStats);
 
-        return UserDTO.fromEntity(savedUser);
+            return UserDTO.fromEntity(savedUser);
+        } catch (Exception e) {
+            throw new BusinessException("REGISTER_FAILED", "注册失败: " + e.getMessage());
+        }
     }
 
     @Override

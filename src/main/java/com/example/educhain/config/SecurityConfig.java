@@ -105,9 +105,9 @@ public class SecurityConfig {
             
             // 配置请求授权
             .authorizeHttpRequests(authz -> authz
-                // 公开接口
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
+                // 公开接口 - 注意：由于context-path是/api，这里的路径应该是相对于context-path的
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/public/**").permitAll()
                 
                 // Swagger文档
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
@@ -116,14 +116,14 @@ public class SecurityConfig {
                 .requestMatchers("/favicon.ico", "/error").permitAll()
                 
                 // 管理员接口
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 
                 // 用户接口
-                .requestMatchers("/api/users/**").hasAnyRole("LEARNER", "ADMIN")
-                .requestMatchers("/api/knowledge/**").hasAnyRole("LEARNER", "ADMIN")
-                .requestMatchers("/api/comments/**").hasAnyRole("LEARNER", "ADMIN")
-                .requestMatchers("/api/interactions/**").hasAnyRole("LEARNER", "ADMIN")
-                .requestMatchers("/api/search/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/users/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/knowledge/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/comments/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/interactions/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/search/**").hasAnyRole("LEARNER", "ADMIN")
                 
                 // 其他所有请求都需要认证
                 .anyRequest().authenticated()

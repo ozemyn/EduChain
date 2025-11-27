@@ -38,9 +38,15 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "获取当前用户信息", description = "获取当前登录用户的详细信息")
     public ResponseEntity<Result<UserDTO>> getCurrentUser() {
-        Long userId = getCurrentUserId();
-        UserDTO user = userService.getUserById(userId);
-        return ResponseEntity.ok(Result.success("获取成功", user));
+        try {
+            Long userId = getCurrentUserId();
+            UserDTO user = userService.getUserById(userId);
+            return ResponseEntity.ok(Result.success("获取成功", user));
+        } catch (Exception e) {
+            System.err.println("获取当前用户信息失败: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -187,11 +193,16 @@ public class UserController {
      */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("当前认证信息: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
+        System.out.println("认证主体: " + (authentication != null ? authentication.getPrincipal().getClass().getSimpleName() : "null"));
+        
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetailsService.CustomUserPrincipal) {
             CustomUserDetailsService.CustomUserPrincipal userPrincipal = 
                 (CustomUserDetailsService.CustomUserPrincipal) authentication.getPrincipal();
+            System.out.println("获取到用户ID: " + userPrincipal.getId());
             return userPrincipal.getId();
         }
+        System.err.println("无法获取当前用户信息 - 认证失败");
         throw new RuntimeException("无法获取当前用户信息");
     }
 

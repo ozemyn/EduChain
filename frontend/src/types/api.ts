@@ -55,7 +55,7 @@ export interface UserStats {
 
 // 认证相关类型
 export interface LoginRequest {
-  username: string;
+  usernameOrEmail: string;
   password: string;
 }
 
@@ -68,7 +68,7 @@ export interface RegisterRequest {
 }
 
 export interface LoginResponse {
-  token: string;
+  accessToken: string;
   refreshToken: string;
   user: User;
   expiresIn: number;

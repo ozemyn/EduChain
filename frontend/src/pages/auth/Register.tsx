@@ -30,22 +30,18 @@ interface RegisterFormData extends RegisterRequest {
 
 const Register: React.FC = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, loading } = useAuth();
   const navigate = useNavigate();
 
   const onFinish = async (values: RegisterFormData) => {
     try {
-      setLoading(true);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...registerData } = values;
       await register(registerData);
-      message.success('注册成功！请登录');
       navigate('/login');
     } catch (error) {
       console.error('Registration failed:', error);
-    } finally {
-      setLoading(false);
+      // 错误已经在AuthContext中处理了，这里不需要额外处理
     }
   };
 

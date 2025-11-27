@@ -38,6 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, 
                                   FilterChain filterChain) throws ServletException, IOException {
         
+        String path = request.getRequestURI();
+        logger.debug("Processing request: " + path);
+        
         try {
             String jwt = getJwtFromRequest(request);
             
@@ -83,16 +86,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        
+        logger.debug("Checking shouldNotFilter for path: " + path + ", contextPath: " + contextPath);
+        
+        // 移除上下文路径，获取实际的servlet路径
+        String servletPath = path;
+        if (contextPath != null && !contextPath.isEmpty() && path.startsWith(contextPath)) {
+            servletPath = path.substring(contextPath.length());
+        }
+        
+        logger.debug("Servlet path after context removal: " + servletPath);
         
         // 跳过认证的路径
-        return path.startsWith("/api/auth/") ||
-               path.startsWith("/api/public/") ||
-               path.startsWith("/swagger-ui/") ||
-               path.startsWith("/v3/api-docs/") ||
-               path.startsWith("/swagger-resources/") ||
-               path.startsWith("/webjars/") ||
-               path.equals("/favicon.ico") ||
-               path.equals("/error");
+        boolean shouldSkip = servletPath.startsWith("/auth/") ||
+               servletPath.startsWith("/public/") ||
+               servletPath.startsWith("/swagger-ui/") ||
+               servletPath.startsWith("/v3/api-docs/") ||
+               servletPath.startsWith("/swagger-resources/") ||
+               servletPath.startsWith("/webjars/") ||
+               servletPath.equals("/favicon.ico") ||
+               servletPath.equals("/error");
+        
+        logger.debug("Should skip filter: " + shouldSkip);
+        return shouldSkip;
     }
 
     /**

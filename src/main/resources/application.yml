@@ -15,11 +15,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
+        format_sql: false
     open-in-view: false
   
   # Redis Configuration
@@ -59,7 +59,7 @@ server:
 
 # JWT Configuration
 jwt:
-  secret: educhain-jwt-secret-key-2024-very-long-and-secure
+  secret: educhain-jwt-secret-key-2024-very-long-and-secure-for-hs512-algorithm-minimum-512-bits-required
   expiration: 86400000 # 24 hours in milliseconds
   refresh-expiration: 604800000 # 7 days in milliseconds
 
@@ -73,12 +73,16 @@ file:
 # Logging Configuration
 logging:
   level:
-    com.example.educhain: DEBUG
-    org.springframework.security: DEBUG
-    org.hibernate.SQL: DEBUG
+    root: WARN
+    com.example.educhain: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type: WARN
+    org.springframework.web: WARN
+    org.springframework.boot: WARN
   pattern:
-    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%15.15t]){faint} %clr(%-5level){spring} %clr(%40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
+    console: "%clr(%d{HH:mm:ss}){faint} %clr(%-5level) %clr(%logger{36}){cyan} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{40} - %msg%n"
   file:
     name: logs/educhain.log
   # 启用彩色输出
@@ -120,12 +124,11 @@ spring:
 # 开发环境日志配置
 logging:
   level:
-    com.example.educhain: DEBUG
-    org.springframework.security: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.example.educhain: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
   pattern:
-    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){blue} %clr([%15.15t]){magenta} %clr(%-5level){highlight} %clr([%logger{36}]){cyan} %clr(:){faint} %clr(%msg){green}%n%clr(%wEx){red}"
+    console: "%clr(%d{HH:mm:ss}){blue} %clr(%-5level){highlight} %clr(%logger{36}){cyan} - %clr(%msg){green}%n"
   ansi:
     enabled: always
 
@@ -162,11 +165,12 @@ spring:
 # 生产环境日志配置
 logging:
   level:
-    com.example.educhain: INFO
-    org.springframework.security: WARN
-    org.hibernate.SQL: WARN
+    root: ERROR
+    com.example.educhain: WARN
+    org.springframework.security: ERROR
+    org.hibernate.SQL: ERROR
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
+    console: "%d{HH:mm:ss} %-5level %logger{40} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{40} - %msg%n"
   ansi:
-    enabled: detect  # 生产环境自动检测是否支持彩色
+    enabled: detect
