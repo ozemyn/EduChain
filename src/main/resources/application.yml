@@ -6,10 +6,12 @@ spring:
   
   # Database Configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/educhain_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&sql_mode=STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO
+    url: jdbc:mysql://localhost:3306/educhain_db?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: zzm20040517
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-init-sql: SET sql_mode='STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO'
   
   # JPA Configuration
   jpa:
@@ -37,6 +39,8 @@ spring:
   jackson:
     default-property-inclusion: non_null
     time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
   
   # File Upload Configuration
   servlet:
@@ -44,11 +48,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 50MB
   
-  # Security Configuration
-  security:
-    user:
-      name: admin
-      password: admin123
+  # Security Configuration - 已通过 SecurityConfig 自定义配置
 
 # Server Configuration
 server:
@@ -58,7 +58,7 @@ server:
 
 # JWT Configuration
 jwt:
-  secret: educhain-jwt-secret-key-2024-very-long-and-secure-for-hs512-algorithm-minimum-512-bits-required
+  secret: ${JWT_SECRET:educhain-jwt-secret-key-2024-very-long-and-secure-for-hs512-algorithm-minimum-512-bits-required}
   expiration: 86400000 # 24 hours in milliseconds
   refresh-expiration: 604800000 # 7 days in milliseconds
 
@@ -94,11 +94,17 @@ logging:
 # Swagger/OpenAPI Configuration
 springdoc:
   api-docs:
-    path: /api-docs
+    enabled: true
+    path: /v3/api-docs
   swagger-ui:
+    enabled: true
     path: /swagger-ui.html
     operations-sorter: method
     tags-sorter: alpha
+    try-it-out-enabled: true
+    disable-swagger-default-url: true
+  default-produces-media-type: application/json
+  show-actuator: false
 
 # Management Endpoints
 management:

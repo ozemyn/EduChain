@@ -22,7 +22,7 @@ import java.util.Map;
  * 外部内容管理控制器
  */
 @RestController
-@RequestMapping("/api/external-content")
+@RequestMapping("/external-content")
 @Tag(name = "外部内容管理", description = "外部内容抓取和管理相关接口")
 public class ExternalContentController {
 

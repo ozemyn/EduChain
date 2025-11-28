@@ -21,7 +21,7 @@ import java.util.List;
  * 推荐系统控制器
  */
 @RestController
-@RequestMapping("/api/recommendations")
+@RequestMapping("/recommendations")
 @Tag(name = "推荐系统", description = "内容推荐相关接口")
 @SecurityRequirement(name = "bearerAuth")
 public class RecommendationController {

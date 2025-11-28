@@ -26,7 +26,7 @@ import java.util.Map;
  * 用户互动控制器
  */
 @RestController
-@RequestMapping("/api/interactions")
+@RequestMapping("/interactions")
 @Tag(name = "用户互动管理", description = "用户互动相关接口")
 public class UserInteractionController {
 

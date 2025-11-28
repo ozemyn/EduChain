@@ -61,7 +61,8 @@ public class SecurityConfig {
      */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -105,12 +106,31 @@ public class SecurityConfig {
             
             // 配置请求授权
             .authorizeHttpRequests(authz -> authz
-                // 公开接口 - 注意：由于context-path是/api，这里的路径应该是相对于context-path的
+                // 公开接口 - 由于context-path是/api，这里的路径是相对于context-path的
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/test/**").permitAll()
                 
-                // Swagger文档
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                // 搜索和推荐接口允许匿名访问
+                .requestMatchers("/search/**").permitAll()
+                .requestMatchers("/recommendations/**").permitAll()
+                
+                // 分类和标签接口允许匿名访问（只读操作）
+                .requestMatchers("/categories/**").permitAll()
+                .requestMatchers("/tags/**").permitAll()
+                
+                // 知识内容的只读接口允许匿名访问
+                .requestMatchers("/knowledge/*/view").permitAll()
+                .requestMatchers("/knowledge/list").permitAll()
+                .requestMatchers("/knowledge/popular").permitAll()
+                
+                // Swagger文档 - 完全开放访问
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-resources/**", "/webjars/**", "/configuration/**").permitAll()
+                .requestMatchers("/api-docs/**", "/swagger-config/**").permitAll()
+                
+                // Actuator健康检查
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                 
                 // 静态资源
                 .requestMatchers("/favicon.ico", "/error").permitAll()
@@ -123,7 +143,8 @@ public class SecurityConfig {
                 .requestMatchers("/knowledge/**").hasAnyRole("LEARNER", "ADMIN")
                 .requestMatchers("/comments/**").hasAnyRole("LEARNER", "ADMIN")
                 .requestMatchers("/interactions/**").hasAnyRole("LEARNER", "ADMIN")
-                .requestMatchers("/search/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/notifications/**").hasAnyRole("LEARNER", "ADMIN")
+                .requestMatchers("/follows/**").hasAnyRole("LEARNER", "ADMIN")
                 
                 // 其他所有请求都需要认证
                 .anyRequest().authenticated()

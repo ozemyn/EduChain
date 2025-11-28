@@ -30,7 +30,7 @@ import java.util.List;
  * 文件上传控制器
  */
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/files")
 @Tag(name = "文件管理", description = "文件上传、下载、管理等功能")
 public class FileUploadController {
 

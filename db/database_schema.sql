@@ -177,12 +177,27 @@ CREATE TABLE search_index (
 -- ========================================
 CREATE TABLE hot_keywords (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    keyword VARCHAR(200) NOT NULL COMMENT '关键词',
-    search_count INT DEFAULT 1 COMMENT '搜索次数',
-    last_searched_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '最后搜索时间',
+    keyword VARCHAR(100) NOT NULL COMMENT '关键词',
+    search_count BIGINT DEFAULT 0 COMMENT '搜索次数',
+    result_count BIGINT DEFAULT 0 COMMENT '搜索结果数量',
+    click_count BIGINT DEFAULT 0 COMMENT '点击次数',
+    trend_score DOUBLE DEFAULT 0.0 COMMENT '趋势分数',
+    daily_count BIGINT DEFAULT 0 COMMENT '今日搜索次数',
+    weekly_count BIGINT DEFAULT 0 COMMENT '本周搜索次数',
+    monthly_count BIGINT DEFAULT 0 COMMENT '本月搜索次数',
+    last_searched_at DATETIME COMMENT '最后搜索时间',
+    category_id BIGINT COMMENT '关联的主要分类',
+    category_name VARCHAR(100) COMMENT '分类名称',
+    status INT DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
     UNIQUE KEY uk_keyword (keyword),
-    INDEX idx_search_count (search_count)
+    INDEX idx_search_count (search_count),
+    INDEX idx_last_searched (last_searched_at),
+    INDEX idx_trend_score (trend_score),
+    INDEX idx_category_id (category_id),
+    INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='热门关键词表';
 
 -- ========================================

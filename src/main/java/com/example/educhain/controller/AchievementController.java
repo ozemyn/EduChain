@@ -27,7 +27,7 @@ import java.util.Map;
  * 成就管理控制器
  */
 @RestController
-@RequestMapping("/api/achievements")
+@RequestMapping("/achievements")
 @Tag(name = "成就管理", description = "用户成就系统相关接口")
 public class AchievementController {
 

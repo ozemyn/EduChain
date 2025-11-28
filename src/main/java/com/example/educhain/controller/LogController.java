@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * 日志管理控制器
  */
 @RestController
-@RequestMapping("/api/admin/logs")
+@RequestMapping("/admin/logs")
 @Tag(name = "日志管理接口", description = "系统日志和管理员日志管理接口")
 @PreAuthorize("hasRole('ADMIN')")
 public class LogController {

@@ -172,6 +172,14 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Result<Void>> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
+        // 跳过Swagger相关请求的异常处理
+        String requestURI = request.getRequestURI();
+        if (requestURI.contains("/v3/api-docs") || requestURI.contains("/swagger-ui") || 
+            requestURI.contains("/swagger-resources") || requestURI.contains("/webjars")) {
+            // 重新抛出异常，让Spring Boot默认处理
+            throw e;
+        }
+        
         logger.error("运行时异常: ", e);
         Result<Void> result = Result.internalError();
         result.setPath(request.getRequestURI());
@@ -183,6 +191,16 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Result<Void>> handleException(Exception e, HttpServletRequest request) {
+        // 跳过Swagger相关请求的异常处理
+        String requestURI = request.getRequestURI();
+        if (requestURI.contains("/v3/api-docs") || requestURI.contains("/swagger-ui") || 
+            requestURI.contains("/swagger-resources") || requestURI.contains("/webjars")) {
+            // 对于Swagger相关请求，返回简单的错误响应，避免递归异常
+            Result<Void> result = Result.error("SWAGGER_ERROR", "API文档访问错误");
+            result.setPath(request.getRequestURI());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+        
         logger.error("系统异常: ", e);
         Result<Void> result = Result.internalError();
         result.setPath(request.getRequestURI());

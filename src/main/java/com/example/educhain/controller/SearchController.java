@@ -28,7 +28,7 @@ import java.util.Map;
  * 搜索控制器
  */
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/search")
 @Tag(name = "搜索管理", description = "搜索和推荐相关接口")
 public class SearchController {
 

@@ -24,7 +24,7 @@ import java.util.List;
  * 知识内容控制器
  */
 @RestController
-@RequestMapping("/api/knowledge")
+@RequestMapping("/knowledge")
 @Tag(name = "知识内容管理", description = "知识内容的CRUD操作、版本管理、文件上传等功能")
 public class KnowledgeItemController {
 

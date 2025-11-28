@@ -25,7 +25,7 @@ import java.util.Map;
  * 统计分析控制器
  */
 @RestController
-@RequestMapping("/api/statistics")
+@RequestMapping("/statistics")
 @Tag(name = "统计分析", description = "统计分析相关接口")
 public class StatisticsController {
 

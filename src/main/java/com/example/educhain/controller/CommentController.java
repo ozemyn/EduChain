@@ -29,7 +29,7 @@ import java.util.Map;
  * 评论控制器
  */
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/comments")
 @Tag(name = "评论管理", description = "评论相关接口")
 public class CommentController {
 

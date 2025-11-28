@@ -26,7 +26,7 @@ import java.util.Map;
  * 用户关注控制器
  */
 @RestController
-@RequestMapping("/api/follows")
+@RequestMapping("/follows")
 @Tag(name = "用户关注管理", description = "用户关注相关接口")
 public class UserFollowController {
 

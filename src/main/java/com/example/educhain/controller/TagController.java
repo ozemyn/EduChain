@@ -20,7 +20,7 @@ import java.util.List;
  * 标签管理控制器
  */
 @RestController
-@RequestMapping("/api/tags")
+@RequestMapping("/tags")
 @Tag(name = "标签管理", description = "标签的CRUD操作、统计、热门标签等功能")
 public class TagController {
 

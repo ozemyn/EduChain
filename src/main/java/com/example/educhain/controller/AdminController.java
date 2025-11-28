@@ -28,7 +28,7 @@ import java.util.Map;
  * 管理员控制器
  */
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 @Tag(name = "管理员接口", description = "管理员功能相关接口")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
