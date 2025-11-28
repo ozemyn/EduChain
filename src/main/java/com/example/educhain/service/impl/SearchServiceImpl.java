@@ -54,6 +54,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private SearchHistoryRepository searchHistoryRepository;
+
     private static final int DEFAULT_PAGE_SIZE = 20;
     private static final int MAX_PAGE_SIZE = 100;
     private static final int DEFAULT_SUGGESTION_LIMIT = 10;
@@ -534,6 +537,47 @@ public class SearchServiceImpl implements SearchService {
             searchIndexRepository.save(searchIndex);
         } catch (Exception e) {
             logger.error("更新知识内容搜索索引失败: {}", knowledge.getId(), e);
+        }
+    }
+
+    @Override
+    public List<String> getUserSearchHistory(Long userId, int limit) {
+        try {
+            if (userId == null) {
+                return new ArrayList<>();
+            }
+            
+            Pageable pageable = PageRequest.of(0, Math.min(limit, 100));
+            List<SearchHistory> histories = searchHistoryRepository.findRecentSearchesByUserId(userId, pageable);
+            
+            return histories.stream()
+                    .map(SearchHistory::getKeyword)
+                    .distinct() // 去重
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("获取用户搜索历史失败: userId={}", userId, e);
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void clearUserSearchHistory(Long userId) {
+        try {
+            if (userId == null) {
+                return;
+            }
+            
+            // 删除用户的所有搜索历史
+            List<SearchHistory> userHistories = searchHistoryRepository.findRecentSearchesByUserId(
+                    userId, PageRequest.of(0, Integer.MAX_VALUE));
+            
+            if (!userHistories.isEmpty()) {
+                searchHistoryRepository.deleteAll(userHistories);
+                logger.info("已清空用户搜索历史: userId={}, 删除记录数={}", userId, userHistories.size());
+            }
+        } catch (Exception e) {
+            logger.error("清空用户搜索历史失败: userId={}", userId, e);
+            throw new RuntimeException("清空搜索历史失败", e);
         }
     }
 

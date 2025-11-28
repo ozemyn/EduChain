@@ -367,6 +367,48 @@ public class SearchController {
     }
 
     /**
+     * 获取搜索历史
+     */
+    @GetMapping("/history")
+    @Operation(summary = "获取搜索历史", description = "获取用户的搜索历史记录")
+    public Result<List<String>> getSearchHistory(
+            @Parameter(description = "返回数量限制") @RequestParam(defaultValue = "20") int limit,
+            Authentication authentication) {
+        try {
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return Result.success(List.of()); // 未登录用户返回空列表
+            }
+            
+            Long userId = getUserIdFromAuthentication(authentication);
+            List<String> searchHistory = searchService.getUserSearchHistory(userId, limit);
+            return Result.success(searchHistory);
+        } catch (Exception e) {
+            logger.error("获取搜索历史失败", e);
+            return Result.error("HISTORY_ERROR", "获取搜索历史失败");
+        }
+    }
+
+    /**
+     * 清空搜索历史
+     */
+    @DeleteMapping("/history")
+    @Operation(summary = "清空搜索历史", description = "清空用户的搜索历史记录")
+    public Result<Void> clearSearchHistory(Authentication authentication) {
+        try {
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return Result.error("UNAUTHORIZED", "用户未登录");
+            }
+            
+            Long userId = getUserIdFromAuthentication(authentication);
+            searchService.clearUserSearchHistory(userId);
+            return Result.success();
+        } catch (Exception e) {
+            logger.error("清空搜索历史失败", e);
+            return Result.error("CLEAR_HISTORY_ERROR", "清空搜索历史失败");
+        }
+    }
+
+    /**
      * 搜索统计信息
      */
     @GetMapping("/statistics")

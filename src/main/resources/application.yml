@@ -14,11 +14,10 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: false
     open-in-view: false
   
@@ -76,10 +75,13 @@ logging:
     root: WARN
     com.example.educhain: INFO
     org.springframework.security: WARN
+    org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer: ERROR
     org.hibernate.SQL: WARN
     org.hibernate.type: WARN
+    org.hibernate.orm.deprecation: ERROR
     org.springframework.web: WARN
     org.springframework.boot: WARN
+    io.netty.resolver.dns: ERROR
   pattern:
     console: "%clr(%d{HH:mm:ss}){faint} %clr(%-5level) %clr(%logger{36}){cyan} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{40} - %msg%n"
@@ -118,7 +120,7 @@ spring:
     url: jdbc:mysql://localhost:3306/educhain_db_dev?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: true
 
 # 开发环境日志配置

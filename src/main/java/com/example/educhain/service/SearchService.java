@@ -115,6 +115,20 @@ public interface SearchService {
     void cleanupExpiredData();
 
     /**
+     * 获取用户搜索历史
+     * @param userId 用户ID
+     * @param limit 返回数量限制
+     * @return 搜索历史列表
+     */
+    List<String> getUserSearchHistory(Long userId, int limit);
+
+    /**
+     * 清空用户搜索历史
+     * @param userId 用户ID
+     */
+    void clearUserSearchHistory(Long userId);
+
+    /**
      * 获取搜索统计信息
      * @return 搜索统计信息
      */
