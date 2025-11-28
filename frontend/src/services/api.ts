@@ -138,7 +138,11 @@ api.interceptors.response.use(
 
     // 检查业务状态码
     if (!data.success) {
-      message.error(data.message || '请求失败');
+      // 对于推荐接口，不显示错误提示（数据为空是正常情况）
+      const isRecommendationApi = response.config.url?.includes('/recommendation');
+      if (!isRecommendationApi) {
+        message.error(data.message || '请求失败');
+      }
       return Promise.reject(new Error(data.message || '请求失败'));
     }
 
@@ -195,10 +199,18 @@ api.interceptors.response.use(
           message.error('服务器内部错误');
           break;
         default:
-          message.error(data?.message || '网络错误，请稍后重试');
+          // 对于推荐接口，不显示错误提示
+          const isRecommendationApi = originalRequest?.url?.includes('/recommendation');
+          if (!isRecommendationApi) {
+            message.error(data?.message || '网络错误，请稍后重试');
+          }
       }
     } else if (error.request) {
-      message.error('网络连接失败，请检查网络设置');
+      // 对于推荐接口，不显示错误提示
+      const isRecommendationApi = originalRequest?.url?.includes('/recommendation');
+      if (!isRecommendationApi) {
+        message.error('网络连接失败，请检查网络设置');
+      }
     } else {
       message.error('请求配置错误');
     }

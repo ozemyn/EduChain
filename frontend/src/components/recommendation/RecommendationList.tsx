@@ -73,12 +73,19 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
         await Promise.all(promises);
 
       setData({
-        personalized: personalizedRes.data,
-        trending: trendingRes.data,
-        general: generalRes.data,
+        personalized: personalizedRes.data || [],
+        trending: trendingRes.data || [],
+        general: generalRes.data || [],
       });
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : '加载推荐内容失败');
+      // 只有在真正的错误时才显示错误提示，数据为空不算错误
+      console.warn('加载推荐内容失败:', err);
+      // 不设置 error，让组件显示空状态而不是错误状态
+      setData({
+        personalized: [],
+        trending: [],
+        general: [],
+      });
     } finally {
       setLoading(false);
     }

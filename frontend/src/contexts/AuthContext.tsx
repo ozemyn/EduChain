@@ -53,7 +53,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return {
         ...state,
         user: action.payload.user,
-        token: action.payload.token,
+        token: action.payload.accessToken,
         refreshToken: action.payload.refreshToken,
         loading: false,
         isAuthenticated: true,
@@ -106,9 +106,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // 初始化认证状态
   useEffect(() => {
     const initAuth = async () => {
-      const token = Storage.getLocal(STORAGE_KEYS.TOKEN);
-      const refreshToken = Storage.getLocal(STORAGE_KEYS.REFRESH_TOKEN);
-      const userInfo = Storage.getLocal(STORAGE_KEYS.USER_INFO);
+      const token = Storage.getLocal<string>(STORAGE_KEYS.TOKEN);
+      const refreshToken = Storage.getLocal<string>(STORAGE_KEYS.REFRESH_TOKEN);
+      const userInfo = Storage.getLocal<User>(STORAGE_KEYS.USER_INFO);
 
       console.log('AuthContext初始化:', { hasToken: !!token, hasRefreshToken: !!refreshToken, hasUserInfo: !!userInfo });
 
@@ -152,7 +152,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               type: 'LOGIN_SUCCESS',
               payload: {
                 user: userInfo,
-                token: token as string,
+                accessToken: token as string,
                 refreshToken: refreshToken as string,
                 expiresIn: 0,
               },
@@ -172,7 +172,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             type: 'LOGIN_SUCCESS',
             payload: {
               user: response.data,
-              token: token as string,
+              accessToken: token as string,
               refreshToken: refreshToken as string,
               expiresIn: 0,
             },
@@ -207,7 +207,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       dispatch({ type: 'LOGIN_SUCCESS', payload: {
         user: response.data.user,
-        token: response.data.accessToken,
+        accessToken: response.data.accessToken,
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn,
       }});
@@ -268,13 +268,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const response = await authService.refreshToken(state.refreshToken);
 
-      Storage.setLocal(STORAGE_KEYS.TOKEN, response.data.token);
+      Storage.setLocal(STORAGE_KEYS.TOKEN, response.data.accessToken);
       Storage.setLocal(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
 
       dispatch({
         type: 'SET_TOKEN',
         payload: {
-          token: response.data.token,
+          token: response.data.accessToken,
           refreshToken: response.data.refreshToken,
         },
       });

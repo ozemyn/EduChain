@@ -1,0 +1,442 @@
+/* ===== 玻璃液态效果 - iOS 风格 ===== */
+
+/* ===== 基础玻璃效果变量 ===== */
+:root {
+  /* 模糊强度 */
+  --blur-xs: blur(2px);
+  --blur-sm: blur(4px);
+  --blur-md: blur(8px);
+  --blur-lg: blur(12px);
+  --blur-xl: blur(16px);
+  --blur-2xl: blur(24px);
+  --blur-3xl: blur(32px);
+  
+  /* 玻璃边框 */
+  --glass-border-width: 1px;
+  --glass-border-style: solid;
+  
+  /* 玻璃阴影 */
+  --glass-shadow-sm: 0 2px 8px var(--glass-shadow);
+  --glass-shadow-md: 0 4px 16px var(--glass-shadow);
+  --glass-shadow-lg: 0 8px 32px var(--glass-shadow);
+  --glass-shadow-xl: 0 16px 48px var(--glass-shadow);
+  
+  /* 液态效果 */
+  --liquid-border-radius: 20px;
+  --liquid-border-radius-lg: 28px;
+  --liquid-border-radius-xl: 36px;
+}
+
+/* ===== 基础玻璃容器 ===== */
+
+/* 轻度玻璃效果 */
+.glass-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  box-shadow: var(--glass-shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 中度玻璃效果 */
+.glass-medium {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  box-shadow: var(--glass-shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 强度玻璃效果 */
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  box-shadow: var(--glass-shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 超强玻璃效果 */
+.glass-ultra {
+  background: var(--bg-glass-strong);
+  backdrop-filter: var(--blur-xl);
+  -webkit-backdrop-filter: var(--blur-xl);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius-lg);
+  box-shadow: var(--glass-shadow-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== 玻璃卡片变体 ===== */
+
+/* 玻璃卡片 */
+.glass-card {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  box-shadow: var(--glass-shadow-md);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-strong);
+  box-shadow: var(--glass-shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* 玻璃按钮 */
+.glass-button {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast) var(--ease-ios);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.glass-button:hover {
+  background: var(--glass-bg-medium);
+  transform: translateY(-1px);
+  box-shadow: var(--glass-shadow-sm);
+}
+
+.glass-button:active {
+  transform: translateY(0);
+  background: var(--glass-bg-strong);
+}
+
+/* 玻璃导航栏 */
+.glass-navbar {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-bottom: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  box-shadow: var(--glass-shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+/* 玻璃侧边栏 */
+.glass-sidebar {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border-right: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  box-shadow: var(--glass-shadow-md);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: var(--z-fixed);
+}
+
+/* 玻璃模态框 */
+.glass-modal {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-xl);
+  -webkit-backdrop-filter: var(--blur-xl);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius-lg);
+  box-shadow: var(--glass-shadow-xl);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--z-modal);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+/* ===== 液态形状变体 ===== */
+
+/* 圆形液态 */
+.liquid-circle {
+  border-radius: 50%;
+}
+
+/* 胶囊形液态 */
+.liquid-pill {
+  border-radius: var(--radius-full);
+}
+
+/* 大圆角液态 */
+.liquid-rounded-lg {
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+/* 超大圆角液态 */
+.liquid-rounded-xl {
+  border-radius: var(--liquid-border-radius-xl);
+}
+
+/* ===== 玻璃效果增强 ===== */
+
+/* 玻璃反光效果 */
+.glass-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left var(--duration-slow) var(--ease-ios);
+  z-index: 1;
+}
+
+.glass-shine:hover::before {
+  left: 100%;
+}
+
+/* 玻璃边缘高光 */
+.glass-highlight::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* 玻璃内阴影 */
+.glass-inset {
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    var(--glass-shadow-md);
+}
+
+/* ===== 动态玻璃效果 ===== */
+
+/* 呼吸玻璃效果 */
+@keyframes glass-breathe {
+  0%, 100% {
+    backdrop-filter: var(--blur-md);
+    -webkit-backdrop-filter: var(--blur-md);
+  }
+  50% {
+    backdrop-filter: var(--blur-lg);
+    -webkit-backdrop-filter: var(--blur-lg);
+  }
+}
+
+.glass-breathe {
+  animation: glass-breathe 3s ease-in-out infinite;
+}
+
+/* 玻璃波纹效果 */
+@keyframes glass-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.glass-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.glass-ripple:active::after {
+  width: 300px;
+  height: 300px;
+  animation: glass-ripple 0.6s ease-out;
+}
+
+/* ===== 玻璃文本效果 ===== */
+
+/* 玻璃文本 */
+.glass-text {
+  background: linear-gradient(
+    135deg,
+    var(--text-primary),
+    var(--text-secondary)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  filter: drop-shadow(0 2px 4px var(--glass-shadow));
+}
+
+/* 霓虹玻璃文本 */
+.glass-neon-text {
+  color: var(--accent-primary);
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor,
+    0 0 20px currentColor;
+  filter: blur(0.5px);
+}
+
+/* ===== 响应式玻璃效果 ===== */
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .glass-light,
+  .glass-medium,
+  .glass-strong {
+    backdrop-filter: var(--blur-xs);
+    -webkit-backdrop-filter: var(--blur-xs);
+  }
+  
+  .glass-ultra {
+    backdrop-filter: var(--blur-sm);
+    -webkit-backdrop-filter: var(--blur-sm);
+  }
+  
+  /* 简化移动端动画 */
+  .glass-breathe {
+    animation: none;
+  }
+  
+  .glass-shine::before {
+    display: none;
+  }
+}
+
+/* 低性能设备优化 */
+@media (prefers-reduced-motion: reduce) {
+  .glass-light,
+  .glass-medium,
+  .glass-strong,
+  .glass-ultra {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--bg-elevated);
+  }
+  
+  .glass-breathe {
+    animation: none;
+  }
+  
+  .glass-ripple::after {
+    display: none;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .glass-light,
+  .glass-medium,
+  .glass-strong,
+  .glass-ultra {
+    background: var(--bg-elevated);
+    border: 2px solid var(--border-strong);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ===== 玻璃效果组合类 ===== */
+
+/* 浮动玻璃卡片 */
+.glass-floating-card {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius-lg);
+  box-shadow: var(--glass-shadow-lg);
+  padding: var(--spacing-xl);
+  transition: all var(--transition-base) var(--ease-spring-ios);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-floating-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--glass-shadow-xl);
+  background: var(--glass-bg-strong);
+}
+
+/* 玻璃工具提示 */
+.glass-tooltip {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  box-shadow: var(--glass-shadow-md);
+  position: absolute;
+  z-index: var(--z-tooltip);
+  white-space: nowrap;
+}
+
+/* 玻璃徽章 */
+.glass-badge {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}

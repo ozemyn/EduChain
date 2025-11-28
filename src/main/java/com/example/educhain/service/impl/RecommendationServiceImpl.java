@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * 推荐算法服务实现类
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class RecommendationServiceImpl implements RecommendationService {
 
     private static final Logger logger = LoggerFactory.getLogger(RecommendationServiceImpl.class);
@@ -91,7 +91,8 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .collect(Collectors.toList());
                     
         } catch (Exception e) {
-            logger.error("获取个性化推荐失败: userId={}", userId, e);
+            logger.error("获取个性化推荐失败 - 详细错误: userId={}, 错误类型={}, 错误信息={}", 
+                    userId, e.getClass().getSimpleName(), e.getMessage(), e);
             // 降级到热门推荐
             return getPopularRecommendations(null, limit);
         }
@@ -131,7 +132,8 @@ public class RecommendationServiceImpl implements RecommendationService {
             return recommendations;
             
         } catch (Exception e) {
-            logger.error("获取基于内容的推荐失败: knowledgeId={}", knowledgeId, e);
+            logger.error("获取基于内容的推荐失败 - 详细错误: knowledgeId={}, 错误类型={}, 错误信息={}", 
+                    knowledgeId, e.getClass().getSimpleName(), e.getMessage(), e);
             return new ArrayList<>();
         }
     }
@@ -193,12 +195,14 @@ public class RecommendationServiceImpl implements RecommendationService {
             return recommendations;
             
         } catch (Exception e) {
-            logger.error("获取协同过滤推荐失败: userId={}", userId, e);
+            logger.error("获取协同过滤推荐失败 - 详细错误: userId={}, 错误类型={}, 错误信息={}", 
+                    userId, e.getClass().getSimpleName(), e.getMessage(), e);
             return getPopularRecommendations(null, limit);
         }
     }
 
     @Override
+    @Transactional(readOnly = true, noRollbackFor = Exception.class)
     public List<SearchResultDTO> getPopularRecommendations(Long categoryId, int limit) {
         limit = Math.min(limit, MAX_LIMIT);
         Pageable pageable = PageRequest.of(0, limit);
@@ -211,12 +215,17 @@ public class RecommendationServiceImpl implements RecommendationService {
                 popularContent = searchIndexRepository.findPopularContent(1, pageable).getContent();
             }
             
+            if (popularContent.isEmpty()) {
+                logger.warn("热门推荐查询结果为空: categoryId={}", categoryId);
+            }
+            
             return popularContent.stream()
                     .map(this::convertToSearchResultDTO)
                     .collect(Collectors.toList());
                     
         } catch (Exception e) {
-            logger.error("获取热门推荐失败: categoryId={}", categoryId, e);
+            logger.error("获取热门推荐失败 - 详细错误: categoryId={}, 错误类型={}, 错误信息={}", 
+                    categoryId, e.getClass().getSimpleName(), e.getMessage(), e);
             return new ArrayList<>();
         }
     }
@@ -235,12 +244,17 @@ public class RecommendationServiceImpl implements RecommendationService {
                         .collect(Collectors.toList());
             }
             
+            if (latestContent.isEmpty()) {
+                logger.warn("最新推荐查询结果为空: categoryId={}", categoryId);
+            }
+            
             return latestContent.stream()
                     .map(this::convertToSearchResultDTO)
                     .collect(Collectors.toList());
                     
         } catch (Exception e) {
-            logger.error("获取最新推荐失败: categoryId={}", categoryId, e);
+            logger.error("获取最新推荐失败 - 详细错误: categoryId={}, 错误类型={}, 错误信息={}", 
+                    categoryId, e.getClass().getSimpleName(), e.getMessage(), e);
             return new ArrayList<>();
         }
     }
