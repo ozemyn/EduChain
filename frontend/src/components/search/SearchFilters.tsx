@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Select, DatePicker, Button, Space, Tag, Collapse } from 'antd';
-import { FilterOutlined, ClearOutlined } from '@ant-design/icons';
+import { Select, DatePicker, Button, Space, Tag, Collapse } from 'antd';
+import { FilterOutlined } from '@ant-design/icons';
 import type { Category } from '@/types/api';
 import { categoryService } from '@/services';
-import styles from './SearchFilters.module.css';
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -32,12 +32,6 @@ const CONTENT_TYPES = [
   { label: '视频', value: 'VIDEO' },
   { label: 'PDF', value: 'PDF' },
   { label: '链接', value: 'LINK' },
-];
-
-const SORT_OPTIONS = [
-  { label: '相关性', value: 'RELEVANCE' },
-  { label: '时间', value: 'TIME' },
-  { label: '热度', value: 'POPULARITY' },
 ];
 
 const POPULAR_TAGS = [
@@ -120,115 +114,85 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   };
 
   const filtersContent = (
-    <div className={styles.filtersContent}>
-      <div className={styles.filterRow}>
-        <div className={styles.filterItem}>
-          <label>分类</label>
-          <Select
-            placeholder="选择分类"
-            value={value.categoryId}
-            onChange={val => handleFilterChange('categoryId', val)}
-            allowClear
-            loading={loading}
-            style={{ width: '100%' }}
-          >
-            <Option value="">全部分类</Option>
-            {renderCategoryOptions(categories)}
-          </Select>
-        </div>
-
-        <div className={styles.filterItem}>
-          <label>内容类型</label>
-          <Select
-            placeholder="选择类型"
-            value={value.type || ''}
-            onChange={val => handleFilterChange('type', val)}
-            style={{ width: '100%' }}
-          >
-            {CONTENT_TYPES.map(type => (
-              <Option key={type.value} value={type.value}>
-                {type.label}
-              </Option>
-            ))}
-          </Select>
-        </div>
-
-        <div className={styles.filterItem}>
-          <label>排序方式</label>
-          <Select
-            value={value.sortBy || 'RELEVANCE'}
-            onChange={val => handleFilterChange('sortBy', val)}
-            style={{ width: '100%' }}
-          >
-            {SORT_OPTIONS.map(option => (
-              <Option key={option.value} value={option.value}>
-                {option.label}
-              </Option>
-            ))}
-          </Select>
-        </div>
+    <div className="cnki-filters-content">
+      {/* 分类筛选 */}
+      <div className="cnki-filter-section">
+        <h4 className="cnki-filter-label">学科分类</h4>
+        <Select
+          placeholder="选择分类"
+          value={value.categoryId}
+          onChange={val => handleFilterChange('categoryId', val)}
+          allowClear
+          loading={loading}
+          size="small"
+          style={{ width: '100%' }}
+        >
+          <Option value="">全部分类</Option>
+          {renderCategoryOptions(categories)}
+        </Select>
       </div>
 
-      <div className={styles.filterRow}>
-        <div className={styles.filterItem}>
-          <label>发布时间</label>
-          <RangePicker
-            placeholder={['开始时间', '结束时间']}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            value={value.dateRange ? (value.dateRange as any) : undefined}
-            onChange={(_, dateStrings) =>
-              handleFilterChange(
-                'dateRange',
-                dateStrings[0] && dateStrings[1] ? dateStrings : undefined
-              )
-            }
-            style={{ width: '100%' }}
-          />
-        </div>
+      {/* 内容类型筛选 */}
+      <div className="cnki-filter-section">
+        <h4 className="cnki-filter-label">文献类型</h4>
+        <Select
+          placeholder="选择类型"
+          value={value.type || ''}
+          onChange={val => handleFilterChange('type', val)}
+          size="small"
+          style={{ width: '100%' }}
+        >
+          {CONTENT_TYPES.map(type => (
+            <Option key={type.value} value={type.value}>
+              {type.label}
+            </Option>
+          ))}
+        </Select>
       </div>
 
-      <div className={styles.filterRow}>
-        <div className={styles.filterItem} style={{ width: '100%' }}>
-          <label>热门标签</label>
-          <div className={styles.tagContainer}>
-            {POPULAR_TAGS.map(tag => (
-              <Tag
-                key={tag}
-                color={value.tags?.includes(tag) ? 'blue' : 'default'}
-                onClick={() => handleTagToggle(tag)}
-                className={styles.tagItem}
-              >
-                {tag}
-              </Tag>
-            ))}
-          </div>
-        </div>
+      {/* 发布时间筛选 */}
+      <div className="cnki-filter-section">
+        <h4 className="cnki-filter-label">发表时间</h4>
+        <RangePicker
+          placeholder={['开始时间', '结束时间']}
+          value={
+            value.dateRange && value.dateRange[0] && value.dateRange[1]
+              ? [dayjs(value.dateRange[0]), dayjs(value.dateRange[1])]
+              : undefined
+          }
+          onChange={(dates, dateStrings) =>
+            handleFilterChange(
+              'dateRange',
+              dates && dates[0] && dates[1] ? dateStrings : undefined
+            )
+          }
+          size="small"
+          style={{ width: '100%' }}
+        />
       </div>
 
-      <div className={styles.filterActions}>
-        <Space>
-          <Button
-            type="primary"
-            icon={<FilterOutlined />}
-            disabled={!hasActiveFilters}
-          >
-            应用筛选
-          </Button>
-          <Button
-            icon={<ClearOutlined />}
-            onClick={handleReset}
-            disabled={!hasActiveFilters}
-          >
-            重置
-          </Button>
-        </Space>
+      {/* 热门标签 */}
+      <div className="cnki-filter-section">
+        <h4 className="cnki-filter-label">热门主题</h4>
+        <div className="cnki-tags-container">
+          {POPULAR_TAGS.slice(0, 8).map(tag => (
+            <Tag
+              key={tag}
+              color={value.tags?.includes(tag) ? 'blue' : 'default'}
+              onClick={() => handleTagToggle(tag)}
+              className="cnki-tag-item"
+            >
+              {tag}
+            </Tag>
+          ))}
+        </div>
       </div>
     </div>
   );
 
   if (collapsed) {
     return (
-      <Card className={`${styles.searchFilters} ${className}`} size="small">
+      <div className={`cnki-filters-collapsed ${className}`}>
         <Collapse ghost>
           <Panel
             header={
@@ -244,8 +208,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                           v !== '' &&
                           (Array.isArray(v) ? v.length > 0 : true)
                       ).length
-                    }{' '}
-                    个筛选条件
+                    }
                   </Tag>
                 )}
               </Space>
@@ -255,37 +218,140 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             {filtersContent}
           </Panel>
         </Collapse>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <Card
-      className={`${styles.searchFilters} ${className}`}
-      title={
-        <Space>
+    <div className={`cnki-filters-panel ${className}`}>
+      <div className="cnki-filters-header">
+        <h3 className="cnki-filters-title">
           <FilterOutlined />
-          搜索筛选
-          {hasActiveFilters && (
-            <Tag color="blue">
-              {
-                Object.values(value).filter(
-                  v =>
-                    v !== undefined &&
-                    v !== '' &&
-                    (Array.isArray(v) ? v.length > 0 : true)
-                ).length
-              }{' '}
-              个条件
-            </Tag>
-          )}
-        </Space>
-      }
-      size="small"
-    >
+          筛选条件
+        </h3>
+        {hasActiveFilters && (
+          <Button
+            type="link"
+            size="small"
+            onClick={handleReset}
+            className="cnki-clear-all"
+          >
+            清空筛选
+          </Button>
+        )}
+      </div>
       {filtersContent}
-    </Card>
+    </div>
   );
 };
 
 export default SearchFilters;
+
+// 知网风格筛选面板样式
+const cnkiFiltersStyles = `
+.cnki-filters-panel {
+  background: #fafbfc;
+  height: 100%;
+}
+
+.cnki-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cnki-filters-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.cnki-clear-all {
+  color: var(--accent-primary);
+  font-size: 0.875rem;
+  padding: 0;
+}
+
+.cnki-filters-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.cnki-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.cnki-filter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cnki-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.cnki-tag-item {
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+  user-select: none;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.cnki-tag-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cnki-filters-collapsed {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .cnki-filters-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .cnki-filters-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  
+  .cnki-clear-all {
+    align-self: flex-end;
+  }
+}
+`;
+
+// 动态注入筛选面板样式
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = cnkiFiltersStyles;
+  document.head.appendChild(styleElement);
+}

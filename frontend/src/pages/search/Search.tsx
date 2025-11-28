@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Typography, Spin, Alert, BackTop } from 'antd';
+import { Row, Col, Spin, Alert, BackTop, Select } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 import SearchInput from '@/components/search/SearchInput';
 import SearchResults from '@/components/search/SearchResults';
@@ -9,9 +9,10 @@ import SearchFilters, {
 import { searchService } from '@/services/search';
 import type { KnowledgeItem } from '@/types/api';
 import { useDebounce } from '@/hooks/useDebounce';
-import styles from './Search.module.css';
-
-const { Title } = Typography;
+import '@/styles/globals.css';
+import '@/styles/theme.css';
+import '@/styles/animations.css';
+import '@/styles/glass-effects.css';
 
 const Search: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -150,63 +151,359 @@ const Search: React.FC = () => {
   };
 
   return (
-    <div className={styles.searchPage}>
-      <div className={styles.searchHeader}>
-        <div className={styles.container}>
-          <Title level={2} className={styles.title}>
-            {keyword ? `"${keyword}" 的搜索结果` : '搜索知识内容'}
-          </Title>
-          <div className={styles.searchInputWrapper}>
+    <div className="cnki-search-container animate-fade-in">
+      {/* 顶部搜索区域 - 类似知网的简洁头部 */}
+      <div className="cnki-search-header">
+        <div className="cnki-header-content">
+          <div className="cnki-search-box">
             <SearchInput
               onSearch={handleSearch}
-              showAdvanced={false}
+              showAdvanced={true}
               size="large"
+              className="cnki-main-search"
             />
           </div>
+
+          {keyword && (
+            <div className="cnki-search-info">
+              <span className="search-keyword">"{keyword}"</span>
+              <span className="search-count">
+                共找到 {total.toLocaleString()} 条结果
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className={styles.container}>
-        <Row gutter={[24, 24]}>
-          <Col xs={24} lg={6}>
-            <SearchFilters
-              value={filters}
-              onChange={handleFiltersChange}
-              onReset={handleFiltersReset}
-              collapsed={false}
-            />
-          </Col>
+      {/* 主体内容区域 */}
+      <div className="cnki-main-content">
+        <div className="cnki-content-wrapper">
+          <Row gutter={[0, 0]} className="cnki-layout">
+            {/* 左侧筛选栏 - 类似知网的筛选面板 */}
+            <Col xs={24} lg={5} className="cnki-sidebar">
+              <div className="cnki-filters-panel">
+                <SearchFilters
+                  value={filters}
+                  onChange={handleFiltersChange}
+                  onReset={handleFiltersReset}
+                  collapsed={false}
+                />
+              </div>
+            </Col>
 
-          <Col xs={24} lg={18}>
-            {error && (
-              <Alert
-                message="搜索出错"
-                description={error}
-                type="error"
-                showIcon
-                closable
-                onClose={() => setError(null)}
-                style={{ marginBottom: 16 }}
-              />
-            )}
+            {/* 右侧结果区域 */}
+            <Col xs={24} lg={19} className="cnki-results-area">
+              {/* 结果工具栏 */}
+              <div className="cnki-results-toolbar">
+                <div className="cnki-toolbar-left">
+                  {keyword && (
+                    <span className="results-summary">
+                      搜索"{keyword}"，共 {total.toLocaleString()} 条结果
+                    </span>
+                  )}
+                </div>
+                <div className="cnki-toolbar-right">
+                  <span className="sort-label">排序：</span>
+                  <Select
+                    value={filters.sortBy || 'RELEVANCE'}
+                    onChange={value =>
+                      handleFiltersChange({ ...filters, sortBy: value })
+                    }
+                    size="small"
+                    className="cnki-sort-select"
+                  >
+                    <Select.Option value="RELEVANCE">相关性</Select.Option>
+                    <Select.Option value="TIME">时间</Select.Option>
+                    <Select.Option value="POPULARITY">热度</Select.Option>
+                  </Select>
+                </div>
+              </div>
 
-            <Spin spinning={loading && results.length === 0}>
-              <SearchResults
-                results={results}
-                loading={loading}
-                keyword={keyword}
-                total={total}
-                onLoadMore={handleLoadMore}
-                hasMore={hasMore}
-              />
-            </Spin>
-          </Col>
-        </Row>
+              {/* 错误提示 */}
+              {error && (
+                <Alert
+                  message="搜索出错"
+                  description={error}
+                  type="error"
+                  showIcon
+                  closable
+                  onClose={() => setError(null)}
+                  className="cnki-error-alert"
+                />
+              )}
+
+              {/* 搜索结果列表 */}
+              <div className="cnki-results-container">
+                <Spin spinning={loading && results.length === 0}>
+                  <SearchResults
+                    results={results}
+                    loading={loading}
+                    keyword={keyword}
+                    total={total}
+                    onLoadMore={handleLoadMore}
+                    hasMore={hasMore}
+                  />
+                </Spin>
+              </div>
+            </Col>
+          </Row>
+        </div>
       </div>
 
-      <BackTop />
+      <BackTop className="cnki-back-top" />
     </div>
   );
 };
 
 export default Search;
+
+// 知网风格搜索页面样式
+const cnkiSearchStyles = `
+/* ===== 知网风格搜索页面样式 ===== */
+.cnki-search-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  font-family: var(--font-system);
+}
+
+/* 顶部搜索区域 */
+.cnki-search-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: var(--spacing-lg) 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cnki-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.cnki-search-box {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-md);
+}
+
+.cnki-main-search {
+  width: 100%;
+}
+
+.cnki-search-info {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.search-keyword {
+  color: var(--accent-primary);
+  font-weight: 500;
+  margin-right: var(--spacing-md);
+}
+
+.search-count {
+  color: var(--text-tertiary);
+}
+
+/* 主体内容区域 */
+.cnki-main-content {
+  background: #f8f9fa;
+  min-height: calc(100vh - 120px);
+}
+
+.cnki-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.cnki-layout {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 左侧筛选面板 */
+.cnki-sidebar {
+  border-right: 1px solid #e5e7eb;
+  background: #fafbfc;
+}
+
+.cnki-filters-panel {
+  padding: var(--spacing-lg);
+  height: 100%;
+}
+
+/* 右侧结果区域 */
+.cnki-results-area {
+  background: #ffffff;
+}
+
+/* 结果工具栏 */
+.cnki-results-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafbfc;
+}
+
+.cnki-toolbar-left {
+  flex: 1;
+}
+
+.results-summary {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.cnki-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.sort-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.cnki-sort-select {
+  min-width: 100px;
+}
+
+/* 错误提示 */
+.cnki-error-alert {
+  margin: var(--spacing-lg);
+  border-radius: var(--radius-md);
+}
+
+/* 结果容器 */
+.cnki-results-container {
+  padding: var(--spacing-lg);
+  min-height: 500px;
+}
+
+/* 返回顶部按钮 */
+.cnki-back-top {
+  background: var(--accent-primary) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.cnki-back-top:hover {
+  background: var(--primary-600) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .cnki-content-wrapper {
+    padding: var(--spacing-md);
+  }
+  
+  .cnki-layout {
+    border-radius: 0;
+  }
+  
+  .cnki-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+}
+
+@media (max-width: 768px) {
+  .cnki-search-header {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .cnki-header-content {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .cnki-content-wrapper {
+    padding: var(--spacing-sm);
+  }
+  
+  .cnki-results-toolbar {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+  }
+  
+  .cnki-toolbar-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .cnki-filters-panel,
+  .cnki-results-container {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 640px) {
+  .cnki-search-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .search-keyword {
+    margin-right: 0;
+  }
+}
+
+/* 知网风格的简洁设计 */
+.cnki-search-container * {
+  transition: all var(--transition-fast) ease;
+}
+
+.cnki-search-container .ant-card {
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
+
+.cnki-search-container .ant-card-head {
+  background: #fafbfc;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cnki-search-container .ant-select-selector {
+  border-radius: var(--radius-sm) !important;
+}
+
+.cnki-search-container .ant-btn {
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.cnki-search-container .ant-btn-primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.cnki-search-container .ant-btn-primary:hover {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+}
+
+/* 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  .cnki-search-container * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+`;
+
+// 动态注入知网风格样式
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = cnkiSearchStyles;
+  document.head.appendChild(styleElement);
+}
