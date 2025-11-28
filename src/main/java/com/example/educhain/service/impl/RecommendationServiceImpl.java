@@ -2,6 +2,8 @@ package com.example.educhain.service.impl;
 
 import com.example.educhain.dto.SearchResultDTO;
 import com.example.educhain.entity.*;
+import com.example.educhain.exception.DatabaseException;
+import com.example.educhain.exception.RecommendationException;
 import com.example.educhain.repository.*;
 import com.example.educhain.service.RecommendationService;
 import org.slf4j.Logger;
@@ -49,36 +51,76 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<SearchResultDTO> getPersonalizedRecommendations(Long userId, int limit) {
+        // 参数验证
+        if (userId == null || userId <= 0) {
+            throw RecommendationException.invalidParameters("userId", userId);
+        }
+        if (limit <= 0) {
+            throw RecommendationException.invalidParameters("limit", limit);
+        }
+        
         limit = Math.min(limit, MAX_LIMIT);
         
         try {
+            // 验证用户是否存在
+            boolean userExists = userRepository.existsById(userId);
+            if (!userExists) {
+                logger.warn("用户不存在: userId={}", userId);
+                throw RecommendationException.userNotFound(userId);
+            }
+            
             // 获取用户偏好分析
-            Map<String, Object> preferences = getUserPreferenceAnalysis(userId);
+            Map<String, Object> preferences;
+            try {
+                preferences = getUserPreferenceAnalysis(userId);
+            } catch (Exception e) {
+                logger.error("用户偏好分析失败: userId={}", userId, e);
+                throw RecommendationException.preferenceAnalysisFailed(userId, e);
+            }
+            
+            // 检查用户是否有足够的历史数据
+            Integer totalInteractions = (Integer) preferences.get("totalInteractions");
+            if (totalInteractions == null || totalInteractions < 3) {
+                logger.info("用户历史数据不足，降级到热门推荐: userId={}, interactions={}", userId, totalInteractions);
+                return getPopularRecommendations(null, limit);
+            }
             
             // 基于用户偏好的推荐权重
             List<SearchResultDTO> recommendations = new ArrayList<>();
             
-            // 1. 基于用户历史行为的推荐 (40%)
-            List<SearchResultDTO> behaviorBased = getBehaviorBasedRecommendations(userId, "mixed", limit / 2);
-            recommendations.addAll(behaviorBased);
+            try {
+                // 1. 基于用户历史行为的推荐 (40%)
+                List<SearchResultDTO> behaviorBased = getBehaviorBasedRecommendations(userId, "mixed", limit / 2);
+                recommendations.addAll(behaviorBased);
+                
+                // 2. 基于协同过滤的推荐 (30%)
+                List<SearchResultDTO> collaborative = getCollaborativeFilteringRecommendations(userId, limit / 3);
+                recommendations.addAll(collaborative);
+                
+                // 3. 热门内容推荐 (20%)
+                @SuppressWarnings("unchecked")
+                List<Long> preferredCategories = (List<Long>) preferences.getOrDefault("preferredCategories", new ArrayList<>());
+                Long topCategoryId = preferredCategories.isEmpty() ? null : preferredCategories.get(0);
+                List<SearchResultDTO> popular = getPopularRecommendations(topCategoryId, limit / 5);
+                recommendations.addAll(popular);
+                
+                // 4. 最新内容推荐 (10%)
+                List<SearchResultDTO> latest = getLatestRecommendations(topCategoryId, limit / 10);
+                recommendations.addAll(latest);
+                
+            } catch (RecommendationException e) {
+                // 如果是推荐异常，记录日志但继续处理
+                logger.warn("部分推荐算法失败，使用可用结果: userId={}, error={}", userId, e.getMessage());
+            }
             
-            // 2. 基于协同过滤的推荐 (30%)
-            List<SearchResultDTO> collaborative = getCollaborativeFilteringRecommendations(userId, limit / 3);
-            recommendations.addAll(collaborative);
-            
-            // 3. 热门内容推荐 (20%)
-            @SuppressWarnings("unchecked")
-            List<Long> preferredCategories = (List<Long>) preferences.getOrDefault("preferredCategories", new ArrayList<>());
-            Long topCategoryId = preferredCategories.isEmpty() ? null : preferredCategories.get(0);
-            List<SearchResultDTO> popular = getPopularRecommendations(topCategoryId, limit / 5);
-            recommendations.addAll(popular);
-            
-            // 4. 最新内容推荐 (10%)
-            List<SearchResultDTO> latest = getLatestRecommendations(topCategoryId, limit / 10);
-            recommendations.addAll(latest);
+            // 检查是否有推荐结果
+            if (recommendations.isEmpty()) {
+                logger.warn("个性化推荐结果为空，降级到热门推荐: userId={}", userId);
+                return getPopularRecommendations(null, limit);
+            }
             
             // 去重并按质量分数排序
-            return recommendations.stream()
+            List<SearchResultDTO> finalResults = recommendations.stream()
                     .collect(Collectors.toMap(
                             SearchResultDTO::getId,
                             dto -> dto,
@@ -89,12 +131,20 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .sorted((a, b) -> Double.compare(b.getQualityScore(), a.getQualityScore()))
                     .limit(limit)
                     .collect(Collectors.toList());
+            
+            logger.debug("成功获取个性化推荐: userId={}, 结果数量={}", userId, finalResults.size());
+            return finalResults;
                     
+        } catch (RecommendationException e) {
+            // 重新抛出业务异常
+            throw e;
+        } catch (org.springframework.dao.DataAccessException e) {
+            logger.error("获取个性化推荐时数据库访问失败: userId={}", userId, e);
+            throw DatabaseException.queryFailed("个性化推荐查询", e);
         } catch (Exception e) {
-            logger.error("获取个性化推荐失败 - 详细错误: userId={}, 错误类型={}, 错误信息={}", 
+            logger.error("获取个性化推荐失败 - 未知错误: userId={}, 错误类型={}, 错误信息={}", 
                     userId, e.getClass().getSimpleName(), e.getMessage(), e);
-            // 降级到热门推荐
-            return getPopularRecommendations(null, limit);
+            throw RecommendationException.algorithmError("个性化推荐算法", e);
         }
     }
 
@@ -204,10 +254,24 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Override
     @Transactional(readOnly = true, noRollbackFor = Exception.class)
     public List<SearchResultDTO> getPopularRecommendations(Long categoryId, int limit) {
+        // 参数验证
+        if (limit <= 0) {
+            throw RecommendationException.invalidParameters("limit", limit);
+        }
+        
         limit = Math.min(limit, MAX_LIMIT);
         Pageable pageable = PageRequest.of(0, limit);
         
         try {
+            // 验证分类是否存在
+            if (categoryId != null) {
+                boolean categoryExists = categoryRepository.existsById(categoryId);
+                if (!categoryExists) {
+                    logger.warn("分类不存在: categoryId={}", categoryId);
+                    throw RecommendationException.invalidParameters("categoryId", categoryId);
+                }
+            }
+            
             List<SearchIndex> popularContent;
             if (categoryId != null) {
                 popularContent = searchIndexRepository.findPopularContentByCategory(categoryId, 1, pageable).getContent();
@@ -216,17 +280,27 @@ public class RecommendationServiceImpl implements RecommendationService {
             }
             
             if (popularContent.isEmpty()) {
-                logger.warn("热门推荐查询结果为空: categoryId={}", categoryId);
+                logger.info("热门推荐查询结果为空: categoryId={}", categoryId);
+                throw RecommendationException.insufficientData("热门内容数据");
             }
             
-            return popularContent.stream()
+            List<SearchResultDTO> results = popularContent.stream()
                     .map(this::convertToSearchResultDTO)
                     .collect(Collectors.toList());
+            
+            logger.debug("成功获取热门推荐: categoryId={}, 结果数量={}", categoryId, results.size());
+            return results;
                     
+        } catch (RecommendationException e) {
+            // 重新抛出业务异常
+            throw e;
+        } catch (org.springframework.dao.DataAccessException e) {
+            logger.error("获取热门推荐时数据库访问失败: categoryId={}", categoryId, e);
+            throw DatabaseException.queryFailed("热门推荐查询", e);
         } catch (Exception e) {
-            logger.error("获取热门推荐失败 - 详细错误: categoryId={}, 错误类型={}, 错误信息={}", 
+            logger.error("获取热门推荐失败 - 未知错误: categoryId={}, 错误类型={}, 错误信息={}", 
                     categoryId, e.getClass().getSimpleName(), e.getMessage(), e);
-            return new ArrayList<>();
+            throw RecommendationException.algorithmError("热门推荐算法", e);
         }
     }
 

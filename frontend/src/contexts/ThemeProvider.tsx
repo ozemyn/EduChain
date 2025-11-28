@@ -22,15 +22,8 @@ interface ThemeProviderProps {
  * 全局主题提供者组件
  * 为整个应用提供主题管理功能
  */
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({
-  children,
-}) => {
-  const {
-    theme,
-    resolvedTheme,
-    setTheme,
-    toggleTheme,
-  } = useTheme();
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme();
 
   const contextValue: ThemeContextType = {
     theme,
@@ -52,19 +45,21 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
  * 使用主题上下文的 Hook
  * 必须在 ThemeProvider 内部使用
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useThemeContext = (): ThemeContextType => {
   const context = useContext(ThemeContext);
-  
+
   if (context === undefined) {
     throw new Error('useThemeContext must be used within a ThemeProvider');
   }
-  
+
   return context;
 };
 
 /**
  * 主题感知组件的高阶组件
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function withTheme<P extends object>(
   Component: React.ComponentType<P & { theme: ThemeContextType }>
 ) {
@@ -72,9 +67,9 @@ export function withTheme<P extends object>(
     const theme = useThemeContext();
     return <Component {...props} theme={theme} />;
   };
-  
+
   WrappedComponent.displayName = `withTheme(${Component.displayName || Component.name})`;
-  
+
   return WrappedComponent;
 }
 
@@ -86,28 +81,22 @@ export const ThemeToggleButton: React.FC<{
   variant?: 'icon' | 'text' | 'both';
   className?: string;
 }> = ({ size = 'medium', variant = 'icon', className = '' }) => {
-  const { toggleTheme, isDark, isSystem } = useThemeContext();
-  
+  const { toggleTheme, isDark } = useThemeContext();
+
   const getIcon = () => {
-    if (isSystem) {
-      return isDark ? '🌙' : '☀️';
-    }
     return isDark ? '🌙' : '☀️';
   };
-  
+
   const getText = () => {
-    if (isSystem) {
-      return `自动 (${isDark ? '深色' : '浅色'})`;
-    }
     return isDark ? '深色模式' : '浅色模式';
   };
-  
+
   const sizeClasses = {
     small: 'text-sm p-1',
     medium: 'text-base p-2',
     large: 'text-lg p-3',
   };
-  
+
   return (
     <button
       onClick={toggleTheme}
@@ -120,14 +109,10 @@ export const ThemeToggleButton: React.FC<{
       aria-label="切换主题"
     >
       {(variant === 'icon' || variant === 'both') && (
-        <span className="theme-icon animate-fade-in">
-          {getIcon()}
-        </span>
+        <span className="theme-icon animate-fade-in">{getIcon()}</span>
       )}
       {(variant === 'text' || variant === 'both') && (
-        <span className="theme-text">
-          {getText()}
-        </span>
+        <span className="theme-text">{getText()}</span>
       )}
     </button>
   );
@@ -141,25 +126,21 @@ export const ThemeConditional: React.FC<{
   dark?: ReactNode;
   system?: ReactNode;
   children?: (theme: ThemeContextType) => ReactNode;
-}> = ({ light, dark, system, children }) => {
+}> = ({ light, dark, children }) => {
   const theme = useThemeContext();
-  
+
   if (children) {
     return <>{children(theme)}</>;
   }
-  
-  if (theme.isSystem && system) {
-    return <>{system}</>;
-  }
-  
+
   if (theme.isDark && dark) {
     return <>{dark}</>;
   }
-  
+
   if (theme.isLight && light) {
     return <>{light}</>;
   }
-  
+
   return null;
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Card, Row, Col, Button, Space, Input, Statistic } from 'antd';
+import { Button, Input, Statistic } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import {
   BookOutlined,
@@ -12,14 +12,13 @@ import {
   FileTextOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
-import { SearchInput } from '@/components/search';
+
 import { RecommendationList } from '@/components/recommendation';
 import '@/styles/globals.css';
 import '@/styles/theme.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
 
-const { Title, Paragraph } = Typography;
 const { Search } = Input;
 
 const Home: React.FC = () => {
@@ -56,7 +55,8 @@ const Home: React.FC = () => {
       description: '海量优质教育内容，涵盖各个学科领域，支持多媒体资源展示',
       color: 'var(--accent-primary)',
       path: '/knowledge',
-      gradient: 'linear-gradient(135deg, var(--primary-500), var(--primary-600))',
+      gradient:
+        'linear-gradient(135deg, var(--primary-500), var(--primary-600))',
     },
     {
       icon: <SearchOutlined />,
@@ -85,41 +85,41 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="home-container">
+    <div className="home-container animate-fade-in">
       {/* 英雄区域 */}
-      <section className="hero-section glass-light animate-fade-in-up">
+      <section className="hero-section glass-light">
         <div className="hero-content">
-          <div className="hero-badge glass-badge animate-scale-in delay-200">
+          <div className="hero-badge glass-badge">
             <StarOutlined />
             <span>全新体验</span>
           </div>
-          
-          <h1 className="hero-title animate-fade-in-up delay-300">
+
+          <h1 className="hero-title">
             <span className="gradient-text">EduChain</span>
             <br />
             <span className="hero-subtitle">智能教育知识平台</span>
           </h1>
-          
-          <p className="hero-description animate-fade-in-up delay-500">
+
+          <p className="hero-description">
             连接全球学习者与教育者，构建去中心化的知识共享生态系统
             <br />
             让每一份知识都能发光发热，让每一次学习都更加高效
           </p>
 
           {/* 搜索区域 */}
-          <div className="hero-search animate-fade-in-up delay-700">
+          <div className="hero-search">
             <div className="search-container glass-medium">
               <Search
                 placeholder="搜索知识内容、课程、专家..."
                 size="large"
                 value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={e => setSearchValue(e.target.value)}
                 onSearch={handleSearch}
                 className="hero-search-input"
                 prefix={<SearchOutlined />}
                 enterButton={
-                  <Button 
-                    type="primary" 
+                  <Button
+                    type="primary"
                     className="glass-button glass-strong hover-lift"
                     icon={<ArrowRightOutlined />}
                   >
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
           </div>
 
           {/* 行动按钮 */}
-          <div className="hero-actions animate-fade-in-up delay-900">
+          <div className="hero-actions">
             <Button
               size="large"
               className="glass-button glass-strong hover-lift active-scale"
@@ -152,7 +152,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* 统计数据 */}
-        <div className="hero-stats animate-fade-in-up delay-1000">
+        <div className="hero-stats">
           <div className="stats-grid">
             <div className="stat-item glass-light hover-lift">
               <Statistic
@@ -183,7 +183,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* 功能特性 */}
-      <section className="features-section animate-fade-in-up">
+      <section className="features-section">
         <div className="section-header">
           <h2 className="section-title">核心功能</h2>
           <p className="section-description">
@@ -192,13 +192,16 @@ const Home: React.FC = () => {
         </div>
 
         <div className="features-grid">
-          {features.map((feature, index) => (
+          {features.map(feature => (
             <div
               key={feature.title}
-              className={`feature-card glass-floating-card hover-lift active-scale animate-fade-in-up delay-${(index + 1) * 200}`}
+              className="feature-card glass-floating-card hover-lift active-scale"
               onClick={() => navigate(feature.path)}
             >
-              <div className="feature-icon" style={{ background: feature.gradient }}>
+              <div
+                className="feature-icon"
+                style={{ background: feature.gradient }}
+              >
                 {feature.icon}
               </div>
               <h3 className="feature-title">{feature.title}</h3>
@@ -212,7 +215,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* 推荐内容 */}
-      <section className="recommendations-section animate-fade-in-up">
+      <section className="recommendations-section">
         <div className="glass-card">
           <RecommendationList
             title="热门推荐"
@@ -230,6 +233,16 @@ const Home: React.FC = () => {
           background: var(--bg-primary);
           position: relative;
           overflow: hidden;
+          animation: fadeIn var(--duration-normal) var(--ease-out-ios);
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
 
         .home-container::before {
@@ -255,6 +268,18 @@ const Home: React.FC = () => {
           margin-bottom: var(--spacing-3xl);
           border-radius: var(--liquid-border-radius-xl);
           margin: var(--spacing-lg);
+          animation: heroFadeIn 0.8s var(--ease-out-ios) forwards;
+        }
+
+        @keyframes heroFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .hero-content {
@@ -269,6 +294,18 @@ const Home: React.FC = () => {
           margin-bottom: var(--spacing-lg);
           font-size: 0.875rem;
           font-weight: 600;
+          animation: badgePop 0.5s var(--ease-spring-ios) 0.2s backwards;
+        }
+
+        @keyframes badgePop {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
 
         .hero-title {
@@ -276,6 +313,18 @@ const Home: React.FC = () => {
           font-weight: 800;
           line-height: 1.1;
           margin-bottom: var(--spacing-lg);
+          animation: titleSlide 0.6s var(--ease-out-ios) 0.3s backwards;
+        }
+
+        @keyframes titleSlide {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
         }
 
         .gradient-text {
@@ -300,10 +349,32 @@ const Home: React.FC = () => {
           max-width: 600px;
           margin-left: auto;
           margin-right: auto;
+          animation: descriptionFade 0.6s var(--ease-out-ios) 0.5s backwards;
+        }
+
+        @keyframes descriptionFade {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
 
         .hero-search {
           margin-bottom: var(--spacing-2xl);
+          animation: searchExpand 0.6s var(--ease-out-ios) 0.6s backwards;
+        }
+
+        @keyframes searchExpand {
+          from {
+            opacity: 0;
+            transform: scaleX(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scaleX(1);
+          }
         }
 
         .search-container {
@@ -331,17 +402,39 @@ const Home: React.FC = () => {
           justify-content: center;
           flex-wrap: wrap;
           margin-bottom: var(--spacing-2xl);
+          animation: actionsFade 0.6s var(--ease-out-ios) 0.7s backwards;
+        }
+
+        @keyframes actionsFade {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .hero-stats {
           margin-top: var(--spacing-2xl);
+          animation: statsFade 0.6s var(--ease-out-ios) 0.8s backwards;
+        }
+
+        @keyframes statsFade {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
 
         .stats-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(3, 1fr);
           gap: var(--spacing-lg);
-          max-width: 600px;
+          max-width: 900px;
           margin: 0 auto;
         }
 
@@ -356,6 +449,18 @@ const Home: React.FC = () => {
         .features-section {
           padding: var(--spacing-3xl) var(--spacing-lg);
           margin-bottom: var(--spacing-3xl);
+          animation: sectionFade 0.6s var(--ease-out-ios) 0.9s backwards;
+        }
+
+        @keyframes sectionFade {
+          from {
+            opacity: 0;
+            transform: translateY(15px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .section-header {
@@ -379,9 +484,9 @@ const Home: React.FC = () => {
 
         .features-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          grid-template-columns: repeat(2, 1fr);
           gap: var(--spacing-xl);
-          max-width: 1200px;
+          max-width: 900px;
           margin: 0 auto;
         }
 
@@ -392,6 +497,23 @@ const Home: React.FC = () => {
           position: relative;
           transition: all var(--transition-base) var(--ease-spring-ios);
           border-radius: var(--liquid-border-radius-lg);
+          animation: cardFadeIn 0.5s var(--ease-out-ios) backwards;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 1.0s; }
+        .feature-card:nth-child(2) { animation-delay: 1.1s; }
+        .feature-card:nth-child(3) { animation-delay: 1.2s; }
+        .feature-card:nth-child(4) { animation-delay: 1.3s; }
+
+        @keyframes cardFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .feature-icon {
@@ -437,6 +559,18 @@ const Home: React.FC = () => {
         .recommendations-section {
           padding: var(--spacing-lg);
           margin-bottom: var(--spacing-3xl);
+          animation: recommendationFade 0.6s var(--ease-out-ios) 1.4s backwards;
+        }
+
+        @keyframes recommendationFade {
+          from {
+            opacity: 0;
+            transform: translateY(15px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         /* 响应式设计 */
@@ -459,6 +593,7 @@ const Home: React.FC = () => {
           .stats-grid {
             grid-template-columns: 1fr;
             gap: var(--spacing-md);
+            max-width: 400px;
           }
 
           .features-grid {
@@ -472,13 +607,33 @@ const Home: React.FC = () => {
           }
         }
 
+        /* 平板响应式 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .stats-grid {
+            max-width: 700px;
+          }
+
+          .features-grid {
+            max-width: 700px;
+          }
+        }
+
         /* 性能优化 */
         @media (prefers-reduced-motion: reduce) {
+          .home-container,
+          .hero-section,
+          .hero-badge,
+          .hero-title,
+          .hero-description,
+          .hero-search,
+          .hero-actions,
+          .hero-stats,
+          .features-section,
           .feature-card,
-          .stat-item,
-          .hero-badge {
+          .recommendations-section,
+          .stat-item {
+            animation: none !important;
             transition: none;
-            animation: none;
           }
         }
       `}</style>

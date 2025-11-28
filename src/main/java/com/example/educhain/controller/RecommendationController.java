@@ -78,22 +78,19 @@ public class RecommendationController {
     @Operation(summary = "获取个性化推荐", description = "基于用户行为的个性化内容推荐")
     public Result<List<SearchResultDTO>> getPersonalizedRecommendations(
             @Parameter(description = "返回数量限制") @RequestParam(defaultValue = "20") int limit) {
-        try {
-            Long userId = getCurrentUserId();
-            List<SearchResultDTO> recommendations;
-            
-            if (userId != null) {
-                recommendations = recommendationService.getPersonalizedRecommendations(userId, limit);
-            } else {
-                // 未登录用户返回热门推荐
-                recommendations = recommendationService.getPopularRecommendations(null, limit);
-            }
-            
-            return Result.success(recommendations);
-        } catch (Exception e) {
-            logger.error("获取个性化推荐失败", e);
-            return Result.error("RECOMMENDATION_ERROR", "获取个性化推荐失败");
+        
+        Long userId = getCurrentUserId();
+        List<SearchResultDTO> recommendations;
+        
+        if (userId != null) {
+            recommendations = recommendationService.getPersonalizedRecommendations(userId, limit);
+        } else {
+            // 未登录用户返回热门推荐
+            recommendations = recommendationService.getPopularRecommendations(null, limit);
         }
+        
+        logger.debug("获取个性化推荐成功: userId={}, 结果数量={}", userId, recommendations.size());
+        return Result.success(recommendations);
     }
 
     /**
@@ -104,13 +101,10 @@ public class RecommendationController {
     public Result<List<SearchResultDTO>> getPopularRecommendations(
             @Parameter(description = "分类ID") @RequestParam(required = false) Long categoryId,
             @Parameter(description = "返回数量限制") @RequestParam(defaultValue = "20") int limit) {
-        try {
-            List<SearchResultDTO> recommendations = recommendationService.getPopularRecommendations(categoryId, limit);
-            return Result.success(recommendations);
-        } catch (Exception e) {
-            logger.error("获取热门推荐失败", e);
-            return Result.error("RECOMMENDATION_ERROR", "获取热门推荐失败");
-        }
+        
+        List<SearchResultDTO> recommendations = recommendationService.getPopularRecommendations(categoryId, limit);
+        logger.debug("获取热门推荐成功: categoryId={}, 结果数量={}", categoryId, recommendations.size());
+        return Result.success(recommendations);
     }
 
     /**

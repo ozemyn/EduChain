@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  Button,
-  Card,
-  Typography,
-  Divider,
-  Select,
-} from 'antd';
+import { Form, Input, Button, Card, Typography, Divider, Select } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
@@ -19,6 +11,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import type { RegisterRequest } from '@/types/api';
+import './auth.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -70,99 +63,26 @@ const Register: React.FC = () => {
   ];
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        background: 'linear-gradient(135deg, #fef7f7 0%, #fdf2f8 50%, #f3e8ff 100%)',
-        overflow: 'hidden',
-      }}
-    >
-      {/* 左侧品牌展示区 - 固定 */}
-      <div
-        style={{
-          flex: 1,
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '60px',
-          background: 'linear-gradient(135deg, rgba(255,182,193,0.3) 0%, rgba(221,160,221,0.3) 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+    <div className="auth-container animate-fade-in">
+      {/* 左侧品牌展示区 */}
+      <div className="auth-brand-section">
         {/* 装饰性背景元素 */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '15%',
-            right: '10%',
-            width: '180px',
-            height: '180px',
-            borderRadius: '50%',
-            background: 'rgba(255,192,203,0.25)',
-            filter: 'blur(35px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '20%',
-            left: '15%',
-            width: '220px',
-            height: '220px',
-            borderRadius: '50%',
-            background: 'rgba(221,160,221,0.25)',
-            filter: 'blur(45px)',
-          }}
-        />
-        
-        <div style={{ textAlign: 'center', zIndex: 1 }}>
-          <Title 
-            level={1} 
-            style={{ 
-              color: '#d946ef', 
-              fontSize: '4rem',
-              fontWeight: 'bold',
-              marginBottom: '24px',
-              textShadow: '0 2px 4px rgba(217,70,239,0.1)'
-            }}
-          >
+        <div className="auth-blob auth-blob-3" />
+        <div className="auth-blob auth-blob-4" />
+
+        <div className="auth-brand-content animate-fade-in-up delay-150">
+          <Title level={1} className="auth-brand-title glass-text">
             EduChain
           </Title>
-          <Title 
-            level={3} 
-            style={{ 
-              color: '#7c3aed', 
-              fontWeight: 'normal',
-              marginBottom: '32px',
-              opacity: 0.8
-            }}
-          >
+          <Title level={3} className="auth-brand-subtitle">
             加入我们的学习社区
           </Title>
-          <div style={{ maxWidth: '400px' }}>
-            <Divider style={{ borderColor: 'rgba(217,70,239,0.3)' }} />
-            <Text 
-              style={{ 
-                fontSize: '18px', 
-                color: '#6b21a8',
-                lineHeight: '1.6',
-                display: 'block',
-                margin: '24px 0'
-              }}
-            >
+          <div className="auth-brand-description">
+            <Divider className="auth-divider" />
+            <Text className="auth-description-text">
               与全球学习者一起分享知识，共同成长
             </Text>
-            <Text 
-              style={{ 
-                fontSize: '16px', 
-                color: '#7c3aed',
-                opacity: 0.7
-              }}
-            >
+            <Text className="auth-description-subtext">
               开启您的知识分享之旅，让学习变得更有意义
             </Text>
           </div>
@@ -170,38 +90,13 @@ const Register: React.FC = () => {
       </div>
 
       {/* 右侧注册表单区 */}
-      <div
-        style={{
-          flex: 1,
-          height: '100vh',
-          overflowY: 'auto',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          padding: '40px 40px 60px 40px',
-          background: 'rgba(255,255,255,0.8)',
-          backdropFilter: 'blur(10px)',
-        }}
-      >
-        <Card
-          style={{
-            width: '100%',
-            maxWidth: 480,
-            marginTop: '20px',
-            marginBottom: '20px',
-            boxShadow: '0 20px 40px rgba(217,70,239,0.1)',
-            borderRadius: '20px',
-            border: '1px solid rgba(217,70,239,0.1)',
-            background: 'rgba(255,255,255,0.95)',
-          }}
-        >
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <Title level={2} style={{ color: '#d946ef', marginBottom: '8px' }}>
+      <div className="auth-form-section auth-form-section-register">
+        <Card className="auth-card auth-card-register glass-card animate-scale-in delay-100">
+          <div className="auth-card-header">
+            <Title level={2} className="auth-card-title">
               创建账户
             </Title>
-            <Text style={{ color: '#7c3aed', fontSize: '16px' }}>
-              填写信息开始您的学习之旅
-            </Text>
+            <Text className="auth-card-subtitle">填写信息开始您的学习之旅</Text>
           </div>
 
           <Form
@@ -215,7 +110,7 @@ const Register: React.FC = () => {
           >
             <Form.Item
               name="username"
-              label={<span style={{ color: '#7c3aed', fontWeight: '500' }}>用户名</span>}
+              label={<span className="auth-label">用户名</span>}
               rules={[
                 { required: true },
                 { min: 3, max: 20 },
@@ -226,66 +121,54 @@ const Register: React.FC = () => {
               ]}
             >
               <Input
-                prefix={<UserOutlined style={{ color: '#d946ef' }} />}
+                prefix={<UserOutlined className="auth-input-icon" />}
                 placeholder="请输入用户名"
                 autoComplete="username"
-                style={{
-                  borderRadius: '12px',
-                  border: '2px solid #f3e8ff',
-                  padding: '12px 16px',
-                }}
+                className="auth-input"
               />
             </Form.Item>
 
             <Form.Item
               name="email"
-              label={<span style={{ color: '#7c3aed', fontWeight: '500' }}>邮箱</span>}
+              label={<span className="auth-label">邮箱</span>}
               rules={[{ required: true }, { type: 'email' }]}
             >
               <Input
-                prefix={<MailOutlined style={{ color: '#d946ef' }} />}
+                prefix={<MailOutlined className="auth-input-icon" />}
                 placeholder="请输入邮箱地址"
                 autoComplete="email"
-                style={{
-                  borderRadius: '12px',
-                  border: '2px solid #f3e8ff',
-                  padding: '12px 16px',
-                }}
+                className="auth-input"
               />
             </Form.Item>
 
             <Form.Item
               name="fullName"
-              label={<span style={{ color: '#7c3aed', fontWeight: '500' }}>真实姓名</span>}
+              label={<span className="auth-label">真实姓名</span>}
               rules={[{ required: true }, { min: 2, max: 20 }]}
             >
               <Input
-                prefix={<UserOutlined style={{ color: '#d946ef' }} />}
+                prefix={<UserOutlined className="auth-input-icon" />}
                 placeholder="请输入真实姓名"
                 autoComplete="name"
-                style={{
-                  borderRadius: '12px',
-                  border: '2px solid #f3e8ff',
-                  padding: '12px 16px',
-                }}
+                className="auth-input"
               />
             </Form.Item>
 
-            <Form.Item 
-              name="school" 
-              label={<span style={{ color: '#7c3aed', fontWeight: '500' }}>学校</span>}
+            <Form.Item
+              name="school"
+              label={<span className="auth-label">学校</span>}
             >
               <Select
                 placeholder="请选择或输入学校名称"
                 showSearch
                 allowClear
                 filterOption={(input, option) =>
-                  (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
+                  (option?.children as unknown as string)
+                    ?.toLowerCase()
+                    .includes(input.toLowerCase())
                 }
-                suffixIcon={<BankOutlined style={{ color: '#d946ef' }} />}
-                style={{
-                  borderRadius: '12px',
-                }}
+                suffixIcon={<BankOutlined className="auth-input-icon" />}
+                className="auth-select"
               >
                 {commonSchools.map(school => (
                   <Option key={school} value={school}>
@@ -297,7 +180,7 @@ const Register: React.FC = () => {
 
             <Form.Item
               name="password"
-              label={<span style={{ color: '#7c3aed', fontWeight: '500' }}>密码</span>}
+              label={<span className="auth-label">密码</span>}
               rules={[
                 { required: true },
                 { min: 6, max: 20 },
@@ -308,14 +191,10 @@ const Register: React.FC = () => {
               ]}
             >
               <Input.Password
-                prefix={<LockOutlined style={{ color: '#d946ef' }} />}
+                prefix={<LockOutlined className="auth-input-icon" />}
                 placeholder="请输入密码"
                 autoComplete="new-password"
-                style={{
-                  borderRadius: '12px',
-                  border: '2px solid #f3e8ff',
-                  padding: '12px 16px',
-                }}
+                className="auth-input"
                 iconRender={visible =>
                   visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                 }
@@ -324,7 +203,7 @@ const Register: React.FC = () => {
 
             <Form.Item
               name="confirmPassword"
-              label={<span style={{ color: '#7c3aed', fontWeight: '500' }}>确认密码</span>}
+              label={<span className="auth-label">确认密码</span>}
               dependencies={['password']}
               rules={[
                 { required: true, message: '请确认密码！' },
@@ -339,14 +218,10 @@ const Register: React.FC = () => {
               ]}
             >
               <Input.Password
-                prefix={<LockOutlined style={{ color: '#d946ef' }} />}
+                prefix={<LockOutlined className="auth-input-icon" />}
                 placeholder="请再次输入密码"
                 autoComplete="new-password"
-                style={{
-                  borderRadius: '12px',
-                  border: '2px solid #f3e8ff',
-                  padding: '12px 16px',
-                }}
+                className="auth-input"
                 iconRender={visible =>
                   visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                 }
@@ -359,36 +234,19 @@ const Register: React.FC = () => {
                 htmlType="submit"
                 loading={loading}
                 block
-                style={{ 
-                  height: '50px', 
-                  fontSize: '16px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #d946ef 0%, #7c3aed 100%)',
-                  border: 'none',
-                  boxShadow: '0 4px 15px rgba(217,70,239,0.3)',
-                }}
+                className="auth-submit-button glass-button hover-lift active-scale"
               >
                 {loading ? '注册中...' : '创建账户'}
               </Button>
             </Form.Item>
 
-            <Divider plain style={{ borderColor: 'rgba(217,70,239,0.2)' }}>
-              <Text style={{ color: '#7c3aed', fontSize: '14px' }}>
-                已有账号？
-              </Text>
+            <Divider plain className="auth-divider">
+              <Text className="auth-divider-text">已有账号？</Text>
             </Divider>
 
-            <div style={{ textAlign: 'center' }}>
+            <div className="auth-link-wrapper">
               <Link to="/login">
-                <Button 
-                  type="link" 
-                  style={{ 
-                    padding: 0, 
-                    fontSize: '16px',
-                    color: '#d946ef',
-                    fontWeight: '500'
-                  }}
-                >
+                <Button type="link" className="auth-link-button">
                   立即登录 →
                 </Button>
               </Link>

@@ -18,7 +18,7 @@ const Layout: React.FC = () => {
         <Outlet />
       </Content>
       <Footer />
-      
+
       <style>{`
         .main-layout {
           min-height: 100vh;

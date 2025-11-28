@@ -142,16 +142,24 @@ CREATE TABLE knowledge_stats (
 CREATE TABLE user_stats (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL COMMENT '用户ID',
-    upload_count INT DEFAULT 0 COMMENT '上传数量',
-    likes_received INT DEFAULT 0 COMMENT '获得点赞数',
-    comments_received INT DEFAULT 0 COMMENT '获得评论数',
-    active_score INT DEFAULT 0 COMMENT '活跃度分数',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    knowledge_count INT DEFAULT 0 NOT NULL COMMENT '知识内容数量',
+    like_count INT DEFAULT 0 NOT NULL COMMENT '点赞数量',
+    favorite_count INT DEFAULT 0 NOT NULL COMMENT '收藏数量',
+    comment_count INT DEFAULT 0 NOT NULL COMMENT '评论数量',
+    follower_count INT DEFAULT 0 NOT NULL COMMENT '关注者数量',
+    following_count INT DEFAULT 0 NOT NULL COMMENT '关注数量',
+    view_count BIGINT DEFAULT 0 NOT NULL COMMENT '浏览量',
+    total_score INT DEFAULT 0 NOT NULL COMMENT '总积分',
+    achievement_count INT DEFAULT 0 NOT NULL COMMENT '成就数量',
+    login_count INT DEFAULT 0 NOT NULL COMMENT '登录次数',
+    last_login_at DATETIME COMMENT '最后登录时间',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT '更新时间',
     reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE KEY uk_user_id (user_id),
-    INDEX idx_active_score (active_score),
-    INDEX idx_upload_count (upload_count)
+    INDEX idx_user_id (user_id),
+    INDEX idx_total_score (total_score)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户统计表';
 
 -- ========================================

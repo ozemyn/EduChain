@@ -110,7 +110,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const refreshToken = Storage.getLocal<string>(STORAGE_KEYS.REFRESH_TOKEN);
       const userInfo = Storage.getLocal<User>(STORAGE_KEYS.USER_INFO);
 
-      console.log('AuthContext初始化:', { hasToken: !!token, hasRefreshToken: !!refreshToken, hasUserInfo: !!userInfo });
+      console.log('AuthContext初始化:', {
+        hasToken: !!token,
+        hasRefreshToken: !!refreshToken,
+        hasUserInfo: !!userInfo,
+      });
 
       if (token && refreshToken) {
         try {
@@ -119,13 +123,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const tokenPayload = token.split('.')[1];
             const decodedToken = JSON.parse(atob(tokenPayload));
             const currentTime = Date.now() / 1000;
-            
-            console.log('Token信息:', { 
-              exp: decodedToken.exp, 
-              current: currentTime, 
+
+            console.log('Token信息:', {
+              exp: decodedToken.exp,
+              current: currentTime,
               expired: decodedToken.exp < currentTime,
               tokenLength: token.length,
-              tokenParts: token.split('.').length
+              tokenParts: token.split('.').length,
             });
 
             if (decodedToken.exp < currentTime) {
@@ -164,10 +168,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           console.log('验证token并获取用户信息');
           const response = await authService.getCurrentUser();
           console.log('获取用户信息成功:', response.data);
-          
+
           // 更新缓存
           Storage.setLocal(STORAGE_KEYS.USER_INFO, response.data);
-          
+
           dispatch({
             type: 'LOGIN_SUCCESS',
             payload: {
@@ -198,19 +202,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
-      const response = await authService.login({ usernameOrEmail: username, password });
+      const response = await authService.login({
+        usernameOrEmail: username,
+        password,
+      });
 
       // 存储到localStorage
       Storage.setLocal(STORAGE_KEYS.TOKEN, response.data.accessToken);
       Storage.setLocal(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
       Storage.setLocal(STORAGE_KEYS.USER_INFO, response.data.user);
 
-      dispatch({ type: 'LOGIN_SUCCESS', payload: {
-        user: response.data.user,
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
-        expiresIn: response.data.expiresIn,
-      }});
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        payload: {
+          user: response.data.user,
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+          expiresIn: response.data.expiresIn,
+        },
+      });
       message.success('登录成功');
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : '登录失败';

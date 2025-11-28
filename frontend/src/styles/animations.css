@@ -9,7 +9,7 @@
   --ease-spring-ios: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-bounce-ios: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --ease-elastic-ios: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  
+
   /* 动画持续时间 */
   --duration-instant: 100ms;
   --duration-fast: 150ms;
@@ -173,7 +173,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -182,11 +183,16 @@
 }
 
 @keyframes bounce {
-  0%, 20%, 53%, 80%, 100% {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     transform: translateY(0);
   }
-  40%, 43% {
+  40%,
+  43% {
     animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
     transform: translateY(-30px);
   }
@@ -201,13 +207,21 @@
 
 /* 摇摆动画 */
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-10px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(10px);
   }
 }
@@ -310,8 +324,9 @@
 
 /* 悬停效果 */
 .hover-lift {
-  transition: transform var(--duration-fast) var(--ease-out-ios),
-              box-shadow var(--duration-fast) var(--ease-out-ios);
+  transition:
+    transform var(--duration-fast) var(--ease-out-ios),
+    box-shadow var(--duration-fast) var(--ease-out-ios);
 }
 
 .hover-lift:hover {
@@ -372,8 +387,9 @@
 .page-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity var(--duration-normal) var(--ease-out-ios),
-              transform var(--duration-normal) var(--ease-out-ios);
+  transition:
+    opacity var(--duration-normal) var(--ease-out-ios),
+    transform var(--duration-normal) var(--ease-out-ios);
 }
 
 .page-exit {
@@ -384,8 +400,9 @@
 .page-exit-active {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity var(--duration-fast) var(--ease-in-ios),
-              transform var(--duration-fast) var(--ease-in-ios);
+  transition:
+    opacity var(--duration-fast) var(--ease-in-ios),
+    transform var(--duration-fast) var(--ease-in-ios);
 }
 
 /* ===== 模态框动画 ===== */
@@ -418,8 +435,9 @@
 .modal-content-enter-active {
   opacity: 1;
   transform: scale(1) translateY(0);
-  transition: opacity var(--duration-normal) var(--ease-spring-ios),
-              transform var(--duration-normal) var(--ease-spring-ios);
+  transition:
+    opacity var(--duration-normal) var(--ease-spring-ios),
+    transform var(--duration-normal) var(--ease-spring-ios);
 }
 
 .modal-content-exit {
@@ -430,8 +448,9 @@
 .modal-content-exit-active {
   opacity: 0;
   transform: scale(0.9) translateY(20px);
-  transition: opacity var(--duration-fast) var(--ease-in-ios),
-              transform var(--duration-fast) var(--ease-in-ios);
+  transition:
+    opacity var(--duration-fast) var(--ease-in-ios),
+    transform var(--duration-fast) var(--ease-in-ios);
 }
 
 /* ===== 列表动画 ===== */
@@ -445,8 +464,9 @@
 .list-item-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity var(--duration-normal) var(--ease-out-ios),
-              transform var(--duration-normal) var(--ease-out-ios);
+  transition:
+    opacity var(--duration-normal) var(--ease-out-ios),
+    transform var(--duration-normal) var(--ease-out-ios);
 }
 
 .list-item-exit {
@@ -457,8 +477,9 @@
 .list-item-exit-active {
   opacity: 0;
   transform: translateX(20px);
-  transition: opacity var(--duration-fast) var(--ease-in-ios),
-              transform var(--duration-fast) var(--ease-in-ios);
+  transition:
+    opacity var(--duration-fast) var(--ease-in-ios),
+    transform var(--duration-fast) var(--ease-in-ios);
 }
 
 /* ===== 加载动画 ===== */
@@ -474,10 +495,12 @@
 }
 
 .skeleton {
-  background: linear-gradient(90deg, 
-    var(--bg-tertiary) 25%, 
-    var(--bg-secondary) 50%, 
-    var(--bg-tertiary) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-secondary) 50%,
+    var(--bg-tertiary) 75%
+  );
   background-size: 200px 100%;
   animation: skeleton-loading 1.5s infinite;
 }
@@ -504,10 +527,12 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    var(--accent-primary), 
-    transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary),
+    transparent
+  );
   animation: progress-indeterminate 1.5s infinite;
 }
 
@@ -520,7 +545,7 @@
     --duration-normal: 200ms;
     --duration-slow: 300ms;
   }
-  
+
   /* 减少复杂动画 */
   .animate-scale-in-bounce {
     animation: scaleIn var(--duration-normal) var(--ease-out-ios) forwards;
@@ -536,12 +561,12 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .skeleton {
     animation: none;
     background: var(--bg-tertiary);
   }
-  
+
   .progress-indeterminate::after {
     animation: none;
   }
@@ -563,11 +588,27 @@
 
 /* ===== 延迟动画工具 ===== */
 
-.delay-75 { animation-delay: 75ms; }
-.delay-100 { animation-delay: 100ms; }
-.delay-150 { animation-delay: 150ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-500 { animation-delay: 500ms; }
-.delay-700 { animation-delay: 700ms; }
-.delay-1000 { animation-delay: 1000ms; }
+.delay-75 {
+  animation-delay: 75ms;
+}
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-150 {
+  animation-delay: 150ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+.delay-700 {
+  animation-delay: 700ms;
+}
+.delay-1000 {
+  animation-delay: 1000ms;
+}

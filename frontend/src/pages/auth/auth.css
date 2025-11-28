@@ -1,0 +1,395 @@
+/* ===== 认证页面样式 - iOS 风格 ===== */
+
+/* 容器布局 */
+.auth-container {
+  height: 100vh;
+  display: flex;
+  background: linear-gradient(
+    135deg,
+    var(--primary-50) 0%,
+    var(--primary-100) 50%,
+    var(--primary-200) 100%
+  );
+  overflow: hidden;
+}
+
+/* 左侧品牌展示区 */
+.auth-brand-section {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-3xl);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 193, 0.3) 0%,
+    rgba(221, 160, 221, 0.3) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+/* 装饰性背景元素 */
+.auth-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.auth-blob-1 {
+  top: 20%;
+  left: 10%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 192, 203, 0.2);
+  filter: var(--blur-xl);
+  animation: float 6s ease-in-out infinite;
+}
+
+.auth-blob-2 {
+  bottom: 30%;
+  right: 15%;
+  width: 150px;
+  height: 150px;
+  background: rgba(221, 160, 221, 0.2);
+  filter: var(--blur-lg);
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.auth-blob-3 {
+  top: 15%;
+  right: 10%;
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 192, 203, 0.25);
+  filter: var(--blur-lg);
+  animation: float 7s ease-in-out infinite;
+}
+
+.auth-blob-4 {
+  bottom: 20%;
+  left: 15%;
+  width: 220px;
+  height: 220px;
+  background: rgba(221, 160, 221, 0.25);
+  filter: var(--blur-2xl);
+  animation: float 9s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* 品牌内容 */
+.auth-brand-content {
+  text-align: center;
+  z-index: 1;
+  max-width: 500px;
+}
+
+.auth-brand-title {
+  color: var(--primary-600) !important;
+  font-size: 4rem !important;
+  font-weight: bold !important;
+  margin-bottom: var(--spacing-lg) !important;
+  text-shadow: 0 2px 4px rgba(217, 70, 239, 0.1);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-brand-subtitle {
+  color: var(--primary-700) !important;
+  font-weight: normal !important;
+  margin-bottom: var(--spacing-xl) !important;
+  opacity: 0.8;
+}
+
+.auth-brand-description {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.auth-description-text {
+  font-size: 18px;
+  color: var(--primary-800);
+  line-height: 1.6;
+  display: block;
+  margin: var(--spacing-lg) 0;
+}
+
+.auth-description-subtext {
+  font-size: 16px;
+  color: var(--primary-700);
+  opacity: 0.7;
+  display: block;
+}
+
+/* 右侧表单区 */
+.auth-form-section {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+.auth-form-section-register {
+  align-items: flex-start;
+  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-3xl)
+    var(--spacing-xl);
+}
+
+/* 卡片样式 */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--glass-shadow-lg);
+  border-radius: var(--liquid-border-radius-lg) !important;
+  border: 1px solid var(--glass-border) !important;
+  background: var(--bg-glass-strong) !important;
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+}
+
+.auth-card-register {
+  max-width: 480px;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.auth-card-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.auth-card-title {
+  color: var(--primary-600) !important;
+  margin-bottom: var(--spacing-sm) !important;
+}
+
+.auth-card-subtitle {
+  color: var(--primary-700);
+  font-size: 16px;
+}
+
+/* 表单标签 */
+.auth-label {
+  color: var(--primary-700);
+  font-weight: 500;
+}
+
+/* 输入框样式 */
+.auth-input,
+.auth-select {
+  border-radius: var(--radius-md) !important;
+  border: 2px solid var(--primary-200) !important;
+  padding: var(--spacing-md) var(--spacing-md) !important;
+  transition: all var(--transition-fast) var(--ease-out-ios);
+}
+
+.auth-input:hover,
+.auth-select:hover {
+  border-color: var(--primary-300) !important;
+}
+
+.auth-input:focus,
+.auth-input-focused,
+.auth-select:focus,
+.auth-select-focused {
+  border-color: var(--primary-500) !important;
+  box-shadow: 0 0 0 3px var(--primary-200) !important;
+}
+
+.auth-input-icon {
+  color: var(--primary-600);
+}
+
+/* Select 特殊样式 */
+.auth-select .ant-select-selector {
+  border-radius: var(--radius-md) !important;
+  border: 2px solid var(--primary-200) !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  height: auto !important;
+}
+
+.auth-select:hover .ant-select-selector,
+.auth-select-focused .ant-select-selector {
+  border-color: var(--primary-500) !important;
+}
+
+/* 提交按钮 */
+.auth-submit-button {
+  height: 50px !important;
+  font-size: 16px !important;
+  border-radius: var(--radius-md) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-600) 0%,
+    var(--primary-700) 100%
+  ) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3) !important;
+  font-weight: 500;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.auth-submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217, 70, 239, 0.4) !important;
+}
+
+.auth-submit-button:active {
+  transform: translateY(0);
+}
+
+/* 分割线 */
+.auth-divider {
+  border-color: var(--primary-300) !important;
+}
+
+.auth-divider-text {
+  color: var(--primary-700);
+  font-size: 14px;
+}
+
+/* 链接样式 */
+.auth-link-wrapper {
+  text-align: center;
+}
+
+.auth-link-button {
+  padding: 0 !important;
+  font-size: 16px !important;
+  color: var(--primary-600) !important;
+  font-weight: 500 !important;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.auth-link-button:hover {
+  color: var(--primary-700) !important;
+  transform: translateX(4px);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-brand-section {
+    height: auto;
+    min-height: 40vh;
+    padding: var(--spacing-xl);
+  }
+
+  .auth-brand-title {
+    font-size: 3rem !important;
+  }
+
+  .auth-form-section,
+  .auth-form-section-register {
+    height: auto;
+    min-height: 60vh;
+    padding: var(--spacing-lg);
+  }
+
+  .auth-blob {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-brand-title {
+    font-size: 2.5rem !important;
+  }
+
+  .auth-brand-subtitle {
+    font-size: 1.25rem !important;
+  }
+
+  .auth-description-text {
+    font-size: 16px;
+  }
+
+  .auth-description-subtext {
+    font-size: 14px;
+  }
+
+  .auth-card,
+  .auth-card-register {
+    max-width: 100%;
+  }
+
+  .auth-form-section,
+  .auth-form-section-register {
+    padding: var(--spacing-md);
+  }
+}
+
+/* 深色主题适配 */
+[data-theme='dark'] .auth-container {
+  background: linear-gradient(
+    135deg,
+    var(--secondary-50) 0%,
+    var(--secondary-100) 50%,
+    var(--secondary-200) 100%
+  );
+}
+
+[data-theme='dark'] .auth-brand-section {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 59, 0.5) 0%,
+    rgba(51, 65, 85, 0.5) 100%
+  );
+}
+
+[data-theme='dark'] .auth-blob-1,
+[data-theme='dark'] .auth-blob-3 {
+  background: rgba(244, 114, 182, 0.15);
+}
+
+[data-theme='dark'] .auth-blob-2,
+[data-theme='dark'] .auth-blob-4 {
+  background: rgba(249, 168, 212, 0.15);
+}
+
+[data-theme='dark'] .auth-brand-title {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-400));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme='dark'] .auth-input,
+[data-theme='dark'] .auth-select .ant-select-selector {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme='dark'] .auth-input:hover,
+[data-theme='dark'] .auth-select:hover .ant-select-selector {
+  border-color: var(--primary-500) !important;
+}
+
+[data-theme='dark'] .auth-input:focus,
+[data-theme='dark'] .auth-input-focused,
+[data-theme='dark'] .auth-select-focused .ant-select-selector {
+  border-color: var(--primary-500) !important;
+  box-shadow: 0 0 0 3px var(--primary-300) !important;
+}

@@ -77,11 +77,7 @@ const Header: React.FC = () => {
 
         {/* 导航菜单 */}
         <div className="nav-menu">
-          <Menu
-            mode="horizontal"
-            items={menuItems}
-            className="glass-menu"
-          />
+          <Menu mode="horizontal" items={menuItems} className="glass-menu" />
         </div>
 
         {/* 搜索框 */}
@@ -100,7 +96,7 @@ const Header: React.FC = () => {
           <Space size="middle">
             {/* 主题切换器 */}
             <ThemeToggle variant="glass" size="middle" />
-            
+
             {user ? (
               <>
                 <Button
@@ -110,20 +106,25 @@ const Header: React.FC = () => {
                 >
                   发布内容
                 </Button>
-                <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+                <Dropdown
+                  menu={{ items: userMenuItems }}
+                  placement="bottomRight"
+                >
                   <div className="user-profile hover-scale active-press">
                     <Avatar
                       src={user.avatarUrl}
                       icon={<UserOutlined />}
                       className="user-avatar"
                     />
-                    <span className="user-name">{user.fullName || user.username}</span>
+                    <span className="user-name">
+                      {user.fullName || user.username}
+                    </span>
                   </div>
                 </Dropdown>
               </>
             ) : (
               <Space size="small">
-                <Button 
+                <Button
                   className="glass-button hover-scale active-scale"
                   onClick={() => navigate('/login')}
                 >

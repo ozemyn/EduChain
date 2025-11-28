@@ -10,17 +10,17 @@
   --blur-xl: blur(16px);
   --blur-2xl: blur(24px);
   --blur-3xl: blur(32px);
-  
+
   /* 玻璃边框 */
   --glass-border-width: 1px;
   --glass-border-style: solid;
-  
+
   /* 玻璃阴影 */
   --glass-shadow-sm: 0 2px 8px var(--glass-shadow);
   --glass-shadow-md: 0 4px 16px var(--glass-shadow);
   --glass-shadow-lg: 0 8px 32px var(--glass-shadow);
   --glass-shadow-xl: 0 16px 48px var(--glass-shadow);
-  
+
   /* 液态效果 */
   --liquid-border-radius: 20px;
   --liquid-border-radius-lg: 28px;
@@ -34,7 +34,8 @@
   background: var(--glass-bg-light);
   backdrop-filter: var(--blur-sm);
   -webkit-backdrop-filter: var(--blur-sm);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius);
   box-shadow: var(--glass-shadow-sm);
   position: relative;
@@ -46,7 +47,8 @@
   background: var(--glass-bg-medium);
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius);
   box-shadow: var(--glass-shadow-md);
   position: relative;
@@ -58,7 +60,8 @@
   background: var(--glass-bg-strong);
   backdrop-filter: var(--blur-lg);
   -webkit-backdrop-filter: var(--blur-lg);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius);
   box-shadow: var(--glass-shadow-lg);
   position: relative;
@@ -70,7 +73,8 @@
   background: var(--bg-glass-strong);
   backdrop-filter: var(--blur-xl);
   -webkit-backdrop-filter: var(--blur-xl);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius-lg);
   box-shadow: var(--glass-shadow-xl);
   position: relative;
@@ -84,7 +88,8 @@
   background: var(--glass-bg-medium);
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius);
   box-shadow: var(--glass-shadow-md);
   padding: var(--spacing-lg);
@@ -104,7 +109,8 @@
   background: var(--glass-bg-light);
   backdrop-filter: var(--blur-sm);
   -webkit-backdrop-filter: var(--blur-sm);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius);
   padding: var(--spacing-sm) var(--spacing-lg);
   color: var(--text-primary);
@@ -135,7 +141,8 @@
   background: var(--glass-bg-strong);
   backdrop-filter: var(--blur-lg);
   -webkit-backdrop-filter: var(--blur-lg);
-  border-bottom: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-bottom: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   box-shadow: var(--glass-shadow-sm);
   position: sticky;
   top: 0;
@@ -148,7 +155,8 @@
   background: var(--glass-bg-medium);
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
-  border-right: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border-right: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   box-shadow: var(--glass-shadow-md);
   height: 100vh;
   position: fixed;
@@ -162,7 +170,8 @@
   background: var(--glass-bg-strong);
   backdrop-filter: var(--blur-xl);
   -webkit-backdrop-filter: var(--blur-xl);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius-lg);
   box-shadow: var(--glass-shadow-xl);
   position: fixed;
@@ -241,7 +250,7 @@
 
 /* 玻璃内阴影 */
 .glass-inset {
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     inset 0 -1px 0 rgba(0, 0, 0, 0.1),
     var(--glass-shadow-md);
@@ -251,7 +260,8 @@
 
 /* 呼吸玻璃效果 */
 @keyframes glass-breathe {
-  0%, 100% {
+  0%,
+  100% {
     backdrop-filter: var(--blur-md);
     -webkit-backdrop-filter: var(--blur-md);
   }
@@ -292,7 +302,9 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition:
+    width 0.6s,
+    height 0.6s;
 }
 
 .glass-ripple:active::after {
@@ -320,7 +332,7 @@
 /* 霓虹玻璃文本 */
 .glass-neon-text {
   color: var(--accent-primary);
-  text-shadow: 
+  text-shadow:
     0 0 5px currentColor,
     0 0 10px currentColor,
     0 0 15px currentColor,
@@ -338,17 +350,17 @@
     backdrop-filter: var(--blur-xs);
     -webkit-backdrop-filter: var(--blur-xs);
   }
-  
+
   .glass-ultra {
     backdrop-filter: var(--blur-sm);
     -webkit-backdrop-filter: var(--blur-sm);
   }
-  
+
   /* 简化移动端动画 */
   .glass-breathe {
     animation: none;
   }
-  
+
   .glass-shine::before {
     display: none;
   }
@@ -364,11 +376,11 @@
     -webkit-backdrop-filter: none;
     background: var(--bg-elevated);
   }
-  
+
   .glass-breathe {
     animation: none;
   }
-  
+
   .glass-ripple::after {
     display: none;
   }
@@ -394,7 +406,8 @@
   background: var(--glass-bg-medium);
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius-lg);
   box-shadow: var(--glass-shadow-lg);
   padding: var(--spacing-xl);
@@ -414,7 +427,8 @@
   background: var(--glass-bg-strong);
   backdrop-filter: var(--blur-lg);
   -webkit-backdrop-filter: var(--blur-lg);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--liquid-border-radius);
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.875rem;
@@ -430,7 +444,8 @@
   background: var(--glass-bg-light);
   backdrop-filter: var(--blur-sm);
   -webkit-backdrop-filter: var(--blur-sm);
-  border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
   border-radius: var(--radius-full);
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: 0.75rem;

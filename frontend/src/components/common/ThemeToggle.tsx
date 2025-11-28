@@ -17,14 +17,12 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
   className = '',
 }) => {
   const { resolvedTheme, toggleTheme } = useThemeContext();
-  
+
   // 快速切换处理
   const handleToggle = () => {
     // 立即切换，无延迟
     toggleTheme();
   };
-
-
 
   // 获取图标 - 简化逻辑
   const getIcon = () => {
@@ -39,7 +37,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
   // 渲染不同变体
   const renderButton = () => {
     const baseClasses = `theme-toggle ${className}`;
-    
+
     switch (variant) {
       case 'glass':
         return (
@@ -53,9 +51,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
               {getIcon()}
             </span>
             {showLabel && (
-              <span className="theme-toggle-label">
-                {getLabel()}
-              </span>
+              <span className="theme-toggle-label">{getLabel()}</span>
             )}
           </button>
         );
@@ -72,9 +68,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
               {getIcon()}
             </span>
             {showLabel && (
-              <span className="theme-toggle-label">
-                {getLabel()}
-              </span>
+              <span className="theme-toggle-label">{getLabel()}</span>
             )}
           </button>
         );

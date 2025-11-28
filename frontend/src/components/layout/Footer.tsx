@@ -36,10 +36,18 @@ const Footer: React.FC = () => {
   ];
 
   const socialLinks = [
-    { icon: <GithubOutlined />, href: 'https://github.com/educhain', label: 'GitHub' },
+    {
+      icon: <GithubOutlined />,
+      href: 'https://github.com/educhain',
+      label: 'GitHub',
+    },
     { icon: <WechatOutlined />, href: '#', label: '微信' },
     { icon: <TwitterOutlined />, href: '#', label: 'Twitter' },
-    { icon: <MailOutlined />, href: 'mailto:contact@educhain.com', label: '邮箱' },
+    {
+      icon: <MailOutlined />,
+      href: 'mailto:contact@educhain.com',
+      label: '邮箱',
+    },
   ];
 
   return (
@@ -65,8 +73,14 @@ const Footer: React.FC = () => {
                       href={social.href}
                       className="social-link glass-button hover-lift active-scale"
                       title={social.label}
-                      target={social.href.startsWith('http') ? '_blank' : '_self'}
-                      rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      target={
+                        social.href.startsWith('http') ? '_blank' : '_self'
+                      }
+                      rel={
+                        social.href.startsWith('http')
+                          ? 'noopener noreferrer'
+                          : undefined
+                      }
                     >
                       {social.icon}
                     </a>
@@ -82,7 +96,10 @@ const Footer: React.FC = () => {
                 <ul className="link-list">
                   {products.map((product, index) => (
                     <li key={index}>
-                      <Link href={product.href} className="footer-link hover-scale">
+                      <Link
+                        href={product.href}
+                        className="footer-link hover-scale"
+                      >
                         {product.icon}
                         <span>{product.title}</span>
                       </Link>
@@ -99,7 +116,10 @@ const Footer: React.FC = () => {
                 <ul className="link-list">
                   {quickLinks.map((link, index) => (
                     <li key={index}>
-                      <Link href={link.href} className="footer-link hover-scale">
+                      <Link
+                        href={link.href}
+                        className="footer-link hover-scale"
+                      >
                         {link.title}
                       </Link>
                     </li>
@@ -124,7 +144,9 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="newsletter glass-light">
                   <p className="newsletter-title">订阅更新</p>
-                  <p className="newsletter-desc">获取最新的教育资讯和平台动态</p>
+                  <p className="newsletter-desc">
+                    获取最新的教育资讯和平台动态
+                  </p>
                 </div>
               </div>
             </Col>
@@ -136,15 +158,22 @@ const Footer: React.FC = () => {
           <div className="copyright-content">
             <div className="copyright-text">
               <Text>
-                © {currentYear} EduChain. Made with <HeartFilled className="heart-icon" /> by EduChain Team
+                © {currentYear} EduChain. Made with{' '}
+                <HeartFilled className="heart-icon" /> by EduChain Team
               </Text>
             </div>
             <div className="footer-links">
-              <Link href="/terms" className="footer-bottom-link">使用条款</Link>
+              <Link href="/terms" className="footer-bottom-link">
+                使用条款
+              </Link>
               <span className="separator">•</span>
-              <Link href="/privacy" className="footer-bottom-link">隐私政策</Link>
+              <Link href="/privacy" className="footer-bottom-link">
+                隐私政策
+              </Link>
               <span className="separator">•</span>
-              <Link href="/cookies" className="footer-bottom-link">Cookie政策</Link>
+              <Link href="/cookies" className="footer-bottom-link">
+                Cookie政策
+              </Link>
             </div>
           </div>
         </div>
