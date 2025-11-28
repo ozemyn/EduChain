@@ -6,20 +6,26 @@ import {
   Spin,
   Empty,
   Button,
-  Space,
-  Typography,
   message,
   Modal,
 } from 'antd';
-import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  ExclamationCircleOutlined,
+  BookOutlined,
+  RocketOutlined,
+} from '@ant-design/icons';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { KnowledgeCard, KnowledgeFilter } from '@/components/knowledge';
 import type { KnowledgeItem } from '@/types';
 import type { FilterValues } from '@/components/knowledge/KnowledgeFilter';
 import { knowledgeService } from '@/services/knowledge';
 import { useAuth } from '@/contexts/AuthContext';
+import '@/styles/globals.css';
+import '@/styles/theme.css';
+import '@/styles/animations.css';
+import '@/styles/glass-effects.css';
 
-const { Title } = Typography;
 const { confirm } = Modal;
 
 const KnowledgeList: React.FC = () => {
@@ -150,73 +156,337 @@ const KnowledgeList: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ padding: '24px' }}>
-      <div style={{ marginBottom: 24 }}>
-        <Space
-          align="center"
-          style={{ width: '100%', justifyContent: 'space-between' }}
-        >
-          <Title level={2} style={{ margin: 0 }}>
-            知识库
-          </Title>
-          {user && (
-            <Link to="/knowledge/create">
-              <Button type="primary" icon={<PlusOutlined />}>
-                发布内容
-              </Button>
-            </Link>
-          )}
-        </Space>
+    <div className="knowledge-list-container animate-fade-in">
+      {/* 背景装饰 */}
+      <div className="knowledge-background">
+        <div className="knowledge-blob knowledge-blob-1" />
+        <div className="knowledge-blob knowledge-blob-2" />
+        <div className="knowledge-blob knowledge-blob-3" />
       </div>
 
-      <KnowledgeFilter onFilter={handleFilter} loading={loading} />
+      {/* 页面头部 */}
+      <section className="knowledge-header glass-light animate-fade-in-up">
+        <div className="knowledge-header-content">
+          <div className="knowledge-title-section">
+            <h1 className="knowledge-title gradient-text">
+              <BookOutlined />
+              知识库
+            </h1>
+            <p className="knowledge-subtitle">探索无限知识，分享智慧结晶</p>
+          </div>
 
-      <Spin spinning={loading}>
-        {knowledgeList.length > 0 ? (
-          <>
-            <Row gutter={[16, 16]}>
-              {knowledgeList.map(knowledge => (
-                <Col key={knowledge.id} xs={24} sm={12} md={8} lg={6}>
-                  <KnowledgeCard
-                    knowledge={knowledge}
-                    showActions={user?.id === knowledge.uploaderId}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                </Col>
-              ))}
-            </Row>
-
-            <div style={{ textAlign: 'center', marginTop: 32 }}>
-              <Pagination
-                current={pagination.current}
-                pageSize={pagination.pageSize}
-                total={pagination.total}
-                showSizeChanger
-                showQuickJumper
-                showTotal={(total, range) =>
-                  `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
-                }
-                onChange={handlePageChange}
-                onShowSizeChange={handlePageChange}
-              />
-            </div>
-          </>
-        ) : (
-          <Empty
-            description="暂无知识内容"
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          >
-            {user && (
+          {user && (
+            <div className="knowledge-actions">
               <Link to="/knowledge/create">
-                <Button type="primary" icon={<PlusOutlined />}>
-                  发布第一个内容
+                <Button
+                  type="primary"
+                  icon={<RocketOutlined />}
+                  size="large"
+                  className="glass-button glass-strong hover-lift active-scale primary-button"
+                >
+                  发布内容
                 </Button>
               </Link>
-            )}
-          </Empty>
-        )}
-      </Spin>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 筛选器 */}
+      <div className="knowledge-filter-wrapper animate-fade-in-up delay-100">
+        <KnowledgeFilter onFilter={handleFilter} loading={loading} />
+      </div>
+
+      {/* 内容区域 */}
+      <div className="knowledge-content animate-fade-in-up delay-200">
+        <Spin spinning={loading}>
+          {knowledgeList.length > 0 ? (
+            <>
+              <Row gutter={[24, 24]} className="knowledge-grid">
+                {knowledgeList.map((knowledge, index) => (
+                  <Col key={knowledge.id} xs={24} sm={12} md={8} lg={6}>
+                    <div
+                      className="knowledge-card-wrapper animate-fade-in-up"
+                      style={{ animationDelay: `${(index % 12) * 50}ms` }}
+                    >
+                      <KnowledgeCard
+                        knowledge={knowledge}
+                        showActions={user?.id === knowledge.uploaderId}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+
+              <div className="knowledge-pagination glass-light">
+                <Pagination
+                  current={pagination.current}
+                  pageSize={pagination.pageSize}
+                  total={pagination.total}
+                  showSizeChanger
+                  showQuickJumper
+                  showTotal={(total, range) =>
+                    `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
+                  }
+                  onChange={handlePageChange}
+                  onShowSizeChange={handlePageChange}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="knowledge-empty glass-card">
+              <Empty
+                description="暂无知识内容"
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+              >
+                {user && (
+                  <Link to="/knowledge/create">
+                    <Button
+                      type="primary"
+                      icon={<PlusOutlined />}
+                      size="large"
+                      className="glass-button glass-strong hover-lift active-scale"
+                    >
+                      发布第一个内容
+                    </Button>
+                  </Link>
+                )}
+              </Empty>
+            </div>
+          )}
+        </Spin>
+      </div>
+
+      <style>{`
+        /* ===== 知识库列表页面样式 ===== */
+        .knowledge-list-container {
+          min-height: 100vh;
+          background: var(--bg-primary);
+          position: relative;
+          overflow: hidden;
+          padding: var(--spacing-lg);
+        }
+
+        /* 背景装饰 */
+        .knowledge-background {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: -1;
+          overflow: hidden;
+        }
+
+        .knowledge-blob {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          filter: var(--blur-xl);
+          animation: float 8s ease-in-out infinite;
+        }
+
+        .knowledge-blob-1 {
+          top: 5%;
+          right: 10%;
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(circle, var(--primary-200) 0%, transparent 70%);
+          animation-delay: 0s;
+        }
+
+        .knowledge-blob-2 {
+          top: 40%;
+          left: 5%;
+          width: 150px;
+          height: 150px;
+          background: radial-gradient(circle, var(--accent-success) 0%, transparent 70%);
+          animation-delay: 3s;
+        }
+
+        .knowledge-blob-3 {
+          bottom: 20%;
+          right: 30%;
+          width: 120px;
+          height: 120px;
+          background: radial-gradient(circle, var(--accent-warning) 0%, transparent 70%);
+          animation-delay: 6s;
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          33% {
+            transform: translateY(-20px) rotate(120deg);
+          }
+          66% {
+            transform: translateY(10px) rotate(240deg);
+          }
+        }
+
+        /* 页面头部 */
+        .knowledge-header {
+          margin-bottom: var(--spacing-2xl);
+          padding: var(--spacing-2xl);
+          border-radius: var(--liquid-border-radius-xl);
+        }
+
+        .knowledge-header-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: var(--spacing-lg);
+        }
+
+        .knowledge-title-section {
+          flex: 1;
+        }
+
+        .knowledge-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin: 0 0 var(--spacing-sm);
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-md);
+          background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .knowledge-subtitle {
+          font-size: 1.125rem;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+
+        .knowledge-actions {
+          display: flex;
+          gap: var(--spacing-md);
+        }
+
+        .primary-button {
+          background: linear-gradient(135deg, var(--accent-primary), var(--primary-600)) !important;
+          border: none !important;
+          color: white !important;
+          font-weight: 600 !important;
+        }
+
+        /* 筛选器包装 */
+        .knowledge-filter-wrapper {
+          max-width: 1200px;
+          margin: 0 auto var(--spacing-2xl);
+        }
+
+        /* 内容区域 */
+        .knowledge-content {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .knowledge-grid {
+          margin-bottom: var(--spacing-2xl);
+        }
+
+        .knowledge-card-wrapper {
+          height: 100%;
+        }
+
+        .knowledge-card-wrapper .ant-card {
+          height: 100%;
+          border: none;
+          background: var(--glass-bg-medium);
+          backdrop-filter: var(--blur-md);
+          -webkit-backdrop-filter: var(--blur-md);
+          border-radius: var(--liquid-border-radius);
+          box-shadow: var(--glass-shadow-md);
+          transition: all var(--transition-base) var(--ease-spring-ios);
+          border: 1px solid var(--glass-border);
+        }
+
+        .knowledge-card-wrapper .ant-card:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: var(--glass-shadow-lg);
+          background: var(--glass-bg-strong);
+        }
+
+        /* 分页器 */
+        .knowledge-pagination {
+          text-align: center;
+          padding: var(--spacing-xl);
+          border-radius: var(--liquid-border-radius);
+          margin-top: var(--spacing-xl);
+        }
+
+        /* 空状态 */
+        .knowledge-empty {
+          text-align: center;
+          padding: var(--spacing-3xl);
+          border-radius: var(--liquid-border-radius-lg);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+          .knowledge-list-container {
+            padding: var(--spacing-md);
+          }
+
+          .knowledge-header {
+            padding: var(--spacing-xl);
+          }
+
+          .knowledge-header-content {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .knowledge-title {
+            font-size: 2rem;
+            justify-content: center;
+          }
+
+          .knowledge-actions {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .knowledge-actions .glass-button {
+            width: 100%;
+            max-width: 300px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .knowledge-title {
+            font-size: 1.75rem;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+          }
+
+          .knowledge-blob {
+            display: none;
+          }
+        }
+
+        /* 性能优化 */
+        @media (prefers-reduced-motion: reduce) {
+          .knowledge-list-container,
+          .knowledge-header,
+          .knowledge-content,
+          .knowledge-card-wrapper,
+          .knowledge-blob {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

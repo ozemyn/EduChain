@@ -10,6 +10,7 @@ interface CategorySelectorProps {
   disabled?: boolean;
   showCount?: boolean;
   size?: 'small' | 'middle' | 'large';
+  className?: string;
 }
 
 interface TreeNode {
@@ -27,6 +28,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   disabled = false,
   showCount = false,
   size = 'middle',
+  className,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -229,6 +231,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       treeData={treeData}
       showSearch
       treeDefaultExpandAll
+      className={className}
       filterTreeNode={(search, node) => {
         return (
           node.title?.toString().toLowerCase().includes(search.toLowerCase()) ||
@@ -243,7 +246,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         )
       }
       style={{ width: '100%' }}
-      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+      styles={{ popup: { root: { maxHeight: 400, overflow: 'auto' } } }}
       treeNodeFilterProp="title"
       showCheckedStrategy={TreeSelect.SHOW_PARENT}
     />

@@ -4,7 +4,6 @@ import {
   Input,
   Select,
   Button,
-  Space,
   Typography,
   message,
   Breadcrumb,
@@ -12,20 +11,16 @@ import {
   Col,
   Divider,
   Modal,
-  List,
-  Progress,
-  Badge,
 } from 'antd';
 import {
   SaveOutlined,
   SendOutlined,
   EyeOutlined,
-  HistoryOutlined,
-  DeleteOutlined,
   FileTextOutlined,
   BulbOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import {
@@ -37,24 +32,18 @@ import {
 import type { KnowledgeItem, CreateKnowledgeRequest } from '@/types';
 import { knowledgeService } from '@/services/knowledge';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDraftManager } from '@/hooks/useDraftManager';
+import draftManager from '@/utils/draftManager';
 import '@/styles/globals.css';
 import '@/styles/theme.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { Option } = Select;
 
 interface FormValues extends CreateKnowledgeRequest {
   isDraft?: boolean;
-}
-
-interface DraftVersion {
-  id: string;
-  title: string;
-  content: string;
-  savedAt: string;
-  autoSaved: boolean;
 }
 
 const CreateKnowledge: React.FC = () => {
@@ -64,10 +53,34 @@ const CreateKnowledge: React.FC = () => {
   const [form] = Form.useForm<FormValues>();
 
   const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [knowledge, setKnowledge] = useState<KnowledgeItem | null>(null);
-  const [drafts, setDrafts] = useState<DraftVersion[]>([]);
-  const [showDrafts, setShowDrafts] = useState(false);
+  const [editorKey, setEditorKey] = useState(0); // 用于强制重新渲染编辑器
+
+  // 使用草稿管理器 Hook - 主要方式
+  const {
+    saveStatus,
+    saveDraft,
+    clearDraft,
+    startAutoSave,
+    stopAutoSave,
+    markUnsaved,
+  } = useDraftManager({
+    autoSave: true,
+    showNotifications: true,
+    onDraftLoaded: draft => {
+      const formValues = {
+        title: draft.title,
+        content: draft.content,
+        type: draft.type,
+        categoryId: draft.categoryId,
+        tags: draft.tags,
+        linkUrl: draft.linkUrl,
+      };
+
+      form.setFieldsValue(formValues);
+      setEditorKey(prev => prev + 1);
+    },
+  });
 
   const isEditing = !!id;
   const pageTitle = isEditing ? '编辑内容' : '发布内容';
@@ -112,78 +125,72 @@ const CreateKnowledge: React.FC = () => {
     }
   };
 
-  // 自动保存草稿
-  const autoSaveDraft = () => {
-    const values = form.getFieldsValue();
-    if (!values.title && !values.content) return;
-
-    const draft: DraftVersion = {
-      id: Date.now().toString(),
-      title: values.title || '未命名草稿',
-      content: values.content || '',
-      savedAt: new Date().toISOString(),
-      autoSaved: true,
-    };
-
-    const existingDrafts = JSON.parse(
-      localStorage.getItem('knowledge_drafts') || '[]'
-    );
-    const newDrafts = [draft, ...existingDrafts.slice(0, 9)]; // 保留最新10个草稿
-    localStorage.setItem('knowledge_drafts', JSON.stringify(newDrafts));
-    setDrafts(newDrafts);
+  // 表单字段变化时的处理 - 优先使用 Hook
+  const handleFormChange = () => {
+    // 标记为未保存状态
+    markUnsaved();
   };
 
-  // 手动保存草稿
-  const saveDraft = async () => {
+  // 手动保存草稿 - 优先使用 Hook
+  const handleSaveDraft = async () => {
+    // 强制触发表单验证，确保所有字段都已同步
     try {
-      setSaving(true);
-      const values = form.getFieldsValue();
+      await form.validateFields();
+    } catch {
+      // 忽略验证错误，继续保存草稿
+    }
 
-      const draft: DraftVersion = {
-        id: Date.now().toString(),
-        title: values.title || '未命名草稿',
-        content: values.content || '',
-        savedAt: new Date().toISOString(),
-        autoSaved: false,
-      };
+    let values = form.getFieldsValue();
 
-      const existingDrafts = JSON.parse(
-        localStorage.getItem('knowledge_drafts') || '[]'
-      );
-      const newDrafts = [draft, ...existingDrafts.slice(0, 9)];
-      localStorage.setItem('knowledge_drafts', JSON.stringify(newDrafts));
-      setDrafts(newDrafts);
+    // 如果 content 为 undefined 或空，尝试从编辑器直接获取
+    if (!values.content || values.content.trim() === '') {
+      const editorElement = document.querySelector(
+        '[contenteditable="true"]'
+      ) as HTMLElement;
+      if (editorElement && editorElement.innerHTML) {
+        const editorContent = editorElement.innerHTML;
+        form.setFieldValue('content', editorContent);
+        values = { ...values, content: editorContent };
+      }
+    }
 
-      message.success('草稿保存成功');
-    } catch (error) {
-      console.error('Save draft failed:', error);
-      message.error('保存草稿失败');
-    } finally {
-      setSaving(false);
+    const success = await saveDraft(
+      values as unknown as Record<string, unknown>,
+      true
+    );
+    if (!success) {
+      message.error('保存草稿失败，请检查内容');
     }
   };
 
-  // 加载草稿
-  const loadDraft = (draft: DraftVersion) => {
-    form.setFieldsValue({
-      title: draft.title,
-      content: draft.content,
-    });
-    setShowDrafts(false);
-    message.success('草稿加载成功');
-  };
+  // 恢复草稿
+  const handleRestoreDraft = () => {
+    const draft = draftManager.getCurrentDraft();
 
-  // 删除草稿
-  const deleteDraft = (draftId: string) => {
-    const existingDrafts = JSON.parse(
-      localStorage.getItem('knowledge_drafts') || '[]'
-    );
-    const newDrafts = existingDrafts.filter(
-      (d: DraftVersion) => d.id !== draftId
-    );
-    localStorage.setItem('knowledge_drafts', JSON.stringify(newDrafts));
-    setDrafts(newDrafts);
-    message.success('草稿删除成功');
+    if (draft) {
+      Modal.confirm({
+        title: '恢复草稿',
+        content: `发现草稿："${draft.title}"，是否恢复？`,
+        okText: '恢复',
+        cancelText: '取消',
+        onOk: () => {
+          form.setFieldsValue({
+            title: draft.title,
+            content: draft.content,
+            type: draft.type,
+            categoryId: draft.categoryId,
+            tags: draft.tags,
+            linkUrl: draft.linkUrl,
+          });
+
+          // 强制更新编辑器
+          setEditorKey(prev => prev + 1);
+          message.success('草稿已恢复');
+        },
+      });
+    } else {
+      message.info('没有找到草稿');
+    }
   };
 
   // 提交表单
@@ -216,7 +223,7 @@ const CreateKnowledge: React.FC = () => {
       }
 
       // 清除草稿
-      localStorage.removeItem('knowledge_drafts');
+      clearDraft();
 
       navigate('/knowledge');
     } catch (error) {
@@ -253,20 +260,28 @@ const CreateKnowledge: React.FC = () => {
       loadKnowledgeDetail();
     }
 
-    // 加载草稿列表
-    const savedDrafts = JSON.parse(
-      localStorage.getItem('knowledge_drafts') || '[]'
-    );
-    setDrafts(savedDrafts);
+    // 启动自动保存 - 使用 Hook 管理，确保能获取到编辑器内容
+    startAutoSave(() => {
+      let values = form.getFieldsValue();
 
-    // 设置自动保存
-    const timer = setInterval(autoSaveDraft, 30000); // 30秒自动保存
+      // 如果内容为空，尝试从编辑器直接获取
+      if (!values.content || values.content.trim() === '') {
+        const editorElement = document.querySelector(
+          '[contenteditable="true"]'
+        ) as HTMLElement;
+        if (editorElement && editorElement.innerHTML) {
+          values = { ...values, content: editorElement.innerHTML };
+        }
+      }
+
+      return values as unknown as Record<string, unknown>;
+    });
 
     return () => {
-      clearInterval(timer);
+      stopAutoSave();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, user]);
+  }, [id, user, startAutoSave, stopAutoSave]);
 
   if (loading) {
     return (
@@ -294,25 +309,36 @@ const CreateKnowledge: React.FC = () => {
       <section className="create-header glass-light animate-fade-in-up">
         <div className="create-header-content">
           <div className="create-breadcrumb">
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <Link to="/knowledge" className="breadcrumb-link hover-scale">
-                  知识库
-                </Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item className="breadcrumb-current">
-                {pageTitle}
-              </Breadcrumb.Item>
-            </Breadcrumb>
+            <Breadcrumb
+              items={[
+                {
+                  title: (
+                    <Link
+                      to="/knowledge"
+                      className="breadcrumb-link hover-scale"
+                    >
+                      知识库
+                    </Link>
+                  ),
+                },
+                {
+                  title: (
+                    <span className="breadcrumb-current">{pageTitle}</span>
+                  ),
+                },
+              ]}
+            />
           </div>
-          
+
           <div className="create-title-section">
             <h1 className="create-title gradient-text">
               <FileTextOutlined />
               {pageTitle}
             </h1>
             <p className="create-subtitle">
-              {isEditing ? '完善您的知识内容，让更多人受益' : '分享您的知识，让智慧传播'}
+              {isEditing
+                ? '完善您的知识内容，让更多人受益'
+                : '分享您的知识，让智慧传播'}
             </p>
           </div>
 
@@ -338,7 +364,7 @@ const CreateKnowledge: React.FC = () => {
 
       <div className="create-content animate-fade-in-up delay-100">
         <Row gutter={[24, 24]}>
-          <Col xs={24} lg={18}>
+          <Col xs={24}>
             <div className="create-main-card glass-card">
               <div className="create-form-header">
                 <h2 className="form-title">
@@ -346,19 +372,36 @@ const CreateKnowledge: React.FC = () => {
                   内容编辑
                 </h2>
                 <div className="form-badges">
-                  <Badge 
-                    count={drafts.length} 
-                    className="glass-badge"
-                    title={`${drafts.length} 个草稿`}
+                  {/* 保存状态指示器 */}
+                  <div className="save-status">
+                    {saveStatus === 'saving' && (
+                      <span className="save-indicator saving">
+                        <div className="save-dot" />
+                        正在保存...
+                      </span>
+                    )}
+                    {saveStatus === 'saved' && (
+                      <span className="save-indicator saved">
+                        <CheckCircleOutlined />
+                        已保存
+                      </span>
+                    )}
+                    {saveStatus === 'unsaved' && (
+                      <span className="save-indicator unsaved">
+                        <ClockCircleOutlined />
+                        有未保存更改
+                      </span>
+                    )}
+                  </div>
+
+                  <Button
+                    icon={<HistoryOutlined />}
+                    onClick={handleRestoreDraft}
+                    className="glass-button hover-scale active-scale"
+                    title="恢复草稿"
                   >
-                    <Button 
-                      className="glass-button hover-scale active-scale"
-                      icon={<HistoryOutlined />}
-                      onClick={() => setShowDrafts(true)}
-                    >
-                      草稿历史
-                    </Button>
-                  </Badge>
+                    恢复草稿
+                  </Button>
                 </div>
               </div>
 
@@ -366,388 +409,222 @@ const CreateKnowledge: React.FC = () => {
                 form={form}
                 layout="vertical"
                 onFinish={handleSubmit}
+                onValuesChange={handleFormChange}
                 initialValues={{
                   type: 'TEXT',
                   isDraft: false,
                 }}
                 className="create-form"
               >
-              {/* 标题 */}
-              <Form.Item
-                name="title"
-                label={<span className="form-label">标题</span>}
-                rules={[
-                  { required: true, message: '请输入标题' },
-                  { max: 100, message: '标题不能超过100个字符' },
-                ]}
-              >
-                <Input 
-                  placeholder="请输入知识内容标题" 
-                  size="large" 
-                  className="create-input"
-                  prefix={<FileTextOutlined />}
-                />
-              </Form.Item>
+                {/* 标题 */}
+                <Form.Item
+                  name="title"
+                  label={<span className="form-label">标题</span>}
+                  rules={[
+                    { required: true, message: '请输入标题' },
+                    { max: 100, message: '标题不能超过100个字符' },
+                  ]}
+                >
+                  <Input
+                    placeholder="请输入知识内容标题"
+                    size="large"
+                    className="create-input"
+                    prefix={<FileTextOutlined />}
+                  />
+                </Form.Item>
 
-              <Row gutter={16}>
-                <Col xs={24} sm={12}>
-                  {/* 内容类型 */}
-                  <Form.Item
-                    name="type"
-                    label={<span className="form-label">内容类型</span>}
-                    rules={[{ required: true, message: '请选择内容类型' }]}
-                  >
-                    <Select 
-                      placeholder="选择内容类型" 
-                      className="create-select"
-                      size="large"
-                    >
-                      {contentTypes.map(type => (
-                        <Option key={type.value} value={type.value}>
-                          {type.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={12}>
-                  {/* 分类 */}
-                  <Form.Item 
-                    name="categoryId" 
-                    label={<span className="form-label">分类</span>}
-                  >
-                    <CategorySelector
-                      placeholder="选择分类（可选）"
-                      allowClear
-                      showCount
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              {/* 外部链接 */}
-              <Form.Item
-                noStyle
-                shouldUpdate={(prevValues, currentValues) =>
-                  prevValues.type !== currentValues.type
-                }
-              >
-                {({ getFieldValue }) => {
-                  const type = getFieldValue('type');
-                  return type === 'LINK' ? (
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    {/* 内容类型 */}
                     <Form.Item
-                      name="linkUrl"
-                      label={<span className="form-label">链接地址</span>}
-                      rules={[
-                        { required: true, message: '请输入链接地址' },
-                        { type: 'url', message: '请输入有效的URL地址' },
-                      ]}
+                      name="type"
+                      label={<span className="form-label">内容类型</span>}
+                      rules={[{ required: true, message: '请选择内容类型' }]}
                     >
-                      <Input 
-                        placeholder="https://example.com" 
-                        className="create-input"
+                      <Select
+                        placeholder="选择内容类型"
+                        className="create-select"
                         size="large"
+                      >
+                        {contentTypes.map(type => (
+                          <Option key={type.value} value={type.value}>
+                            {type.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    {/* 分类 */}
+                    <Form.Item
+                      name="categoryId"
+                      label={<span className="form-label">分类</span>}
+                    >
+                      <CategorySelector
+                        placeholder="选择分类（可选）"
+                        allowClear
+                        showCount
+                        size="large"
+                        className="create-select"
                       />
                     </Form.Item>
-                  ) : null;
-                }}
-              </Form.Item>
+                  </Col>
+                </Row>
 
-              {/* 多媒体文件 */}
-              <Form.Item
-                noStyle
-                shouldUpdate={(prevValues, currentValues) =>
-                  prevValues.type !== currentValues.type
-                }
-              >
-                {({ getFieldValue }) => {
-                  const type = getFieldValue('type');
-                  return ['IMAGE', 'VIDEO', 'PDF'].includes(type) ? (
-                    <Form.Item 
-                      name="mediaUrls" 
-                      label={<span className="form-label">上传文件</span>}
-                    >
-                      <div className="media-upload-wrapper glass-light">
-                        <MediaUpload
-                          maxCount={type === 'IMAGE' ? 9 : 3}
-                          accept={
-                            type === 'IMAGE'
-                              ? 'image/*'
-                              : type === 'VIDEO'
-                                ? 'video/*'
-                                : '.pdf,.doc,.docx,.ppt,.pptx'
-                          }
+                {/* 外部链接 */}
+                <Form.Item
+                  noStyle
+                  shouldUpdate={(prevValues, currentValues) =>
+                    prevValues.type !== currentValues.type
+                  }
+                >
+                  {({ getFieldValue }) => {
+                    const type = getFieldValue('type');
+                    return type === 'LINK' ? (
+                      <Form.Item
+                        name="linkUrl"
+                        label={<span className="form-label">链接地址</span>}
+                        rules={[
+                          { required: true, message: '请输入链接地址' },
+                          { type: 'url', message: '请输入有效的URL地址' },
+                        ]}
+                      >
+                        <Input
+                          placeholder="https://example.com"
+                          className="create-input"
+                          size="large"
                         />
-                      </div>
-                    </Form.Item>
-                  ) : null;
-                }}
-              </Form.Item>
+                      </Form.Item>
+                    ) : null;
+                  }}
+                </Form.Item>
 
-              {/* 内容编辑器 */}
-              <Form.Item
-                name="content"
-                label={<span className="form-label">内容</span>}
-                rules={[
-                  { required: true, message: '请输入内容' },
-                  { min: 10, message: '内容不能少于10个字符' },
-                ]}
-              >
-                <div className="editor-wrapper glass-light">
-                  <RichTextEditor height={400} />
-                </div>
-              </Form.Item>
-
-              {/* 标签管理 */}
-              <Form.Item
-                name="tags"
-                label={<span className="form-label">标签</span>}
-                getValueFromEvent={tags => tags.join(',')}
-                getValueProps={value => ({
-                  value: value ? value.split(',').filter(Boolean) : [],
-                })}
-              >
-                <div className="tag-selector-wrapper glass-light">
-                  <TagSelector
-                    placeholder="选择或输入标签"
-                    maxTags={10}
-                    showPopular
-                  />
-                </div>
-              </Form.Item>
-
-              <Divider className="form-divider" />
-
-              {/* 操作按钮 */}
-              <Form.Item className="form-actions">
-                <div className="action-buttons">
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon={<SendOutlined />}
-                    loading={loading}
-                    size="large"
-                    className="glass-button glass-strong hover-lift active-scale primary-button"
-                  >
-                    {isEditing ? '更新内容' : '发布内容'}
-                  </Button>
-
-                  <Button
-                    icon={<SaveOutlined />}
-                    onClick={saveDraft}
-                    loading={saving}
-                    size="large"
-                    className="glass-button hover-scale active-scale"
-                  >
-                    保存草稿
-                  </Button>
-
-                  <Button
-                    icon={<EyeOutlined />}
-                    onClick={handlePreview}
-                    size="large"
-                    className="glass-button hover-scale active-scale"
-                  >
-                    预览
-                  </Button>
-
-                  <Button 
-                    onClick={() => navigate('/knowledge')} 
-                    size="large"
-                    className="glass-button hover-scale active-scale"
-                  >
-                    取消
-                  </Button>
-                </div>
-              </Form.Item>
-            </Form>
-            </div>
-          </Col>
-
-          <Col xs={24} lg={6}>
-            {/* 侧边栏 */}
-            <div className="create-sidebar animate-fade-in-up delay-200">
-              <Space direction="vertical" size="large" style={{ width: '100%' }}>
-                {/* 草稿历史 */}
-                {drafts.length > 0 && (
-                  <div className="sidebar-card glass-card">
-                    <div className="sidebar-header">
-                      <h3 className="sidebar-title">
-                        <HistoryOutlined />
-                        草稿历史
-                      </h3>
-                      <Badge count={drafts.length} className="glass-badge" />
-                    </div>
-                    
-                    <List
-                      size="small"
-                      dataSource={drafts.slice(0, 3)}
-                      className="draft-list"
-                      renderItem={draft => (
-                        <List.Item className="draft-item glass-light hover-lift">
-                          <List.Item.Meta
-                            title={
-                              <Text ellipsis className="draft-title">
-                                {draft.title}
-                              </Text>
-                            }
-                            description={
-                              <div className="draft-meta">
-                                <Text type="secondary" className="draft-time">
-                                  {new Date(draft.savedAt).toLocaleString()}
-                                </Text>
-                                {draft.autoSaved && (
-                                  <Badge 
-                                    text="自动保存" 
-                                    status="processing" 
-                                    className="auto-save-badge"
-                                  />
-                                )}
-                              </div>
+                {/* 多媒体文件 */}
+                <Form.Item
+                  noStyle
+                  shouldUpdate={(prevValues, currentValues) =>
+                    prevValues.type !== currentValues.type
+                  }
+                >
+                  {({ getFieldValue }) => {
+                    const type = getFieldValue('type');
+                    return ['IMAGE', 'VIDEO', 'PDF'].includes(type) ? (
+                      <Form.Item
+                        name="mediaUrls"
+                        label={<span className="form-label">上传文件</span>}
+                      >
+                        <div className="media-upload-wrapper glass-light">
+                          <MediaUpload
+                            maxCount={type === 'IMAGE' ? 9 : 3}
+                            accept={
+                              type === 'IMAGE'
+                                ? 'image/*'
+                                : type === 'VIDEO'
+                                  ? 'video/*'
+                                  : '.pdf,.doc,.docx,.ppt,.pptx'
                             }
                           />
-                          <Button
-                            type="link"
-                            size="small"
-                            onClick={() => loadDraft(draft)}
-                            className="draft-load-btn hover-scale"
-                          >
-                            加载
-                          </Button>
-                        </List.Item>
-                      )}
+                        </div>
+                      </Form.Item>
+                    ) : null;
+                  }}
+                </Form.Item>
+
+                {/* 内容编辑器 */}
+                <Form.Item
+                  name="content"
+                  label={<span className="form-label">内容</span>}
+                  rules={[
+                    { required: true, message: '请输入内容' },
+                    { min: 10, message: '内容不能少于10个字符' },
+                  ]}
+                >
+                  <RichTextEditor
+                    key={editorKey}
+                    height={400}
+                    showStats={true}
+                    targetWords={1000}
+                    className="editor-wrapper glass-light"
+                  />
+                </Form.Item>
+
+                {/* 标签管理 */}
+                <Form.Item
+                  name="tags"
+                  label={<span className="form-label">标签</span>}
+                  getValueFromEvent={tags => tags.join(',')}
+                  getValueProps={value => ({
+                    value: value ? value.split(',').filter(Boolean) : [],
+                  })}
+                >
+                  <div className="tag-selector-wrapper glass-light">
+                    <TagSelector
+                      placeholder="选择或输入标签"
+                      maxTags={10}
+                      showPopular
+                      size="large"
+                      className="create-select"
                     />
-                    
-                    {drafts.length > 3 && (
-                      <Button
-                        type="link"
-                        block
-                        icon={<HistoryOutlined />}
-                        onClick={() => setShowDrafts(true)}
-                        className="view-all-btn hover-scale"
-                      >
-                        查看全部 ({drafts.length})
-                      </Button>
-                    )}
                   </div>
-                )}
+                </Form.Item>
 
-                {/* 发布提示 */}
-                <div className="sidebar-card glass-card">
-                  <div className="sidebar-header">
-                    <h3 className="sidebar-title">
-                      <BulbOutlined />
-                      发布提示
-                    </h3>
-                  </div>
-                  
-                  <div className="tips-content">
-                    <div className="tip-item">
-                      <CheckCircleOutlined className="tip-icon" />
-                      <span>标题要简洁明了，突出重点</span>
-                    </div>
-                    <div className="tip-item">
-                      <CheckCircleOutlined className="tip-icon" />
-                      <span>内容要结构清晰，逻辑性强</span>
-                    </div>
-                    <div className="tip-item">
-                      <CheckCircleOutlined className="tip-icon" />
-                      <span>添加合适的标签便于搜索</span>
-                    </div>
-                    <div className="tip-item">
-                      <CheckCircleOutlined className="tip-icon" />
-                      <span>选择正确的分类和内容类型</span>
-                    </div>
-                    <div className="tip-item">
-                      <ClockCircleOutlined className="tip-icon" />
-                      <span>系统会自动保存草稿</span>
-                    </div>
-                  </div>
-                </div>
+                <Divider className="form-divider" />
 
-                {/* 发布统计 */}
-                <div className="sidebar-card glass-card">
-                  <div className="sidebar-header">
-                    <h3 className="sidebar-title">
-                      <FileTextOutlined />
-                      内容统计
-                    </h3>
+                {/* 操作按钮 */}
+                <Form.Item className="form-actions">
+                  <div className="action-buttons">
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      icon={<SendOutlined />}
+                      loading={loading}
+                      size="large"
+                      className="glass-button glass-strong hover-lift active-scale primary-button"
+                    >
+                      {isEditing ? '更新内容' : '发布内容'}
+                    </Button>
+
+                    <Button
+                      icon={<SaveOutlined />}
+                      onClick={handleSaveDraft}
+                      size="large"
+                      className="glass-button hover-scale active-scale"
+                    >
+                      保存草稿
+                    </Button>
+
+                    <Button
+                      icon={<HistoryOutlined />}
+                      onClick={handleRestoreDraft}
+                      size="large"
+                      className="glass-button hover-scale active-scale"
+                    >
+                      恢复草稿
+                    </Button>
+
+                    <Button
+                      icon={<EyeOutlined />}
+                      onClick={handlePreview}
+                      size="large"
+                      className="glass-button hover-scale active-scale"
+                    >
+                      预览
+                    </Button>
+
+                    <Button
+                      onClick={() => navigate('/knowledge')}
+                      size="large"
+                      className="glass-button hover-scale active-scale"
+                    >
+                      取消
+                    </Button>
                   </div>
-                  
-                  <div className="stats-content">
-                    <div className="stat-item">
-                      <span className="stat-label">字数统计</span>
-                      <Progress 
-                        percent={75} 
-                        size="small" 
-                        strokeColor="var(--accent-primary)"
-                        showInfo={false}
-                      />
-                      <span className="stat-value">约 1,200 字</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">完成度</span>
-                      <Progress 
-                        percent={60} 
-                        size="small" 
-                        strokeColor="var(--accent-success)"
-                        showInfo={false}
-                      />
-                      <span className="stat-value">60%</span>
-                    </div>
-                  </div>
-                </div>
-              </Space>
+                </Form.Item>
+              </Form>
             </div>
           </Col>
         </Row>
       </div>
-
-      {/* 草稿历史弹窗 */}
-      <Modal
-        title="草稿历史"
-        open={showDrafts}
-        onCancel={() => setShowDrafts(false)}
-        footer={null}
-        width={600}
-      >
-        <List
-          dataSource={drafts}
-          renderItem={draft => (
-            <List.Item
-              actions={[
-                <Button type="link" onClick={() => loadDraft(draft)}>
-                  加载
-                </Button>,
-                <Button
-                  type="link"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => deleteDraft(draft.id)}
-                >
-                  删除
-                </Button>,
-              ]}
-            >
-              <List.Item.Meta
-                title={draft.title}
-                description={
-                  <Space direction="vertical" size="small">
-                    <Text type="secondary">
-                      {new Date(draft.savedAt).toLocaleString()}
-                      {draft.autoSaved && ' (自动保存)'}
-                    </Text>
-                    <Text type="secondary" ellipsis style={{ width: 400 }}>
-                      {draft.content.replace(/<[^>]*>/g, '').substring(0, 100)}
-                      ...
-                    </Text>
-                  </Space>
-                }
-              />
-            </List.Item>
-          )}
-        />
-      </Modal>
 
       <style>{`
         /* ===== 发布内容页面样式 ===== */
@@ -967,7 +844,61 @@ const CreateKnowledge: React.FC = () => {
 
         .form-badges {
           display: flex;
-          gap: var(--spacing-sm);
+          align-items: center;
+          gap: var(--spacing-md);
+        }
+
+        /* 保存状态指示器 */
+        .save-status {
+          display: flex;
+          align-items: center;
+        }
+
+        .save-indicator {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-xs);
+          font-size: 0.875rem;
+          padding: var(--spacing-xs) var(--spacing-sm);
+          border-radius: var(--radius-md);
+          transition: all var(--transition-fast) var(--ease-ios);
+        }
+
+        .save-indicator.saving {
+          color: var(--accent-info);
+          background: var(--info-bg);
+          border: 1px solid var(--info-border);
+        }
+
+        .save-indicator.saved {
+          color: var(--accent-success);
+          background: var(--success-bg);
+          border: 1px solid var(--success-border);
+        }
+
+        .save-indicator.unsaved {
+          color: var(--accent-warning);
+          background: var(--warning-bg);
+          border: 1px solid var(--warning-border);
+        }
+
+        .save-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: currentColor;
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 0.4;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
+          }
         }
 
         /* 表单样式 */
@@ -982,7 +913,9 @@ const CreateKnowledge: React.FC = () => {
         }
 
         .create-input,
-        .create-select {
+        .create-select,
+        .create-select .ant-select-selector,
+        .create-select .ant-tree-select-selector {
           border-radius: var(--radius-md) !important;
           border: 2px solid var(--border-color) !important;
           transition: all var(--transition-fast) var(--ease-ios);
@@ -990,14 +923,47 @@ const CreateKnowledge: React.FC = () => {
         }
 
         .create-input:hover,
-        .create-select:hover {
+        .create-select:hover,
+        .create-select:hover .ant-select-selector,
+        .create-select:hover .ant-tree-select-selector {
           border-color: var(--accent-primary) !important;
         }
 
         .create-input:focus,
-        .create-select:focus {
+        .create-select:focus,
+        .create-select.ant-select-focused .ant-select-selector,
+        .create-select.ant-tree-select-focused .ant-tree-select-selector {
           border-color: var(--accent-primary) !important;
           box-shadow: 0 0 0 3px var(--primary-200) !important;
+        }
+
+        /* 确保TreeSelect的选择器样式一致 */
+        .create-select.ant-tree-select .ant-tree-select-selector {
+          min-height: 40px;
+          padding: 4px 11px;
+        }
+
+        .create-select.ant-tree-select-large .ant-tree-select-selector {
+          min-height: 40px;
+          padding: 6px 11px;
+          font-size: 16px;
+        }
+
+        /* 确保多选Select的样式一致 */
+        .create-select.ant-select-multiple .ant-select-selector {
+          min-height: 40px;
+          padding: 2px 4px;
+        }
+
+        .create-select.ant-select-large.ant-select-multiple .ant-select-selector {
+          min-height: 40px;
+          padding: 4px 6px;
+        }
+
+        /* 统一所有选择器的字体大小 */
+        .create-select.ant-select-large .ant-select-selection-item,
+        .create-select.ant-tree-select-large .ant-select-selection-item {
+          font-size: 16px;
         }
 
         .media-upload-wrapper,
@@ -1031,126 +997,7 @@ const CreateKnowledge: React.FC = () => {
           font-weight: 600 !important;
         }
 
-        /* 侧边栏 */
-        .create-sidebar {
-          position: sticky;
-          top: var(--spacing-lg);
-        }
 
-        .sidebar-card {
-          padding: var(--spacing-xl);
-          border-radius: var(--liquid-border-radius);
-          margin-bottom: var(--spacing-lg);
-        }
-
-        .sidebar-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: var(--spacing-lg);
-        }
-
-        .sidebar-title {
-          font-size: 1rem;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin: 0;
-          display: flex;
-          align-items: center;
-          gap: var(--spacing-sm);
-        }
-
-        /* 草稿列表 */
-        .draft-list {
-          margin-bottom: var(--spacing-md);
-        }
-
-        .draft-item {
-          padding: var(--spacing-md);
-          border-radius: var(--radius-md);
-          margin-bottom: var(--spacing-sm);
-          border: 1px solid var(--glass-border);
-          transition: all var(--transition-fast) var(--ease-ios);
-        }
-
-        .draft-title {
-          font-size: 0.875rem;
-          font-weight: 500;
-          color: var(--text-primary);
-        }
-
-        .draft-meta {
-          display: flex;
-          align-items: center;
-          gap: var(--spacing-sm);
-          margin-top: var(--spacing-xs);
-        }
-
-        .draft-time {
-          font-size: 0.75rem;
-        }
-
-        .auto-save-badge {
-          font-size: 0.75rem;
-        }
-
-        .draft-load-btn {
-          color: var(--accent-primary);
-          font-size: 0.75rem;
-        }
-
-        .view-all-btn {
-          color: var(--accent-primary);
-          font-size: 0.875rem;
-          margin-top: var(--spacing-sm);
-        }
-
-        /* 提示内容 */
-        .tips-content {
-          display: flex;
-          flex-direction: column;
-          gap: var(--spacing-md);
-        }
-
-        .tip-item {
-          display: flex;
-          align-items: flex-start;
-          gap: var(--spacing-sm);
-          font-size: 0.875rem;
-          color: var(--text-secondary);
-          line-height: 1.5;
-        }
-
-        .tip-icon {
-          color: var(--accent-success);
-          margin-top: 2px;
-          flex-shrink: 0;
-        }
-
-        /* 统计内容 */
-        .stats-content {
-          display: flex;
-          flex-direction: column;
-          gap: var(--spacing-lg);
-        }
-
-        .stat-item {
-          display: flex;
-          flex-direction: column;
-          gap: var(--spacing-sm);
-        }
-
-        .stat-label {
-          font-size: 0.875rem;
-          color: var(--text-secondary);
-          font-weight: 500;
-        }
-
-        .stat-value {
-          font-size: 0.75rem;
-          color: var(--text-tertiary);
-          text-align: right;
-        }
 
         /* 响应式设计 */
         @media (max-width: 1024px) {
@@ -1168,10 +1015,7 @@ const CreateKnowledge: React.FC = () => {
             height: 30px;
           }
 
-          .create-sidebar {
-            position: static;
-            margin-top: var(--spacing-xl);
-          }
+
         }
 
         @media (max-width: 768px) {
@@ -1208,9 +1052,7 @@ const CreateKnowledge: React.FC = () => {
             justify-content: center;
           }
 
-          .sidebar-card {
-            padding: var(--spacing-lg);
-          }
+
         }
 
         @media (max-width: 640px) {
@@ -1232,7 +1074,6 @@ const CreateKnowledge: React.FC = () => {
           .create-knowledge-container,
           .create-header,
           .create-content,
-          .create-sidebar,
           .create-blob,
           .progress-icon {
             animation: none !important;

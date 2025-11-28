@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Row,
   Col,
-  Card,
   Typography,
   Space,
   Button,
@@ -11,11 +10,20 @@ import {
   Breadcrumb,
   Spin,
 } from 'antd';
-import { FolderOutlined, BarChartOutlined } from '@ant-design/icons';
+import {
+  FolderOutlined,
+  BarChartOutlined,
+  SettingOutlined,
+  TagOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { CategoryTree, TagCloud } from '@/components/knowledge';
 import type { Category } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
+import '@/styles/globals.css';
+import '@/styles/theme.css';
+import '@/styles/animations.css';
+import '@/styles/glass-effects.css';
 
 const { Title, Text } = Typography;
 
@@ -315,12 +323,23 @@ const CategoryManagement: React.FC = () => {
 
   if (!user || user.role !== 'ADMIN') {
     return (
-      <div style={{ padding: '50px', textAlign: 'center' }}>
-        <Title level={3}>权限不足</Title>
-        <Text type="secondary">只有管理员可以访问分类管理页面</Text>
-        <div style={{ marginTop: 16 }}>
+      <div className="category-access-denied animate-fade-in">
+        <div className="glass-card access-denied-card">
+          <SettingOutlined className="access-denied-icon" />
+          <Title level={3} className="access-denied-title">
+            权限不足
+          </Title>
+          <Text type="secondary" className="access-denied-description">
+            只有管理员可以访问分类管理页面
+          </Text>
           <Link to="/knowledge">
-            <Button type="primary">返回知识库</Button>
+            <Button
+              type="primary"
+              size="large"
+              className="glass-button glass-strong hover-lift active-scale"
+            >
+              返回知识库
+            </Button>
           </Link>
         </div>
       </div>
@@ -328,187 +347,718 @@ const CategoryManagement: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: '24px' }}>
-      {/* 面包屑导航 */}
-      <Breadcrumb style={{ marginBottom: 24 }}>
-        <Breadcrumb.Item>
-          <Link to="/knowledge">知识库</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>分类管理</Breadcrumb.Item>
-      </Breadcrumb>
-
-      {/* 页面标题 */}
-      <div style={{ marginBottom: 24 }}>
-        <Space
-          align="center"
-          style={{ width: '100%', justifyContent: 'space-between' }}
-        >
-          <Title level={2} style={{ margin: 0 }}>
-            <FolderOutlined style={{ marginRight: 8 }} />
-            分类管理
-          </Title>
-          <Link to="/knowledge">
-            <Button>返回知识库</Button>
-          </Link>
-        </Space>
+    <div className="category-management-container animate-fade-in">
+      {/* 背景装饰 */}
+      <div className="category-background">
+        <div className="category-blob category-blob-1" />
+        <div className="category-blob category-blob-2" />
+        <div className="category-blob category-blob-3" />
       </div>
 
-      <Spin spinning={loading}>
-        <Row gutter={24}>
-          {/* 左侧：分类树 */}
-          <Col xs={24} lg={12}>
-            <CategoryTree
-              categories={categories}
-              onCategorySelect={handleCategorySelect}
-              onCategoryCreate={handleCategoryCreate}
-              onCategoryUpdate={handleCategoryUpdate}
-              onCategoryDelete={handleCategoryDelete}
-              selectedCategoryId={selectedCategory?.id}
-              showActions={true}
-              showSearch={true}
-              showStats={true}
-            />
-          </Col>
+      <div className="category-content">
+        {/* 面包屑导航 */}
+        <div className="category-breadcrumb glass-light animate-fade-in-up">
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to="/knowledge" className="breadcrumb-link hover-scale">
+                知识库
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item className="breadcrumb-current">
+              分类管理
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </div>
 
-          {/* 右侧：统计信息和详情 */}
-          <Col xs={24} lg={12}>
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-              {/* 统计信息 */}
-              <Card title="统计概览" size="small">
-                <Row gutter={16}>
-                  <Col span={8}>
-                    <Statistic
-                      title="总分类数"
-                      value={stats.totalCategories}
-                      prefix={<FolderOutlined />}
-                    />
-                  </Col>
-                  <Col span={8}>
-                    <Statistic
-                      title="总内容数"
-                      value={stats.totalContent}
-                      prefix={<BarChartOutlined />}
-                    />
-                  </Col>
-                  <Col span={8}>
-                    <Statistic
-                      title="平均内容数"
-                      value={
-                        stats.totalCategories > 0
-                          ? Math.round(
-                              stats.totalContent / stats.totalCategories
-                            )
-                          : 0
-                      }
-                    />
-                  </Col>
-                </Row>
-              </Card>
+        {/* 页面头部 */}
+        <section className="category-header glass-light animate-fade-in-up delay-100">
+          <div className="category-header-content">
+            <div className="category-title-section">
+              <h1 className="category-title gradient-text">
+                <SettingOutlined />
+                分类管理
+              </h1>
+              <p className="category-subtitle">
+                管理知识分类体系，优化内容组织结构
+              </p>
+            </div>
 
-              {/* 热门分类 */}
-              <Card title="热门分类" size="small">
-                <Space direction="vertical" style={{ width: '100%' }}>
-                  {stats.topCategories.map((category, index) => (
-                    <div
-                      key={category.id}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '8px 0',
-                        borderBottom:
-                          index < stats.topCategories.length - 1
-                            ? '1px solid #f0f0f0'
-                            : 'none',
-                      }}
-                    >
-                      <Space>
-                        <Text strong style={{ color: '#1890ff' }}>
-                          #{index + 1}
-                        </Text>
-                        <Text>{category.name}</Text>
-                      </Space>
-                      <Text type="secondary">{category.count} 个内容</Text>
-                    </div>
-                  ))}
-                </Space>
-              </Card>
+            <div className="category-actions">
+              <Link to="/knowledge">
+                <Button
+                  size="large"
+                  className="glass-button hover-scale active-scale"
+                >
+                  返回知识库
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
 
-              {/* 选中分类详情 */}
-              {selectedCategory && (
-                <Card title="分类详情" size="small">
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <div>
-                      <Text strong>分类名称：</Text>
-                      <Text>{selectedCategory.name}</Text>
-                    </div>
-                    {selectedCategory.description && (
-                      <div>
-                        <Text strong>分类描述：</Text>
-                        <Text>{selectedCategory.description}</Text>
+        <Spin spinning={loading}>
+          <Row
+            gutter={[24, 24]}
+            className="category-main-content animate-fade-in-up delay-200"
+          >
+            {/* 左侧：分类树 */}
+            <Col xs={24} lg={12}>
+              <div className="category-tree-wrapper glass-card">
+                <div className="tree-header">
+                  <h2 className="tree-title">
+                    <FolderOutlined />
+                    分类结构
+                  </h2>
+                </div>
+                <CategoryTree
+                  categories={categories}
+                  onCategorySelect={handleCategorySelect}
+                  onCategoryCreate={handleCategoryCreate}
+                  onCategoryUpdate={handleCategoryUpdate}
+                  onCategoryDelete={handleCategoryDelete}
+                  selectedCategoryId={selectedCategory?.id}
+                  showActions={true}
+                  showSearch={true}
+                  showStats={true}
+                />
+              </div>
+            </Col>
+
+            {/* 右侧：统计信息和详情 */}
+            <Col xs={24} lg={12}>
+              <Space
+                direction="vertical"
+                size="large"
+                style={{ width: '100%' }}
+              >
+                {/* 统计信息 */}
+                <div className="stats-card glass-card">
+                  <div className="stats-header">
+                    <h2 className="stats-title">
+                      <BarChartOutlined />
+                      统计概览
+                    </h2>
+                  </div>
+                  <Row gutter={[16, 16]} className="stats-grid">
+                    <Col span={8}>
+                      <div className="stat-item glass-light hover-lift">
+                        <Statistic
+                          title="总分类数"
+                          value={stats.totalCategories}
+                          prefix={<FolderOutlined />}
+                          valueStyle={{ color: 'var(--accent-primary)' }}
+                        />
                       </div>
-                    )}
-                    <div>
-                      <Text strong>内容数量：</Text>
-                      <Text>{selectedCategory.knowledgeCount || 0} 个</Text>
+                    </Col>
+                    <Col span={8}>
+                      <div className="stat-item glass-light hover-lift">
+                        <Statistic
+                          title="总内容数"
+                          value={stats.totalContent}
+                          prefix={<BarChartOutlined />}
+                          valueStyle={{ color: 'var(--accent-success)' }}
+                        />
+                      </div>
+                    </Col>
+                    <Col span={8}>
+                      <div className="stat-item glass-light hover-lift">
+                        <Statistic
+                          title="平均内容数"
+                          value={
+                            stats.totalCategories > 0
+                              ? Math.round(
+                                  stats.totalContent / stats.totalCategories
+                                )
+                              : 0
+                          }
+                          valueStyle={{ color: 'var(--accent-warning)' }}
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+
+                {/* 热门分类 */}
+                <div className="popular-categories-card glass-card">
+                  <div className="popular-header">
+                    <h2 className="popular-title">
+                      <FolderOutlined />
+                      热门分类
+                    </h2>
+                  </div>
+                  <div className="popular-list">
+                    {stats.topCategories.map((category, index) => (
+                      <div
+                        key={category.id}
+                        className="popular-item glass-light hover-lift"
+                      >
+                        <div className="popular-rank">
+                          <span className="rank-number">#{index + 1}</span>
+                        </div>
+                        <div className="popular-info">
+                          <Text strong className="category-name">
+                            {category.name}
+                          </Text>
+                          <Text type="secondary" className="category-count">
+                            {category.count} 个内容
+                          </Text>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 选中分类详情 */}
+                {selectedCategory && (
+                  <div className="category-detail-card glass-card animate-scale-in">
+                    <div className="detail-header">
+                      <h2 className="detail-title">
+                        <FolderOutlined />
+                        分类详情
+                      </h2>
                     </div>
-                    <div>
-                      <Text strong>创建时间：</Text>
-                      <Text>
-                        {new Date(
-                          selectedCategory.createdAt
-                        ).toLocaleDateString()}
-                      </Text>
-                    </div>
-                    <div>
-                      <Text strong>排序顺序：</Text>
-                      <Text>{selectedCategory.sortOrder}</Text>
-                    </div>
-                    {selectedCategory.children &&
-                      selectedCategory.children.length > 0 && (
-                        <div>
-                          <Text strong>子分类：</Text>
-                          <div style={{ marginTop: 8 }}>
-                            <Space wrap>
+                    <div className="detail-content">
+                      <div className="detail-item">
+                        <Text strong className="detail-label">
+                          分类名称
+                        </Text>
+                        <Text className="detail-value">
+                          {selectedCategory.name}
+                        </Text>
+                      </div>
+                      {selectedCategory.description && (
+                        <div className="detail-item">
+                          <Text strong className="detail-label">
+                            分类描述
+                          </Text>
+                          <Text className="detail-value">
+                            {selectedCategory.description}
+                          </Text>
+                        </div>
+                      )}
+                      <div className="detail-item">
+                        <Text strong className="detail-label">
+                          内容数量
+                        </Text>
+                        <Text className="detail-value">
+                          {selectedCategory.knowledgeCount || 0} 个
+                        </Text>
+                      </div>
+                      <div className="detail-item">
+                        <Text strong className="detail-label">
+                          创建时间
+                        </Text>
+                        <Text className="detail-value">
+                          {new Date(
+                            selectedCategory.createdAt
+                          ).toLocaleDateString()}
+                        </Text>
+                      </div>
+                      <div className="detail-item">
+                        <Text strong className="detail-label">
+                          排序顺序
+                        </Text>
+                        <Text className="detail-value">
+                          {selectedCategory.sortOrder}
+                        </Text>
+                      </div>
+                      {selectedCategory.children &&
+                        selectedCategory.children.length > 0 && (
+                          <div className="detail-item">
+                            <Text strong className="detail-label">
+                              子分类
+                            </Text>
+                            <div className="children-list">
                               {selectedCategory.children.map(child => (
                                 <Button
                                   key={child.id}
                                   size="small"
-                                  type="dashed"
+                                  className="glass-badge hover-scale active-scale"
                                   onClick={() => setSelectedCategory(child)}
                                 >
                                   {child.name} ({child.knowledgeCount || 0})
                                 </Button>
                               ))}
-                            </Space>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    <div style={{ marginTop: 16 }}>
-                      <Link to={`/knowledge?categoryId=${selectedCategory.id}`}>
-                        <Button type="primary" size="small">
-                          查看该分类下的内容
-                        </Button>
-                      </Link>
+                        )}
+                      <div className="detail-actions">
+                        <Link
+                          to={`/knowledge?categoryId=${selectedCategory.id}`}
+                        >
+                          <Button
+                            type="primary"
+                            className="glass-button glass-strong hover-lift active-scale"
+                          >
+                            查看该分类下的内容
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                  </Space>
-                </Card>
-              )}
-            </Space>
-          </Col>
-        </Row>
+                  </div>
+                )}
+              </Space>
+            </Col>
+          </Row>
 
-        {/* 标签云 */}
-        <div style={{ marginTop: 24 }}>
-          <TagCloud
-            onTagClick={handleTagClick}
-            showSearch={true}
-            showStats={true}
-            maxTags={30}
-            title="热门标签"
-          />
-        </div>
-      </Spin>
+          {/* 标签云 */}
+          <div className="tag-cloud-section animate-fade-in-up delay-300">
+            <div className="tag-cloud-card glass-card">
+              <div className="tag-cloud-header">
+                <h2 className="tag-cloud-title">
+                  <TagOutlined />
+                  热门标签
+                </h2>
+              </div>
+              <TagCloud
+                onTagClick={handleTagClick}
+                showSearch={true}
+                showStats={true}
+                maxTags={30}
+                title=""
+              />
+            </div>
+          </div>
+        </Spin>
+      </div>
+
+      <style>{`
+        /* ===== 分类管理页面样式 ===== */
+        .category-management-container {
+          min-height: 100vh;
+          background: var(--bg-primary);
+          position: relative;
+          overflow: hidden;
+        }
+
+        /* 权限拒绝页面 */
+        .category-access-denied {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-primary);
+        }
+
+        .access-denied-card {
+          text-align: center;
+          padding: var(--spacing-3xl);
+          border-radius: var(--liquid-border-radius-lg);
+          max-width: 400px;
+        }
+
+        .access-denied-icon {
+          font-size: 4rem;
+          color: var(--text-quaternary);
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .access-denied-title {
+          color: var(--text-primary);
+          margin-bottom: var(--spacing-md) !important;
+        }
+
+        .access-denied-description {
+          display: block;
+          margin-bottom: var(--spacing-xl);
+        }
+
+        /* 背景装饰 */
+        .category-background {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: -1;
+          overflow: hidden;
+        }
+
+        .category-blob {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          filter: var(--blur-xl);
+          animation: float 8s ease-in-out infinite;
+        }
+
+        .category-blob-1 {
+          top: 10%;
+          right: 5%;
+          width: 250px;
+          height: 250px;
+          background: radial-gradient(circle, var(--primary-200) 0%, transparent 70%);
+          animation-delay: 0s;
+        }
+
+        .category-blob-2 {
+          top: 50%;
+          left: 5%;
+          width: 180px;
+          height: 180px;
+          background: radial-gradient(circle, var(--accent-success) 0%, transparent 70%);
+          animation-delay: 3s;
+        }
+
+        .category-blob-3 {
+          bottom: 20%;
+          right: 30%;
+          width: 150px;
+          height: 150px;
+          background: radial-gradient(circle, var(--accent-warning) 0%, transparent 70%);
+          animation-delay: 6s;
+        }
+
+        /* 主要内容 */
+        .category-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: var(--spacing-lg);
+        }
+
+        .category-breadcrumb {
+          padding: var(--spacing-md) var(--spacing-lg);
+          border-radius: var(--liquid-border-radius);
+          margin-bottom: var(--spacing-xl);
+        }
+
+        .breadcrumb-link {
+          color: var(--text-secondary);
+          text-decoration: none;
+          transition: color var(--transition-fast) var(--ease-ios);
+        }
+
+        .breadcrumb-link:hover {
+          color: var(--accent-primary);
+        }
+
+        .breadcrumb-current {
+          color: var(--text-primary);
+          font-weight: 500;
+        }
+
+        /* 页面头部 */
+        .category-header {
+          margin-bottom: var(--spacing-2xl);
+          padding: var(--spacing-2xl);
+          border-radius: var(--liquid-border-radius-xl);
+        }
+
+        .category-header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: var(--spacing-lg);
+        }
+
+        .category-title-section {
+          flex: 1;
+        }
+
+        .category-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin: 0 0 var(--spacing-sm);
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-md);
+          background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .category-subtitle {
+          font-size: 1.125rem;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+
+        .category-actions {
+          display: flex;
+          gap: var(--spacing-md);
+        }
+
+        /* 主要内容区域 */
+        .category-main-content {
+          margin-bottom: var(--spacing-2xl);
+        }
+
+        /* 分类树包装器 */
+        .category-tree-wrapper {
+          padding: var(--spacing-xl);
+          border-radius: var(--liquid-border-radius-lg);
+          height: fit-content;
+        }
+
+        .tree-header {
+          margin-bottom: var(--spacing-lg);
+          padding-bottom: var(--spacing-md);
+          border-bottom: 1px solid var(--border-light);
+        }
+
+        .tree-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        /* 统计卡片 */
+        .stats-card {
+          padding: var(--spacing-xl);
+          border-radius: var(--liquid-border-radius);
+        }
+
+        .stats-header {
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .stats-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        .stats-grid {
+          margin: 0;
+        }
+
+        .stat-item {
+          padding: var(--spacing-lg);
+          border-radius: var(--radius-md);
+          text-align: center;
+          transition: all var(--transition-fast) var(--ease-ios);
+        }
+
+        /* 热门分类卡片 */
+        .popular-categories-card {
+          padding: var(--spacing-xl);
+          border-radius: var(--liquid-border-radius);
+        }
+
+        .popular-header {
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .popular-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        .popular-list {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-md);
+        }
+
+        .popular-item {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-md);
+          padding: var(--spacing-md);
+          border-radius: var(--radius-md);
+          transition: all var(--transition-fast) var(--ease-ios);
+        }
+
+        .popular-rank {
+          flex-shrink: 0;
+        }
+
+        .rank-number {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          background: linear-gradient(135deg, var(--accent-primary), var(--primary-600));
+          color: white;
+          border-radius: 50%;
+          font-weight: 600;
+          font-size: 0.875rem;
+        }
+
+        .popular-info {
+          flex: 1;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .category-name {
+          color: var(--text-primary);
+        }
+
+        .category-count {
+          font-size: 0.875rem;
+        }
+
+        /* 分类详情卡片 */
+        .category-detail-card {
+          padding: var(--spacing-xl);
+          border-radius: var(--liquid-border-radius);
+        }
+
+        .detail-header {
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .detail-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        .detail-content {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-lg);
+        }
+
+        .detail-item {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+        }
+
+        .detail-label {
+          color: var(--text-secondary);
+          font-size: 0.875rem;
+        }
+
+        .detail-value {
+          color: var(--text-primary);
+        }
+
+        .children-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: var(--spacing-sm);
+          margin-top: var(--spacing-sm);
+        }
+
+        .detail-actions {
+          margin-top: var(--spacing-md);
+        }
+
+        /* 标签云区域 */
+        .tag-cloud-section {
+          margin-top: var(--spacing-2xl);
+        }
+
+        .tag-cloud-card {
+          padding: var(--spacing-xl);
+          border-radius: var(--liquid-border-radius-lg);
+        }
+
+        .tag-cloud-header {
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .tag-cloud-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+          .category-header-content {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .category-actions {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .category-content {
+            padding: var(--spacing-md);
+          }
+
+          .category-header {
+            padding: var(--spacing-xl);
+          }
+
+          .category-title {
+            font-size: 2rem;
+            justify-content: center;
+          }
+
+          .category-tree-wrapper,
+          .stats-card,
+          .popular-categories-card,
+          .category-detail-card,
+          .tag-cloud-card {
+            padding: var(--spacing-lg);
+          }
+
+          .stats-grid .ant-col {
+            margin-bottom: var(--spacing-md);
+          }
+        }
+
+        @media (max-width: 640px) {
+          .category-title {
+            font-size: 1.75rem;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+          }
+
+          .popular-item {
+            flex-direction: column;
+            text-align: center;
+            gap: var(--spacing-sm);
+          }
+
+          .popular-info {
+            flex-direction: column;
+            gap: var(--spacing-xs);
+          }
+
+          .category-blob {
+            display: none;
+          }
+        }
+
+        /* 性能优化 */
+        @media (prefers-reduced-motion: reduce) {
+          .category-management-container,
+          .category-header,
+          .category-main-content,
+          .tag-cloud-section,
+          .category-blob,
+          .stat-item,
+          .popular-item {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

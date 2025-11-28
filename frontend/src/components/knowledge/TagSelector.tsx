@@ -13,6 +13,7 @@ interface TagSelectorProps {
   maxTags?: number;
   size?: 'small' | 'middle' | 'large';
   showPopular?: boolean;
+  className?: string;
 }
 
 interface TagInfo {
@@ -29,6 +30,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   maxTags = 10,
   size = 'middle',
   showPopular = true,
+  className,
 }) => {
   const [loading, setLoading] = useState(false);
   const [allTags, setAllTags] = useState<TagInfo[]>([]);
@@ -131,7 +133,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   }, []);
 
   return (
-    <Space direction="vertical" style={{ width: '100%' }}>
+    <Space orientation="vertical" style={{ width: '100%' }}>
       {/* 主选择器 */}
       <Select
         mode="multiple"
@@ -142,6 +144,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
         size={size}
         loading={loading}
         filterOption={filterOption}
+        className={className}
         style={{ width: '100%' }}
         maxTagCount="responsive"
         tagRender={props => {

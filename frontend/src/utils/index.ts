@@ -11,3 +11,4 @@ export * from './apiTest';
 export * from './systemTest';
 export * from './optimization';
 export * from './uxImprovement';
+export * from './draftManager';

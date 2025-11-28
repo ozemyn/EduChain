@@ -22,7 +22,9 @@ const Loading: React.FC<LoadingProps> = ({
         width: '100%',
       }}
     >
-      <Spin size="large" tip={tip} {...props} />
+      <Spin size="large" {...props}>
+        <div style={{ padding: '20px' }}>{tip}</div>
+      </Spin>
     </div>
   );
 };

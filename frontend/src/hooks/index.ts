@@ -4,3 +4,5 @@ export * from './useDebounce';
 export * from './usePagination';
 export * from './useAuthToken';
 export * from './usePermissions';
+export * from './useTextStats';
+export * from './useDraftManager';

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, Space, Divider, Tooltip, message } from 'antd';
+import { Button, Space, Divider, Tooltip, message, Typography } from 'antd';
 import {
   BoldOutlined,
   ItalicOutlined,
@@ -11,8 +11,13 @@ import {
   CodeOutlined,
   UndoOutlined,
   RedoOutlined,
+  EditOutlined,
+  ClockCircleOutlined,
 } from '@ant-design/icons';
 import { uploadFile } from '@/services/api';
+import { useTextStats } from '@/hooks/useTextStats';
+
+const { Text } = Typography;
 
 interface RichTextEditorProps {
   value?: string;
@@ -20,6 +25,9 @@ interface RichTextEditorProps {
   placeholder?: string;
   height?: number;
   disabled?: boolean;
+  showStats?: boolean; // 是否显示统计信息
+  targetWords?: number; // 目标字数
+  className?: string; // 支持自定义样式
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -28,27 +36,124 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   placeholder = '请输入内容...',
   height = 300,
   disabled = false,
+  showStats = true,
+  targetWords = 1000,
+  className = '',
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [currentContent, setCurrentContent] = useState(value);
 
+  // 历史记录管理
+  const [history, setHistory] = useState<string[]>([value || '']);
+  const [historyIndex, setHistoryIndex] = useState(0);
+
+  // 实时文本统计
+  const { stats, isCalculating } = useTextStats(currentContent || '', {
+    debounceMs: 300,
+    useWorker: true,
+    wordsPerMinute: 200,
+  });
+
+  // 初始化编辑器内容
   useEffect(() => {
-    if (editorRef.current && value !== editorRef.current.innerHTML) {
-      editorRef.current.innerHTML = value;
+    if (editorRef.current && value !== undefined) {
+      const newValue = value || '';
+      const currentHTML = editorRef.current.innerHTML;
+
+      if (newValue !== currentHTML) {
+        editorRef.current.innerHTML = newValue;
+        setCurrentContent(newValue);
+      }
     }
   }, [value]);
+
+  // 确保初始内容正确设置和同步
+  useEffect(() => {
+    if (editorRef.current) {
+      const initialValue = value || '';
+
+      if (initialValue) {
+        editorRef.current.innerHTML = initialValue;
+        setCurrentContent(initialValue);
+        // 初始化时也要触发 onChange
+        onChange?.(initialValue);
+      }
+
+      // 立即同步当前内容到表单
+      setTimeout(() => {
+        if (editorRef.current) {
+          const content = editorRef.current.innerHTML;
+          setCurrentContent(content);
+          onChange?.(content);
+        }
+      }, 100);
+    }
+  }, [onChange, value]);
+
+  // 清理定时器
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleCommand = (command: string, value?: string) => {
     document.execCommand(command, false, value);
     handleContentChange();
   };
 
+  // 添加到历史记录
+  const addToHistory = (content: string) => {
+    setHistory(prev => {
+      const newHistory = prev.slice(0, historyIndex + 1);
+      newHistory.push(content);
+      // 限制历史记录数量，最多保留50条
+      if (newHistory.length > 50) {
+        newHistory.shift();
+        return newHistory;
+      }
+      return newHistory;
+    });
+    setHistoryIndex(prev => Math.min(prev + 1, 49));
+  };
+
+  // 防抖定时器引用
+  const debounceTimeoutRef = useRef<number | null>(null);
+
   const handleContentChange = () => {
     if (editorRef.current) {
       const content = editorRef.current.innerHTML;
+
+      setCurrentContent(content);
       onChange?.(content);
+
+      // 防抖添加到历史记录
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      debounceTimeoutRef.current = window.setTimeout(() => {
+        addToHistory(content);
+      }, 1000); // 1秒后添加到历史记录
     }
   };
+
+  // 定期同步内容，确保不丢失
+  useEffect(() => {
+    const syncInterval = setInterval(() => {
+      if (editorRef.current && onChange) {
+        const content = editorRef.current.innerHTML;
+        if (content !== currentContent) {
+          setCurrentContent(content);
+          onChange(content);
+        }
+      }
+    }, 2000); // 每2秒同步一次
+
+    return () => clearInterval(syncInterval);
+  }, [currentContent, onChange]);
 
   const handleImageUpload = async () => {
     const input = document.createElement('input');
@@ -86,7 +191,44 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     }
   };
 
-  const toolbarButtons = [
+  // 撤销功能
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      const content = history[newIndex];
+      setHistoryIndex(newIndex);
+      setCurrentContent(content);
+      if (editorRef.current) {
+        editorRef.current.innerHTML = content;
+      }
+      onChange?.(content);
+    }
+  };
+
+  // 清空功能（重做按钮）
+  const handleClear = () => {
+    const emptyContent = '';
+    setCurrentContent(emptyContent);
+    if (editorRef.current) {
+      editorRef.current.innerHTML = emptyContent;
+    }
+    onChange?.(emptyContent);
+    addToHistory(emptyContent);
+  };
+
+  // 工具栏按钮类型
+  interface ToolbarButton {
+    icon?: React.ReactNode;
+    title?: string;
+    command?: string;
+    value?: string;
+    onClick?: () => void;
+    loading?: boolean;
+    disabled?: boolean;
+    type?: 'divider';
+  }
+
+  const toolbarButtons: ToolbarButton[] = [
     {
       icon: <BoldOutlined />,
       title: '粗体',
@@ -140,30 +282,39 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     },
     {
       icon: <UndoOutlined />,
-      title: '撤销',
-      command: 'undo',
+      title: '撤销上一步操作',
+      onClick: handleUndo,
+      disabled: historyIndex <= 0,
     },
     {
       icon: <RedoOutlined />,
-      title: '重做',
-      command: 'redo',
+      title: '清空所有内容',
+      onClick: handleClear,
+      disabled: !currentContent || currentContent.trim() === '',
     },
   ];
 
   return (
-    <div style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}>
+    <div
+      className={className}
+      style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}
+    >
       {/* 工具栏 */}
       <div
         style={{
           padding: '8px 12px',
           borderBottom: '1px solid #d9d9d9',
           backgroundColor: '#fafafa',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
+        {/* 左侧工具按钮 */}
         <Space size="small">
           {toolbarButtons.map((button, index) => {
             if (button.type === 'divider') {
-              return <Divider key={index} type="vertical" />;
+              return <Divider key={index} orientation="vertical" />;
             }
 
             return (
@@ -172,7 +323,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                   type="text"
                   size="small"
                   icon={button.icon}
-                  disabled={disabled}
+                  disabled={disabled || button.disabled}
                   loading={button.loading}
                   onClick={() => {
                     if (button.onClick) {
@@ -186,6 +337,56 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             );
           })}
         </Space>
+
+        {/* 右侧统计信息 */}
+        {showStats && (
+          <div className="editor-stats">
+            <Space size="middle" className="stats-container">
+              <div className="stat-item">
+                <EditOutlined className="stat-icon" />
+                <Text className="stat-text">
+                  {stats.words.toLocaleString()} 字
+                  {isCalculating && <span className="calculating">...</span>}
+                </Text>
+              </div>
+              <Divider orientation="vertical" />
+              <div className="stat-item">
+                <ClockCircleOutlined className="stat-icon" />
+                <Text className="stat-text">
+                  {stats.readingTime < 1 ? '< 1' : stats.readingTime} 分钟
+                </Text>
+              </div>
+              {targetWords > 0 && (
+                <>
+                  <Divider orientation="vertical" />
+                  <div className="stat-item">
+                    <div
+                      className="progress-ring"
+                      style={
+                        {
+                          '--progress': Math.min(
+                            (stats.words / targetWords) * 100,
+                            100
+                          ),
+                          '--color':
+                            stats.words >= targetWords
+                              ? '#52c41a'
+                              : stats.words >= targetWords * 0.7
+                                ? '#faad14'
+                                : '#ff4d4f',
+                        } as React.CSSProperties
+                      }
+                    >
+                      <Text className="progress-text">
+                        {Math.round((stats.words / targetWords) * 100)}%
+                      </Text>
+                    </div>
+                  </div>
+                </>
+              )}
+            </Space>
+          </div>
+        )}
       </div>
 
       {/* 编辑器 */}
@@ -255,6 +456,88 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           
           [contenteditable] a:hover {
             text-decoration: underline;
+          }
+
+          /* 编辑器统计样式 */
+          .editor-stats {
+            user-select: none;
+          }
+
+          .stats-container {
+            align-items: center;
+          }
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+
+          .stat-icon {
+            font-size: 12px;
+            color: #666;
+          }
+
+          .stat-text {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+            white-space: nowrap;
+          }
+
+          .calculating {
+            color: #1890ff;
+            animation: blink 1s infinite;
+          }
+
+          @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+          }
+
+          /* 进度环 */
+          .progress-ring {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: conic-gradient(
+              var(--color) calc(var(--progress) * 1%),
+              #f0f0f0 calc(var(--progress) * 1%)
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .progress-ring::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fafafa;
+          }
+
+          .progress-text {
+            position: relative;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--color);
+            z-index: 1;
+          }
+
+          /* 响应式调整 */
+          @media (max-width: 768px) {
+            .editor-stats {
+              display: none;
+            }
+          }
+
+          @media (max-width: 1024px) {
+            .stat-item:last-child {
+              display: none;
+            }
           }
         `}
       </style>

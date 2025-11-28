@@ -256,7 +256,7 @@ const Profile: React.FC = () => {
           <div className="profile-user-info">
             <h1 className="profile-name gradient-text">{user.fullName}</h1>
             <p className="profile-username">@{user.username}</p>
-            
+
             <div className="profile-badges">
               <div className="glass-badge">
                 <StarOutlined />
@@ -270,9 +270,7 @@ const Profile: React.FC = () => {
               )}
             </div>
 
-            {user.bio && (
-              <p className="profile-bio">{user.bio}</p>
-            )}
+            {user.bio && <p className="profile-bio">{user.bio}</p>}
 
             <div className="profile-meta">
               <div className="profile-meta-item">
@@ -287,7 +285,9 @@ const Profile: React.FC = () => {
               )}
               <div className="profile-meta-item">
                 <CalendarOutlined />
-                <span>加入于 {new Date(user.createdAt).toLocaleDateString()}</span>
+                <span>
+                  加入于 {new Date(user.createdAt).toLocaleDateString()}
+                </span>
               </div>
             </div>
           </div>
@@ -317,7 +317,13 @@ const Profile: React.FC = () => {
         <section className="profile-stats-section animate-fade-in-up delay-100">
           <div className="stats-grid">
             <div className="stat-card glass-floating-card hover-lift">
-              <div className="stat-icon" style={{ background: 'linear-gradient(135deg, var(--accent-primary), var(--primary-600))' }}>
+              <div
+                className="stat-icon"
+                style={{
+                  background:
+                    'linear-gradient(135deg, var(--accent-primary), var(--primary-600))',
+                }}
+              >
                 <BookOutlined />
               </div>
               <div className="stat-content">
@@ -327,7 +333,13 @@ const Profile: React.FC = () => {
             </div>
 
             <div className="stat-card glass-floating-card hover-lift">
-              <div className="stat-icon" style={{ background: 'linear-gradient(135deg, var(--accent-success), #059669)' }}>
+              <div
+                className="stat-icon"
+                style={{
+                  background:
+                    'linear-gradient(135deg, var(--accent-success), #059669)',
+                }}
+              >
                 <HeartOutlined />
               </div>
               <div className="stat-content">
@@ -337,7 +349,13 @@ const Profile: React.FC = () => {
             </div>
 
             <div className="stat-card glass-floating-card hover-lift">
-              <div className="stat-icon" style={{ background: 'linear-gradient(135deg, var(--accent-warning), #d97706)' }}>
+              <div
+                className="stat-icon"
+                style={{
+                  background:
+                    'linear-gradient(135deg, var(--accent-warning), #d97706)',
+                }}
+              >
                 <EyeOutlined />
               </div>
               <div className="stat-content">
@@ -347,7 +365,13 @@ const Profile: React.FC = () => {
             </div>
 
             <div className="stat-card glass-floating-card hover-lift">
-              <div className="stat-icon" style={{ background: 'linear-gradient(135deg, var(--accent-info), #2563eb)' }}>
+              <div
+                className="stat-icon"
+                style={{
+                  background:
+                    'linear-gradient(135deg, var(--accent-info), #2563eb)',
+                }}
+              >
                 <TeamOutlined />
               </div>
               <div className="stat-content">
@@ -392,7 +416,7 @@ const Profile: React.FC = () => {
                   <Progress percent={88} strokeColor="var(--accent-success)" />
                 </div>
               </div>
-              
+
               <div className="overview-item">
                 <h3>最近活动</h3>
                 <div className="activity-list">
@@ -481,11 +505,15 @@ const Profile: React.FC = () => {
                   label="真实姓名"
                   rules={[
                     { required: true, message: '请输入真实姓名！' },
-                    { min: 2, max: 20, message: '姓名长度应在2-20个字符之间！' },
+                    {
+                      min: 2,
+                      max: 20,
+                      message: '姓名长度应在2-20个字符之间！',
+                    },
                   ]}
                 >
-                  <Input 
-                    placeholder="请输入真实姓名" 
+                  <Input
+                    placeholder="请输入真实姓名"
                     className="profile-input"
                     prefix={<UserOutlined />}
                   />
@@ -499,8 +527,8 @@ const Profile: React.FC = () => {
                     { type: 'email', message: '请输入有效的邮箱地址！' },
                   ]}
                 >
-                  <Input 
-                    placeholder="请输入邮箱地址" 
+                  <Input
+                    placeholder="请输入邮箱地址"
                     className="profile-input"
                     prefix={<MailOutlined />}
                   />
@@ -538,15 +566,15 @@ const Profile: React.FC = () => {
 
                 <Form.Item>
                   <Space>
-                    <Button 
-                      type="primary" 
-                      htmlType="submit" 
+                    <Button
+                      type="primary"
+                      htmlType="submit"
                       loading={loading}
                       className="glass-button hover-lift active-scale"
                     >
                       保存修改
                     </Button>
-                    <Button 
+                    <Button
                       onClick={() => setEditMode(false)}
                       className="glass-button hover-scale active-scale"
                     >
@@ -562,7 +590,7 @@ const Profile: React.FC = () => {
                     <h3>基本信息</h3>
                     <p>管理您的个人资料信息</p>
                   </div>
-                  <Button 
+                  <Button
                     icon={<EditOutlined />}
                     onClick={() => setEditMode(true)}
                     className="glass-button hover-lift active-scale"
@@ -570,13 +598,13 @@ const Profile: React.FC = () => {
                     编辑
                   </Button>
                 </div>
-                
+
                 <div className="settings-item">
                   <div className="settings-info">
                     <h3>账户安全</h3>
                     <p>修改密码和安全设置</p>
                   </div>
-                  <Button 
+                  <Button
                     icon={<LockOutlined />}
                     onClick={() => setPasswordModalVisible(true)}
                     className="glass-button hover-lift active-scale"
