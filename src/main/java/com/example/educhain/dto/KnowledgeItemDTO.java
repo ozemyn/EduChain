@@ -2,311 +2,332 @@ package com.example.educhain.dto;
 
 import com.example.educhain.entity.KnowledgeItem;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 知识内容DTO
- */
+/** 知识内容DTO */
 public class KnowledgeItemDTO {
 
-    private Long id;
-    private String title;
-    private String content;
-    private KnowledgeItem.ContentType type;
-    private List<String> mediaUrls;
-    private String linkUrl;
-    private Long uploaderId;
-    private String uploaderName;
-    private String uploaderAvatar;
-    private Long categoryId;
-    private String categoryName;
-    private String tags;
-    private List<String> tagList;
-    private Integer status;
-    private String statusText;
-    
-    // 统计信息
-    private Long viewCount;
-    private Long likeCount;
-    private Long favoriteCount;
-    private Long commentCount;
-    private Long shareCount;
-    private Double qualityScore;
-    
-    // 用户互动状态
-    private Boolean isLiked;
-    private Boolean isFavorited;
-    private Boolean isFollowingAuthor;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+  private Long id;
+  private String title;
+  private String content;
+  private KnowledgeItem.ContentType type;
+  private List<String> mediaUrls;
+  private String linkUrl;
+  private Long uploaderId;
+  private String uploaderName;
+  private String uploaderAvatar;
+  private Long categoryId;
+  private String categoryName;
+  private String tags;
+  private List<String> tagList;
+  private Integer status;
+  private String statusText;
 
-    // 默认构造函数
-    public KnowledgeItemDTO() {}
+  // 统计信息
+  private Long viewCount;
+  private Long likeCount;
+  private Long favoriteCount;
+  private Long commentCount;
+  private Long shareCount;
+  private Double qualityScore;
 
-    // 构造函数
-    public KnowledgeItemDTO(Long id, String title, String content, KnowledgeItem.ContentType type,
-                           Long uploaderId, String uploaderName, Long categoryId, String categoryName,
-                           String tags, Integer status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.type = type;
-        this.uploaderId = uploaderId;
-        this.uploaderName = uploaderName;
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
-        this.tags = tags;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+  // 用户互动状态
+  private Boolean isLiked;
+  private Boolean isFavorited;
+  private Boolean isFollowingAuthor;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime createdAt;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime updatedAt;
 
-    public String getTitle() {
-        return title;
-    }
+  // 默认构造函数
+  public KnowledgeItemDTO() {}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  // 构造函数
+  public KnowledgeItemDTO(
+      Long id,
+      String title,
+      String content,
+      KnowledgeItem.ContentType type,
+      Long uploaderId,
+      String uploaderName,
+      Long categoryId,
+      String categoryName,
+      String tags,
+      Integer status,
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.type = type;
+    this.uploaderId = uploaderId;
+    this.uploaderName = uploaderName;
+    this.categoryId = categoryId;
+    this.categoryName = categoryName;
+    this.tags = tags;
+    this.status = status;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 
-    public String getContent() {
-        return content;
-    }
+  // Getters and Setters
+  public Long getId() {
+    return id;
+  }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public KnowledgeItem.ContentType getType() {
-        return type;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setType(KnowledgeItem.ContentType type) {
-        this.type = type;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public List<String> getMediaUrls() {
-        return mediaUrls;
-    }
+  public String getContent() {
+    return content;
+  }
 
-    public void setMediaUrls(List<String> mediaUrls) {
-        this.mediaUrls = mediaUrls;
-    }
+  public void setContent(String content) {
+    this.content = content;
+  }
 
-    public String getLinkUrl() {
-        return linkUrl;
-    }
+  public KnowledgeItem.ContentType getType() {
+    return type;
+  }
 
-    public void setLinkUrl(String linkUrl) {
-        this.linkUrl = linkUrl;
-    }
+  public void setType(KnowledgeItem.ContentType type) {
+    this.type = type;
+  }
 
-    public Long getUploaderId() {
-        return uploaderId;
-    }
+  public List<String> getMediaUrls() {
+    return mediaUrls;
+  }
 
-    public void setUploaderId(Long uploaderId) {
-        this.uploaderId = uploaderId;
-    }
+  public void setMediaUrls(List<String> mediaUrls) {
+    this.mediaUrls = mediaUrls;
+  }
 
-    public String getUploaderName() {
-        return uploaderName;
-    }
+  public String getLinkUrl() {
+    return linkUrl;
+  }
 
-    public void setUploaderName(String uploaderName) {
-        this.uploaderName = uploaderName;
-    }
+  public void setLinkUrl(String linkUrl) {
+    this.linkUrl = linkUrl;
+  }
 
-    public String getUploaderAvatar() {
-        return uploaderAvatar;
-    }
+  public Long getUploaderId() {
+    return uploaderId;
+  }
 
-    public void setUploaderAvatar(String uploaderAvatar) {
-        this.uploaderAvatar = uploaderAvatar;
-    }
+  public void setUploaderId(Long uploaderId) {
+    this.uploaderId = uploaderId;
+  }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
+  public String getUploaderName() {
+    return uploaderName;
+  }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+  public void setUploaderName(String uploaderName) {
+    this.uploaderName = uploaderName;
+  }
 
-    public String getCategoryName() {
-        return categoryName;
-    }
+  public String getUploaderAvatar() {
+    return uploaderAvatar;
+  }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
+  public void setUploaderAvatar(String uploaderAvatar) {
+    this.uploaderAvatar = uploaderAvatar;
+  }
 
-    public String getTags() {
-        return tags;
-    }
+  public Long getCategoryId() {
+    return categoryId;
+  }
 
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
+  }
 
-    public List<String> getTagList() {
-        return tagList;
-    }
+  public String getCategoryName() {
+    return categoryName;
+  }
 
-    public void setTagList(List<String> tagList) {
-        this.tagList = tagList;
-    }
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+  }
 
-    public Integer getStatus() {
-        return status;
-    }
+  public String getTags() {
+    return tags;
+  }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
 
-    public String getStatusText() {
-        return statusText;
-    }
+  public List<String> getTagList() {
+    return tagList;
+  }
 
-    public void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
+  public void setTagList(List<String> tagList) {
+    this.tagList = tagList;
+  }
 
-    public Long getViewCount() {
-        return viewCount;
-    }
+  public Integer getStatus() {
+    return status;
+  }
 
-    public void setViewCount(Long viewCount) {
-        this.viewCount = viewCount;
-    }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
 
-    public Long getLikeCount() {
-        return likeCount;
-    }
+  public String getStatusText() {
+    return statusText;
+  }
 
-    public void setLikeCount(Long likeCount) {
-        this.likeCount = likeCount;
-    }
+  public void setStatusText(String statusText) {
+    this.statusText = statusText;
+  }
 
-    public Long getFavoriteCount() {
-        return favoriteCount;
-    }
+  public Long getViewCount() {
+    return viewCount;
+  }
 
-    public void setFavoriteCount(Long favoriteCount) {
-        this.favoriteCount = favoriteCount;
-    }
+  public void setViewCount(Long viewCount) {
+    this.viewCount = viewCount;
+  }
 
-    public Long getCommentCount() {
-        return commentCount;
-    }
+  public Long getLikeCount() {
+    return likeCount;
+  }
 
-    public void setCommentCount(Long commentCount) {
-        this.commentCount = commentCount;
-    }
+  public void setLikeCount(Long likeCount) {
+    this.likeCount = likeCount;
+  }
 
-    public Long getShareCount() {
-        return shareCount;
-    }
+  public Long getFavoriteCount() {
+    return favoriteCount;
+  }
 
-    public void setShareCount(Long shareCount) {
-        this.shareCount = shareCount;
-    }
+  public void setFavoriteCount(Long favoriteCount) {
+    this.favoriteCount = favoriteCount;
+  }
 
-    public Double getQualityScore() {
-        return qualityScore;
-    }
+  public Long getCommentCount() {
+    return commentCount;
+  }
 
-    public void setQualityScore(Double qualityScore) {
-        this.qualityScore = qualityScore;
-    }
+  public void setCommentCount(Long commentCount) {
+    this.commentCount = commentCount;
+  }
 
-    public Boolean getIsLiked() {
-        return isLiked;
-    }
+  public Long getShareCount() {
+    return shareCount;
+  }
 
-    public void setIsLiked(Boolean isLiked) {
-        this.isLiked = isLiked;
-    }
+  public void setShareCount(Long shareCount) {
+    this.shareCount = shareCount;
+  }
 
-    public Boolean getIsFavorited() {
-        return isFavorited;
-    }
+  public Double getQualityScore() {
+    return qualityScore;
+  }
 
-    public void setIsFavorited(Boolean isFavorited) {
-        this.isFavorited = isFavorited;
-    }
+  public void setQualityScore(Double qualityScore) {
+    this.qualityScore = qualityScore;
+  }
 
-    public Boolean getIsFollowingAuthor() {
-        return isFollowingAuthor;
-    }
+  public Boolean getIsLiked() {
+    return isLiked;
+  }
 
-    public void setIsFollowingAuthor(Boolean isFollowingAuthor) {
-        this.isFollowingAuthor = isFollowingAuthor;
-    }
+  public void setIsLiked(Boolean isLiked) {
+    this.isLiked = isLiked;
+  }
 
-    // 便利方法
-    public void setUserLiked(Boolean userLiked) {
-        this.isLiked = userLiked;
-    }
+  public Boolean getIsFavorited() {
+    return isFavorited;
+  }
 
-    public void setUserFavorited(Boolean userFavorited) {
-        this.isFavorited = userFavorited;
-    }
+  public void setIsFavorited(Boolean isFavorited) {
+    this.isFavorited = isFavorited;
+  }
 
-    public Boolean getUserLiked() {
-        return this.isLiked;
-    }
+  public Boolean getIsFollowingAuthor() {
+    return isFollowingAuthor;
+  }
 
-    public Boolean getUserFavorited() {
-        return this.isFavorited;
-    }
+  public void setIsFollowingAuthor(Boolean isFollowingAuthor) {
+    this.isFollowingAuthor = isFollowingAuthor;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  // 便利方法
+  public void setUserLiked(Boolean userLiked) {
+    this.isLiked = userLiked;
+  }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setUserFavorited(Boolean userFavorited) {
+    this.isFavorited = userFavorited;
+  }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+  public Boolean getUserLiked() {
+    return this.isLiked;
+  }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+  public Boolean getUserFavorited() {
+    return this.isFavorited;
+  }
 
-    @Override
-    public String toString() {
-        return "KnowledgeItemDTO{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", type=" + type +
-                ", uploaderId=" + uploaderId +
-                ", uploaderName='" + uploaderName + '\'' +
-                ", categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", status=" + status +
-                ", viewCount=" + viewCount +
-                ", likeCount=" + likeCount +
-                ", createdAt=" + createdAt +
-                '}';
-    }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  @Override
+  public String toString() {
+    return "KnowledgeItemDTO{"
+        + "id="
+        + id
+        + ", title='"
+        + title
+        + '\''
+        + ", type="
+        + type
+        + ", uploaderId="
+        + uploaderId
+        + ", uploaderName='"
+        + uploaderName
+        + '\''
+        + ", categoryId="
+        + categoryId
+        + ", categoryName='"
+        + categoryName
+        + '\''
+        + ", status="
+        + status
+        + ", viewCount="
+        + viewCount
+        + ", likeCount="
+        + likeCount
+        + ", createdAt="
+        + createdAt
+        + '}';
+  }
 }

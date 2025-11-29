@@ -1,162 +1,170 @@
 package com.example.educhain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
-/**
- * 标签DTO
- */
+/** 标签DTO */
 public class TagDTO {
 
-    private Long id;
-    private String name;
-    private String description;
-    private Long usageCount;
-    private String category;
-    private String color;
-    private Integer status;
-    private String statusText;
-    private Long creatorId;
-    private String creatorName;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastUsedAt;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+  private Long id;
+  private String name;
+  private String description;
+  private Long usageCount;
+  private String category;
+  private String color;
+  private Integer status;
+  private String statusText;
+  private Long creatorId;
+  private String creatorName;
 
-    // 默认构造函数
-    public TagDTO() {}
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime lastUsedAt;
 
-    // 构造函数
-    public TagDTO(Long id, String name, String description, Long usageCount, String category, Integer status) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.usageCount = usageCount;
-        this.category = category;
-        this.status = status;
-    }
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime createdAt;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime updatedAt;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  // 默认构造函数
+  public TagDTO() {}
 
-    public String getName() {
-        return name;
-    }
+  // 构造函数
+  public TagDTO(
+      Long id, String name, String description, Long usageCount, String category, Integer status) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.usageCount = usageCount;
+    this.category = category;
+    this.status = status;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  // Getters and Setters
+  public Long getId() {
+    return id;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Long getUsageCount() {
-        return usageCount;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setUsageCount(Long usageCount) {
-        this.usageCount = usageCount;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getCategory() {
-        return category;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+  public Long getUsageCount() {
+    return usageCount;
+  }
 
-    public String getColor() {
-        return color;
-    }
+  public void setUsageCount(Long usageCount) {
+    this.usageCount = usageCount;
+  }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+  public String getCategory() {
+    return category;
+  }
 
-    public Integer getStatus() {
-        return status;
-    }
+  public void setCategory(String category) {
+    this.category = category;
+  }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+  public String getColor() {
+    return color;
+  }
 
-    public String getStatusText() {
-        return statusText;
-    }
+  public void setColor(String color) {
+    this.color = color;
+  }
 
-    public void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
+  public Integer getStatus() {
+    return status;
+  }
 
-    public Long getCreatorId() {
-        return creatorId;
-    }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
 
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
-    }
+  public String getStatusText() {
+    return statusText;
+  }
 
-    public String getCreatorName() {
-        return creatorName;
-    }
+  public void setStatusText(String statusText) {
+    this.statusText = statusText;
+  }
 
-    public void setCreatorName(String creatorName) {
-        this.creatorName = creatorName;
-    }
+  public Long getCreatorId() {
+    return creatorId;
+  }
 
-    public LocalDateTime getLastUsedAt() {
-        return lastUsedAt;
-    }
+  public void setCreatorId(Long creatorId) {
+    this.creatorId = creatorId;
+  }
 
-    public void setLastUsedAt(LocalDateTime lastUsedAt) {
-        this.lastUsedAt = lastUsedAt;
-    }
+  public String getCreatorName() {
+    return creatorName;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public void setCreatorName(String creatorName) {
+    this.creatorName = creatorName;
+  }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public LocalDateTime getLastUsedAt() {
+    return lastUsedAt;
+  }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+  public void setLastUsedAt(LocalDateTime lastUsedAt) {
+    this.lastUsedAt = lastUsedAt;
+  }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    @Override
-    public String toString() {
-        return "TagDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", usageCount=" + usageCount +
-                ", category='" + category + '\'' +
-                ", status=" + status +
-                ", createdAt=" + createdAt +
-                '}';
-    }
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  @Override
+  public String toString() {
+    return "TagDTO{"
+        + "id="
+        + id
+        + ", name='"
+        + name
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", usageCount="
+        + usageCount
+        + ", category='"
+        + category
+        + '\''
+        + ", status="
+        + status
+        + ", createdAt="
+        + createdAt
+        + '}';
+  }
 }

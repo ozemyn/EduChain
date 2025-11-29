@@ -2,138 +2,144 @@ package com.example.educhain.dto;
 
 import com.example.educhain.entity.KnowledgeItem;
 import jakarta.validation.constraints.Size;
-
 import java.util.List;
 
-/**
- * 更新知识内容请求DTO
- */
+/** 更新知识内容请求DTO */
 public class UpdateKnowledgeRequest {
 
-    @Size(min = 1, max = 200, message = "标题长度必须在1-200个字符之间")
-    private String title;
+  @Size(min = 1, max = 200, message = "标题长度必须在1-200个字符之间")
+  private String title;
 
-    private String content;
+  private String content;
 
-    private KnowledgeItem.ContentType type;
+  private KnowledgeItem.ContentType type;
 
-    private List<String> mediaUrls;
+  private List<String> mediaUrls;
 
-    private String linkUrl;
+  private String linkUrl;
 
-    private Long categoryId;
+  private Long categoryId;
 
-    private String tags;
+  private String tags;
 
-    private List<String> tagList;
+  private List<String> tagList;
 
-    private String description;
+  private String description;
 
-    private Integer status;
+  private Integer status;
 
-    private String changeSummary; // 变更摘要
+  private String changeSummary; // 变更摘要
 
-    // 默认构造函数
-    public UpdateKnowledgeRequest() {}
+  // 默认构造函数
+  public UpdateKnowledgeRequest() {}
 
-    // Getters and Setters
-    public String getTitle() {
-        return title;
-    }
+  // Getters and Setters
+  public String getTitle() {
+    return title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getContent() {
-        return content;
-    }
+  public String getContent() {
+    return content;
+  }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public void setContent(String content) {
+    this.content = content;
+  }
 
-    public KnowledgeItem.ContentType getType() {
-        return type;
-    }
+  public KnowledgeItem.ContentType getType() {
+    return type;
+  }
 
-    public void setType(KnowledgeItem.ContentType type) {
-        this.type = type;
-    }
+  public void setType(KnowledgeItem.ContentType type) {
+    this.type = type;
+  }
 
-    public List<String> getMediaUrls() {
-        return mediaUrls;
-    }
+  public List<String> getMediaUrls() {
+    return mediaUrls;
+  }
 
-    public void setMediaUrls(List<String> mediaUrls) {
-        this.mediaUrls = mediaUrls;
-    }
+  public void setMediaUrls(List<String> mediaUrls) {
+    this.mediaUrls = mediaUrls;
+  }
 
-    public String getLinkUrl() {
-        return linkUrl;
-    }
+  public String getLinkUrl() {
+    return linkUrl;
+  }
 
-    public void setLinkUrl(String linkUrl) {
-        this.linkUrl = linkUrl;
-    }
+  public void setLinkUrl(String linkUrl) {
+    this.linkUrl = linkUrl;
+  }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
+  public Long getCategoryId() {
+    return categoryId;
+  }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
+  }
 
-    public String getTags() {
-        return tags;
-    }
+  public String getTags() {
+    return tags;
+  }
 
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+  public void setTags(String tags) {
+    this.tags = tags;
+  }
 
-    public List<String> getTagList() {
-        return tagList;
-    }
+  public List<String> getTagList() {
+    return tagList;
+  }
 
-    public void setTagList(List<String> tagList) {
-        this.tagList = tagList;
-    }
+  public void setTagList(List<String> tagList) {
+    this.tagList = tagList;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public Integer getStatus() {
-        return status;
-    }
+  public Integer getStatus() {
+    return status;
+  }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
 
-    public String getChangeSummary() {
-        return changeSummary;
-    }
+  public String getChangeSummary() {
+    return changeSummary;
+  }
 
-    public void setChangeSummary(String changeSummary) {
-        this.changeSummary = changeSummary;
-    }
+  public void setChangeSummary(String changeSummary) {
+    this.changeSummary = changeSummary;
+  }
 
-    @Override
-    public String toString() {
-        return "UpdateKnowledgeRequest{" +
-                "title='" + title + '\'' +
-                ", type=" + type +
-                ", categoryId=" + categoryId +
-                ", tags='" + tags + '\'' +
-                ", status=" + status +
-                ", changeSummary='" + changeSummary + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "UpdateKnowledgeRequest{"
+        + "title='"
+        + title
+        + '\''
+        + ", type="
+        + type
+        + ", categoryId="
+        + categoryId
+        + ", tags='"
+        + tags
+        + '\''
+        + ", status="
+        + status
+        + ", changeSummary='"
+        + changeSummary
+        + '\''
+        + '}';
+  }
 }

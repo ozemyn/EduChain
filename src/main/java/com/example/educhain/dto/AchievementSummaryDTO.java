@@ -4,184 +4,191 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 成就系统概览DTO
- */
+/** 成就系统概览DTO */
 public class AchievementSummaryDTO {
 
-    private Long userId;
-    private String username;
-    
-    // 成就统计
-    private Long totalAchievements;
-    private Long completedAchievements;
-    private Long pendingAchievements;
-    private Integer totalPoints;
-    private Integer currentLevel;
-    
-    // 进度信息
-    private Double overallProgress;
-    private List<UserAchievementDTO> recentAchievements;
-    private List<UserAchievementDTO> nearCompletionAchievements;
-    private List<UserAchievementDTO> upgradableAchievements;
-    
-    // 排行榜信息
-    private Integer globalRank;
-    private Map<String, Integer> typeRanks;
-    
-    // 统计信息
-    private Map<String, Long> achievementsByType;
-    private LocalDateTime lastAchievementDate;
-    private String nextMilestone;
-    
-    // 默认构造函数
-    public AchievementSummaryDTO() {}
+  private Long userId;
+  private String username;
 
-    public AchievementSummaryDTO(Long userId, String username) {
-        this.userId = userId;
-        this.username = username;
-    }
+  // 成就统计
+  private Long totalAchievements;
+  private Long completedAchievements;
+  private Long pendingAchievements;
+  private Integer totalPoints;
+  private Integer currentLevel;
 
-    // Getters and Setters
-    public Long getUserId() {
-        return userId;
-    }
+  // 进度信息
+  private Double overallProgress;
+  private List<UserAchievementDTO> recentAchievements;
+  private List<UserAchievementDTO> nearCompletionAchievements;
+  private List<UserAchievementDTO> upgradableAchievements;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+  // 排行榜信息
+  private Integer globalRank;
+  private Map<String, Integer> typeRanks;
 
-    public String getUsername() {
-        return username;
-    }
+  // 统计信息
+  private Map<String, Long> achievementsByType;
+  private LocalDateTime lastAchievementDate;
+  private String nextMilestone;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  // 默认构造函数
+  public AchievementSummaryDTO() {}
 
-    public Long getTotalAchievements() {
-        return totalAchievements;
-    }
+  public AchievementSummaryDTO(Long userId, String username) {
+    this.userId = userId;
+    this.username = username;
+  }
 
-    public void setTotalAchievements(Long totalAchievements) {
-        this.totalAchievements = totalAchievements;
-    }
+  // Getters and Setters
+  public Long getUserId() {
+    return userId;
+  }
 
-    public Long getCompletedAchievements() {
-        return completedAchievements;
-    }
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
-    public void setCompletedAchievements(Long completedAchievements) {
-        this.completedAchievements = completedAchievements;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public Long getPendingAchievements() {
-        return pendingAchievements;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setPendingAchievements(Long pendingAchievements) {
-        this.pendingAchievements = pendingAchievements;
-    }
+  public Long getTotalAchievements() {
+    return totalAchievements;
+  }
 
-    public Integer getTotalPoints() {
-        return totalPoints;
-    }
+  public void setTotalAchievements(Long totalAchievements) {
+    this.totalAchievements = totalAchievements;
+  }
 
-    public void setTotalPoints(Integer totalPoints) {
-        this.totalPoints = totalPoints;
-    }
+  public Long getCompletedAchievements() {
+    return completedAchievements;
+  }
 
-    public Integer getCurrentLevel() {
-        return currentLevel;
-    }
+  public void setCompletedAchievements(Long completedAchievements) {
+    this.completedAchievements = completedAchievements;
+  }
 
-    public void setCurrentLevel(Integer currentLevel) {
-        this.currentLevel = currentLevel;
-    }
+  public Long getPendingAchievements() {
+    return pendingAchievements;
+  }
 
-    public Double getOverallProgress() {
-        return overallProgress;
-    }
+  public void setPendingAchievements(Long pendingAchievements) {
+    this.pendingAchievements = pendingAchievements;
+  }
 
-    public void setOverallProgress(Double overallProgress) {
-        this.overallProgress = overallProgress;
-    }
+  public Integer getTotalPoints() {
+    return totalPoints;
+  }
 
-    public List<UserAchievementDTO> getRecentAchievements() {
-        return recentAchievements;
-    }
+  public void setTotalPoints(Integer totalPoints) {
+    this.totalPoints = totalPoints;
+  }
 
-    public void setRecentAchievements(List<UserAchievementDTO> recentAchievements) {
-        this.recentAchievements = recentAchievements;
-    }
+  public Integer getCurrentLevel() {
+    return currentLevel;
+  }
 
-    public List<UserAchievementDTO> getNearCompletionAchievements() {
-        return nearCompletionAchievements;
-    }
+  public void setCurrentLevel(Integer currentLevel) {
+    this.currentLevel = currentLevel;
+  }
 
-    public void setNearCompletionAchievements(List<UserAchievementDTO> nearCompletionAchievements) {
-        this.nearCompletionAchievements = nearCompletionAchievements;
-    }
+  public Double getOverallProgress() {
+    return overallProgress;
+  }
 
-    public List<UserAchievementDTO> getUpgradableAchievements() {
-        return upgradableAchievements;
-    }
+  public void setOverallProgress(Double overallProgress) {
+    this.overallProgress = overallProgress;
+  }
 
-    public void setUpgradableAchievements(List<UserAchievementDTO> upgradableAchievements) {
-        this.upgradableAchievements = upgradableAchievements;
-    }
+  public List<UserAchievementDTO> getRecentAchievements() {
+    return recentAchievements;
+  }
 
-    public Integer getGlobalRank() {
-        return globalRank;
-    }
+  public void setRecentAchievements(List<UserAchievementDTO> recentAchievements) {
+    this.recentAchievements = recentAchievements;
+  }
 
-    public void setGlobalRank(Integer globalRank) {
-        this.globalRank = globalRank;
-    }
+  public List<UserAchievementDTO> getNearCompletionAchievements() {
+    return nearCompletionAchievements;
+  }
 
-    public Map<String, Integer> getTypeRanks() {
-        return typeRanks;
-    }
+  public void setNearCompletionAchievements(List<UserAchievementDTO> nearCompletionAchievements) {
+    this.nearCompletionAchievements = nearCompletionAchievements;
+  }
 
-    public void setTypeRanks(Map<String, Integer> typeRanks) {
-        this.typeRanks = typeRanks;
-    }
+  public List<UserAchievementDTO> getUpgradableAchievements() {
+    return upgradableAchievements;
+  }
 
-    public Map<String, Long> getAchievementsByType() {
-        return achievementsByType;
-    }
+  public void setUpgradableAchievements(List<UserAchievementDTO> upgradableAchievements) {
+    this.upgradableAchievements = upgradableAchievements;
+  }
 
-    public void setAchievementsByType(Map<String, Long> achievementsByType) {
-        this.achievementsByType = achievementsByType;
-    }
+  public Integer getGlobalRank() {
+    return globalRank;
+  }
 
-    public LocalDateTime getLastAchievementDate() {
-        return lastAchievementDate;
-    }
+  public void setGlobalRank(Integer globalRank) {
+    this.globalRank = globalRank;
+  }
 
-    public void setLastAchievementDate(LocalDateTime lastAchievementDate) {
-        this.lastAchievementDate = lastAchievementDate;
-    }
+  public Map<String, Integer> getTypeRanks() {
+    return typeRanks;
+  }
 
-    public String getNextMilestone() {
-        return nextMilestone;
-    }
+  public void setTypeRanks(Map<String, Integer> typeRanks) {
+    this.typeRanks = typeRanks;
+  }
 
-    public void setNextMilestone(String nextMilestone) {
-        this.nextMilestone = nextMilestone;
-    }
+  public Map<String, Long> getAchievementsByType() {
+    return achievementsByType;
+  }
 
-    @Override
-    public String toString() {
-        return "AchievementSummaryDTO{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", totalAchievements=" + totalAchievements +
-                ", completedAchievements=" + completedAchievements +
-                ", totalPoints=" + totalPoints +
-                ", currentLevel=" + currentLevel +
-                ", overallProgress=" + overallProgress +
-                ", globalRank=" + globalRank +
-                '}';
-    }
+  public void setAchievementsByType(Map<String, Long> achievementsByType) {
+    this.achievementsByType = achievementsByType;
+  }
+
+  public LocalDateTime getLastAchievementDate() {
+    return lastAchievementDate;
+  }
+
+  public void setLastAchievementDate(LocalDateTime lastAchievementDate) {
+    this.lastAchievementDate = lastAchievementDate;
+  }
+
+  public String getNextMilestone() {
+    return nextMilestone;
+  }
+
+  public void setNextMilestone(String nextMilestone) {
+    this.nextMilestone = nextMilestone;
+  }
+
+  @Override
+  public String toString() {
+    return "AchievementSummaryDTO{"
+        + "userId="
+        + userId
+        + ", username='"
+        + username
+        + '\''
+        + ", totalAchievements="
+        + totalAchievements
+        + ", completedAchievements="
+        + completedAchievements
+        + ", totalPoints="
+        + totalPoints
+        + ", currentLevel="
+        + currentLevel
+        + ", overallProgress="
+        + overallProgress
+        + ", globalRank="
+        + globalRank
+        + '}';
+  }
 }

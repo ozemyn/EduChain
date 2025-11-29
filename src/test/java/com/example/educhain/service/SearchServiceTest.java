@@ -1,10 +1,17 @@
 package com.example.educhain.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 import com.example.educhain.dto.SearchRequest;
 import com.example.educhain.dto.SearchResultDTO;
 import com.example.educhain.entity.SearchIndex;
 import com.example.educhain.repository.*;
 import com.example.educhain.service.impl.SearchServiceImpl;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,250 +23,237 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
-/**
- * 搜索服务测试类
- */
+/** 搜索服务测试类 */
 @ExtendWith(MockitoExtension.class)
 class SearchServiceTest {
 
-    @Mock
-    private SearchIndexRepository searchIndexRepository;
+  @Mock private SearchIndexRepository searchIndexRepository;
 
-    @Mock
-    private HotKeywordRepository hotKeywordRepository;
+  @Mock private HotKeywordRepository hotKeywordRepository;
 
-    @Mock
-    private KnowledgeItemRepository knowledgeItemRepository;
+  @Mock private KnowledgeItemRepository knowledgeItemRepository;
 
-    @Mock
-    private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-    @Mock
-    private CategoryRepository categoryRepository;
+  @Mock private CategoryRepository categoryRepository;
 
-    @Mock
-    private UserInteractionRepository userInteractionRepository;
+  @Mock private UserInteractionRepository userInteractionRepository;
 
-    @Mock
-    private CommentRepository commentRepository;
+  @Mock private CommentRepository commentRepository;
 
-    @InjectMocks
-    private SearchServiceImpl searchService;
+  @InjectMocks private SearchServiceImpl searchService;
 
-    private SearchIndex testSearchIndex;
-    private List<SearchIndex> testSearchIndexes;
+  private SearchIndex testSearchIndex;
+  private List<SearchIndex> testSearchIndexes;
 
-    @BeforeEach
-    void setUp() {
-        testSearchIndex = new SearchIndex();
-        testSearchIndex.setId(1L);
-        testSearchIndex.setKnowledgeId(1L);
-        testSearchIndex.setTitle("Java编程基础");
-        testSearchIndex.setContentSummary("Java是一种面向对象的编程语言...");
-        testSearchIndex.setTags("Java,编程,基础");
-        testSearchIndex.setCategoryId(1L);
-        testSearchIndex.setCategoryName("编程语言");
-        testSearchIndex.setUploaderId(1L);
-        testSearchIndex.setUploaderName("张三");
-        testSearchIndex.setViewCount(100L);
-        testSearchIndex.setLikeCount(20L);
-        testSearchIndex.setFavoriteCount(15L);
-        testSearchIndex.setCommentCount(5L);
-        testSearchIndex.setQualityScore(85.5);
-        testSearchIndex.setStatus(1);
-        testSearchIndex.setCreatedAt(LocalDateTime.now());
-        testSearchIndex.setUpdatedAt(LocalDateTime.now());
+  @BeforeEach
+  void setUp() {
+    testSearchIndex = new SearchIndex();
+    testSearchIndex.setId(1L);
+    testSearchIndex.setKnowledgeId(1L);
+    testSearchIndex.setTitle("Java编程基础");
+    testSearchIndex.setContentSummary("Java是一种面向对象的编程语言...");
+    testSearchIndex.setTags("Java,编程,基础");
+    testSearchIndex.setCategoryId(1L);
+    testSearchIndex.setCategoryName("编程语言");
+    testSearchIndex.setUploaderId(1L);
+    testSearchIndex.setUploaderName("张三");
+    testSearchIndex.setViewCount(100L);
+    testSearchIndex.setLikeCount(20L);
+    testSearchIndex.setFavoriteCount(15L);
+    testSearchIndex.setCommentCount(5L);
+    testSearchIndex.setQualityScore(85.5);
+    testSearchIndex.setStatus(1);
+    testSearchIndex.setCreatedAt(LocalDateTime.now());
+    testSearchIndex.setUpdatedAt(LocalDateTime.now());
 
-        testSearchIndexes = Arrays.asList(testSearchIndex);
-    }
+    testSearchIndexes = Arrays.asList(testSearchIndex);
+  }
 
-    @Test
-    void testFullTextSearch() {
-        // Given
-        String keyword = "Java";
-        int page = 0;
-        int size = 20;
-        Pageable pageable = PageRequest.of(page, size);
-        Page<SearchIndex> mockPage = new PageImpl<>(testSearchIndexes, pageable, 1);
+  @Test
+  void testFullTextSearch() {
+    // Given
+    String keyword = "Java";
+    int page = 0;
+    int size = 20;
+    Pageable pageable = PageRequest.of(page, size);
+    Page<SearchIndex> mockPage = new PageImpl<>(testSearchIndexes, pageable, 1);
 
-        when(searchIndexRepository.fullTextSearch(eq("java"), eq(1), any(Pageable.class)))
-                .thenReturn(mockPage);
+    when(searchIndexRepository.fullTextSearch(eq("java"), eq(1), any(Pageable.class)))
+        .thenReturn(mockPage);
 
-        // When
-        Page<SearchResultDTO> result = searchService.fullTextSearch(keyword, page, size);
+    // When
+    Page<SearchResultDTO> result = searchService.fullTextSearch(keyword, page, size);
 
-        // Then
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(1, result.getContent().size());
-        
-        SearchResultDTO resultDTO = result.getContent().get(0);
-        assertEquals(testSearchIndex.getKnowledgeId(), resultDTO.getId());
-        assertEquals(testSearchIndex.getTitle(), resultDTO.getTitle());
-        assertEquals(testSearchIndex.getContentSummary(), resultDTO.getContentSummary());
-        assertEquals(testSearchIndex.getQualityScore(), resultDTO.getQualityScore());
+    // Then
+    assertNotNull(result);
+    assertEquals(1, result.getTotalElements());
+    assertEquals(1, result.getContent().size());
 
-        verify(searchIndexRepository).fullTextSearch(eq("java"), eq(1), any(Pageable.class));
-    }
+    SearchResultDTO resultDTO = result.getContent().get(0);
+    assertEquals(testSearchIndex.getKnowledgeId(), resultDTO.getId());
+    assertEquals(testSearchIndex.getTitle(), resultDTO.getTitle());
+    assertEquals(testSearchIndex.getContentSummary(), resultDTO.getContentSummary());
+    assertEquals(testSearchIndex.getQualityScore(), resultDTO.getQualityScore());
 
-    @Test
-    void testAdvancedSearch() {
-        // Given
-        SearchRequest request = new SearchRequest();
-        request.setKeyword("Java");
-        request.setCategoryId(1L);
-        request.setPage(0);
-        request.setSize(20);
+    verify(searchIndexRepository).fullTextSearch(eq("java"), eq(1), any(Pageable.class));
+  }
 
-        Pageable pageable = PageRequest.of(0, 20);
-        Page<SearchIndex> mockPage = new PageImpl<>(testSearchIndexes, pageable, 1);
+  @Test
+  void testAdvancedSearch() {
+    // Given
+    SearchRequest request = new SearchRequest();
+    request.setKeyword("Java");
+    request.setCategoryId(1L);
+    request.setPage(0);
+    request.setSize(20);
 
-        when(searchIndexRepository.advancedSearch(
-                eq(1L), isNull(), isNull(), eq("java"), eq(1), any(Pageable.class)))
-                .thenReturn(mockPage);
+    Pageable pageable = PageRequest.of(0, 20);
+    Page<SearchIndex> mockPage = new PageImpl<>(testSearchIndexes, pageable, 1);
 
-        // When
-        Page<SearchResultDTO> result = searchService.advancedSearch(request);
+    when(searchIndexRepository.advancedSearch(
+            eq(1L), isNull(), isNull(), eq("java"), eq(1), any(Pageable.class)))
+        .thenReturn(mockPage);
 
-        // Then
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(1, result.getContent().size());
+    // When
+    Page<SearchResultDTO> result = searchService.advancedSearch(request);
 
-        SearchResultDTO resultDTO = result.getContent().get(0);
-        assertEquals(testSearchIndex.getKnowledgeId(), resultDTO.getId());
-        assertEquals(testSearchIndex.getTitle(), resultDTO.getTitle());
+    // Then
+    assertNotNull(result);
+    assertEquals(1, result.getTotalElements());
+    assertEquals(1, result.getContent().size());
 
-        verify(searchIndexRepository).advancedSearch(
-                eq(1L), isNull(), isNull(), eq("java"), eq(1), any(Pageable.class));
-    }
+    SearchResultDTO resultDTO = result.getContent().get(0);
+    assertEquals(testSearchIndex.getKnowledgeId(), resultDTO.getId());
+    assertEquals(testSearchIndex.getTitle(), resultDTO.getTitle());
 
-    @Test
-    void testSearchWithEmptyKeyword() {
-        // Given
-        SearchRequest request = new SearchRequest();
-        request.setKeyword("");
-        request.setPage(0);
-        request.setSize(20);
+    verify(searchIndexRepository)
+        .advancedSearch(eq(1L), isNull(), isNull(), eq("java"), eq(1), any(Pageable.class));
+  }
 
-        // When
-        Page<SearchResultDTO> result = searchService.search(request);
+  @Test
+  void testSearchWithEmptyKeyword() {
+    // Given
+    SearchRequest request = new SearchRequest();
+    request.setKeyword("");
+    request.setPage(0);
+    request.setSize(20);
 
-        // Then
-        assertNotNull(result);
-        assertEquals(0, result.getTotalElements());
-        assertTrue(result.getContent().isEmpty());
+    // When
+    Page<SearchResultDTO> result = searchService.search(request);
 
-        // 验证没有调用搜索方法
-        verify(searchIndexRepository, never()).fullTextSearch(anyString(), anyInt(), any(Pageable.class));
-        verify(searchIndexRepository, never()).fuzzySearch(anyString(), anyInt(), any(Pageable.class));
-    }
+    // Then
+    assertNotNull(result);
+    assertEquals(0, result.getTotalElements());
+    assertTrue(result.getContent().isEmpty());
 
-    @Test
-    void testSearchWithNullKeyword() {
-        // Given
-        SearchRequest request = new SearchRequest();
-        request.setKeyword(null);
-        request.setPage(0);
-        request.setSize(20);
+    // 验证没有调用搜索方法
+    verify(searchIndexRepository, never())
+        .fullTextSearch(anyString(), anyInt(), any(Pageable.class));
+    verify(searchIndexRepository, never()).fuzzySearch(anyString(), anyInt(), any(Pageable.class));
+  }
 
-        // When
-        Page<SearchResultDTO> result = searchService.search(request);
+  @Test
+  void testSearchWithNullKeyword() {
+    // Given
+    SearchRequest request = new SearchRequest();
+    request.setKeyword(null);
+    request.setPage(0);
+    request.setSize(20);
 
-        // Then
-        assertNotNull(result);
-        assertEquals(0, result.getTotalElements());
-        assertTrue(result.getContent().isEmpty());
+    // When
+    Page<SearchResultDTO> result = searchService.search(request);
 
-        // 验证没有调用搜索方法
-        verify(searchIndexRepository, never()).fullTextSearch(anyString(), anyInt(), any(Pageable.class));
-        verify(searchIndexRepository, never()).fuzzySearch(anyString(), anyInt(), any(Pageable.class));
-    }
+    // Then
+    assertNotNull(result);
+    assertEquals(0, result.getTotalElements());
+    assertTrue(result.getContent().isEmpty());
 
-    @Test
-    void testGetSuggestions() {
-        // Given
-        String prefix = "Ja";
-        int limit = 10;
+    // 验证没有调用搜索方法
+    verify(searchIndexRepository, never())
+        .fullTextSearch(anyString(), anyInt(), any(Pageable.class));
+    verify(searchIndexRepository, never()).fuzzySearch(anyString(), anyInt(), any(Pageable.class));
+  }
 
-        // When
-        List<String> result = searchService.getSuggestions(prefix, limit);
+  @Test
+  void testGetSuggestions() {
+    // Given
+    String prefix = "Ja";
+    int limit = 10;
 
-        // Then
-        assertNotNull(result);
-        // 由于我们没有mock HotKeywordRepository，结果应该是空的
-        assertTrue(result.isEmpty());
-    }
+    // When
+    List<String> result = searchService.getSuggestions(prefix, limit);
 
-    @Test
-    void testGetSuggestionsWithShortPrefix() {
-        // Given
-        String prefix = "J"; // 长度小于2
-        int limit = 10;
+    // Then
+    assertNotNull(result);
+    // 由于我们没有mock HotKeywordRepository，结果应该是空的
+    assertTrue(result.isEmpty());
+  }
 
-        // When
-        List<String> result = searchService.getSuggestions(prefix, limit);
+  @Test
+  void testGetSuggestionsWithShortPrefix() {
+    // Given
+    String prefix = "J"; // 长度小于2
+    int limit = 10;
 
-        // Then
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
+    // When
+    List<String> result = searchService.getSuggestions(prefix, limit);
 
-    @Test
-    void testRecordSearch() {
-        // Given
-        String keyword = "Java编程";
-        Long resultCount = 10L;
-        Long categoryId = 1L;
+    // Then
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
+  }
 
-        // When & Then - 应该不抛出异常
-        assertDoesNotThrow(() -> {
-            searchService.recordSearch(keyword, resultCount, categoryId);
+  @Test
+  void testRecordSearch() {
+    // Given
+    String keyword = "Java编程";
+    Long resultCount = 10L;
+    Long categoryId = 1L;
+
+    // When & Then - 应该不抛出异常
+    assertDoesNotThrow(
+        () -> {
+          searchService.recordSearch(keyword, resultCount, categoryId);
         });
-    }
+  }
 
-    @Test
-    void testRecordSearchWithEmptyKeyword() {
-        // Given
-        String keyword = "";
-        Long resultCount = 0L;
-        Long categoryId = null;
+  @Test
+  void testRecordSearchWithEmptyKeyword() {
+    // Given
+    String keyword = "";
+    Long resultCount = 0L;
+    Long categoryId = null;
 
-        // When & Then - 应该不抛出异常
-        assertDoesNotThrow(() -> {
-            searchService.recordSearch(keyword, resultCount, categoryId);
+    // When & Then - 应该不抛出异常
+    assertDoesNotThrow(
+        () -> {
+          searchService.recordSearch(keyword, resultCount, categoryId);
         });
-    }
+  }
 
-    @Test
-    void testRecordKeywordClick() {
-        // Given
-        String keyword = "Java";
+  @Test
+  void testRecordKeywordClick() {
+    // Given
+    String keyword = "Java";
 
-        // When & Then - 应该不抛出异常
-        assertDoesNotThrow(() -> {
-            searchService.recordKeywordClick(keyword);
+    // When & Then - 应该不抛出异常
+    assertDoesNotThrow(
+        () -> {
+          searchService.recordKeywordClick(keyword);
         });
-    }
+  }
 
-    @Test
-    void testGetSearchStatistics() {
-        // When
-        SearchService.SearchStatisticsDTO result = searchService.getSearchStatistics();
+  @Test
+  void testGetSearchStatistics() {
+    // When
+    SearchService.SearchStatisticsDTO result = searchService.getSearchStatistics();
 
-        // Then
-        assertNotNull(result);
-        // 由于没有实际数据，统计应该都是0或默认值
-        assertNotNull(result.getTotalSearches());
-        assertNotNull(result.getTotalKeywords());
-        assertNotNull(result.getAverageResultCount());
-    }
+    // Then
+    assertNotNull(result);
+    // 由于没有实际数据，统计应该都是0或默认值
+    assertNotNull(result.getTotalSearches());
+    assertNotNull(result.getTotalKeywords());
+    assertNotNull(result.getAverageResultCount());
+  }
 }
