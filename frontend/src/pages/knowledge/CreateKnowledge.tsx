@@ -208,7 +208,7 @@ const CreateKnowledge: React.FC = () => {
         title: values.title,
         content: values.content,
         type: values.type,
-        categoryId: values.categoryId,
+        categoryId: values.categoryId, // CategorySelector 已确保返回数字类型
         mediaUrls: values.mediaUrls,
         linkUrl: values.linkUrl,
         tags: values.tags,
@@ -222,9 +222,7 @@ const CreateKnowledge: React.FC = () => {
         message.success('发布成功');
       }
 
-      // 清除草稿
       clearDraft();
-
       navigate('/knowledge');
     } catch (error) {
       console.error('Submit failed:', error);

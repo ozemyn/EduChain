@@ -117,16 +117,16 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
           <div className="card-header">
             <div className="author-info">
               <Avatar
-                src={knowledge.uploader.avatarUrl}
-                alt={knowledge.uploader.fullName}
+                src={knowledge.uploaderAvatar || knowledge.uploader?.avatarUrl}
+                alt={knowledge.uploaderName || knowledge.uploader?.fullName || '用户'}
                 icon={<UserOutlined />}
                 className="author-avatar"
               >
-                {knowledge.uploader.fullName?.charAt(0)}
+                {(knowledge.uploaderName || knowledge.uploader?.fullName)?.charAt(0) || 'U'}
               </Avatar>
               <div className="author-details">
                 <Text strong className="author-name">
-                  {knowledge.uploader.fullName}
+                  {knowledge.uploaderName || knowledge.uploader?.fullName || `用户 ${knowledge.uploaderId}`}
                 </Text>
                 <Text type="secondary" className="publish-date">
                   {formatDate(knowledge.createdAt)}
@@ -160,9 +160,9 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
             >
               {knowledge.type}
             </Tag>
-            {knowledge.category && (
+            {(knowledge.categoryName || knowledge.category?.name) && (
               <Tag className="category-tag glass-badge">
-                {knowledge.category.name}
+                {knowledge.categoryName || knowledge.category?.name}
               </Tag>
             )}
             {knowledge.tags &&
@@ -192,10 +192,12 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
                 knowledge.stats
                   ? {
                       knowledgeId: knowledge.id,
-                      likeCount: knowledge.stats.likeCount,
-                      favoriteCount: knowledge.stats.favoriteCount,
-                      viewCount: knowledge.stats.viewCount,
-                      commentCount: knowledge.stats.commentCount,
+                      likeCount: knowledge.stats.likeCount ?? 0,
+                      favoriteCount: knowledge.stats.favoriteCount ?? 0,
+                      viewCount: knowledge.stats.viewCount ?? 0,
+                      commentCount: knowledge.stats.commentCount ?? 0,
+                      userLiked: false,
+                      userFavorited: false,
                     }
                   : undefined
               }

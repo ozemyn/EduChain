@@ -544,3 +544,43 @@ CREATE INDEX idx_comments_knowledge_created ON comments(knowledge_id, created_at
 -- 数据库结构创建完成 (共20张表)
 -- 所有表结构已完全匹配实体类定义
 -- ========================================
+
+-- ========================================
+-- 初始化数据
+-- ========================================
+
+-- 插入分类数据
+-- 根分类
+INSERT INTO categories (id, name, description, parent_id, sort_order, created_at) VALUES
+(1, '前端开发', '前端相关技术', NULL, 1, NOW()),
+(2, '后端开发', '后端相关技术', NULL, 2, NOW()),
+(3, '数据库', '数据库相关技术', NULL, 3, NOW()),
+(4, '移动开发', '移动应用开发', NULL, 4, NOW());
+
+-- 前端开发子分类
+INSERT INTO categories (id, name, description, parent_id, sort_order, created_at) VALUES
+(11, 'React', 'React框架', 1, 1, NOW()),
+(12, 'Vue', 'Vue框架', 1, 2, NOW()),
+(13, 'Angular', 'Angular框架', 1, 3, NOW());
+
+-- 后端开发子分类
+INSERT INTO categories (id, name, description, parent_id, sort_order, created_at) VALUES
+(21, 'Spring Boot', 'Spring Boot框架', 2, 1, NOW()),
+(22, 'Node.js', 'Node.js运行时', 2, 2, NOW()),
+(23, 'Django', 'Django框架', 2, 3, NOW());
+
+-- 数据库子分类
+INSERT INTO categories (id, name, description, parent_id, sort_order, created_at) VALUES
+(31, 'MySQL', 'MySQL数据库', 3, 1, NOW()),
+(32, 'Redis', 'Redis缓存', 3, 2, NOW()),
+(33, 'MongoDB', 'MongoDB文档数据库', 3, 3, NOW());
+
+-- 移动开发子分类
+INSERT INTO categories (id, name, description, parent_id, sort_order, created_at) VALUES
+(41, 'React Native', 'React Native框架', 4, 1, NOW()),
+(42, 'Flutter', 'Flutter框架', 4, 2, NOW()),
+(43, 'iOS', 'iOS原生开发', 4, 3, NOW());
+
+-- ========================================
+-- 数据库初始化完成
+-- ========================================

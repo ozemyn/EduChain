@@ -2,6 +2,7 @@ package com.example.educhain.controller;
 
 import com.example.educhain.dto.*;
 import com.example.educhain.entity.KnowledgeVersion;
+import com.example.educhain.service.CustomUserDetailsService;
 import com.example.educhain.service.KnowledgeItemService;
 import com.example.educhain.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,11 +39,10 @@ public class KnowledgeItemController {
   @PostMapping
   @Operation(summary = "创建知识内容", description = "创建新的知识内容")
   public ResponseEntity<Result<KnowledgeItemDTO>> create(
-      @Valid @RequestBody CreateKnowledgeRequest request, Authentication authentication) {
+      @Valid @RequestBody CreateKnowledgeRequest request,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = knowledgeItemService.create(request, userId);
-
+    KnowledgeItemDTO result = knowledgeItemService.create(request, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -50,11 +51,9 @@ public class KnowledgeItemController {
   public ResponseEntity<Result<KnowledgeItemDTO>> createWithFiles(
       @Valid @RequestPart("request") CreateKnowledgeRequest request,
       @RequestPart(value = "files", required = false) List<MultipartFile> files,
-      Authentication authentication) {
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = knowledgeItemService.createWithFiles(request, files, userId);
-
+    KnowledgeItemDTO result = knowledgeItemService.createWithFiles(request, files, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -63,11 +62,9 @@ public class KnowledgeItemController {
   public ResponseEntity<Result<KnowledgeItemDTO>> update(
       @PathVariable Long id,
       @Valid @RequestBody UpdateKnowledgeRequest request,
-      Authentication authentication) {
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = knowledgeItemService.update(id, request, userId);
-
+    KnowledgeItemDTO result = knowledgeItemService.update(id, request, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -77,64 +74,56 @@ public class KnowledgeItemController {
       @PathVariable Long id,
       @Valid @RequestPart("request") UpdateKnowledgeRequest request,
       @RequestPart(value = "files", required = false) List<MultipartFile> files,
-      Authentication authentication) {
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = knowledgeItemService.updateWithFiles(id, request, files, userId);
-
+    KnowledgeItemDTO result = knowledgeItemService.updateWithFiles(id, request, files, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "删除知识内容", description = "软删除指定的知识内容")
-  public ResponseEntity<Result<Void>> delete(@PathVariable Long id, Authentication authentication) {
+  public ResponseEntity<Result<Void>> delete(
+      @PathVariable Long id,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    knowledgeItemService.delete(id, userId);
-
+    knowledgeItemService.delete(id, principal.getId());
     return ResponseEntity.ok(Result.success());
   }
 
   @PostMapping("/batch-delete")
   @Operation(summary = "批量删除知识内容", description = "批量软删除多个知识内容")
   public ResponseEntity<Result<Void>> batchDelete(
-      @RequestBody List<Long> ids, Authentication authentication) {
+      @RequestBody List<Long> ids,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    knowledgeItemService.batchDelete(ids, userId);
-
+    knowledgeItemService.batchDelete(ids, principal.getId());
     return ResponseEntity.ok(Result.success());
   }
 
   @PutMapping("/{id}/restore")
   @Operation(summary = "恢复知识内容", description = "恢复已删除的知识内容")
   public ResponseEntity<Result<Void>> restore(
-      @PathVariable Long id, Authentication authentication) {
+      @PathVariable Long id,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    knowledgeItemService.restore(id, userId);
-
+    knowledgeItemService.restore(id, principal.getId());
     return ResponseEntity.ok(Result.success());
   }
 
   @GetMapping("/{id}")
   @Operation(summary = "获取知识内容详情", description = "根据ID获取知识内容的详细信息")
   public ResponseEntity<Result<KnowledgeItemDTO>> findById(
-      @PathVariable Long id, Authentication authentication, HttpServletRequest request) {
+      @PathVariable Long id,
+      Authentication authentication,
+      HttpServletRequest request) {
 
     Long userId = getUserId(authentication);
-    KnowledgeItemDTO result;
-
-    if (userId != null) {
-      result = knowledgeItemService.findByIdWithUserStatus(id, userId);
-    } else {
-      result = knowledgeItemService.findById(id);
-    }
+    KnowledgeItemDTO result = (userId != null)
+        ? knowledgeItemService.findByIdWithUserStatus(id, userId)
+        : knowledgeItemService.findById(id);
 
     // 增加浏览量
-    String ipAddress = getClientIpAddress(request);
-    knowledgeItemService.incrementViewCount(id, ipAddress);
-
+    knowledgeItemService.incrementViewCount(id, getClientIpAddress(request));
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -146,13 +135,9 @@ public class KnowledgeItemController {
       Authentication authentication) {
 
     Long userId = getUserId(authentication);
-    Page<KnowledgeItemDTO> result;
-
-    if (userId != null) {
-      result = knowledgeItemService.findAllWithUserStatus(pageable, filter, userId);
-    } else {
-      result = knowledgeItemService.findAll(pageable, filter);
-    }
+    Page<KnowledgeItemDTO> result = (userId != null)
+        ? knowledgeItemService.findAllWithUserStatus(pageable, filter, userId)
+        : knowledgeItemService.findAll(pageable, filter);
 
     return ResponseEntity.ok(Result.success(result));
   }
@@ -230,11 +215,11 @@ public class KnowledgeItemController {
   @GetMapping("/recommended")
   @Operation(summary = "获取推荐内容", description = "获取个性化推荐的知识内容")
   public ResponseEntity<Result<Page<KnowledgeItemDTO>>> getRecommendedContent(
-      @PageableDefault(size = 20) Pageable pageable, Authentication authentication) {
+      @PageableDefault(size = 20) Pageable pageable,
+      Authentication authentication) {
 
     Long userId = getUserId(authentication);
     Page<KnowledgeItemDTO> result = knowledgeItemService.getRecommendedContent(userId, pageable);
-
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -274,12 +259,10 @@ public class KnowledgeItemController {
       @PathVariable Long id,
       @RequestParam Integer versionNumber,
       @RequestParam(required = false) String changeSummary,
-      Authentication authentication) {
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result =
-        knowledgeItemService.restoreToVersion(id, versionNumber, userId, changeSummary);
-
+    KnowledgeItemDTO result = knowledgeItemService.restoreToVersion(
+        id, versionNumber, principal.getId(), changeSummary);
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -297,44 +280,40 @@ public class KnowledgeItemController {
   @PostMapping("/drafts")
   @Operation(summary = "保存草稿", description = "保存知识内容为草稿")
   public ResponseEntity<Result<KnowledgeItemDTO>> saveDraft(
-      @Valid @RequestBody CreateKnowledgeRequest request, Authentication authentication) {
+      @Valid @RequestBody CreateKnowledgeRequest request,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = knowledgeItemService.saveDraft(request, userId);
-
+    KnowledgeItemDTO result = knowledgeItemService.saveDraft(request, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
   @PostMapping("/{id}/publish")
   @Operation(summary = "发布草稿", description = "将草稿发布为正式内容")
   public ResponseEntity<Result<KnowledgeItemDTO>> publishDraft(
-      @PathVariable Long id, Authentication authentication) {
+      @PathVariable Long id,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = knowledgeItemService.publishDraft(id, userId);
-
+    KnowledgeItemDTO result = knowledgeItemService.publishDraft(id, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
   @GetMapping("/drafts")
   @Operation(summary = "获取用户草稿", description = "获取当前用户的草稿列表")
   public ResponseEntity<Result<Page<KnowledgeItemDTO>>> getUserDrafts(
-      @PageableDefault(size = 20) Pageable pageable, Authentication authentication) {
+      @PageableDefault(size = 20) Pageable pageable,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    Page<KnowledgeItemDTO> result = knowledgeItemService.getUserDrafts(userId, pageable);
-
+    Page<KnowledgeItemDTO> result = knowledgeItemService.getUserDrafts(principal.getId(), pageable);
     return ResponseEntity.ok(Result.success(result));
   }
 
   @PostMapping("/batch-update-status")
   @Operation(summary = "批量更新状态", description = "批量更新多个知识内容的状态")
   public ResponseEntity<Result<Void>> batchUpdateStatus(
-      @RequestBody BatchUpdateStatusRequest request, Authentication authentication) {
+      @RequestBody BatchUpdateStatusRequest request,
+      @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    Long userId = getUserId(authentication);
-    knowledgeItemService.batchUpdateStatus(request.getIds(), request.getStatus(), userId);
-
+    knowledgeItemService.batchUpdateStatus(request.getIds(), request.getStatus(), principal.getId());
     return ResponseEntity.ok(Result.success());
   }
 
@@ -357,10 +336,13 @@ public class KnowledgeItemController {
     return ResponseEntity.ok(Result.success(result));
   }
 
-  // 私有辅助方法
+  // 私有辅助方法 - 高性能获取用户ID（仅用于可选认证场景）
   private Long getUserId(Authentication authentication) {
     if (authentication != null && authentication.isAuthenticated()) {
-      return Long.parseLong(authentication.getName());
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof CustomUserDetailsService.CustomUserPrincipal) {
+        return ((CustomUserDetailsService.CustomUserPrincipal) principal).getId();
+      }
     }
     return null;
   }

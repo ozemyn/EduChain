@@ -3,6 +3,7 @@ package com.example.educhain.controller;
 import com.example.educhain.annotation.RateLimit;
 import com.example.educhain.entity.FileUpload;
 import com.example.educhain.enums.RateLimitType;
+import com.example.educhain.service.CustomUserDetailsService;
 import com.example.educhain.service.FileUploadService;
 import com.example.educhain.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -291,7 +292,12 @@ public class FileUploadController {
   // 私有辅助方法
   private Long getUserId(Authentication authentication) {
     if (authentication != null && authentication.isAuthenticated()) {
-      return Long.parseLong(authentication.getName());
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof CustomUserDetailsService.CustomUserPrincipal) {
+        CustomUserDetailsService.CustomUserPrincipal userPrincipal =
+            (CustomUserDetailsService.CustomUserPrincipal) principal;
+        return userPrincipal.getId();
+      }
     }
     return null;
   }

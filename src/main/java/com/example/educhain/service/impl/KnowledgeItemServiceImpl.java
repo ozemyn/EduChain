@@ -643,6 +643,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
    * @param ipAddress 访问者IP地址
    */
   @Override
+  @Transactional
   public void incrementViewCount(Long id, String ipAddress) {
     // 增加统计表中的浏览量
     knowledgeStatsRepository.incrementViewCount(id, LocalDateTime.now());
@@ -781,6 +782,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
    * @param newTags 新标签
    */
   @Override
+  @Transactional
   public void processTagAssociation(KnowledgeItem knowledgeItem, String oldTags, String newTags) {
     Set<String> oldTagSet = parseTagsToSet(oldTags);
     Set<String> newTagSet = parseTagsToSet(newTags);

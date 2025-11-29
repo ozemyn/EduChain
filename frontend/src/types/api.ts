@@ -83,9 +83,12 @@ export interface KnowledgeItem {
   mediaUrls?: string[];
   linkUrl?: string;
   uploaderId: number;
-  uploader: User;
+  uploaderName?: string; // 后端返回的字段
+  uploaderAvatar?: string; // 后端返回的字段
+  uploader?: User; // 兼容字段，但后端不返回
   categoryId?: number;
-  category?: Category;
+  categoryName?: string; // 后端返回的字段
+  category?: Category; // 兼容字段，但后端不返回
   tags: string;
   status: number;
   createdAt: string;

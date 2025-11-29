@@ -5,6 +5,7 @@ import com.example.educhain.dto.HotKeywordDTO;
 import com.example.educhain.dto.SearchRequest;
 import com.example.educhain.dto.SearchResultDTO;
 import com.example.educhain.enums.RateLimitType;
+import com.example.educhain.service.CustomUserDetailsService;
 import com.example.educhain.service.KeywordStatisticsService;
 import com.example.educhain.service.RecommendationService;
 import com.example.educhain.service.SearchService;
@@ -488,10 +489,11 @@ public class SearchController {
 
   private Long getUserIdFromAuthentication(Authentication authentication) {
     if (authentication != null && authentication.isAuthenticated()) {
-      try {
-        return Long.parseLong(authentication.getName());
-      } catch (NumberFormatException e) {
-        logger.warn("无法解析用户ID: {}", authentication.getName());
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof CustomUserDetailsService.CustomUserPrincipal) {
+        CustomUserDetailsService.CustomUserPrincipal userPrincipal =
+            (CustomUserDetailsService.CustomUserPrincipal) principal;
+        return userPrincipal.getId();
       }
     }
     return null;

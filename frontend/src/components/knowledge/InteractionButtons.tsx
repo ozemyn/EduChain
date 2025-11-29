@@ -30,8 +30,19 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
   onStatsChange,
   onCommentClick,
 }) => {
-  const [stats, setStats] = useState<InteractionStats>(
-    initialStats || {
+  const [stats, setStats] = useState<InteractionStats>(() => {
+    if (initialStats) {
+      return {
+        knowledgeId: initialStats.knowledgeId ?? knowledgeId,
+        likeCount: initialStats.likeCount ?? 0,
+        favoriteCount: initialStats.favoriteCount ?? 0,
+        viewCount: initialStats.viewCount ?? 0,
+        commentCount: initialStats.commentCount ?? 0,
+        userLiked: initialStats.userLiked ?? false,
+        userFavorited: initialStats.userFavorited ?? false,
+      };
+    }
+    return {
       knowledgeId,
       likeCount: 0,
       favoriteCount: 0,
@@ -39,8 +50,8 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
       commentCount: 0,
       userLiked: false,
       userFavorited: false,
-    }
-  );
+    };
+  });
   const [loading, setLoading] = useState({
     like: false,
     favorite: false,
@@ -164,7 +175,10 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
     }
   };
 
-  const formatCount = (count: number): string => {
+  const formatCount = (count: number | undefined | null): string => {
+    if (count == null || isNaN(count)) {
+      return '0';
+    }
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
     }

@@ -15,7 +15,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -171,12 +174,114 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(result);
   }
 
+  /** 处理HTTP消息不可读异常（JSON反序列化失败） */
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<Result<Void>> handleHttpMessageNotReadableException(
+      HttpMessageNotReadableException e, HttpServletRequest request) {
+    String requestInfo = buildRequestInfo(request);
+    String errorMessage = e.getMessage();
+    String userMessage = "请求参数格式错误，请检查参数类型是否正确";
+
+    // 尝试从异常信息中提取更详细的错误信息
+    if (errorMessage != null) {
+      // 检查是否是数字格式错误
+      if (errorMessage.contains("For input string")) {
+        // 提取错误的字符串值
+        String invalidValue = extractInvalidValue(errorMessage);
+        userMessage = String.format("参数类型错误：期望数字类型，但收到 '%s'。请检查 categoryId、status 等数字类型参数是否正确", invalidValue);
+        logger.warn("JSON反序列化失败 - 数字格式错误: 无效值={}, {}", invalidValue, requestInfo);
+      } else if (errorMessage.contains("Cannot deserialize value")) {
+        // 尝试提取字段名
+        String fieldName = extractFieldName(errorMessage);
+        if (fieldName != null) {
+          userMessage = String.format("参数 '%s' 格式错误，请检查该参数的值和类型", fieldName);
+        }
+        logger.warn("JSON反序列化失败: message={}, {}", errorMessage, requestInfo);
+      } else {
+        logger.warn("JSON反序列化失败: message={}, {}", errorMessage, requestInfo);
+      }
+    }
+
+    Result<Void> result = Result.error("INVALID_REQUEST_FORMAT", userMessage);
+    result.setPath(request.getRequestURI());
+    return ResponseEntity.badRequest().body(result);
+  }
+
+  /** 处理方法参数类型不匹配异常（路径参数类型错误） */
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<Result<Void>> handleMethodArgumentTypeMismatchException(
+      MethodArgumentTypeMismatchException e, HttpServletRequest request) {
+    String requestInfo = buildRequestInfo(request);
+    String parameterName = e.getName();
+    String requiredType = e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "未知类型";
+    String actualValue = e.getValue() != null ? e.getValue().toString() : "null";
+    
+    String userMessage = String.format(
+        "参数 '%s' 类型错误：期望 %s 类型，但收到 '%s'。请检查该参数的值是否正确",
+        parameterName, requiredType, actualValue);
+    
+    logger.warn("参数类型不匹配: parameter={}, requiredType={}, actualValue={}, {}", 
+        parameterName, requiredType, actualValue, requestInfo);
+    
+    Result<Void> result = Result.error("PARAMETER_TYPE_MISMATCH", userMessage);
+    result.setPath(request.getRequestURI());
+    return ResponseEntity.badRequest().body(result);
+  }
+
+  /** 处理缺少请求参数异常 */
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseEntity<Result<Void>> handleMissingServletRequestParameterException(
+      MissingServletRequestParameterException e, HttpServletRequest request) {
+    String requestInfo = buildRequestInfo(request);
+    String parameterName = e.getParameterName();
+    String parameterType = e.getParameterType();
+    
+    String userMessage = String.format("缺少必需参数 '%s' (类型: %s)", parameterName, parameterType);
+    
+    logger.warn("缺少请求参数: parameter={}, type={}, {}", parameterName, parameterType, requestInfo);
+    
+    Result<Void> result = Result.error("MISSING_PARAMETER", userMessage);
+    result.setPath(request.getRequestURI());
+    return ResponseEntity.badRequest().body(result);
+  }
+
+  /** 处理数字格式异常 */
+  @ExceptionHandler(NumberFormatException.class)
+  public ResponseEntity<Result<Void>> handleNumberFormatException(
+      NumberFormatException e, HttpServletRequest request) {
+    String requestInfo = buildRequestInfo(request);
+    String errorMessage = e.getMessage();
+    String invalidValue = extractInvalidValue(errorMessage);
+    
+    String userMessage = String.format(
+        "参数类型错误：期望数字类型，但收到 '%s'。请检查 categoryId、status 等数字类型参数是否正确",
+        invalidValue);
+    
+    logger.warn("数字格式异常: 无效值={}, {}", invalidValue, requestInfo);
+    
+    Result<Void> result = Result.error("INVALID_NUMBER_FORMAT", userMessage);
+    result.setPath(request.getRequestURI());
+    return ResponseEntity.badRequest().body(result);
+  }
+
   /** 处理非法参数异常 */
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Result<Void>> handleIllegalArgumentException(
       IllegalArgumentException e, HttpServletRequest request) {
-    logger.warn("非法参数异常: {}", e.getMessage());
-    Result<Void> result = Result.badRequest(e.getMessage());
+    String requestInfo = buildRequestInfo(request);
+    String errorMessage = e.getMessage();
+    
+    // 检查是否是数字格式错误（NumberFormatException 是 IllegalArgumentException 的子类，但我们已经单独处理了）
+    String userMessage = errorMessage;
+    if (errorMessage != null && errorMessage.contains("For input string")) {
+      String invalidValue = extractInvalidValue(errorMessage);
+      userMessage = String.format(
+          "参数类型错误：期望数字类型，但收到 '%s'。请检查 categoryId、status 等数字类型参数是否正确",
+          invalidValue);
+    }
+    
+    logger.warn("非法参数异常: message={}, {}", errorMessage, requestInfo);
+    Result<Void> result = Result.badRequest(userMessage);
     result.setPath(request.getRequestURI());
     return ResponseEntity.badRequest().body(result);
   }
@@ -461,5 +566,62 @@ public class GlobalExceptionHandler {
       ipAddress = ipAddress.split(",")[0].trim();
     }
     return ipAddress;
+  }
+
+  /** 从异常信息中提取无效的值（例如："For input string: \"zzz\"" -> "zzz"） */
+  private String extractInvalidValue(String errorMessage) {
+    if (errorMessage == null) {
+      return "未知值";
+    }
+    
+    // 匹配 "For input string: \"value\"" 格式
+    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("For input string: \"([^\"]+)\"");
+    java.util.regex.Matcher matcher = pattern.matcher(errorMessage);
+    if (matcher.find()) {
+      return matcher.group(1);
+    }
+    
+    // 匹配其他可能的格式
+    if (errorMessage.contains("\"")) {
+      int start = errorMessage.indexOf("\"");
+      int end = errorMessage.indexOf("\"", start + 1);
+      if (end > start) {
+        return errorMessage.substring(start + 1, end);
+      }
+    }
+    
+    return "未知值";
+  }
+
+  /** 从异常信息中提取字段名 */
+  private String extractFieldName(String errorMessage) {
+    if (errorMessage == null) {
+      return null;
+    }
+    
+    // 尝试匹配常见的字段名模式
+    // 例如："Cannot deserialize value of type `java.lang.Long` from String \"zzz\": not a valid representation"
+    // 或者："JSON parse error: Cannot deserialize value of type `java.lang.Long` from String \"zzz\""
+    
+    // 匹配 "from String" 之前的字段信息
+    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+        "Cannot deserialize.*?from String.*?at.*?\\[\"([^\"]+)\"\\]");
+    java.util.regex.Matcher matcher = pattern.matcher(errorMessage);
+    if (matcher.find()) {
+      return matcher.group(1);
+    }
+    
+    // 尝试从堆栈跟踪中提取字段名（如果包含）
+    if (errorMessage.contains("categoryId")) {
+      return "categoryId";
+    }
+    if (errorMessage.contains("status")) {
+      return "status";
+    }
+    if (errorMessage.contains("type")) {
+      return "type";
+    }
+    
+    return null;
   }
 }
