@@ -81,7 +81,7 @@ export const API_ENDPOINTS = {
   // 通知相关
   NOTIFICATIONS: {
     LIST: '/notifications',
-    UNREAD_COUNT: '/notifications/unread-count',
+    UNREAD_COUNT: '/notifications/unread/count',
     MARK_READ: '/notifications/:id/read',
     MARK_ALL_READ: '/notifications/read-all',
     DELETE: '/notifications/:id',

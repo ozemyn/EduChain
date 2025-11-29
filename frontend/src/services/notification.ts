@@ -36,7 +36,8 @@ export const notificationService = {
   ) => request.get<PageResponse<Notification>>('/notifications', { params }),
 
   // 获取未读通知数量
-  getUnreadCount: () => request.get<number>('/notifications/unread-count'),
+  getUnreadCount: () =>
+    request.get<{ unreadCount: number }>('/notifications/unread/count'),
 
   // 获取通知统计
   getNotificationStats: () =>

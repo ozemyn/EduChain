@@ -1,5 +1,4 @@
 import { request } from './api';
-import type { PageRequest, PageResponse } from '@/types/api';
 
 export interface Category {
   id: number;
@@ -32,8 +31,7 @@ export interface UpdateCategoryRequest {
 
 export const categoryService = {
   // 获取分类列表
-  getCategories: (params?: PageRequest) =>
-    request.get<PageResponse<Category>>('/categories', { params }),
+  getCategories: () => request.get<Category[]>('/categories'),
 
   // 获取分类树
   getCategoryTree: () => request.get<CategoryTree[]>('/categories/tree'),

@@ -26,8 +26,11 @@ export const authService = {
   getCurrentUser: () => request.get<User>('/users/me'),
 
   // 修改密码
-  changePassword: (data: { oldPassword: string; newPassword: string }) =>
-    request.put('/users/me/password', data),
+  changePassword: (data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => request.put('/users/me/password', data),
 
   // 检查用户名是否可用
   checkUsername: (username: string) =>

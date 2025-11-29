@@ -87,8 +87,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const fetchUnreadCount = async () => {
     try {
       const response = await notificationService.getUnreadCount();
-      setUnreadCount(response.data);
-      onUnreadCountChange?.(response.data);
+      const count = response.data.unreadCount;
+      setUnreadCount(count);
+      onUnreadCountChange?.(count);
     } catch (error) {
       console.error('Failed to fetch unread count:', error);
     }

@@ -29,9 +29,9 @@ public interface UserService {
      * 刷新访问令牌
      * 
      * @param refreshToken 刷新令牌
-     * @return 新的访问令牌
+     * @return 登录响应（包含新的访问令牌和刷新令牌）
      */
-    String refreshAccessToken(String refreshToken);
+    LoginResponse refreshAccessToken(String refreshToken);
 
     /**
      * 用户登出

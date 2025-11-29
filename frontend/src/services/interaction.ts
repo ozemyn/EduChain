@@ -51,19 +51,19 @@ export interface UpdateCommentRequest {
 export const interactionService = {
   // 点赞
   like: (knowledgeId: number) =>
-    request.post('/interactions/like', { knowledgeId }),
+    request.post(`/interactions/like/${knowledgeId}`),
 
   // 取消点赞
   unlike: (knowledgeId: number) =>
-    request.post('/interactions/unlike', { knowledgeId }),
+    request.delete(`/interactions/like/${knowledgeId}`),
 
   // 收藏
   favorite: (knowledgeId: number) =>
-    request.post('/interactions/favorite', { knowledgeId }),
+    request.post(`/interactions/favorite/${knowledgeId}`),
 
   // 取消收藏
   unfavorite: (knowledgeId: number) =>
-    request.post('/interactions/unfavorite', { knowledgeId }),
+    request.delete(`/interactions/favorite/${knowledgeId}`),
 
   // 分享
   share: (knowledgeId: number) =>

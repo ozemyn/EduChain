@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String refreshAccessToken(String refreshToken) {
+    public LoginResponse refreshAccessToken(String refreshToken) {
         try {
             // 验证刷新令牌
             if (!jwtUtil.validateTokenFormat(refreshToken) || !jwtUtil.isRefreshToken(refreshToken)) {
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(refreshToken, userDetails)) {
-                // 生成新的访问令牌
+                // 生成新的访问令牌和刷新令牌
                 CustomUserDetailsService.CustomUserPrincipal userPrincipal = 
                     (CustomUserDetailsService.CustomUserPrincipal) userDetails;
                 
@@ -175,7 +175,25 @@ public class UserServiceImpl implements UserService {
                 claims.put("userId", userPrincipal.getId());
                 claims.put("role", userPrincipal.getRole().name());
                 
-                return jwtUtil.generateToken(userDetails, claims);
+                String newAccessToken = jwtUtil.generateToken(userDetails, claims);
+                String newRefreshToken = jwtUtil.generateRefreshToken(userDetails);
+                
+                // 获取用户信息
+                User user = userRepository.findById(userPrincipal.getId())
+                    .orElseThrow(() -> new BusinessException("USER_NOT_FOUND", "用户不存在"));
+                UserDTO userDTO = UserDTO.fromEntity(user);
+                
+                // 更新Redis中的token
+                try {
+                    String tokenKey = "user:tokens:" + user.getId();
+                    redisTemplate.opsForSet().add(tokenKey, newAccessToken);
+                    redisTemplate.opsForSet().add(tokenKey, newRefreshToken);
+                    redisTemplate.expire(tokenKey, Duration.ofDays(7));
+                } catch (Exception e) {
+                    logger.warn("Redis token存储失败: {}", e.getMessage(), e);
+                }
+                
+                return new LoginResponse(newAccessToken, newRefreshToken, 86400L, userDTO);
             } else {
                 throw new BusinessException("INVALID_REFRESH_TOKEN", "刷新令牌已过期");
             }

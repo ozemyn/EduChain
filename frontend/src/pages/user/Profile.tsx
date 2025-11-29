@@ -50,7 +50,7 @@ interface UpdateProfileFormData {
 }
 
 interface ChangePasswordFormData {
-  oldPassword: string;
+  currentPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
@@ -138,8 +138,9 @@ const Profile: React.FC = () => {
     try {
       setPasswordLoading(true);
       await authService.changePassword({
-        oldPassword: values.oldPassword,
+        currentPassword: values.currentPassword,
         newPassword: values.newPassword,
+        confirmPassword: values.confirmPassword,
       });
       message.success('密码修改成功！');
       setPasswordModalVisible(false);
@@ -638,7 +639,7 @@ const Profile: React.FC = () => {
             className="password-form"
           >
             <Form.Item
-              name="oldPassword"
+              name="currentPassword"
               label={<span className="form-label">原密码</span>}
               rules={[{ required: true, message: '请输入原密码！' }]}
             >

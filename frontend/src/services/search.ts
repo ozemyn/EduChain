@@ -27,11 +27,11 @@ export interface AdvancedSearchRequest extends SearchRequest {
 export const searchService = {
   // 基础搜索
   search: (params: SearchRequest) =>
-    request.get<PageResponse<KnowledgeItem>>('/search', { params }),
+    request.post<PageResponse<KnowledgeItem>>('/search', params),
 
   // 高级搜索
   advancedSearch: (params: AdvancedSearchRequest) =>
-    request.get<PageResponse<KnowledgeItem>>('/search/advanced', { params }),
+    request.post<PageResponse<KnowledgeItem>>('/search/advanced', params),
 
   // 获取搜索建议
   getSuggestions: (keyword: string) =>

@@ -56,18 +56,18 @@ public class AuthController {
      * 刷新访问令牌
      */
     @PostMapping("/refresh")
-    @Operation(summary = "刷新令牌", description = "使用刷新令牌获取新的访问令牌")
+    @Operation(summary = "刷新令牌", description = "使用刷新令牌获取新的访问令牌和刷新令牌")
     @RateLimit(key = "auth:refresh", limit = 20, timeWindow = 60, type = RateLimitType.USER, 
                algorithm = "token_bucket", message = "刷新令牌请求过于频繁")
-    public ResponseEntity<Result<String>> refreshToken(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Result<LoginResponse>> refreshToken(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
         if (refreshToken == null || refreshToken.trim().isEmpty()) {
             return ResponseEntity.badRequest()
                 .body(Result.error("INVALID_REQUEST", "刷新令牌不能为空"));
         }
         
-        String newAccessToken = userService.refreshAccessToken(refreshToken);
-        return ResponseEntity.ok(Result.success("令牌刷新成功", newAccessToken));
+        LoginResponse response = userService.refreshAccessToken(refreshToken);
+        return ResponseEntity.ok(Result.success("令牌刷新成功", response));
     }
 
     /**
