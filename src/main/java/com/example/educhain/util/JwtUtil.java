@@ -18,7 +18,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret:educhain-secret-key-for-jwt-token-generation-and-validation}")
+    @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration:86400}") // 默认24小时
@@ -26,6 +26,23 @@ public class JwtUtil {
 
     @Value("${jwt.refresh-expiration:604800}") // 默认7天
     private Long refreshExpiration;
+
+    /**
+     * 验证JWT密钥配置
+     */
+    @jakarta.annotation.PostConstruct
+    public void validateConfiguration() {
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalStateException(
+                "JWT密钥未配置！请在application.yml中设置jwt.secret（至少32个字符）"
+            );
+        }
+        if (secret.length() < 32) {
+            throw new IllegalStateException(
+                "JWT密钥太短！密钥长度必须至少32个字符，当前长度: " + secret.length()
+            );
+        }
+    }
 
     /**
      * 获取签名密钥

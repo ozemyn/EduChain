@@ -19,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 用户控制器
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "用户管理", description = "用户信息管理相关接口")
 @SecurityRequirement(name = "bearerAuth")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -43,8 +47,7 @@ public class UserController {
             UserDTO user = userService.getUserById(userId);
             return ResponseEntity.ok(Result.success("获取成功", user));
         } catch (Exception e) {
-            System.err.println("获取当前用户信息失败: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("获取当前用户信息失败: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -193,16 +196,16 @@ public class UserController {
      */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("当前认证信息: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
-        System.out.println("认证主体: " + (authentication != null ? authentication.getPrincipal().getClass().getSimpleName() : "null"));
+        logger.debug("当前认证信息: {}", authentication != null ? authentication.getClass().getSimpleName() : "null");
+        logger.debug("认证主体: {}", authentication != null ? authentication.getPrincipal().getClass().getSimpleName() : "null");
         
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetailsService.CustomUserPrincipal) {
             CustomUserDetailsService.CustomUserPrincipal userPrincipal = 
                 (CustomUserDetailsService.CustomUserPrincipal) authentication.getPrincipal();
-            System.out.println("获取到用户ID: " + userPrincipal.getId());
+            logger.debug("获取到用户ID: {}", userPrincipal.getId());
             return userPrincipal.getId();
         }
-        System.err.println("无法获取当前用户信息 - 认证失败");
+        logger.error("无法获取当前用户信息 - 认证失败");
         throw new RuntimeException("无法获取当前用户信息");
     }
 

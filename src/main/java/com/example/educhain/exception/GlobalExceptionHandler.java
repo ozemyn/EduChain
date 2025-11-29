@@ -31,6 +31,10 @@ public class GlobalExceptionHandler {
     
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     
+    private static final boolean IS_PRODUCTION = 
+        "prod".equals(System.getProperty("spring.profiles.active")) || 
+        "production".equals(System.getProperty("spring.profiles.active"));
+    
     /**
      * 处理业务异常
      */
@@ -222,7 +226,8 @@ public class GlobalExceptionHandler {
         logger.error("SQL异常: SQLState={}, ErrorCode={}, Message={}", 
                 e.getSQLState(), e.getErrorCode(), e.getMessage(), e);
         
-        String userMessage = "数据库操作失败";
+        // 生产环境不返回详细错误信息
+        String userMessage = IS_PRODUCTION ? "数据库操作失败，请稍后重试" : "数据库操作失败";
         String errorCode = "SQL_ERROR";
         
         // 根据SQL错误码提供更具体的错误信息
@@ -311,6 +316,23 @@ public class GlobalExceptionHandler {
     }
     
     /**
+     * 处理限流异常
+     */
+    @ExceptionHandler(com.example.educhain.exception.RateLimitException.class)
+    public ResponseEntity<Result<Void>> handleRateLimitException(
+            com.example.educhain.exception.RateLimitException e, HttpServletRequest request) {
+        logger.warn("限流异常: {}", e.getMessage());
+        
+        Result<Void> result = Result.error("RATE_LIMIT_EXCEEDED", e.getMessage());
+        result.setPath(request.getRequestURI());
+        
+        // 添加Retry-After响应头
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header("Retry-After", String.valueOf(e.getRetryAfter()))
+                .body(result);
+    }
+    
+    /**
      * 处理所有其他异常
      */
     @ExceptionHandler(Exception.class)
@@ -326,7 +348,12 @@ public class GlobalExceptionHandler {
         }
         
         logger.error("系统异常: ", e);
-        Result<Void> result = Result.internalError();
+        
+        // 生产环境不返回详细错误信息
+        String message = IS_PRODUCTION ? "系统错误，请联系管理员" : 
+            (e.getMessage() != null ? e.getMessage() : "系统内部错误");
+        
+        Result<Void> result = Result.error("INTERNAL_ERROR", message);
         result.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
     }

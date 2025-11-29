@@ -1,9 +1,11 @@
 package com.example.educhain.controller;
 
+import com.example.educhain.annotation.RateLimit;
 import com.example.educhain.dto.LoginRequest;
 import com.example.educhain.dto.LoginResponse;
 import com.example.educhain.dto.RegisterRequest;
 import com.example.educhain.dto.UserDTO;
+import com.example.educhain.enums.RateLimitType;
 import com.example.educhain.service.UserService;
 import com.example.educhain.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +33,8 @@ public class AuthController {
      */
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "创建新用户账户")
+    @RateLimit(key = "auth:register", limit = 5, timeWindow = 60, type = RateLimitType.IP, 
+               algorithm = "sliding_window", message = "注册请求过于频繁，请稍后再试")
     public ResponseEntity<Result<UserDTO>> register(@Valid @RequestBody RegisterRequest request) {
         UserDTO user = userService.register(request);
         return ResponseEntity.ok(Result.success("注册成功", user));
@@ -41,6 +45,8 @@ public class AuthController {
      */
     @PostMapping("/login")
     @Operation(summary = "用户登录", description = "用户登录获取访问令牌")
+    @RateLimit(key = "auth:login", limit = 10, timeWindow = 60, type = RateLimitType.IP, 
+               algorithm = "sliding_window", message = "登录请求过于频繁，请稍后再试")
     public ResponseEntity<Result<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = userService.login(request);
         return ResponseEntity.ok(Result.success("登录成功", response));
@@ -51,6 +57,8 @@ public class AuthController {
      */
     @PostMapping("/refresh")
     @Operation(summary = "刷新令牌", description = "使用刷新令牌获取新的访问令牌")
+    @RateLimit(key = "auth:refresh", limit = 20, timeWindow = 60, type = RateLimitType.USER, 
+               algorithm = "token_bucket", message = "刷新令牌请求过于频繁")
     public ResponseEntity<Result<String>> refreshToken(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
         if (refreshToken == null || refreshToken.trim().isEmpty()) {

@@ -1,8 +1,8 @@
 -- ========================================
--- 教育知识共享平台数据库结构 (精简版 - 20张表)
+-- 教育知识共享平台数据库结构 (完全匹配实体类版本)
 -- EduChain Database Schema
--- 创建时间: 2025-11-26
--- 版本: 2.0 (精简版)
+-- 创建时间: 2025-11-28
+-- 版本: 3.0 (完全匹配实体类)
 -- ========================================
 
 -- 删除原有数据库(如果存在)
@@ -13,71 +13,94 @@ CREATE DATABASE IF NOT EXISTS educhain_db CHARACTER SET utf8mb4 COLLATE utf8mb4_
 USE educhain_db;
 
 -- ========================================
--- 1. 用户核心表 (合并用户信息)
+-- 1. 用户表 (User)
 -- ========================================
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE COMMENT '用户名',
+    email VARCHAR(100) NOT NULL UNIQUE COMMENT '邮箱',
     password_hash VARCHAR(255) NOT NULL COMMENT '加密密码',
-    email VARCHAR(100) UNIQUE COMMENT '邮箱',
-    role ENUM('ADMIN', 'LEARNER') DEFAULT 'LEARNER' COMMENT '用户角色',
+    role ENUM('LEARNER', 'ADMIN') NOT NULL DEFAULT 'LEARNER' COMMENT '用户角色',
     full_name VARCHAR(100) COMMENT '真实姓名',
     avatar_url VARCHAR(500) COMMENT '头像URL',
-    school VARCHAR(200) COMMENT '学校信息',
-    level INT DEFAULT 1 COMMENT '用户等级',
+    school VARCHAR(100) COMMENT '学校信息',
+    level INT NOT NULL DEFAULT 1 COMMENT '用户等级',
     bio TEXT COMMENT '个人简介',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     INDEX idx_username (username),
     INDEX idx_email (email),
-    INDEX idx_level (level)
+    INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户信息表';
 
 -- ========================================
--- 2. 知识条目核心表 (合并多媒体信息)
--- ========================================
-CREATE TABLE knowledge_items (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(500) NOT NULL COMMENT '标题',
-    content TEXT COMMENT '内容描述',
-    type ENUM('TEXT', 'IMAGE', 'LINK', 'PDF', 'VIDEO', 'MIXED') DEFAULT 'TEXT' COMMENT '类型',
-    media_urls JSON COMMENT '多媒体URL集合(JSON格式)',
-    link_url VARCHAR(1000) COMMENT '外部链接',
-    uploader_id BIGINT NOT NULL COMMENT '上传者ID',
-    category_id BIGINT COMMENT '分类ID',
-    tags VARCHAR(500) COMMENT '标签(逗号分隔)',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-删除, 2-审核中',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (uploader_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_uploader (uploader_id),
-    INDEX idx_category (category_id),
-    INDEX idx_type (type),
-    INDEX idx_status (status),
-    INDEX idx_created_at (created_at),
-    FULLTEXT KEY ft_title_content (title, content)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识条目表';
-
--- ========================================
--- 3. 分类表
+-- 2. 分类表 (Category) - 必须在 knowledge_items 之前创建
 -- ========================================
 CREATE TABLE categories (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE COMMENT '分类名称',
     description TEXT COMMENT '分类描述',
     parent_id BIGINT COMMENT '父分类ID',
-    sort_order INT DEFAULT 0 COMMENT '排序',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    sort_order INT NOT NULL DEFAULT 0 COMMENT '排序',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL,
-    INDEX idx_parent_id (parent_id)
+    INDEX idx_name (name),
+    INDEX idx_parent_id (parent_id),
+    INDEX idx_sort_order (sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='分类表';
 
 -- ========================================
--- 4. 评论表
+-- 3. 知识条目表 (KnowledgeItem) - 依赖 users 和 categories
+-- ========================================
+CREATE TABLE knowledge_items (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL COMMENT '标题',
+    content LONGTEXT COMMENT '内容',
+    type ENUM('TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT', 'LINK', 'MIXED') NOT NULL DEFAULT 'TEXT' COMMENT '内容类型',
+    media_urls JSON COMMENT '多媒体URL集合(JSON格式)',
+    link_url VARCHAR(500) COMMENT '外部链接',
+    uploader_id BIGINT NOT NULL COMMENT '上传者ID',
+    category_id BIGINT NOT NULL COMMENT '分类ID',
+    tags VARCHAR(500) COMMENT '标签(逗号分隔)',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-删除, 2-草稿',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (uploader_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    INDEX idx_title (title),
+    INDEX idx_uploader_id (uploader_id),
+    INDEX idx_category_id (category_id),
+    INDEX idx_type (type),
+    INDEX idx_status (status),
+    INDEX idx_created_at (created_at),
+    INDEX idx_tags (tags)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识条目表';
+
+-- ========================================
+-- 4. 标签表 (Tag)
+-- ========================================
+CREATE TABLE tags (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE COMMENT '标签名称',
+    description VARCHAR(200) COMMENT '标签描述',
+    usage_count BIGINT NOT NULL DEFAULT 0 COMMENT '使用次数',
+    category VARCHAR(50) COMMENT '标签分类',
+    color VARCHAR(20) COMMENT '标签颜色',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
+    creator_id BIGINT COMMENT '创建者ID',
+    last_used_at DATETIME COMMENT '最后使用时间',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_name (name),
+    INDEX idx_usage_count (usage_count),
+    INDEX idx_category (category),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='标签表';
+
+-- ========================================
+-- 5. 评论表 (Comment)
 -- ========================================
 CREATE TABLE comments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -85,363 +108,392 @@ CREATE TABLE comments (
     user_id BIGINT NOT NULL COMMENT '用户ID',
     parent_id BIGINT COMMENT '父评论ID',
     content TEXT NOT NULL COMMENT '评论内容',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-删除',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-删除, 2-待审核',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE,
     INDEX idx_knowledge_id (knowledge_id),
     INDEX idx_user_id (user_id),
+    INDEX idx_parent_id (parent_id),
+    INDEX idx_status (status),
     INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='评论表';
 
 -- ========================================
--- 5. 用户互动表 (合并点赞、收藏、浏览)
+-- 6. 用户互动表 (UserInteraction)
 -- ========================================
 CREATE TABLE user_interactions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     knowledge_id BIGINT NOT NULL COMMENT '知识条目ID',
-    user_id BIGINT COMMENT '用户ID(可为空)',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
     interaction_type ENUM('LIKE', 'FAVORITE', 'VIEW') NOT NULL COMMENT '互动类型',
     ip_address VARCHAR(45) COMMENT 'IP地址',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
-    UNIQUE KEY uk_like_favorite (knowledge_id, user_id, interaction_type),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY uk_user_knowledge_interaction (user_id, knowledge_id, interaction_type),
     INDEX idx_knowledge_id (knowledge_id),
     INDEX idx_user_id (user_id),
-    INDEX idx_type (interaction_type),
+    INDEX idx_interaction_type (interaction_type),
     INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户互动表';
 
 -- ========================================
--- 6. 知识统计表 (合并各种统计)
--- ========================================
-CREATE TABLE knowledge_stats (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    knowledge_id BIGINT NOT NULL COMMENT '知识条目ID',
-    views_count INT DEFAULT 0 COMMENT '浏览次数',
-    likes_count INT DEFAULT 0 COMMENT '点赞次数',
-    favorites_count INT DEFAULT 0 COMMENT '收藏次数',
-    comments_count INT DEFAULT 0 COMMENT '评论次数',
-    score DECIMAL(5,2) DEFAULT 0.00 COMMENT '综合评分',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
-    UNIQUE KEY uk_knowledge_id (knowledge_id),
-    INDEX idx_views_count (views_count),
-    INDEX idx_likes_count (likes_count),
-    INDEX idx_score (score)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识统计表';
-
--- ========================================
--- 7. 用户统计表
--- ========================================
-CREATE TABLE user_stats (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL COMMENT '用户ID',
-    knowledge_count INT DEFAULT 0 NOT NULL COMMENT '知识内容数量',
-    like_count INT DEFAULT 0 NOT NULL COMMENT '点赞数量',
-    favorite_count INT DEFAULT 0 NOT NULL COMMENT '收藏数量',
-    comment_count INT DEFAULT 0 NOT NULL COMMENT '评论数量',
-    follower_count INT DEFAULT 0 NOT NULL COMMENT '关注者数量',
-    following_count INT DEFAULT 0 NOT NULL COMMENT '关注数量',
-    view_count BIGINT DEFAULT 0 NOT NULL COMMENT '浏览量',
-    total_score INT DEFAULT 0 NOT NULL COMMENT '总积分',
-    achievement_count INT DEFAULT 0 NOT NULL COMMENT '成就数量',
-    login_count INT DEFAULT 0 NOT NULL COMMENT '登录次数',
-    last_login_at DATETIME COMMENT '最后登录时间',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE KEY uk_user_id (user_id),
-    INDEX idx_user_id (user_id),
-    INDEX idx_total_score (total_score)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户统计表';
-
--- ========================================
--- 8. 搜索索引表
--- ========================================
-CREATE TABLE search_index (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    knowledge_id BIGINT NOT NULL COMMENT '知识条目ID',
-    title VARCHAR(500) NOT NULL COMMENT '标题',
-    content_snippet TEXT COMMENT '内容摘要',
-    tags VARCHAR(1000) COMMENT '标签集合',
-    category_name VARCHAR(100) COMMENT '分类名称',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
-    UNIQUE KEY uk_knowledge_id (knowledge_id),
-    FULLTEXT KEY ft_search (title, content_snippet, tags),
-    INDEX idx_updated_at (updated_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='搜索索引表';
-
--- ========================================
--- 9. 热门关键词表
--- ========================================
-CREATE TABLE hot_keywords (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    keyword VARCHAR(100) NOT NULL COMMENT '关键词',
-    search_count BIGINT DEFAULT 0 COMMENT '搜索次数',
-    result_count BIGINT DEFAULT 0 COMMENT '搜索结果数量',
-    click_count BIGINT DEFAULT 0 COMMENT '点击次数',
-    trend_score DOUBLE DEFAULT 0.0 COMMENT '趋势分数',
-    daily_count BIGINT DEFAULT 0 COMMENT '今日搜索次数',
-    weekly_count BIGINT DEFAULT 0 COMMENT '本周搜索次数',
-    monthly_count BIGINT DEFAULT 0 COMMENT '本月搜索次数',
-    last_searched_at DATETIME COMMENT '最后搜索时间',
-    category_id BIGINT COMMENT '关联的主要分类',
-    category_name VARCHAR(100) COMMENT '分类名称',
-    status INT DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    UNIQUE KEY uk_keyword (keyword),
-    INDEX idx_search_count (search_count),
-    INDEX idx_last_searched (last_searched_at),
-    INDEX idx_trend_score (trend_score),
-    INDEX idx_category_id (category_id),
-    INDEX idx_status (status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='热门关键词表';
-
--- ========================================
--- 10. 系统设置表
--- ========================================
-CREATE TABLE system_settings (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    setting_key VARCHAR(100) NOT NULL UNIQUE COMMENT '配置键',
-    setting_value TEXT COMMENT '配置值',
-    description VARCHAR(500) COMMENT '配置描述',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    INDEX idx_key (setting_key)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统设置表';
-
--- ========================================
--- 11. 通知表
--- ========================================
-CREATE TABLE notifications (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL COMMENT '用户ID',
-    type ENUM('LIKE', 'COMMENT', 'FOLLOW', 'SYSTEM') NOT NULL COMMENT '通知类型',
-    title VARCHAR(200) NOT NULL COMMENT '通知标题',
-    content TEXT COMMENT '通知内容',
-    related_id BIGINT COMMENT '关联ID(知识条目ID等)',
-    status TINYINT DEFAULT 0 COMMENT '状态: 0-未读, 1-已读',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_user_id (user_id),
-    INDEX idx_status (status),
-    INDEX idx_created_at (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知表';
-
--- ========================================
--- 12. 管理员日志表
--- ========================================
-CREATE TABLE admin_logs (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    admin_id BIGINT NOT NULL COMMENT '管理员ID',
-    target_type ENUM('KNOWLEDGE', 'USER', 'COMMENT') NOT NULL COMMENT '操作对象类型',
-    target_id BIGINT COMMENT '操作对象ID',
-    action ENUM('APPROVE', 'REJECT', 'DELETE', 'EDIT', 'RESTORE', 'BAN') NOT NULL COMMENT '操作类型',
-    reason TEXT COMMENT '操作原因',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_admin_id (admin_id),
-    INDEX idx_target_type (target_type),
-    INDEX idx_action (action),
-    INDEX idx_created_at (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='管理员日志表';
-
--- ========================================
--- 13. 版本历史表
--- ========================================
-CREATE TABLE knowledge_versions (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    knowledge_id BIGINT NOT NULL COMMENT '知识条目ID',
-    version_number INT NOT NULL COMMENT '版本号',
-    title VARCHAR(500) COMMENT '历史标题',
-    content_snapshot TEXT COMMENT '内容快照',
-    editor_id BIGINT NOT NULL COMMENT '编辑者ID',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
-    FOREIGN KEY (editor_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_knowledge_id (knowledge_id),
-    INDEX idx_version (version_number)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='版本历史表';
-
--- ========================================
--- 14. 用户关注表
+-- 7. 用户关注表 (UserFollow)
 -- ========================================
 CREATE TABLE user_follows (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     follower_id BIGINT NOT NULL COMMENT '关注者ID',
     following_id BIGINT NOT NULL COMMENT '被关注者ID',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (following_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE KEY uk_follow (follower_id, following_id),
-    INDEX idx_follower (follower_id),
-    INDEX idx_following (following_id)
+    UNIQUE KEY uk_follower_following (follower_id, following_id),
+    INDEX idx_follower_id (follower_id),
+    INDEX idx_following_id (following_id),
+    INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户关注表';
 
 -- ========================================
--- 15. 标签表
+-- 8. 通知表 (Notification)
 -- ========================================
-CREATE TABLE tags (
+CREATE TABLE notifications (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE COMMENT '标签名称',
-    description VARCHAR(500) COMMENT '标签描述',
-    usage_count INT DEFAULT 0 COMMENT '使用次数',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    INDEX idx_name (name),
-    INDEX idx_usage_count (usage_count)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='标签表';
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    type ENUM('LIKE', 'COMMENT', 'REPLY', 'FOLLOW', 'SYSTEM') NOT NULL COMMENT '通知类型',
+    title VARCHAR(200) NOT NULL COMMENT '通知标题',
+    content TEXT NOT NULL COMMENT '通知内容',
+    related_id BIGINT COMMENT '关联ID(知识内容ID等)',
+    related_user_id BIGINT COMMENT '相关的用户ID',
+    is_read TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否已读: 0-未读, 1-已读',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id),
+    INDEX idx_type (type),
+    INDEX idx_is_read (is_read),
+    INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知表';
 
 -- ========================================
--- 16. 文件管理表
+-- 9. 知识版本历史表 (KnowledgeVersion)
 -- ========================================
-CREATE TABLE file_uploads (
+CREATE TABLE knowledge_versions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    knowledge_id BIGINT COMMENT '关联知识条目ID',
-    uploader_id BIGINT NOT NULL COMMENT '上传者ID',
-    file_name VARCHAR(255) NOT NULL COMMENT '文件名',
-    file_path VARCHAR(1000) NOT NULL COMMENT '文件路径',
-    file_type VARCHAR(50) NOT NULL COMMENT '文件类型',
-    file_size BIGINT NOT NULL COMMENT '文件大小',
-    mime_type VARCHAR(100) COMMENT 'MIME类型',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-删除',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE SET NULL,
-    FOREIGN KEY (uploader_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_knowledge_id (knowledge_id),
-    INDEX idx_uploader_id (uploader_id),
-    INDEX idx_file_type (file_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件管理表';
-
--- ========================================
--- 17. 外部数据源表
--- ========================================
-CREATE TABLE external_sources (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    source_name VARCHAR(100) NOT NULL COMMENT '数据源名称',
-    domain VARCHAR(200) NOT NULL UNIQUE COMMENT '域名',
-    api_endpoint VARCHAR(500) COMMENT 'API端点',
-    crawl_frequency INT DEFAULT 24 COMMENT '抓取频率(小时)',
-    last_crawl_at DATETIME COMMENT '最后抓取时间',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-启用, 0-禁用',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    INDEX idx_domain (domain),
-    INDEX idx_status (status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='外部数据源表';
-
--- ========================================
--- 18. 外部内容索引表
--- ========================================
-CREATE TABLE external_content (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    source_id BIGINT NOT NULL COMMENT '数据源ID',
-    title VARCHAR(500) NOT NULL COMMENT '标题',
-    summary TEXT COMMENT '摘要',
-    url VARCHAR(1000) NOT NULL COMMENT '原始URL',
-    content_hash VARCHAR(64) COMMENT '内容哈希',
+    knowledge_id BIGINT NOT NULL COMMENT '知识条目ID',
+    version_number INT NOT NULL COMMENT '版本号',
+    title VARCHAR(200) NOT NULL COMMENT '历史标题',
+    content LONGTEXT COMMENT '内容快照',
+    type ENUM('TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT', 'LINK', 'MIXED') NOT NULL COMMENT '内容类型',
+    media_urls JSON COMMENT '多媒体URL集合(JSON格式)',
+    link_url VARCHAR(500) COMMENT '外部链接',
     tags VARCHAR(500) COMMENT '标签',
-    fetched_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
-    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常, 0-删除',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
-    FOREIGN KEY (source_id) REFERENCES external_sources(id) ON DELETE CASCADE,
-    INDEX idx_source_id (source_id),
-    INDEX idx_content_hash (content_hash),
-    INDEX idx_fetched_at (fetched_at),
-    FULLTEXT KEY ft_title_summary (title, summary)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='外部内容表';
+    editor_id BIGINT NOT NULL COMMENT '编辑者ID',
+    change_summary VARCHAR(500) COMMENT '变更摘要',
+    change_type ENUM('CREATE', 'UPDATE', 'DELETE', 'RESTORE') NOT NULL DEFAULT 'UPDATE' COMMENT '变更类型',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
+    FOREIGN KEY (editor_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_knowledge_id (knowledge_id),
+    INDEX idx_version_number (version_number),
+    INDEX idx_created_at (created_at),
+    INDEX idx_editor_id (editor_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='版本历史表';
 
 -- ========================================
--- 19. 用户成就表
+-- 10. 知识统计表 (KnowledgeStats)
+-- ========================================
+CREATE TABLE knowledge_stats (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    knowledge_id BIGINT NOT NULL UNIQUE COMMENT '知识条目ID',
+    view_count BIGINT NOT NULL DEFAULT 0 COMMENT '浏览次数',
+    like_count BIGINT NOT NULL DEFAULT 0 COMMENT '点赞次数',
+    favorite_count BIGINT NOT NULL DEFAULT 0 COMMENT '收藏次数',
+    comment_count BIGINT NOT NULL DEFAULT 0 COMMENT '评论次数',
+    share_count BIGINT NOT NULL DEFAULT 0 COMMENT '分享次数',
+    quality_score DOUBLE DEFAULT 0.0 COMMENT '质量评分',
+    last_view_at DATETIME COMMENT '最后浏览时间',
+    last_interaction_at DATETIME COMMENT '最后互动时间',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
+    INDEX idx_knowledge_id (knowledge_id),
+    INDEX idx_view_count (view_count),
+    INDEX idx_like_count (like_count),
+    INDEX idx_favorite_count (favorite_count),
+    INDEX idx_comment_count (comment_count)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识统计表';
+
+-- ========================================
+-- 11. 用户统计表 (UserStats)
+-- ========================================
+CREATE TABLE user_stats (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE COMMENT '用户ID',
+    knowledge_count INT NOT NULL DEFAULT 0 COMMENT '知识内容数量',
+    like_count INT NOT NULL DEFAULT 0 COMMENT '点赞数量',
+    favorite_count INT NOT NULL DEFAULT 0 COMMENT '收藏数量',
+    comment_count INT NOT NULL DEFAULT 0 COMMENT '评论数量',
+    follower_count INT NOT NULL DEFAULT 0 COMMENT '关注者数量',
+    following_count INT NOT NULL DEFAULT 0 COMMENT '关注数量',
+    view_count BIGINT NOT NULL DEFAULT 0 COMMENT '浏览量',
+    total_score INT NOT NULL DEFAULT 0 COMMENT '总积分',
+    achievement_count INT NOT NULL DEFAULT 0 COMMENT '成就数量',
+    login_count INT NOT NULL DEFAULT 0 COMMENT '登录次数',
+    last_login_at DATETIME COMMENT '最后登录时间',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id),
+    INDEX idx_total_score (total_score)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户统计表';
+
+-- ========================================
+-- 12. 用户成就表 (UserAchievement)
 -- ========================================
 CREATE TABLE user_achievements (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL COMMENT '用户ID',
-    achievement_type VARCHAR(50) NOT NULL COMMENT '成就类型',
+    achievement_type ENUM('KNOWLEDGE_CREATOR', 'KNOWLEDGE_SHARER', 'ACTIVE_LEARNER', 'SOCIAL_BUTTERFLY', 'QUALITY_CONTRIBUTOR', 'MILESTONE_ACHIEVER', 'SPECIAL_EVENT', 'SYSTEM_BADGE') NOT NULL COMMENT '成就类型',
     achievement_name VARCHAR(100) NOT NULL COMMENT '成就名称',
-    description VARCHAR(500) COMMENT '成就描述',
-    points INT DEFAULT 0 COMMENT '成就积分',
-    awarded_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '获得时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    achievement_description TEXT COMMENT '成就描述',
+    achievement_icon VARCHAR(200) COMMENT '成就图标',
+    points_awarded INT NOT NULL DEFAULT 0 COMMENT '成就积分',
+    level INT NOT NULL DEFAULT 1 COMMENT '成就等级',
+    progress_current INT NOT NULL DEFAULT 0 COMMENT '当前进度',
+    progress_target INT NOT NULL DEFAULT 1 COMMENT '目标进度',
+    is_completed TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否完成: 0-未完成, 1-已完成',
+    achieved_at DATETIME COMMENT '获得时间',
+    metadata JSON COMMENT '额外的成就数据',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY idx_user_achievement (user_id, achievement_type),
     INDEX idx_user_id (user_id),
-    INDEX idx_type (achievement_type),
-    INDEX idx_awarded_at (awarded_at)
+    INDEX idx_achievement_type (achievement_type),
+    INDEX idx_achieved_at (achieved_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户成就表';
 
 -- ========================================
--- 20. 系统日志表
+-- 13. 搜索历史表 (SearchHistory)
+-- ========================================
+CREATE TABLE search_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT COMMENT '用户ID(可为空，支持匿名搜索)',
+    keyword VARCHAR(100) NOT NULL COMMENT '关键词',
+    result_count BIGINT NOT NULL DEFAULT 0 COMMENT '搜索结果数量',
+    category_id BIGINT COMMENT '分类ID',
+    content_type ENUM('TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT', 'LINK', 'MIXED') COMMENT '内容类型',
+    ip_address VARCHAR(45) COMMENT 'IP地址',
+    user_agent VARCHAR(500) COMMENT '用户代理',
+    search_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '搜索时间',
+    response_time BIGINT COMMENT '搜索响应时间（毫秒）',
+    clicked_result_id BIGINT COMMENT '用户点击的结果ID',
+    clicked_position INT COMMENT '点击结果在搜索结果中的位置',
+    session_id VARCHAR(100) COMMENT '会话ID',
+    INDEX idx_user_id (user_id),
+    INDEX idx_keyword (keyword),
+    INDEX idx_search_time (search_time),
+    INDEX idx_ip_address (ip_address)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='搜索历史表';
+
+-- ========================================
+-- 14. 搜索索引表 (SearchIndex)
+-- ========================================
+CREATE TABLE search_indexes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    knowledge_id BIGINT NOT NULL UNIQUE COMMENT '知识条目ID',
+    search_text TEXT COMMENT '合并的搜索文本（标题+内容+标签）',
+    title VARCHAR(200) COMMENT '标题',
+    content_summary VARCHAR(500) COMMENT '内容摘要',
+    category_id BIGINT COMMENT '分类ID',
+    category_name VARCHAR(100) COMMENT '分类名称',
+    tags VARCHAR(500) COMMENT '标签',
+    uploader_id BIGINT COMMENT '上传者ID',
+    uploader_name VARCHAR(50) COMMENT '上传者名称',
+    content_type ENUM('TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT', 'LINK', 'MIXED') COMMENT '内容类型',
+    view_count BIGINT NOT NULL DEFAULT 0 COMMENT '浏览量',
+    like_count BIGINT NOT NULL DEFAULT 0 COMMENT '点赞数',
+    favorite_count BIGINT NOT NULL DEFAULT 0 COMMENT '收藏数',
+    comment_count BIGINT NOT NULL DEFAULT 0 COMMENT '评论数',
+    quality_score DOUBLE NOT NULL DEFAULT 0.0 COMMENT '质量评分',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-删除',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE CASCADE,
+    INDEX idx_knowledge_id (knowledge_id),
+    INDEX idx_category_id (category_id),
+    INDEX idx_tags (tags),
+    INDEX idx_updated_at (updated_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='搜索索引表';
+
+-- ========================================
+-- 15. 热门关键词表 (HotKeyword)
+-- ========================================
+CREATE TABLE hot_keywords (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    keyword VARCHAR(100) NOT NULL UNIQUE COMMENT '关键词',
+    search_count BIGINT NOT NULL DEFAULT 0 COMMENT '搜索次数',
+    result_count BIGINT NOT NULL DEFAULT 0 COMMENT '搜索结果数量',
+    click_count BIGINT NOT NULL DEFAULT 0 COMMENT '点击次数',
+    trend_score DOUBLE NOT NULL DEFAULT 0.0 COMMENT '趋势分数',
+    daily_count BIGINT NOT NULL DEFAULT 0 COMMENT '今日搜索次数',
+    weekly_count BIGINT NOT NULL DEFAULT 0 COMMENT '本周搜索次数',
+    monthly_count BIGINT NOT NULL DEFAULT 0 COMMENT '本月搜索次数',
+    last_searched_at DATETIME COMMENT '最后搜索时间',
+    category_id BIGINT COMMENT '关联的主要分类',
+    category_name VARCHAR(100) COMMENT '分类名称',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-禁用',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_keyword (keyword),
+    INDEX idx_search_count (search_count),
+    INDEX idx_last_searched (last_searched_at),
+    INDEX idx_trend_score (trend_score)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='热门关键词表';
+
+-- ========================================
+-- 16. 文件上传表 (FileUpload)
+-- ========================================
+CREATE TABLE file_uploads (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    original_name VARCHAR(255) NOT NULL COMMENT '原始文件名',
+    stored_name VARCHAR(255) NOT NULL COMMENT '存储文件名',
+    file_path VARCHAR(500) NOT NULL COMMENT '文件路径',
+    file_url VARCHAR(500) NOT NULL COMMENT '文件URL',
+    file_size BIGINT NOT NULL COMMENT '文件大小',
+    file_type VARCHAR(100) NOT NULL COMMENT '文件类型',
+    mime_type VARCHAR(100) COMMENT 'MIME类型',
+    file_hash VARCHAR(64) COMMENT '文件哈希值(MD5或SHA256)',
+    uploader_id BIGINT NOT NULL COMMENT '上传者ID',
+    knowledge_id BIGINT COMMENT '关联的知识内容ID',
+    download_count BIGINT NOT NULL DEFAULT 0 COMMENT '下载次数',
+    last_accessed_at DATETIME COMMENT '最后访问时间',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-删除, 2-待审核',
+    description VARCHAR(500) COMMENT '文件描述',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (uploader_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (knowledge_id) REFERENCES knowledge_items(id) ON DELETE SET NULL,
+    INDEX idx_uploader_id (uploader_id),
+    INDEX idx_file_type (file_type),
+    INDEX idx_status (status),
+    INDEX idx_created_at (created_at),
+    INDEX idx_file_hash (file_hash)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件上传表';
+
+-- ========================================
+-- 17. 外部数据源表 (ExternalSource) - 必须在 external_contents 之前创建
+-- ========================================
+CREATE TABLE external_sources (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL COMMENT '数据源名称',
+    source_url VARCHAR(500) NOT NULL UNIQUE COMMENT '数据源URL',
+    source_type VARCHAR(50) NOT NULL COMMENT '数据源类型',
+    description TEXT COMMENT '描述',
+    crawl_frequency INT NOT NULL DEFAULT 24 COMMENT '抓取频率(小时)',
+    selector_config JSON COMMENT 'CSS选择器配置',
+    headers_config JSON COMMENT 'HTTP请求头配置',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-启用, 0-禁用',
+    last_crawl_at DATETIME COMMENT '最后抓取时间',
+    last_success_at DATETIME COMMENT '最后成功时间',
+    last_error TEXT COMMENT '最后错误信息',
+    total_crawled BIGINT NOT NULL DEFAULT 0 COMMENT '总抓取次数',
+    total_success BIGINT NOT NULL DEFAULT 0 COMMENT '总成功次数',
+    total_failed BIGINT NOT NULL DEFAULT 0 COMMENT '总失败次数',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_source_url (source_url),
+    INDEX idx_source_type (source_type),
+    INDEX idx_status (status),
+    INDEX idx_last_crawl_at (last_crawl_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='外部数据源表';
+
+-- ========================================
+-- 18. 外部内容表 (ExternalContent) - 依赖 external_sources
+-- ========================================
+CREATE TABLE external_contents (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    source_id BIGINT NOT NULL COMMENT '数据源ID',
+    title VARCHAR(200) NOT NULL COMMENT '标题',
+    content LONGTEXT COMMENT '内容',
+    summary TEXT COMMENT '摘要',
+    author VARCHAR(100) COMMENT '作者',
+    original_url VARCHAR(500) NOT NULL COMMENT '原始URL',
+    image_url VARCHAR(500) COMMENT '图片URL',
+    tags VARCHAR(500) COMMENT '标签',
+    category VARCHAR(100) COMMENT '分类',
+    content_hash VARCHAR(64) NOT NULL UNIQUE COMMENT '内容哈希(SHA-256)',
+    language VARCHAR(10) DEFAULT 'zh' COMMENT '语言',
+    word_count INT COMMENT '字数',
+    reading_time INT COMMENT '预估阅读时间（分钟）',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-正常, 0-隐藏, -1-删除',
+    quality_score DOUBLE DEFAULT 0.0 COMMENT '质量分数',
+    published_at DATETIME COMMENT '发布时间',
+    crawled_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
+    last_updated_at DATETIME COMMENT '最后更新时间',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (source_id) REFERENCES external_sources(id) ON DELETE CASCADE,
+    INDEX idx_source_id (source_id),
+    INDEX idx_original_url (original_url),
+    INDEX idx_content_hash (content_hash),
+    INDEX idx_status (status),
+    INDEX idx_crawled_at (crawled_at),
+    INDEX idx_published_at (published_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='外部内容表';
+
+-- ========================================
+-- 19. 管理员日志表 (AdminLog)
+-- ========================================
+CREATE TABLE admin_logs (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    admin_id BIGINT NOT NULL COMMENT '管理员ID',
+    admin_username VARCHAR(50) NOT NULL COMMENT '管理员用户名',
+    operation_type ENUM('CREATE', 'UPDATE', 'DELETE', 'APPROVE', 'REJECT', 'DISABLE', 'ENABLE', 'EXPORT', 'IMPORT', 'BACKUP', 'RESTORE') NOT NULL COMMENT '操作类型',
+    target_type ENUM('USER', 'KNOWLEDGE_ITEM', 'CATEGORY', 'COMMENT', 'TAG', 'SYSTEM_CONFIG', 'EXTERNAL_SOURCE', 'NOTIFICATION', 'LOG') NOT NULL COMMENT '目标类型',
+    target_id BIGINT COMMENT '操作对象ID',
+    target_name VARCHAR(200) COMMENT '操作对象名称',
+    operation VARCHAR(200) NOT NULL COMMENT '操作',
+    description TEXT COMMENT '描述',
+    old_value TEXT COMMENT '旧值',
+    new_value TEXT COMMENT '新值',
+    ip_address VARCHAR(45) COMMENT 'IP地址',
+    user_agent VARCHAR(500) COMMENT '用户代理',
+    result ENUM('SUCCESS', 'FAILED', 'PARTIAL') NOT NULL COMMENT '操作结果',
+    error_message TEXT COMMENT '错误信息',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    INDEX idx_admin_id (admin_id),
+    INDEX idx_operation_type (operation_type),
+    INDEX idx_target_type (target_type),
+    INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='管理员日志表';
+
+-- ========================================
+-- 20. 系统日志表 (SystemLog)
 -- ========================================
 CREATE TABLE system_logs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    log_level ENUM('INFO', 'WARN', 'ERROR', 'DEBUG') DEFAULT 'INFO' COMMENT '日志级别',
-    module VARCHAR(50) NOT NULL COMMENT '模块名称',
-    action VARCHAR(100) NOT NULL COMMENT '操作名称',
+    log_type ENUM('OPERATION', 'ERROR', 'SECURITY', 'PERFORMANCE', 'SYSTEM') NOT NULL COMMENT '日志类型',
+    level ENUM('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL') NOT NULL COMMENT '日志级别',
     user_id BIGINT COMMENT '用户ID',
+    username VARCHAR(100) COMMENT '用户名',
+    operation VARCHAR(200) NOT NULL COMMENT '操作',
+    description TEXT COMMENT '描述',
     ip_address VARCHAR(45) COMMENT 'IP地址',
     user_agent VARCHAR(500) COMMENT '用户代理',
-    request_data JSON COMMENT '请求数据',
-    response_data JSON COMMENT '响应数据',
-    execution_time INT COMMENT '执行时间(毫秒)',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    reserved_field_1 VARCHAR(255) DEFAULT NULL COMMENT '预留字段1',
+    request_url VARCHAR(500) COMMENT '请求URL',
+    request_method VARCHAR(10) COMMENT '请求方法',
+    response_status INT COMMENT '响应状态码',
+    execution_time BIGINT COMMENT '执行时间(毫秒)',
+    exception TEXT COMMENT '异常信息',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
-    INDEX idx_log_level (log_level),
-    INDEX idx_module (module),
+    INDEX idx_log_type (log_type),
     INDEX idx_user_id (user_id),
-    INDEX idx_created_at (created_at)
+    INDEX idx_created_at (created_at),
+    INDEX idx_level (level)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统日志表';
-
--- ========================================
--- 初始化数据 (可选 - 如需要可手动执行)
--- ========================================
-
--- 注释掉初始化数据，避免启动时的日期问题
--- 如需要这些数据，可以在应用启动后手动执行
-
-/*
--- 插入默认系统设置
-INSERT INTO system_settings (setting_key, setting_value, description) VALUES
-('site_name', 'EduChain 教育知识共享平台', '网站名称'),
-('max_upload_size', '10485760', '最大上传文件大小(字节)'),
-('enable_registration', '1', '是否开放注册'),
-('default_user_level', '1', '新用户默认等级'),
-('points_per_upload', '10', '每次上传获得积分'),
-('points_per_like', '2', '每次点赞获得积分');
-
--- 插入默认分类
-INSERT INTO categories (name, description, sort_order) VALUES
-('计算机科学', '计算机相关知识', 1),
-('数学', '数学相关知识', 2),
-('物理', '物理相关知识', 3),
-('化学', '化学相关知识', 4),
-('生物', '生物相关知识', 5),
-('其他', '其他类别知识', 99);
-
--- 插入默认标签
-INSERT INTO tags (name, description) VALUES
-('编程', '编程相关内容'),
-('算法', '算法相关内容'),
-('数据结构', '数据结构相关内容'),
-('机器学习', '机器学习相关内容'),
-('人工智能', '人工智能相关内容');
-*/
 
 -- ========================================
 -- 创建触发器
@@ -454,17 +506,17 @@ CREATE TRIGGER tr_interaction_stats AFTER INSERT ON user_interactions
 FOR EACH ROW
 BEGIN
     IF NEW.interaction_type = 'LIKE' THEN
-        INSERT INTO knowledge_stats (knowledge_id, likes_count) 
+        INSERT INTO knowledge_stats (knowledge_id, like_count) 
         VALUES (NEW.knowledge_id, 1)
-        ON DUPLICATE KEY UPDATE likes_count = likes_count + 1;
+        ON DUPLICATE KEY UPDATE like_count = like_count + 1;
     ELSEIF NEW.interaction_type = 'FAVORITE' THEN
-        INSERT INTO knowledge_stats (knowledge_id, favorites_count) 
+        INSERT INTO knowledge_stats (knowledge_id, favorite_count) 
         VALUES (NEW.knowledge_id, 1)
-        ON DUPLICATE KEY UPDATE favorites_count = favorites_count + 1;
+        ON DUPLICATE KEY UPDATE favorite_count = favorite_count + 1;
     ELSEIF NEW.interaction_type = 'VIEW' THEN
-        INSERT INTO knowledge_stats (knowledge_id, views_count) 
+        INSERT INTO knowledge_stats (knowledge_id, view_count) 
         VALUES (NEW.knowledge_id, 1)
-        ON DUPLICATE KEY UPDATE views_count = views_count + 1;
+        ON DUPLICATE KEY UPDATE view_count = view_count + 1;
     END IF;
 END$$
 
@@ -472,9 +524,9 @@ END$$
 CREATE TRIGGER tr_comment_stats AFTER INSERT ON comments
 FOR EACH ROW
 BEGIN
-    INSERT INTO knowledge_stats (knowledge_id, comments_count) 
+    INSERT INTO knowledge_stats (knowledge_id, comment_count) 
     VALUES (NEW.knowledge_id, 1)
-    ON DUPLICATE KEY UPDATE comments_count = comments_count + 1;
+    ON DUPLICATE KEY UPDATE comment_count = comment_count + 1;
 END$$
 
 DELIMITER ;
@@ -489,46 +541,6 @@ CREATE INDEX idx_interactions_knowledge_type ON user_interactions(knowledge_id, 
 CREATE INDEX idx_comments_knowledge_created ON comments(knowledge_id, created_at DESC);
 
 -- ========================================
--- 全文搜索索引优化
--- ========================================
-
--- 为 knowledge_items 表添加额外的 FULLTEXT 索引（已有基础索引）
--- ALTER TABLE knowledge_items ADD FULLTEXT(title, content, tags); -- 已在表创建时添加
-
--- 为 search_index 表添加 FULLTEXT 索引
-ALTER TABLE search_index ADD FULLTEXT(title, content_snippet, tags);
-
--- 创建搜索性能优化索引
-CREATE INDEX idx_search_updated_at ON search_index(updated_at DESC);
-
--- 创建热门关键词表的性能索引
-CREATE INDEX idx_hot_keyword_search_count ON hot_keywords(search_count DESC);
-CREATE INDEX idx_hot_keyword_last_searched ON hot_keywords(last_searched_at DESC);
-
--- ========================================
--- 数据库性能优化
--- ========================================
-
--- 注意：如果将来需要修复无效日期数据，可以使用以下语句：
--- UPDATE users SET created_at = NOW() WHERE created_at = '0000-00-00 00:00:00' OR created_at IS NULL;
--- UPDATE users SET updated_at = NOW() WHERE updated_at = '0000-00-00 00:00:00' OR updated_at IS NULL;
--- UPDATE knowledge_items SET created_at = NOW() WHERE created_at = '0000-00-00 00:00:00' OR created_at IS NULL;
--- UPDATE knowledge_items SET updated_at = NOW() WHERE updated_at = '0000-00-00 00:00:00' OR updated_at IS NULL;
-
--- 为 TEXT 字段创建带长度限制的索引（避免索引过长问题）
-CREATE INDEX idx_knowledge_content ON knowledge_items (content(255));
-CREATE INDEX idx_search_content_snippet ON search_index (content_snippet(255));
-
--- ========================================
--- MySQL 全文搜索配置建议
--- ========================================
--- 在 MySQL 配置文件 (my.cnf) 中建议设置以下参数：
--- ft_min_word_len = 2      # 最小索引词长度，支持中文搜索
--- ft_max_word_len = 84     # 最大索引词长度
--- ft_stopword_file = ''    # 停用词文件，设置为空以索引所有词
--- innodb_ft_min_token_size = 2  # InnoDB 全文索引最小词长度
-
--- ========================================
 -- 数据库结构创建完成 (共20张表)
--- 包含：基础结构 + 全文索引 + 性能优化 + 问题修复
+-- 所有表结构已完全匹配实体类定义
 -- ========================================

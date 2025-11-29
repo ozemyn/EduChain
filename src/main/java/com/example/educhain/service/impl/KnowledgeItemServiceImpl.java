@@ -30,7 +30,6 @@ import com.github.difflib.patch.Patch;
  * 知识内容服务实现类
  */
 @Service
-@Transactional
 public class KnowledgeItemServiceImpl implements KnowledgeItemService {
 
     private static final Logger logger = LoggerFactory.getLogger(KnowledgeItemServiceImpl.class);

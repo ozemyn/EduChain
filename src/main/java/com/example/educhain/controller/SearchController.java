@@ -1,5 +1,8 @@
 package com.example.educhain.controller;
 
+import com.example.educhain.annotation.RateLimit;
+import com.example.educhain.enums.RateLimitType;
+
 import com.example.educhain.dto.HotKeywordDTO;
 import com.example.educhain.dto.SearchRequest;
 import com.example.educhain.dto.SearchResultDTO;
@@ -48,6 +51,8 @@ public class SearchController {
      */
     @PostMapping
     @Operation(summary = "执行搜索", description = "根据搜索请求执行搜索操作")
+    @RateLimit(key = "search:query", limit = 50, timeWindow = 60, type = RateLimitType.IP, 
+               algorithm = "sliding_window", message = "搜索请求过于频繁，请稍后再试")
     public Result<Page<SearchResultDTO>> search(
             @Valid @RequestBody SearchRequest request,
             HttpServletRequest httpRequest) {

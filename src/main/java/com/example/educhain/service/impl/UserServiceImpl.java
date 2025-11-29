@@ -23,6 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -35,6 +38,8 @@ import java.util.Set;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -135,7 +140,7 @@ public class UserServiceImpl implements UserService {
                 redisTemplate.expire(tokenKey, Duration.ofDays(7));
             } catch (Exception e) {
                 // Redis操作失败不影响登录流程
-                System.err.println("Redis token存储失败: " + e.getMessage());
+                logger.warn("Redis token存储失败: {}", e.getMessage(), e);
             }
 
             // 记录登录
@@ -216,7 +221,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (Exception e) {
             // 记录日志但不抛出异常，确保登出操作不会失败
-            System.err.println("Redis操作失败，但登出继续进行: " + e.getMessage());
+            logger.warn("Redis操作失败，但登出继续进行: {}", e.getMessage(), e);
         }
     }
 

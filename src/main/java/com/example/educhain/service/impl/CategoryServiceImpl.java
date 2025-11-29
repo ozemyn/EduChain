@@ -8,6 +8,8 @@ import com.example.educhain.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = {"categories", "categoryTree"}, key = "#id")
     public CategoryDTO update(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "分类不存在"));
@@ -112,6 +115,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = {"categories", "categoryTree"}, key = "#id", allEntries = true)
     public void delete(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "分类不存在"));
@@ -127,6 +131,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "categories", key = "#id")
     public CategoryDTO findById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "分类不存在"));
@@ -182,20 +187,23 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(readOnly = true)
     public List<CategoryDTO> getCategoryPath(Long categoryId) {
+        // 使用递归查询一次性获取所有父分类，避免N+1查询
+        List<Object[]> categoryPathData = categoryRepository.findCategoryPathById(categoryId);
+        
+        if (categoryPathData.isEmpty()) {
+            throw new BusinessException("CATEGORY_NOT_FOUND", "分类不存在");
+        }
+        
+        // 将查询结果转换为CategoryDTO列表
         List<CategoryDTO> path = new ArrayList<>();
-        
-        Category current = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BusinessException("CATEGORY_NOT_FOUND", "分类不存在"));
-        
-        // 从当前分类向上遍历到根分类
-        while (current != null) {
-            path.add(0, convertToDTO(current)); // 插入到列表开头
-            
-            if (current.getParentId() != null) {
-                current = categoryRepository.findById(current.getParentId()).orElse(null);
-            } else {
-                current = null;
-            }
+        for (Object[] row : categoryPathData) {
+            CategoryDTO dto = new CategoryDTO();
+            dto.setId(((Number) row[0]).longValue());
+            dto.setName((String) row[1]);
+            dto.setDescription((String) row[2]);
+            dto.setParentId(row[3] != null ? ((Number) row[3]).longValue() : null);
+            dto.setSortOrder(row[4] != null ? ((Number) row[4]).intValue() : 0);
+            path.add(dto);
         }
         
         return path;

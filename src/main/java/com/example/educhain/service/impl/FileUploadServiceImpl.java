@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * 文件上传服务实现类
  */
 @Service
-@Transactional
 public class FileUploadServiceImpl implements FileUploadService {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadServiceImpl.class);
@@ -74,6 +73,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     );
 
     @Override
+    @Transactional
     public FileUpload uploadFile(MultipartFile file, Long uploaderId, Long knowledgeId, String description) {
         validateFile(file);
         
@@ -96,9 +96,11 @@ public class FileUploadServiceImpl implements FileUploadService {
             Path uploadDir = Paths.get(uploadPath, datePath);
             Files.createDirectories(uploadDir);
             
-            // 保存文件
+            // 保存文件（使用try-with-resources确保流正确关闭）
             Path filePath = uploadDir.resolve(storedName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            try (var inputStream = file.getInputStream()) {
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
             
             // 生成文件URL
             String fileUrl = generateFileUrl(datePath, storedName);
@@ -177,6 +179,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
+    @Transactional
     public void deleteFile(Long fileId, Long operatorId) {
         FileUpload file = getFileById(fileId);
         
@@ -203,6 +206,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
+    @Transactional
     public void physicalDeleteFile(Long fileId) {
         FileUpload file = fileUploadRepository.findById(fileId)
                 .orElseThrow(() -> new BusinessException("FILE_NOT_FOUND", "文件不存在"));
@@ -260,6 +264,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
+    @Transactional
     public void incrementDownloadCount(Long fileId) {
         fileUploadRepository.incrementDownloadCount(fileId, LocalDateTime.now());
     }
@@ -312,12 +317,14 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     @Override
+    @Transactional
     public int cleanupOrphanFiles(int daysThreshold) {
         LocalDateTime before = LocalDateTime.now().minusDays(daysThreshold);
         return fileUploadRepository.deleteOrphanFilesBefore(before);
     }
 
     @Override
+    @Transactional
     public int cleanupDuplicateFiles() {
         List<Object[]> duplicates = fileUploadRepository.findDuplicateFiles(1);
         int cleanedCount = 0;

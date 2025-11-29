@@ -73,9 +73,27 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        
+        // 只允许指定的源（生产环境应从配置文件读取）
+        String allowedOrigins = System.getProperty("cors.allowed.origins", 
+            "http://localhost:3000,http://localhost:5173,http://localhost:8080");
+        configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
+        
+        // 只允许必要的HTTP方法
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        
+        // 只允许必要的头部
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin"
+        ));
+        
+        // 只暴露必要的响应头
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
@@ -124,10 +142,13 @@ public class SecurityConfig {
                 .requestMatchers("/knowledge/list").permitAll()
                 .requestMatchers("/knowledge/popular").permitAll()
                 
-                // Swagger文档 - 完全开放访问
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/swagger-resources/**", "/webjars/**", "/configuration/**").permitAll()
-                .requestMatchers("/api-docs/**", "/swagger-config/**").permitAll()
+                // Swagger文档 - 开发环境开放，生产环境限制管理员访问
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**")
+                    .permitAll() // 开发环境允许所有访问，生产环境建议使用反向代理控制
+                .requestMatchers("/swagger-resources/**", "/webjars/**", "/configuration/**")
+                    .permitAll() // 开发环境允许所有访问，生产环境建议使用反向代理控制
+                .requestMatchers("/api-docs/**", "/swagger-config/**")
+                    .permitAll() // 开发环境允许所有访问，生产环境建议使用反向代理控制
                 
                 // Actuator健康检查
                 .requestMatchers("/actuator/health", "/actuator/info").permitAll()

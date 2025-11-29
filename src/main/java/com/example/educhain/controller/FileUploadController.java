@@ -1,6 +1,8 @@
 package com.example.educhain.controller;
 
+import com.example.educhain.annotation.RateLimit;
 import com.example.educhain.entity.FileUpload;
+import com.example.educhain.enums.RateLimitType;
 import com.example.educhain.service.FileUploadService;
 import com.example.educhain.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +41,8 @@ public class FileUploadController {
 
     @PostMapping("/upload")
     @Operation(summary = "上传单个文件", description = "上传单个文件到服务器")
+    @RateLimit(key = "file:upload", limit = 20, timeWindow = 60, type = RateLimitType.USER, 
+               algorithm = "token_bucket", message = "文件上传过于频繁，请稍后再试")
     public ResponseEntity<Result<FileUpload>> uploadFile(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "knowledgeId", required = false) Long knowledgeId,
@@ -53,6 +57,8 @@ public class FileUploadController {
 
     @PostMapping("/upload-multiple")
     @Operation(summary = "上传多个文件", description = "批量上传多个文件到服务器")
+    @RateLimit(key = "file:upload-multiple", limit = 10, timeWindow = 60, type = RateLimitType.USER, 
+               algorithm = "token_bucket", message = "批量上传过于频繁，请稍后再试")
     public ResponseEntity<Result<List<FileUpload>>> uploadFiles(
             @RequestParam("files") List<MultipartFile> files,
             @RequestParam(value = "knowledgeId", required = false) Long knowledgeId,

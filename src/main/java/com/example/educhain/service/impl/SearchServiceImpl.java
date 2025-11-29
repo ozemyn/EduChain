@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
  * 搜索服务实现类
  */
 @Service
-@Transactional
 public class SearchServiceImpl implements SearchService {
 
     private static final Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
