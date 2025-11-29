@@ -43,7 +43,7 @@ import '@/styles/theme.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 const { confirm } = Modal;
 
 const KnowledgeDetail: React.FC = () => {
@@ -336,16 +336,16 @@ const KnowledgeDetail: React.FC = () => {
                   <div className="author-info glass-light hover-lift">
                     <Avatar
                       size={48}
-                      src={knowledge.uploader.avatarUrl}
+                      src={knowledge.uploaderAvatar || undefined}
                       icon={<UserOutlined />}
                       className="author-avatar"
                     />
                     <div className="author-details">
                       <Text strong className="author-name">
-                        {knowledge.uploader.fullName}
+                        {knowledge.uploaderName || `用户 ${knowledge.uploaderId}`}
                       </Text>
                       <Text type="secondary" className="author-username">
-                        @{knowledge.uploader.username}
+                        @{knowledge.uploaderId}
                       </Text>
                     </div>
                   </div>
@@ -548,35 +548,19 @@ const KnowledgeDetail: React.FC = () => {
                     <div className="author-profile">
                       <Avatar
                         size={64}
-                        src={knowledge.uploader.avatarUrl}
+                        src={knowledge.uploaderAvatar || undefined}
                         icon={<UserOutlined />}
                         className="profile-avatar"
                       />
                       <div className="profile-info">
                         <Text strong className="profile-name">
-                          {knowledge.uploader.fullName}
+                          {knowledge.uploaderName || `用户 ${knowledge.uploaderId}`}
                         </Text>
                         <Text type="secondary" className="profile-username">
-                          @{knowledge.uploader.username}
+                          @{knowledge.uploaderId}
                         </Text>
                       </div>
                     </div>
-
-                    {knowledge.uploader.bio && (
-                      <Paragraph
-                        type="secondary"
-                        ellipsis={{ rows: 3 }}
-                        className="profile-bio"
-                      >
-                        {knowledge.uploader.bio}
-                      </Paragraph>
-                    )}
-
-                    {knowledge.uploader.school && (
-                      <Text type="secondary" className="profile-school">
-                        来自：{knowledge.uploader.school}
-                      </Text>
-                    )}
 
                     <Button
                       type="primary"

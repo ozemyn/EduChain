@@ -138,8 +138,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                 <div className="cnki-meta-left">
                   <span className="cnki-author">
                     <UserOutlined />
-                    <Link to={`/user/${item.uploader.id}`}>
-                      {item.uploader.fullName || item.uploader.username}
+                    <Link to={`/user/${item.uploaderId}`}>
+                      {item.uploaderName || `用户 ${item.uploaderId}`}
                     </Link>
                   </span>
                   {item.category && (

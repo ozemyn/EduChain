@@ -146,11 +146,11 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
         <div className={styles.authorInfo}>
           <Avatar
             size="small"
-            src={item.uploader.avatarUrl}
+            src={item.uploaderAvatar || undefined}
             icon={<UserOutlined />}
           />
-          <Link to={`/user/${item.uploader.id}`} className={styles.authorName}>
-            {item.uploader.fullName || item.uploader.username}
+          <Link to={`/user/${item.uploaderId}`} className={styles.authorName}>
+            {item.uploaderName || `用户 ${item.uploaderId}`}
           </Link>
           <span className={styles.date}>{formatDate(item.createdAt)}</span>
         </div>

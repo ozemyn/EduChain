@@ -353,9 +353,9 @@ const ContentManagement: React.FC = () => {
       key: 'author',
       render: (_, record) => (
         <div>
-          <div>{record.uploader.fullName}</div>
+          <div>{record.uploaderName || `用户 ${record.uploaderId}`}</div>
           <div style={{ fontSize: '12px', color: '#666' }}>
-            @{record.uploader.username}
+            @{record.uploaderId}
           </div>
         </div>
       ),
@@ -551,8 +551,8 @@ const ContentManagement: React.FC = () => {
                 {selectedContent.title}
               </Descriptions.Item>
               <Descriptions.Item label="作者">
-                {selectedContent.uploader.fullName} (@
-                {selectedContent.uploader.username})
+                {selectedContent.uploaderName || `用户 ${selectedContent.uploaderId}`} (@
+                {selectedContent.uploaderId})
               </Descriptions.Item>
               <Descriptions.Item label="分类">
                 {selectedContent.category?.name || '未分类'}

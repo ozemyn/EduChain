@@ -83,11 +83,11 @@ const SimilarContent: React.FC<SimilarContentProps> = ({
                 <Space size="small">
                   <Avatar
                     size="small"
-                    src={item.uploader.avatarUrl}
+                    src={item.uploaderAvatar || undefined}
                     icon={<UserOutlined />}
                   />
                   <Text type="secondary" className={styles.author}>
-                    {item.uploader.fullName || item.uploader.username}
+                    {item.uploaderName || `用户 ${item.uploaderId}`}
                   </Text>
                   <Text type="secondary" className={styles.date}>
                     {formatDate(item.createdAt)}
