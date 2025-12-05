@@ -1,6 +1,8 @@
 package com.example.educhain.repository;
 
 import com.example.educhain.entity.UserStats;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,4 +53,8 @@ public interface UserStatsRepository extends JpaRepository<UserStats, Long> {
   @Query("SELECT us FROM UserStats us WHERE us.knowledgeCount >= :minCount")
   Page<UserStats> findByKnowledgeCountGreaterThanEqual(
       @Param("minCount") Integer minCount, Pageable pageable);
+
+  /** 根据总积分排序查找用户统计（返回List） */
+  @Query("SELECT us FROM UserStats us ORDER BY us.totalScore DESC")
+  List<UserStats> findTopByOrderByTotalScoreDesc(Pageable pageable);
 }

@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
+import { initMock } from './mock';
 
 // 配置 dayjs 以支持 Ant Design
 import dayjs from 'dayjs';
@@ -22,6 +23,9 @@ dayjs.extend(weekYear);
 dayjs.extend(advancedFormat);
 dayjs.extend(customParseFormat);
 dayjs.locale('zh-cn');
+
+// 初始化 Mock 服务
+initMock();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

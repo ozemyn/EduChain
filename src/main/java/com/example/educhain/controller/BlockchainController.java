@@ -216,17 +216,32 @@ public class BlockchainController {
       summary = "获取交易详情",
       description = "根据知识ID获取交易的完整信息"
   )
-  public ResponseEntity<Result<Map<String, Object>>> getTransaction(
+  public ResponseEntity<Result<TransactionDTO>> getTransaction(
       @Parameter(description = "知识ID") @PathVariable Long knowledgeId) {
     try {
       String transactionUrl = blockchainServiceUrl + "/api/blockchain/transaction/" + knowledgeId;
-      Map<String, Object> transactionData = restTemplate.getForObject(transactionUrl, Map.class);
+      Map<String, Object> response = restTemplate.getForObject(transactionUrl, Map.class);
 
-      if (transactionData == null) {
+      if (response == null) {
         return ResponseEntity.ok(Result.error("BC002", "交易不存在"));
       }
 
-      return ResponseEntity.ok(Result.success(transactionData));
+      // 提取交易数据
+      Map<String, Object> transactionData = (Map<String, Object>) response.get("transaction");
+      Integer blockIndex = (Integer) response.get("block_index");
+      String status = (String) response.get("status");
+
+      if (transactionData == null) {
+        return ResponseEntity.ok(Result.error("BC002", "交易数据格式错误"));
+      }
+
+      // 转换为DTO
+      TransactionDTO transaction = convertToTransactionDTO(transactionData);
+      
+      // 添加区块索引和状态（如果有的话）
+      // 注意：TransactionDTO需要添加这些字段
+      
+      return ResponseEntity.ok(Result.success(transaction));
 
     } catch (RestClientException e) {
       if (e.getMessage() != null && e.getMessage().contains("404")) {
@@ -443,7 +458,14 @@ public class BlockchainController {
       userId = (Long) userIdObj;
     }
 
+    // 生成交易ID（如果没有的话）
+    String transactionId = (String) transactionData.get("id");
+    if (transactionId == null && knowledgeId != null) {
+      transactionId = "tx_" + knowledgeId + "_" + System.currentTimeMillis();
+    }
+
     return TransactionDTO.builder()
+        .id(transactionId)
         .type((String) transactionData.get("type"))
         .knowledgeId(knowledgeId)
         .userId(userId)

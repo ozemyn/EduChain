@@ -295,16 +295,18 @@ api.interceptors.response.use(
         case 404:
           toast.error('请求的资源不存在');
           break;
-        case 429:
+        case 429: {
           // 处理限流错误
           const retryAfter = error.response.headers['retry-after'];
-          const rateLimitMessage = error.response.data?.message || '请求过于频繁，请稍后再试';
+          const rateLimitMessage =
+            error.response.data?.message || '请求过于频繁，请稍后再试';
           toast.warning(
-            retryAfter 
+            retryAfter
               ? `${rateLimitMessage}（${retryAfter}秒后重试）`
               : rateLimitMessage
           );
           break;
+        }
         case 500:
           // 使用新的错误处理机制
           handleApiError(error, originalRequest);

@@ -26,17 +26,26 @@ const BlockchainSearch: React.FC = () => {
 
     try {
       setLoading(true);
-      const response = await blockchainService.search(value);
-      if (response.success) {
-        setResults(
-          response.data as { block?: Block; transaction?: Transaction } | null
-        );
-        if (!response.data || Object.keys(response.data).length === 0) {
+      const response = await blockchainService.search(value, searchType);
+      if (response.success && response.data) {
+        const data = response.data as { type: string; data: Block | Transaction | null };
+        
+        if (data.type === 'block' && data.data) {
+          setResults({ block: data.data as Block });
+        } else if (data.type === 'transaction' && data.data) {
+          setResults({ transaction: data.data as Transaction });
+        } else {
+          setResults(null);
           message.info('未找到相关结果');
         }
+      } else {
+        setResults(null);
+        message.info('未找到相关结果');
       }
-    } catch {
+    } catch (error) {
+      console.error('搜索失败:', error);
       message.error('搜索失败');
+      setResults(null);
     } finally {
       setLoading(false);
     }

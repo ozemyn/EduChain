@@ -45,8 +45,6 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
     [key: string]: number;
   }>({});
 
-
-
   const getFileIcon = (fileName: string) => {
     const ext = fileName.toLowerCase().split('.').pop();
     switch (ext) {
@@ -103,7 +101,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
       if (response.success && response.data) {
         // 后端返回的是 fileUrl 字段，不是 url
         const fileUrl = response.data.fileUrl || response.data.url;
-        
+
         if (fileUrl) {
           const newUrls = [...value, fileUrl];
           onChange?.(newUrls);

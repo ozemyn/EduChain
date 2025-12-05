@@ -1,0 +1,201 @@
+/* ===================================
+   法律页面样式 - Legal Pages Styles
+   ===================================
+   
+   使用全局样式系统，保持与首页一致的风格
+   
+   ================================== */
+
+.legal-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: var(--spacing-xl) 0;
+  position: relative;
+}
+
+/* 背景装饰 */
+.legal-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.3), transparent 50%);
+  pointer-events: none;
+}
+
+.legal-container {
+  max-width: var(--container-lg);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+/* 页面头部 */
+.legal-header {
+  text-align: center;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-xl);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.header-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.header-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: var(--primary-color);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  background: rgba(102, 126, 234, 0.1);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.legal-header h1 {
+  margin: var(--spacing-md) 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.legal-header .ant-typography {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* 内容卡片 */
+.legal-content {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.legal-content .ant-typography {
+  color: var(--text-primary);
+}
+
+.legal-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.legal-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-content p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-content ul {
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-content li {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.legal-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.legal-content .ant-divider {
+  margin: var(--spacing-xl) 0;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.legal-content .ant-alert {
+  border-radius: var(--radius-md);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .legal-page {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .legal-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .legal-header {
+    padding: var(--spacing-lg);
+  }
+
+  .legal-header h1 {
+    font-size: 2rem;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .legal-content {
+    padding: var(--spacing-lg);
+  }
+
+  .legal-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .legal-content h3 {
+    font-size: 1.125rem;
+  }
+
+  .legal-content p,
+  .legal-content li {
+    font-size: 0.9375rem;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .legal-page {
+    background: white;
+  }
+
+  .legal-page::before {
+    display: none;
+  }
+
+  .legal-header,
+  .legal-content {
+    background: white !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}

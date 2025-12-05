@@ -20,6 +20,8 @@ export interface Transaction {
   timestamp: string;
   signature?: string;
   publicKey?: string;
+  blockIndex?: number;
+  status?: 'pending' | 'confirmed';
 }
 
 export interface CertificateInfo {

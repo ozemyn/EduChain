@@ -291,10 +291,19 @@ const KnowledgeDetail: React.FC = () => {
               </header>
 
               {/* 文章内容 */}
-              <div
-                className="article-body"
-                dangerouslySetInnerHTML={{ __html: knowledge.content }}
-              />
+              <div className="article-body">
+                {knowledge.content.split('\n').map((paragraph, index) => {
+                  // 跳过空行
+                  if (!paragraph.trim()) {
+                    return <br key={index} />;
+                  }
+                  return (
+                    <p key={index} style={{ marginBottom: '1em' }}>
+                      {paragraph}
+                    </p>
+                  );
+                })}
+              </div>
 
               {/* 标签 */}
               {knowledge.tags && (
@@ -396,14 +405,27 @@ const KnowledgeDetail: React.FC = () => {
               侧边栏 - Sidebar
               ================================== */}
           <aside className="detail-sidebar animate-fade-in-up delay-200">
-            {/* 区块链存证信息 */}
-            <BlockchainCertInfo
-              knowledgeId={knowledge.id}
-              knowledgeTitle={knowledge.title}
-              userId={knowledge.uploaderId}
-              userName={knowledge.uploaderName || '未知用户'}
-              contentHash={knowledge.contentHash}
-            />
+            {/* 作者信息 */}
+            <div className="sidebar-card glass-card">
+              <h3 className="sidebar-title">作者信息</h3>
+              <div className="author-card glass-light">
+                <Avatar
+                  src={knowledge.uploaderAvatar}
+                  icon={<UserOutlined />}
+                  size={64}
+                  className="author-avatar-large"
+                />
+                <h4 className="author-name-large">{knowledge.uploaderName}</h4>
+                <p className="author-bio">分享知识，传播智慧</p>
+                <Button
+                  type="primary"
+                  className="glass-button glass-strong hover-lift active-scale"
+                  block
+                >
+                  关注作者
+                </Button>
+              </div>
+            </div>
 
             {/* 统计信息 */}
             <div className="sidebar-card glass-card">
@@ -440,27 +462,14 @@ const KnowledgeDetail: React.FC = () => {
               </div>
             </div>
 
-            {/* 作者信息 */}
-            <div className="sidebar-card glass-card">
-              <h3 className="sidebar-title">作者信息</h3>
-              <div className="author-card glass-light">
-                <Avatar
-                  src={knowledge.uploaderAvatar}
-                  icon={<UserOutlined />}
-                  size={64}
-                  className="author-avatar-large"
-                />
-                <h4 className="author-name-large">{knowledge.uploaderName}</h4>
-                <p className="author-bio">分享知识，传播智慧</p>
-                <Button
-                  type="primary"
-                  className="glass-button glass-strong hover-lift active-scale"
-                  block
-                >
-                  关注作者
-                </Button>
-              </div>
-            </div>
+            {/* 区块链存证信息 */}
+            <BlockchainCertInfo
+              knowledgeId={knowledge.id}
+              knowledgeTitle={knowledge.title}
+              userId={knowledge.uploaderId}
+              userName={knowledge.uploaderName || '未知用户'}
+              contentHash={knowledge.contentHash}
+            />
           </aside>
         </div>
       </div>

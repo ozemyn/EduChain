@@ -33,8 +33,6 @@ import {
   EyeOutlined,
   FileTextOutlined,
   BulbOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
   HistoryOutlined,
   ArrowLeftOutlined,
 } from '@ant-design/icons';
@@ -91,12 +89,10 @@ const CreateKnowledge: React.FC = () => {
 
   // 使用草稿管理器 - 禁用自动保存
   const {
-    saveStatus,
     saveDraft,
     clearDraft,
     startAutoSave,
     stopAutoSave,
-    markUnsaved,
   } = useDraftManager({
     autoSave: false, // 禁用自动保存，避免性能问题
     showNotifications: false, // 禁用通知

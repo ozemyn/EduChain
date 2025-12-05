@@ -168,9 +168,7 @@ const UserManagement: React.FC = () => {
     try {
       const values = await form.validateFields();
 
-      const url = selectedUser
-        ? `/api/users/${selectedUser.id}`
-        : '/api/users';
+      const url = selectedUser ? `/api/users/${selectedUser.id}` : '/api/users';
       const method = selectedUser ? 'PUT' : 'POST';
 
       const response = await fetch(url, {

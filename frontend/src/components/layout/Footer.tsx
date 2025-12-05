@@ -12,7 +12,7 @@
 
 import React from 'react';
 import { Layout, Row, Col, Space } from 'antd';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   GithubOutlined,
   TwitterOutlined,
@@ -27,6 +27,13 @@ const { Footer: AntFooter } = Layout;
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+
+  // 点击链接时滚动到顶部
+  const handleLinkClick = (path: string) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const footerLinks = {
     product: [
@@ -108,9 +115,16 @@ const Footer: React.FC = () => {
                 <ul className="link-list">
                   {footerLinks.product.map(link => (
                     <li key={link.path}>
-                      <Link to={link.path} className="footer-link hover-lift">
+                      <a
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleLinkClick(link.path);
+                        }}
+                        className="footer-link hover-lift"
+                        style={{ cursor: 'pointer' }}
+                      >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -124,9 +138,16 @@ const Footer: React.FC = () => {
                 <ul className="link-list">
                   {footerLinks.company.map(link => (
                     <li key={link.path}>
-                      <Link to={link.path} className="footer-link hover-lift">
+                      <a
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleLinkClick(link.path);
+                        }}
+                        className="footer-link hover-lift"
+                        style={{ cursor: 'pointer' }}
+                      >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -140,9 +161,16 @@ const Footer: React.FC = () => {
                 <ul className="link-list">
                   {footerLinks.resources.map(link => (
                     <li key={link.path}>
-                      <Link to={link.path} className="footer-link hover-lift">
+                      <a
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleLinkClick(link.path);
+                        }}
+                        className="footer-link hover-lift"
+                        style={{ cursor: 'pointer' }}
+                      >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -156,9 +184,16 @@ const Footer: React.FC = () => {
                 <ul className="link-list">
                   {footerLinks.legal.map(link => (
                     <li key={link.path}>
-                      <Link to={link.path} className="footer-link hover-lift">
+                      <a
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleLinkClick(link.path);
+                        }}
+                        className="footer-link hover-lift"
+                        style={{ cursor: 'pointer' }}
+                      >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>

@@ -218,6 +218,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         open={showDropdown}
         onDropdownVisibleChange={setShowDropdown}
         dropdownClassName={styles.dropdown}
+        style={{ width: '100%' }}
       >
         <Search
           ref={inputRef}
@@ -226,6 +227,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           loading={loading}
           onSearch={handleSearch}
           onFocus={() => setShowDropdown(true)}
+          style={{ width: '100%' }}
           enterButton={
             <Space>
               <SearchOutlined />

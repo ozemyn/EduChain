@@ -146,4 +146,14 @@ public interface KnowledgeItemRepository extends JpaRepository<KnowledgeItem, Lo
 
   /** 根据创建时间范围查找知识内容列表 */
   List<KnowledgeItem> findByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+  /** 根据状态查找知识内容（按创建时间倒序，分页） */
+  List<KnowledgeItem> findByStatusOrderByCreatedAtDesc(Integer status, Pageable pageable);
+
+  /** 根据状态和创建时间查找知识内容（分页） */
+  List<KnowledgeItem> findByStatusAndCreatedAtAfterOrderByCreatedAtDesc(
+      Integer status, LocalDateTime createdAt, Pageable pageable);
+
+  /** 根据状态和创建时间统计知识内容数量 */
+  long countByStatusAndCreatedAtAfter(Integer status, LocalDateTime createdAt);
 }

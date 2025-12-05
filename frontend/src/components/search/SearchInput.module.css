@@ -2,8 +2,21 @@
   width: 100%;
 }
 
+.searchInput :global(.ant-input-search) {
+  width: 100%;
+}
+
+.searchInput :global(.ant-input-wrapper) {
+  width: 100%;
+}
+
+.searchInput :global(.ant-input-affix-wrapper) {
+  width: 100%;
+}
+
 .dropdown {
-  max-width: 500px;
+  max-width: 800px;
+  width: 100%;
 }
 
 .sectionHeader {

@@ -38,6 +38,12 @@ const CertificateVerifyPage = React.lazy(
 );
 const NotFoundPage = React.lazy(() => import('../pages/error/NotFound'));
 
+// 法律页面
+const TermsOfServicePage = React.lazy(() => import('../pages/legal/TermsOfService'));
+const PrivacyPolicyPage = React.lazy(() => import('../pages/legal/PrivacyPolicy'));
+const CopyrightPage = React.lazy(() => import('../pages/legal/Copyright'));
+const DisclaimerPage = React.lazy(() => import('../pages/legal/Disclaimer'));
+
 // 管理员页面
 const AdminLoginPage = React.lazy(() => import('../pages/admin/AdminLogin'));
 const AdminDashboardPage = React.lazy(
@@ -190,6 +196,38 @@ export const router = createBrowserRouter([
               <ProfilePage />
             </LoadingWrapper>
           </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'terms',
+        element: (
+          <LoadingWrapper>
+            <TermsOfServicePage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'privacy',
+        element: (
+          <LoadingWrapper>
+            <PrivacyPolicyPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'copyright',
+        element: (
+          <LoadingWrapper>
+            <CopyrightPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'disclaimer',
+        element: (
+          <LoadingWrapper>
+            <DisclaimerPage />
+          </LoadingWrapper>
         ),
       },
     ],

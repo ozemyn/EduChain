@@ -103,4 +103,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
   /** 根据创建时间范围统计评论数量 */
   long countByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+  /** 根据状态和创建时间统计评论数量 */
+  long countByStatusAndCreatedAtAfter(Integer status, LocalDateTime createdAt);
 }

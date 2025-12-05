@@ -26,6 +26,9 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
   /** 根据状态查找标签 */
   List<Tag> findByStatus(Integer status);
 
+  /** 根据状态查找标签（分页） */
+  List<Tag> findByStatus(Integer status, Pageable pageable);
+
   /** 根据分类查找标签 */
   List<Tag> findByCategoryAndStatus(String category, Integer status);
 

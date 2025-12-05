@@ -15,6 +15,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class TransactionDTO {
 
+  /** 交易ID */
+  private String id;
+
   /** 交易类型 */
   private String type;
 
@@ -38,4 +41,10 @@ public class TransactionDTO {
 
   /** 公钥（可选） */
   private String publicKey;
+
+  /** 所在区块索引（可选） */
+  private Integer blockIndex;
+
+  /** 交易状态：pending-待确认, confirmed-已确认 */
+  private String status;
 }

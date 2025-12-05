@@ -44,9 +44,10 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
     trending: [],
     general: [],
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // 初始设置为true，显示加载状态
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState(defaultTab);
+  // 如果用户未登录，默认显示热门内容而不是个性化推荐
+  const [activeTab, setActiveTab] = useState(user ? defaultTab : 'trending');
 
   useEffect(() => {
     loadRecommendations();
@@ -72,20 +73,39 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
       const [personalizedRes, trendingRes, generalRes] =
         await Promise.all(promises);
 
-      setData({
+      const newData = {
         personalized: personalizedRes.data || [],
         trending: trendingRes.data || [],
         general: generalRes.data || [],
-      });
+      };
+
+      setData(newData);
+
+      // 如果当前标签没有数据，自动切换到有数据的标签
+      const currentTabData = newData[activeTab as keyof RecommendationData];
+      if (!currentTabData || currentTabData.length === 0) {
+        // 按优先级查找有数据的标签
+        if (newData.trending.length > 0) {
+          setActiveTab('trending');
+        } else if (newData.general.length > 0) {
+          setActiveTab('general');
+        } else if (newData.personalized.length > 0) {
+          setActiveTab('personalized');
+        }
+      }
     } catch (err: unknown) {
       // 只有在真正的错误时才显示错误提示，数据为空不算错误
       console.warn('加载推荐内容失败:', err);
       // 不设置 error，让组件显示空状态而不是错误状态
-      setData({
+      const fallbackData = {
         personalized: [],
         trending: [],
         general: [],
-      });
+      };
+      setData(fallbackData);
+      
+      // 切换到默认的热门内容标签
+      setActiveTab('trending');
     } finally {
       setLoading(false);
     }

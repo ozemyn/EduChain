@@ -223,7 +223,7 @@ const Home: React.FC = () => {
                   title="知识条目"
                   value={stats.totalKnowledge}
                   prefix={<FileTextOutlined />}
-                  styles={{ value: { color: 'var(--primary-600)' } }}
+                  valueStyle={{ color: 'var(--primary-600)' }}
                 />
               </div>
               <div className="stat-card glass-light hover-lift gpu-accelerated delay-100">
@@ -231,7 +231,7 @@ const Home: React.FC = () => {
                   title="活跃用户"
                   value={stats.totalUsers}
                   prefix={<TeamOutlined />}
-                  styles={{ value: { color: 'var(--accent-success)' } }}
+                  valueStyle={{ color: 'var(--accent-success)' }}
                 />
               </div>
               <div className="stat-card glass-light hover-lift gpu-accelerated delay-200">
@@ -239,7 +239,7 @@ const Home: React.FC = () => {
                   title="总浏览量"
                   value={stats.totalViews}
                   prefix={<EyeOutlined />}
-                  styles={{ value: { color: 'var(--accent-warning)' } }}
+                  valueStyle={{ color: 'var(--accent-warning)' }}
                 />
               </div>
             </div>

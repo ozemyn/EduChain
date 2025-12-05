@@ -3,6 +3,19 @@
   border-radius: 8px;
   transition: all 0.3s ease;
   position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendationCard :global(.ant-card-body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendationCard :global(.ant-card-actions) {
+  margin-top: auto;
 }
 
 .recommendationCard:hover {
@@ -52,6 +65,9 @@
 
 .contentSection {
   margin-bottom: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
@@ -59,6 +75,11 @@
   color: var(--text-secondary);
   line-height: 1.6;
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .footer {
@@ -67,6 +88,7 @@
   align-items: center;
   padding-top: 12px;
   border-top: 1px solid var(--border-color);
+  margin-top: auto;
 }
 
 .authorInfo {
