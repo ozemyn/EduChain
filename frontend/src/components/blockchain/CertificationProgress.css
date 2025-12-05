@@ -1,0 +1,171 @@
+.certification-progress-card {
+  margin: 24px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.progress-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.progress-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.progress-status.processing {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.progress-status.success {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.progress-status.error {
+  background: #fff2f0;
+  color: #ff4d4f;
+}
+
+.certification-steps {
+  margin: 24px 0;
+}
+
+.certification-steps .ant-steps-item-icon {
+  font-size: 24px;
+}
+
+.certification-steps .ant-steps-item-title {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.certification-steps .ant-steps-item-description {
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+/* 步骤状态颜色 */
+.certification-steps .ant-steps-item-process .ant-steps-item-icon {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.certification-steps .ant-steps-item-finish .ant-steps-item-icon {
+  background: #52c41a;
+  border-color: #52c41a;
+}
+
+.certification-steps .ant-steps-item-error .ant-steps-item-icon {
+  background: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.error-alert {
+  margin-top: 24px;
+  border-radius: 6px;
+}
+
+.success-actions {
+  margin-top: 24px;
+}
+
+.success-alert {
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.progress-info {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.info-text {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .certification-progress-card {
+    margin: 16px 0;
+  }
+
+  .progress-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .certification-steps {
+    margin: 16px 0;
+  }
+
+  .certification-steps .ant-steps-item-icon {
+    font-size: 20px;
+  }
+
+  .certification-steps .ant-steps-item-title {
+    font-size: 14px;
+  }
+
+  .certification-steps .ant-steps-item-description {
+    font-size: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-buttons .ant-btn {
+    width: 100%;
+  }
+
+  .info-text {
+    font-size: 13px;
+  }
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.progress-status.processing {
+  animation: pulse 2s ease-in-out infinite;
+}

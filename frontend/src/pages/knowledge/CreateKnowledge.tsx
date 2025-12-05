@@ -50,6 +50,11 @@ import { knowledgeService } from '@/services/knowledge';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDraftManager } from '@/hooks/useDraftManager';
 import draftManager from '@/utils/draftManager';
+import CertificationProgress, {
+  CertificationStep,
+  CertificationStatus,
+} from '@/components/blockchain/CertificationProgress';
+import { blockchainService } from '@/services/blockchain';
 import './CreateKnowledge.css';
 
 const { Title } = Typography;
@@ -72,6 +77,17 @@ const CreateKnowledge: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [knowledge, setKnowledge] = useState<KnowledgeItem | null>(null);
   const [editorKey, setEditorKey] = useState(0);
+
+  // 存证进度状态
+  const [showProgress, setShowProgress] = useState(false);
+  const [certStep, setCertStep] = useState<CertificationStep>(
+    CertificationStep.UPLOADING
+  );
+  const [certStatus, setCertStatus] = useState<CertificationStatus>(
+    CertificationStatus.PENDING
+  );
+  const [certError, setCertError] = useState<string>();
+  const [createdKnowledgeId, setCreatedKnowledgeId] = useState<number>();
 
   // 使用草稿管理器
   const {
@@ -215,6 +231,10 @@ const CreateKnowledge: React.FC = () => {
 
     try {
       setLoading(true);
+      setShowProgress(true);
+      setCertStep(CertificationStep.UPLOADING);
+      setCertStatus(CertificationStatus.IN_PROGRESS);
+      setCertError(undefined);
 
       const submitData: CreateKnowledgeRequest = {
         title: values.title,
@@ -226,21 +246,141 @@ const CreateKnowledge: React.FC = () => {
         tags: values.tags,
       };
 
+      let knowledgeId: number;
+
       if (isEditing && knowledge) {
         await knowledgeService.updateKnowledge(knowledge.id, submitData);
+        knowledgeId = knowledge.id;
         message.success('更新成功');
       } else {
-        await knowledgeService.createKnowledge(submitData);
-        message.success('发布成功');
+        const response = await knowledgeService.createKnowledge(submitData);
+        if (response.success && response.data) {
+          knowledgeId = response.data.id;
+          setCreatedKnowledgeId(knowledgeId);
+        } else {
+          throw new Error('创建失败');
+        }
       }
 
+      // 开始存证流程
+      await performCertification(knowledgeId, values.title, values.content);
+
       clearDraft();
-      navigate('/knowledge');
     } catch (error) {
       console.error('Submit failed:', error);
+      setCertStatus(CertificationStatus.ERROR);
+      setCertError(error instanceof Error ? error.message : '发布失败');
       message.error(isEditing ? '更新失败' : '发布失败');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 执行存证流程
+  const performCertification = async (
+    knowledgeId: number,
+    title: string,
+    content: string
+  ) => {
+    try {
+      // 步骤1: 计算哈希
+      setCertStep(CertificationStep.HASHING);
+      await new Promise(resolve => setTimeout(resolve, 500)); // 模拟延迟
+      const contentHash = await calculateContentHash(content);
+
+      // 步骤2: 区块链存证
+      setCertStep(CertificationStep.CERTIFYING);
+      await blockchainService.certifyContent({
+        type: 'KNOWLEDGE_CERT',
+        knowledge_id: knowledgeId,
+        user_id: user!.id,
+        content_hash: contentHash,
+        metadata: {
+          title: title,
+          timestamp: new Date().toISOString(),
+        },
+      });
+
+      // 步骤3: 生成证书
+      setCertStep(CertificationStep.GENERATING);
+      await blockchainService.createCertificate({
+        knowledge_id: knowledgeId,
+        knowledge_title: title,
+        user_id: user!.id,
+        user_name: user!.username || user!.email,
+      });
+
+      // 步骤4: 完成
+      setCertStep(CertificationStep.COMPLETED);
+      setCertStatus(CertificationStatus.SUCCESS);
+      message.success('内容发布并存证成功！');
+    } catch (error) {
+      console.error('Certification failed:', error);
+      setCertStatus(CertificationStatus.ERROR);
+      setCertError(
+        '存证失败：' + (error instanceof Error ? error.message : '未知错误')
+      );
+      throw error;
+    }
+  };
+
+  // 计算内容哈希（简化版，实际应该在后端计算）
+  const calculateContentHash = async (content: string): Promise<string> => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(content);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    return hashHex;
+  };
+
+  // 重试存证
+  const handleRetryCertification = async () => {
+    if (!createdKnowledgeId) return;
+
+    const values = form.getFieldsValue();
+    setCertStatus(CertificationStatus.IN_PROGRESS);
+    setCertError(undefined);
+
+    try {
+      await performCertification(
+        createdKnowledgeId,
+        values.title,
+        values.content
+      );
+    } catch {
+      // 错误已在performCertification中处理
+    }
+  };
+
+  // 下载证书
+  const handleDownloadCertificate = async () => {
+    if (!createdKnowledgeId) return;
+
+    try {
+      const response = await blockchainService.createCertificate({
+        knowledge_id: createdKnowledgeId,
+        knowledge_title: form.getFieldValue('title'),
+        user_id: user!.id,
+        user_name: user!.username || user!.email,
+      });
+
+      if (response.code === '200' && response.data) {
+        await blockchainService.downloadCertificate(
+          response.data.certificate_id
+        );
+      }
+    } catch {
+      message.error('下载证书失败');
+    }
+  };
+
+  // 查看详情
+  const handleViewDetail = () => {
+    if (createdKnowledgeId) {
+      navigate(`/knowledge/${createdKnowledgeId}`);
     }
   };
 
@@ -394,6 +534,18 @@ const CreateKnowledge: React.FC = () => {
                 恢复草稿
               </Button>
             </div>
+
+            {/* 存证进度 */}
+            {showProgress && (
+              <CertificationProgress
+                currentStep={certStep}
+                status={certStatus}
+                errorMessage={certError}
+                onRetry={handleRetryCertification}
+                onDownloadCertificate={handleDownloadCertificate}
+                onViewDetail={handleViewDetail}
+              />
+            )}
 
             <Form
               form={form}

@@ -94,6 +94,7 @@ export interface KnowledgeItem {
   createdAt: string;
   updatedAt: string;
   stats?: KnowledgeStats;
+  contentHash?: string; // 内容哈希，用于区块链存证
 }
 
 export interface KnowledgeStats {

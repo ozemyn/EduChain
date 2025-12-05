@@ -1,0 +1,410 @@
+/* ===================================
+   区块链浏览器页面样式 - Blockchain Explorer Page Styles
+   ===================================
+   
+   使用全局样式系统：
+   - animations.css - 动画效果
+   - glass-effects.css - 玻璃效果
+   - theme-variables.css - 主题变量
+   - globals.css - 基础样式
+   
+   ================================== */
+
+/* ===================================
+   页面容器 - Page Container
+   ================================== */
+
+.blockchain-explorer-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-lg) 0;
+}
+
+/* ===================================
+   背景装饰 - Background Decoration
+   ================================== */
+
+.blockchain-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blockchain-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: var(--blur-2xl);
+  opacity: 0.6;
+  animation: float 12s ease-in-out infinite;
+}
+
+.blockchain-blob-1 {
+  top: 10%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--primary-200) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.blockchain-blob-2 {
+  top: 50%;
+  left: 5%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(
+    circle,
+    var(--accent-secondary) 0%,
+    transparent 70%
+  );
+  animation-delay: 4s;
+}
+
+.blockchain-blob-3 {
+  bottom: 15%;
+  right: 25%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    var(--accent-success) 0%,
+    transparent 70%
+  );
+  animation-delay: 8s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* ===================================
+   内容容器 - Content Container
+   ================================== */
+
+.blockchain-content {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* ===================================
+   页面头部 - Page Header
+   ================================== */
+
+.blockchain-header {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.title-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: linear-gradient(
+    135deg,
+    var(--primary-600),
+    var(--accent-secondary)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===================================
+   主内容区域 - Main Content
+   ================================== */
+
+.blockchain-main {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.blockchain-tabs-container {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius);
+  min-height: 600px;
+}
+
+.blockchain-tabs {
+  width: 100%;
+}
+
+.blockchain-tabs .ant-tabs-nav {
+  margin-bottom: var(--spacing-xl);
+}
+
+.blockchain-tabs .ant-tabs-tab {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all var(--transition-base);
+}
+
+.blockchain-tabs .ant-tabs-tab:hover {
+  color: var(--primary-600);
+}
+
+.blockchain-tabs .ant-tabs-tab-active {
+  color: var(--primary-600);
+}
+
+.blockchain-tabs .ant-tabs-ink-bar {
+  background: var(--primary-600);
+  height: 3px;
+}
+
+/* ===================================
+   标签页内容 - Tab Content
+   ================================== */
+
+.tab-content {
+  padding: var(--spacing-lg) 0;
+  min-height: 400px;
+}
+
+/* 占位内容样式 */
+.placeholder-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
+/* ===================================
+   响应式设计 - Responsive Design
+   ================================== */
+
+/* 平板竖屏 (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .blockchain-header {
+    padding: var(--spacing-xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .title-section {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    justify-content: center;
+  }
+
+  .blockchain-tabs-container {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 手机横屏 (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .blockchain-header {
+    padding: var(--spacing-lg);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    justify-content: center;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .blockchain-tabs-container {
+    padding: var(--spacing-md);
+  }
+
+  .blockchain-tabs .ant-tabs-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+  }
+}
+
+/* 手机竖屏 (< 640px) */
+@media (max-width: 639px) {
+  .blockchain-explorer-page {
+    padding: var(--spacing-md) 0;
+  }
+
+  .blockchain-content {
+    padding: 0 var(--spacing-md);
+  }
+
+  .blockchain-header {
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-md);
+  }
+
+  .title-section {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    justify-content: center;
+  }
+
+  .page-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .blockchain-tabs-container {
+    padding: var(--spacing-sm);
+    min-height: 500px;
+  }
+
+  .blockchain-tabs .ant-tabs-tab {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+
+  .tab-content {
+    padding: var(--spacing-md) 0;
+    min-height: 300px;
+  }
+
+  .placeholder-content {
+    min-height: 300px;
+    font-size: 1rem;
+  }
+
+  /* 隐藏背景装饰以提升性能 */
+  .blockchain-blob {
+    display: none;
+  }
+}
+
+/* 超小屏幕 (< 375px) */
+@media (max-width: 374px) {
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .blockchain-header {
+    padding: var(--spacing-md);
+  }
+
+  .blockchain-tabs-container {
+    padding: var(--spacing-xs);
+  }
+}
+
+/* ===================================
+   触摸设备优化 - Touch Device Optimization
+   ================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* 增加触摸目标大小 */
+  .blockchain-tabs .ant-tabs-tab {
+    min-height: 44px;
+  }
+}
+
+/* ===================================
+   减少动画偏好 - Reduced Motion
+   ================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .blockchain-blob {
+    animation: none;
+  }
+}
+
+/* ===================================
+   打印样式 - Print Styles
+   ================================== */
+
+@media print {
+  .blockchain-background {
+    display: none !important;
+  }
+
+  .blockchain-header {
+    background: white;
+    border: 1px solid #000;
+  }
+
+  .blockchain-tabs-container {
+    background: white;
+    border: 1px solid #000;
+  }
+}
+
+/* ===================================
+   深色模式特定样式 - Dark Mode Specific
+   ================================== */
+
+[data-theme='dark'] .blockchain-blob {
+  opacity: 0.3;
+}
+
+[data-theme='dark'] .blockchain-blob-1 {
+  background: radial-gradient(circle, #333333 0%, transparent 70%);
+}
+
+[data-theme='dark'] .blockchain-blob-2 {
+  background: radial-gradient(circle, #404040 0%, transparent 70%);
+}
+
+[data-theme='dark'] .blockchain-blob-3 {
+  background: radial-gradient(circle, #525252 0%, transparent 70%);
+}

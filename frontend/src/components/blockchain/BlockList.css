@@ -1,0 +1,21 @@
+.block-list {
+  padding: var(--spacing-lg);
+}
+
+.block-table {
+  background: transparent;
+}
+
+.hash-code {
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+}
+
+@media (max-width: 768px) {
+  .block-list {
+    padding: var(--spacing-md);
+  }
+}

@@ -28,6 +28,7 @@ import {
   MenuOutlined,
   BellOutlined,
   CloseOutlined,
+  BlockOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@contexts/AuthContext';
 import { ThemeToggle } from '@components/common';
@@ -101,6 +102,12 @@ const Header: React.FC = () => {
       icon: <BookOutlined />,
       label: '知识库',
       path: '/knowledge',
+    },
+    {
+      key: 'blockchain',
+      icon: <BlockOutlined />,
+      label: '区块链',
+      path: '/blockchain',
     },
     {
       key: 'search',

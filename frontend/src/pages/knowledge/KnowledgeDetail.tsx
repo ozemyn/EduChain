@@ -45,6 +45,7 @@ import type { KnowledgeItem } from '@/types';
 import { knowledgeService } from '@/services/knowledge';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatDate } from '@/utils/format';
+import BlockchainCertInfo from '@/components/blockchain/BlockchainCertInfo';
 import './KnowledgeDetail.css';
 
 const { confirm } = Modal;
@@ -395,6 +396,15 @@ const KnowledgeDetail: React.FC = () => {
               侧边栏 - Sidebar
               ================================== */}
           <aside className="detail-sidebar animate-fade-in-up delay-200">
+            {/* 区块链存证信息 */}
+            <BlockchainCertInfo
+              knowledgeId={knowledge.id}
+              knowledgeTitle={knowledge.title}
+              userId={knowledge.uploaderId}
+              userName={knowledge.uploaderName || '未知用户'}
+              contentHash={knowledge.contentHash}
+            />
+
             {/* 统计信息 */}
             <div className="sidebar-card glass-card">
               <h3 className="sidebar-title">统计信息</h3>

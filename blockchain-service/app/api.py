@@ -1,13 +1,19 @@
 """FastAPI REST API 接口"""
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
+import os
+import io
 
 from .blockchain import Blockchain
 from .transaction import Transaction
 from .database.db_manager import BlockchainDB
+from .certificate import certificate_generator, CertificateData
+from .certificate_pdf import pdf_generator
+from .qr_code import qr_generator
 
 # 初始化FastAPI应用
 app = FastAPI(
@@ -69,6 +75,25 @@ class ChainInfoResponse(BaseModel):
     is_valid: bool
     latest_block_index: int
     latest_block_hash: str
+
+
+class CertificateRequest(BaseModel):
+    """证书生成请求"""
+    knowledge_id: int
+    knowledge_title: str
+    user_id: int
+    user_name: str
+
+
+class CertificateResponse(BaseModel):
+    """证书响应"""
+    certificate_id: str
+    knowledge_id: int
+    block_index: int
+    pdf_url: str
+    qr_code_url: str
+    verification_url: str
+    created_at: str
 
 
 # 启动时从数据库加载区块链
@@ -290,3 +315,171 @@ async def get_stats():
         "is_valid": blockchain.is_chain_valid()
     }
 
+
+
+# 证书相关API
+@app.post("/api/blockchain/certificates", response_model=CertificateResponse)
+async def create_certificate(request: CertificateRequest):
+    """生成存证证书
+    
+    为已存证的知识内容生成PDF证书
+    """
+    try:
+        # 查找知识内容的交易
+        transaction = blockchain.get_transaction_by_knowledge_id(request.knowledge_id)
+        if not transaction:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"No certification found for knowledge_id {request.knowledge_id}"
+            )
+        
+        # 查找交易所在的区块
+        block_index = None
+        block_hash = None
+        for block in blockchain.chain:
+            if transaction in block.transactions:
+                block_index = block.index
+                block_hash = block.hash
+                break
+        
+        if block_index is None:
+            raise HTTPException(
+                status_code=404, 
+                detail="Transaction not found in any block"
+            )
+        
+        # 创建证书数据
+        certificate = certificate_generator.create_certificate(
+            knowledge_id=request.knowledge_id,
+            knowledge_title=request.knowledge_title,
+            user_id=request.user_id,
+            user_name=request.user_name,
+            content_hash=transaction.content_hash,
+            block_index=block_index,
+            block_hash=block_hash,
+            timestamp=transaction.timestamp
+        )
+        
+        # 生成二维码
+        qr_image_path = qr_generator.generate_certificate_qr(
+            verification_url=certificate.verification_url,
+            certificate_id=certificate.certificate_id
+        )
+        
+        # 生成PDF证书
+        pdf_path = pdf_generator.generate_pdf(certificate, qr_image_path)
+        
+        # 构建URL（实际部署时应该使用真实的域名）
+        base_url = "http://localhost:8000"  # 应该从配置读取
+        pdf_url = f"{base_url}/api/blockchain/certificates/{certificate.certificate_id}/download"
+        qr_code_url = f"{base_url}/qrcodes/cert_{certificate.certificate_id}.png"
+        
+        return CertificateResponse(
+            certificate_id=certificate.certificate_id,
+            knowledge_id=certificate.knowledge_id,
+            block_index=block_index,
+            pdf_url=pdf_url,
+            qr_code_url=qr_code_url,
+            verification_url=certificate.verification_url,
+            created_at=datetime.now().isoformat()
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/blockchain/certificates/{certificate_id}/download")
+async def download_certificate(certificate_id: str):
+    """下载证书PDF文件"""
+    try:
+        # 构建文件路径
+        pdf_path = os.path.join(pdf_generator.output_dir, f"{certificate_id}.pdf")
+        
+        # 检查文件是否存在
+        if not os.path.exists(pdf_path):
+            raise HTTPException(status_code=404, detail="Certificate not found")
+        
+        # 返回文件
+        return FileResponse(
+            path=pdf_path,
+            media_type="application/pdf",
+            filename=f"{certificate_id}.pdf"
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/blockchain/certificates/{certificate_id}/verify")
+async def verify_certificate(certificate_id: str):
+    """验证证书有效性
+    
+    通过证书编号验证证书是否有效
+    """
+    try:
+        # 检查证书文件是否存在
+        pdf_path = os.path.join(pdf_generator.output_dir, f"{certificate_id}.pdf")
+        
+        if not os.path.exists(pdf_path):
+            return {
+                "valid": False,
+                "certificate_id": certificate_id,
+                "message": "Certificate not found"
+            }
+        
+        # 证书存在即为有效（实际应用中可以添加更多验证逻辑）
+        return {
+            "valid": True,
+            "certificate_id": certificate_id,
+            "message": "Certificate is valid",
+            "verification_time": datetime.now().isoformat()
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/blockchain/certificates/knowledge/{knowledge_id}")
+async def get_certificate_by_knowledge(knowledge_id: int):
+    """根据知识ID获取证书信息"""
+    try:
+        # 查找知识内容的交易
+        transaction = blockchain.get_transaction_by_knowledge_id(knowledge_id)
+        if not transaction:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"No certification found for knowledge_id {knowledge_id}"
+            )
+        
+        # 查找交易所在的区块
+        block_index = None
+        block_hash = None
+        for block in blockchain.chain:
+            if transaction in block.transactions:
+                block_index = block.index
+                block_hash = block.hash
+                break
+        
+        if block_index is None:
+            raise HTTPException(
+                status_code=404, 
+                detail="Transaction not found in any block"
+            )
+        
+        return {
+            "knowledge_id": knowledge_id,
+            "block_index": block_index,
+            "block_hash": block_hash,
+            "content_hash": transaction.content_hash,
+            "timestamp": transaction.timestamp,
+            "has_certificate": True
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

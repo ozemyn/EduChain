@@ -1,0 +1,53 @@
+.blockchain-search {
+  padding: var(--spacing-lg);
+}
+
+.search-card {
+  margin-bottom: var(--spacing-xl);
+}
+
+.search-input-group {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.search-input {
+  flex: 1;
+}
+
+.search-results {
+  min-height: 200px;
+}
+
+.result-card {
+  margin-bottom: var(--spacing-lg);
+}
+
+.result-card code {
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  word-break: break-all;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+@media (max-width: 768px) {
+  .blockchain-search {
+    padding: var(--spacing-md);
+  }
+
+  .search-input-group {
+    flex-direction: column;
+  }
+
+  .search-type-select {
+    width: 100% !important;
+  }
+}

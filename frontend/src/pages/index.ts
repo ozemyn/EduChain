@@ -5,3 +5,4 @@ export * from './user';
 export * from './search';
 export * from './recommendation';
 export * from './admin';
+export * from './blockchain';

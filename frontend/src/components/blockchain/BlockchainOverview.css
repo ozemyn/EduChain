@@ -1,0 +1,57 @@
+.blockchain-overview {
+  padding: var(--spacing-lg);
+}
+
+.overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.overview-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.overview-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.stat-card {
+  transition: all var(--transition-base);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.latest-block-card h3 {
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.25rem;
+}
+
+.latest-block-card code {
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  word-break: break-all;
+}
+
+@media (max-width: 768px) {
+  .blockchain-overview {
+    padding: var(--spacing-md);
+  }
+
+  .overview-header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+}

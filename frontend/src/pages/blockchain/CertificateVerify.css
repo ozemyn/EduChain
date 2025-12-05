@@ -1,0 +1,69 @@
+.certificate-verify-container {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0 24px;
+}
+
+.certificate-verify-header {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.verify-result-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+.certificate-info-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.certificate-info-card .ant-descriptions-item-label {
+  font-weight: 600;
+  background-color: #fafafa;
+}
+
+.legal-notice-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.legal-notice {
+  line-height: 1.8;
+  color: #666;
+}
+
+.legal-notice p {
+  margin-bottom: 12px;
+}
+
+.legal-notice strong {
+  color: #1890ff;
+  font-size: 16px;
+}
+
+.legal-notice-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e8e8e8;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .certificate-verify-container {
+    padding: 0 16px;
+  }
+
+  .verify-result-title {
+    font-size: 20px;
+  }
+
+  .legal-notice {
+    font-size: 14px;
+  }
+}
