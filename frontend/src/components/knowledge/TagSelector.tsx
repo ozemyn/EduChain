@@ -22,7 +22,7 @@ interface TagInfo {
   color?: string;
 }
 
-const TagSelector: React.FC<TagSelectorProps> = ({
+const TagSelector: React.FC<TagSelectorProps> = React.memo(({
   value = [],
   onChange,
   placeholder = '选择或输入标签',
@@ -265,6 +265,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({
       )}
     </Space>
   );
-};
+});
+
+TagSelector.displayName = 'TagSelector';
 
 export default TagSelector;

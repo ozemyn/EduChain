@@ -136,6 +136,10 @@ public class SecurityConfig {
                     .requestMatchers("/knowledge/popular")
                     .permitAll()
 
+                    // 区块链浏览器接口允许认证用户访问
+                    .requestMatchers("/blockchain/**")
+                    .hasAnyRole("LEARNER", "ADMIN")
+
                     // Swagger文档 - 开发环境开放，生产环境限制管理员访问
                     .requestMatchers(
                         "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**")
@@ -151,6 +155,10 @@ public class SecurityConfig {
 
                     // 静态资源
                     .requestMatchers("/favicon.ico", "/error")
+                    .permitAll()
+                    
+                    // 上传文件访问
+                    .requestMatchers("/uploads/**")
                     .permitAll()
 
                     // 管理员接口

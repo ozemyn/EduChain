@@ -24,6 +24,11 @@ public class RateLimiter {
           + "local now = tonumber(ARGV[3])\n"
           + "local expire = tonumber(ARGV[4])\n"
           + "\n"
+          + "-- 参数验证\n"
+          + "if not window or not limit or not now or not expire then\n"
+          + "    return {0, 0, 1}\n"
+          + "end\n"
+          + "\n"
           + "-- 移除窗口外的记录\n"
           + "redis.call('ZREMRANGEBYSCORE', key, 0, now - window * 1000)\n"
           + "\n"
@@ -54,10 +59,22 @@ public class RateLimiter {
           + "local now = tonumber(ARGV[4])\n"
           + "local expire = tonumber(ARGV[5])\n"
           + "\n"
+          + "-- 参数验证\n"
+          + "if not capacity or not tokens or not refillRate or not now or not expire then\n"
+          + "    return {0, 0, 1}\n"
+          + "end\n"
+          + "\n"
           + "-- 获取当前桶状态\n"
           + "local bucket = redis.call('HMGET', key, 'tokens', 'lastRefill')\n"
-          + "local currentTokens = tonumber(bucket[1] or capacity)\n"
-          + "local lastRefill = tonumber(bucket[2] or now)\n"
+          + "local currentTokens = tonumber(bucket[1])\n"
+          + "if not currentTokens then\n"
+          + "    currentTokens = capacity\n"
+          + "end\n"
+          + "\n"
+          + "local lastRefill = tonumber(bucket[2])\n"
+          + "if not lastRefill then\n"
+          + "    lastRefill = now\n"
+          + "end\n"
           + "\n"
           + "-- 计算需要补充的令牌数\n"
           + "local elapsed = now - lastRefill\n"
@@ -164,6 +181,15 @@ public class RateLimiter {
       long now = System.currentTimeMillis();
       int expire = (int) (capacity / refillRate) + 10;
 
+      logger.debug(
+          "令牌桶限流参数: key={}, capacity={}, tokens={}, refillRate={}, now={}, expire={}",
+          key,
+          capacity,
+          tokens,
+          refillRate,
+          now,
+          expire);
+
       @SuppressWarnings("unchecked")
       List<Number> result =
           redisTemplate.execute(
@@ -190,8 +216,8 @@ public class RateLimiter {
           capacity,
           tokens,
           refillRate,
-          e.getMessage(),
-          e);
+          e.getMessage());
+      // 限流失败时默认允许请求，避免影响业务
       return new RateLimitResult(true, capacity, 0);
     }
   }

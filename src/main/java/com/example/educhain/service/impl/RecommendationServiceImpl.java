@@ -82,7 +82,13 @@ public class RecommendationServiceImpl implements RecommendationService {
       Integer totalInteractions = (Integer) preferences.get("totalInteractions");
       if (totalInteractions == null || totalInteractions < 3) {
         logger.info("用户历史数据不足，降级到热门推荐: userId={}, interactions={}", userId, totalInteractions);
-        return getPopularRecommendations(null, limit);
+        List<SearchResultDTO> fallbackResults = getPopularRecommendations(null, limit);
+        // 如果热门推荐也为空，返回最新内容
+        if (fallbackResults.isEmpty()) {
+          logger.info("热门推荐为空，返回最新内容: userId={}", userId);
+          fallbackResults = getLatestRecommendations(null, limit);
+        }
+        return fallbackResults;
       }
 
       // 基于用户偏好的推荐权重
@@ -119,7 +125,13 @@ public class RecommendationServiceImpl implements RecommendationService {
       // 检查是否有推荐结果
       if (recommendations.isEmpty()) {
         logger.warn("个性化推荐结果为空，降级到热门推荐: userId={}", userId);
-        return getPopularRecommendations(null, limit);
+        List<SearchResultDTO> fallbackResults = getPopularRecommendations(null, limit);
+        // 如果热门推荐也为空，返回最新内容
+        if (fallbackResults.isEmpty()) {
+          logger.info("热门推荐为空，返回最新内容: userId={}", userId);
+          fallbackResults = getLatestRecommendations(null, limit);
+        }
+        return fallbackResults;
       }
 
       // 去重并按质量分数排序
@@ -336,8 +348,14 @@ public class RecommendationServiceImpl implements RecommendationService {
       }
 
       if (popularContent.isEmpty()) {
-        logger.info("热门推荐查询结果为空: categoryId={}", categoryId);
-        throw RecommendationException.insufficientData("热门内容数据");
+        logger.info("热门推荐查询结果为空，尝试获取随机内容: categoryId={}", categoryId);
+        // 数据不足时，返回随机内容而不是抛异常
+        popularContent = searchIndexRepository.findLatestContent(1, pageable).getContent();
+        
+        if (popularContent.isEmpty()) {
+          logger.warn("没有可用的推荐内容，返回空列表: categoryId={}", categoryId);
+          return new ArrayList<>();
+        }
       }
 
       List<SearchResultDTO> results =
@@ -387,7 +405,8 @@ public class RecommendationServiceImpl implements RecommendationService {
       }
 
       if (latestContent.isEmpty()) {
-        logger.warn("最新推荐查询结果为空: categoryId={}", categoryId);
+        logger.info("最新推荐查询结果为空，返回空列表: categoryId={}", categoryId);
+        return new ArrayList<>();
       }
 
       return latestContent.stream()

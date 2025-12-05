@@ -62,7 +62,7 @@ const BlockchainOverview: React.FC = () => {
               title="总区块数"
               value={overview?.totalBlocks || 0}
               prefix={<BlockOutlined />}
-              valueStyle={{ color: '#1890ff' }}
+              style={{ color: '#1890ff' }}
             />
           </Card>
         </Col>
@@ -72,7 +72,7 @@ const BlockchainOverview: React.FC = () => {
               title="总交易数"
               value={overview?.totalTransactions || 0}
               prefix={<TransactionOutlined />}
-              valueStyle={{ color: '#52c41a' }}
+              style={{ color: '#52c41a' }}
             />
           </Card>
         </Col>
@@ -82,7 +82,7 @@ const BlockchainOverview: React.FC = () => {
               title="最新区块"
               value={overview?.latestBlock?.index || 0}
               prefix={<ClockCircleOutlined />}
-              valueStyle={{ color: '#faad14' }}
+              style={{ color: '#faad14' }}
             />
           </Card>
         </Col>
@@ -92,7 +92,7 @@ const BlockchainOverview: React.FC = () => {
               title="链状态"
               value={overview?.chainValid ? '有效' : '无效'}
               prefix={<CheckCircleOutlined />}
-              valueStyle={{
+              style={{
                 color: overview?.chainValid ? '#52c41a' : '#ff4d4f',
               }}
             />

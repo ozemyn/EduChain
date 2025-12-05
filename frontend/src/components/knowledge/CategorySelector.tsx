@@ -21,7 +21,7 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-const CategorySelector: React.FC<CategorySelectorProps> = ({
+const CategorySelector: React.FC<CategorySelectorProps> = React.memo(({
   value,
   onChange,
   placeholder = '请选择分类',
@@ -123,6 +123,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       showCheckedStrategy={TreeSelect.SHOW_PARENT}
     />
   );
-};
+});
+
+CategorySelector.displayName = 'CategorySelector';
 
 export default CategorySelector;

@@ -89,7 +89,7 @@ const CreateKnowledge: React.FC = () => {
   const [certError, setCertError] = useState<string>();
   const [createdKnowledgeId, setCreatedKnowledgeId] = useState<number>();
 
-  // 使用草稿管理器
+  // 使用草稿管理器 - 禁用自动保存
   const {
     saveStatus,
     saveDraft,
@@ -98,8 +98,8 @@ const CreateKnowledge: React.FC = () => {
     stopAutoSave,
     markUnsaved,
   } = useDraftManager({
-    autoSave: true,
-    showNotifications: true,
+    autoSave: false, // 禁用自动保存，避免性能问题
+    showNotifications: false, // 禁用通知
     onDraftLoaded: draft => {
       const formValues = {
         title: draft.title,
@@ -157,10 +157,7 @@ const CreateKnowledge: React.FC = () => {
     }
   };
 
-  // 表单字段变化处理
-  const handleFormChange = () => {
-    markUnsaved();
-  };
+  // 移除表单变化监听，完全避免重渲染
 
   // 手动保存草稿
   const handleSaveDraft = async () => {
@@ -411,24 +408,9 @@ const CreateKnowledge: React.FC = () => {
       loadKnowledgeDetail();
     }
 
-    // 启动自动保存
-    startAutoSave(() => {
-      let values = form.getFieldsValue();
-
-      if (!values.content || values.content.trim() === '') {
-        const editorElement = document.querySelector(
-          '[contenteditable="true"]'
-        ) as HTMLElement;
-        if (editorElement && editorElement.innerHTML) {
-          values = { ...values, content: editorElement.innerHTML };
-        }
-      }
-
-      return values as unknown as Record<string, unknown>;
-    });
-
+    // 不启动自动保存，避免性能问题
     return () => {
-      stopAutoSave();
+      // 清理
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, user, startAutoSave, stopAutoSave]);
@@ -492,27 +474,7 @@ const CreateKnowledge: React.FC = () => {
               </p>
             </div>
 
-            {/* 保存状态指示器 */}
-            <div className="save-status-indicator">
-              {saveStatus === 'saving' && (
-                <span className="status-badge saving">
-                  <div className="status-dot" />
-                  正在保存...
-                </span>
-              )}
-              {saveStatus === 'saved' && (
-                <span className="status-badge saved">
-                  <CheckCircleOutlined />
-                  已保存
-                </span>
-              )}
-              {saveStatus === 'unsaved' && (
-                <span className="status-badge unsaved">
-                  <ClockCircleOutlined />
-                  有未保存更改
-                </span>
-              )}
-            </div>
+            {/* 移除保存状态指示器，避免频繁更新 */}
           </div>
         </header>
 
@@ -551,7 +513,6 @@ const CreateKnowledge: React.FC = () => {
               form={form}
               layout="vertical"
               onFinish={handleSubmit}
-              onValuesChange={handleFormChange}
               initialValues={{
                 type: 'TEXT',
                 isDraft: false,
@@ -607,13 +568,8 @@ const CreateKnowledge: React.FC = () => {
                 </Col>
               </Row>
 
-              {/* 外部链接 */}
-              <Form.Item
-                noStyle
-                shouldUpdate={(prevValues, currentValues) =>
-                  prevValues.type !== currentValues.type
-                }
-              >
+              {/* 外部链接 - 优化：只在 type 变化时重渲染 */}
+              <Form.Item dependencies={['type']} noStyle>
                 {({ getFieldValue }) => {
                   const type = getFieldValue('type');
                   return type === 'LINK' ? (
@@ -631,32 +587,27 @@ const CreateKnowledge: React.FC = () => {
                 }}
               </Form.Item>
 
-              {/* 多媒体文件 */}
-              <Form.Item
-                noStyle
-                shouldUpdate={(prevValues, currentValues) =>
-                  prevValues.type !== currentValues.type
-                }
-              >
+              {/* 多媒体文件 - 优化：只在 type 变化时重渲染 */}
+              <Form.Item dependencies={['type']} noStyle>
                 {({ getFieldValue }) => {
                   const type = getFieldValue('type');
                   return ['IMAGE', 'VIDEO', 'PDF'].includes(type) ? (
                     <Form.Item
                       name="mediaUrls"
                       label={<span className="form-label">上传文件</span>}
+                      valuePropName="value"
+                      trigger="onChange"
                     >
-                      <div className="media-upload-wrapper glass-light">
-                        <MediaUpload
-                          maxCount={type === 'IMAGE' ? 9 : 3}
-                          accept={
-                            type === 'IMAGE'
-                              ? 'image/*'
-                              : type === 'VIDEO'
-                                ? 'video/*'
-                                : '.pdf,.doc,.docx,.ppt,.pptx'
-                          }
-                        />
-                      </div>
+                      <MediaUpload
+                        maxCount={type === 'IMAGE' ? 9 : 3}
+                        accept={
+                          type === 'IMAGE'
+                            ? 'image/*'
+                            : type === 'VIDEO'
+                              ? 'video/*'
+                              : '.pdf,.doc,.docx,.ppt,.pptx'
+                        }
+                      />
                     </Form.Item>
                   ) : null;
                 }}
@@ -674,8 +625,6 @@ const CreateKnowledge: React.FC = () => {
                 <RichTextEditor
                   key={editorKey}
                   height={400}
-                  showStats={true}
-                  targetWords={1000}
                   className="editor-wrapper"
                 />
               </Form.Item>

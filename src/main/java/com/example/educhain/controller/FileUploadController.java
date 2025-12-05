@@ -46,11 +46,12 @@ public class FileUploadController {
   @Operation(summary = "上传单个文件", description = "上传单个文件到服务器")
   @RateLimit(
       key = "file:upload",
-      limit = 20,
+      limit = 100,
       timeWindow = 60,
       type = RateLimitType.USER,
-      algorithm = "token_bucket",
-      message = "文件上传过于频繁，请稍后再试")
+      algorithm = "sliding_window",
+      message = "文件上传过于频繁，请稍后再试",
+      enabled = false)
   public ResponseEntity<Result<FileUpload>> uploadFile(
       @RequestParam("file") MultipartFile file,
       @RequestParam(value = "knowledgeId", required = false) Long knowledgeId,

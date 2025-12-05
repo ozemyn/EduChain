@@ -97,55 +97,26 @@ const UserManagement: React.FC = () => {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 构建查询参数
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        size: pageSize.toString(),
+      });
 
-      const mockUsers: User[] = [
-        {
-          id: 1,
-          username: 'zhangsan',
-          email: 'zhangsan@example.com',
-          fullName: '张三',
-          avatarUrl: undefined,
-          school: '清华大学',
-          level: 5,
-          bio: '热爱学习的程序员',
-          role: 'LEARNER',
-          status: 1,
-          createdAt: '2024-01-01T00:00:00Z',
-          updatedAt: '2024-01-15T00:00:00Z',
-        },
-        {
-          id: 2,
-          username: 'lisi',
-          email: 'lisi@example.com',
-          fullName: '李四',
-          avatarUrl: undefined,
-          school: '北京大学',
-          level: 3,
-          bio: '前端开发工程师',
-          role: 'LEARNER',
-          status: 1,
-          createdAt: '2024-01-02T00:00:00Z',
-          updatedAt: '2024-01-14T00:00:00Z',
-        },
-        {
-          id: 3,
-          username: 'admin',
-          email: 'admin@example.com',
-          fullName: '管理员',
-          avatarUrl: undefined,
-          school: undefined,
-          level: 10,
-          bio: '系统管理员',
-          role: 'ADMIN',
-          status: 1,
-          createdAt: '2024-01-01T00:00:00Z',
-          updatedAt: '2024-01-15T00:00:00Z',
-        },
-      ];
+      if (searchKeyword) params.append('keyword', searchKeyword);
+      if (statusFilter) params.append('status', statusFilter);
+      if (roleFilter) params.append('role', roleFilter);
 
-      setUsers(mockUsers);
-      setTotal(mockUsers.length);
+      const response = await fetch(`/api/users?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
+      }
+
+      const result = await response.json();
+      if (result.success && result.data) {
+        setUsers(result.data.content || []);
+        setTotal(result.data.totalElements || 0);
+      }
     } catch (error) {
       console.error('Failed to load users:', error);
       message.error('加载用户列表失败');
@@ -165,16 +136,13 @@ const UserManagement: React.FC = () => {
     setUserDetailVisible(true);
 
     try {
-      const mockStats: UserStats = {
-        userId: user.id,
-        knowledgeCount: 25,
-        likeCount: 156,
-        favoriteCount: 89,
-        followingCount: 45,
-        followerCount: 123,
-        viewCount: 2345,
-      };
-      setUserStats(mockStats);
+      const response = await fetch(`/api/users/${user.id}/stats`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setUserStats(result.data);
+        }
+      }
     } catch (error) {
       console.error('Failed to load user stats:', error);
     }
@@ -199,16 +167,36 @@ const UserManagement: React.FC = () => {
   const handleSaveUser = async () => {
     try {
       const values = await form.validateFields();
-      console.log('Saving user:', values);
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const url = selectedUser
+        ? `/api/users/${selectedUser.id}`
+        : '/api/users';
+      const method = selectedUser ? 'PUT' : 'POST';
 
-      message.success('用户信息更新成功');
-      setEditModalVisible(false);
-      loadUsers();
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save user');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        message.success(selectedUser ? '用户信息更新成功' : '用户创建成功');
+        setEditModalVisible(false);
+        loadUsers();
+      } else {
+        throw new Error(result.message || '保存失败');
+      }
     } catch (error) {
       console.error('Failed to save user:', error);
-      message.error('保存失败');
+      message.error(error instanceof Error ? error.message : '保存失败');
     }
   };
 

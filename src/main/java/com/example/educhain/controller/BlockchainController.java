@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * 提供区块链浏览器相关的API接口，包括区块查询、交易查询、搜索等功能
  */
 @RestController
-@RequestMapping("/api/blockchain")
+@RequestMapping("/blockchain")
 @Tag(name = "区块链浏览器", description = "区块链浏览器相关API，提供区块、交易查询和搜索功能")
 public class BlockchainController {
 
@@ -454,7 +454,6 @@ public class BlockchainController {
         .publicKey((String) transactionData.get("public_key"))
         .build();
   }
-}
 
   /**
    * 生成存证证书

@@ -13,7 +13,7 @@
    ================================== */
 
 import React, { useState, useEffect } from 'react';
-import { Layout, Button, Avatar, Dropdown, Input, Drawer, Badge } from 'antd';
+import { Layout, Button, Avatar, Dropdown, Drawer, Badge } from 'antd';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   HomeOutlined,
@@ -35,7 +35,6 @@ import { ThemeToggle } from '@components/common';
 import './Header.css';
 
 const { Header: AntHeader } = Layout;
-const { Search } = Input;
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -45,7 +44,6 @@ const Header: React.FC = () => {
   // 状态管理
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
 
   // 监听滚动，添加导航栏效果
   useEffect(() => {
@@ -55,14 +53,6 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // 搜索处理
-  const handleSearch = (value: string) => {
-    if (value.trim()) {
-      navigate(`/search?q=${encodeURIComponent(value.trim())}`);
-      setMobileMenuOpen(false);
-    }
-  };
 
   // 登出处理
   const handleLogout = () => {
@@ -140,7 +130,7 @@ const Header: React.FC = () => {
       <AntHeader
         className={`modern-navbar glass-navbar optimized-card ${
           scrolled ? 'scrolled' : ''
-        } ${searchFocused ? 'search-focused' : ''}`}
+        }`}
       >
         <div className="navbar-container container">
           {/* Logo 区域 */}
@@ -169,19 +159,6 @@ const Header: React.FC = () => {
               </Link>
             ))}
           </nav>
-
-          {/* 搜索框 - 桌面端 */}
-          <div className="search-wrapper desktop-only">
-            <Search
-              placeholder="搜索知识、课程、专家..."
-              allowClear
-              onSearch={handleSearch}
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-              className="navbar-search glass-medium"
-              prefix={<SearchOutlined />}
-            />
-          </div>
 
           {/* 右侧操作区 */}
           <div className="navbar-actions">
@@ -251,7 +228,7 @@ const Header: React.FC = () => {
             <Button
               className="mobile-menu-button glass-button hover-scale active-scale mobile-only"
               icon={<MenuOutlined />}
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               shape="circle"
             />
           </div>
@@ -271,20 +248,8 @@ const Header: React.FC = () => {
         open={mobileMenuOpen}
         className="mobile-nav-drawer"
         closeIcon={<CloseOutlined />}
-        width={280}
+        size="default"
       >
-        {/* 移动端搜索 */}
-        <div className="mobile-search">
-          <Search
-            placeholder="搜索..."
-            allowClear
-            onSearch={handleSearch}
-            className="glass-medium"
-            prefix={<SearchOutlined />}
-            size="large"
-          />
-        </div>
-
         {/* 移动端导航链接 */}
         <nav className="mobile-nav-links">
           {navLinks.map(link => (

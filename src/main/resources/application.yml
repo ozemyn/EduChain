@@ -64,7 +64,7 @@ jwt:
 
 # Rate Limiting Configuration
 rate-limit:
-  enabled: true
+  enabled: false
   default-algorithm: sliding_window
   default-limit: 100
   default-window: 60
@@ -92,11 +92,13 @@ rate-limit:
       algorithm: sliding_window
 
 # File Storage Configuration
-file:
-  upload:
-    path: ./uploads/
-    max-size: 10485760 # 10MB
-    allowed-types: jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,mp4,avi,mov
+app:
+  file:
+    upload:
+      path: uploads
+      max-size: 10485760 # 10MB
+      allowed-types: image/jpeg,image/png,image/gif,video/mp4,application/pdf,text/plain
+    base-url: http://localhost:8080
 
 # Logging Configuration
 logging:

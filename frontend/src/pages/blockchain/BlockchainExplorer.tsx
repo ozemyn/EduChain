@@ -12,6 +12,7 @@
 
 import React, { useState } from 'react';
 import { Tabs } from 'antd';
+import type { TabsProps } from 'antd';
 import {
   BlockOutlined,
   SearchOutlined,
@@ -24,13 +25,56 @@ import {
 } from '@/components/blockchain';
 import './BlockchainExplorer.css';
 
-const { TabPane } = Tabs;
-
 /**
  * 区块链浏览器主页面
  */
 const BlockchainExplorer: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+
+  const tabItems: TabsProps['items'] = [
+    {
+      key: 'overview',
+      label: (
+        <span>
+          <BarChartOutlined />
+          概览
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <BlockchainOverview />
+        </div>
+      ),
+    },
+    {
+      key: 'blocks',
+      label: (
+        <span>
+          <BlockOutlined />
+          区块列表
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <BlockList />
+        </div>
+      ),
+    },
+    {
+      key: 'search',
+      label: (
+        <span>
+          <SearchOutlined />
+          搜索
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <BlockchainSearch />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="blockchain-explorer-page animate-fade-in">
@@ -69,49 +113,8 @@ const BlockchainExplorer: React.FC = () => {
               onChange={setActiveTab}
               size="large"
               className="blockchain-tabs"
-            >
-              <TabPane
-                tab={
-                  <span>
-                    <BarChartOutlined />
-                    概览
-                  </span>
-                }
-                key="overview"
-              >
-                <div className="tab-content">
-                  <BlockchainOverview />
-                </div>
-              </TabPane>
-
-              <TabPane
-                tab={
-                  <span>
-                    <BlockOutlined />
-                    区块列表
-                  </span>
-                }
-                key="blocks"
-              >
-                <div className="tab-content">
-                  <BlockList />
-                </div>
-              </TabPane>
-
-              <TabPane
-                tab={
-                  <span>
-                    <SearchOutlined />
-                    搜索
-                  </span>
-                }
-                key="search"
-              >
-                <div className="tab-content">
-                  <BlockchainSearch />
-                </div>
-              </TabPane>
-            </Tabs>
+              items={tabItems}
+            />
           </div>
         </main>
       </div>

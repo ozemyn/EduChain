@@ -45,6 +45,8 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
     [key: string]: number;
   }>({});
 
+
+
   const getFileIcon = (fileName: string) => {
     const ext = fileName.toLowerCase().split('.').pop();
     switch (ext) {
@@ -97,11 +99,19 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
         setUploadProgress(prev => ({ ...prev, [fileId]: percent }));
       });
 
-      if (response.success && response.data?.url) {
-        const newUrls = [...value, response.data.url];
-        onChange?.(newUrls);
-        onSuccess?.(response.data);
-        message.success('文件上传成功');
+      // 检查响应是否成功
+      if (response.success && response.data) {
+        // 后端返回的是 fileUrl 字段，不是 url
+        const fileUrl = response.data.fileUrl || response.data.url;
+        
+        if (fileUrl) {
+          const newUrls = [...value, fileUrl];
+          onChange?.(newUrls);
+          onSuccess?.(response.data);
+          message.success('文件上传成功');
+        } else {
+          throw new Error('上传成功但未返回文件URL');
+        }
       } else {
         throw new Error(response.message || '上传失败');
       }
@@ -154,7 +164,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
               key={url}
               size="small"
               style={{ width: 104, height: 104 }}
-              bodyStyle={{ padding: 4 }}
+              styles={{ body: { padding: 4 } }}
               cover={
                 isImageFile(url) ? (
                   <Image

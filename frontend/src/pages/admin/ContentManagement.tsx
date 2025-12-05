@@ -120,55 +120,27 @@ const ContentManagement: React.FC = () => {
   const loadContents = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 构建查询参数
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        size: pageSize.toString(),
+      });
 
-      const mockContents: KnowledgeItem[] = [
-        {
-          id: 1,
-          title: 'React 18 新特性详解',
-          content: '本文详细介绍了React 18的新特性...',
-          type: 'TEXT',
-          uploaderId: 1,
-          uploaderName: '张三',
-          categoryId: 1,
-          categoryName: '前端开发',
-          tags: 'React,JavaScript,前端',
-          status: 1,
-          createdAt: '2024-01-15T10:30:00Z',
-          updatedAt: '2024-01-15T10:30:00Z',
-        },
-        {
-          id: 2,
-          title: 'TypeScript 高级类型应用',
-          content: '深入探讨TypeScript的高级类型系统...',
-          type: 'TEXT',
-          uploaderId: 2,
-          uploaderName: '李四',
-          categoryId: 1,
-          categoryName: '前端开发',
-          tags: 'TypeScript,JavaScript',
-          status: 2,
-          createdAt: '2024-01-14T15:20:00Z',
-          updatedAt: '2024-01-14T15:20:00Z',
-        },
-        {
-          id: 3,
-          title: '机器学习入门教程',
-          content: '从零开始学习机器学习...',
-          type: 'VIDEO',
-          uploaderId: 1,
-          uploaderName: '张三',
-          categoryId: 2,
-          categoryName: '人工智能',
-          tags: '机器学习,AI,Python',
-          status: 1,
-          createdAt: '2024-01-13T09:15:00Z',
-          updatedAt: '2024-01-13T09:15:00Z',
-        },
-      ];
+      if (searchKeyword) params.append('keyword', searchKeyword);
+      if (statusFilter) params.append('status', statusFilter);
+      if (typeFilter) params.append('type', typeFilter);
+      if (categoryFilter) params.append('categoryId', categoryFilter);
 
-      setContents(mockContents);
-      setTotal(mockContents.length);
+      const response = await fetch(`/api/knowledge?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch contents');
+      }
+
+      const result = await response.json();
+      if (result.success && result.data) {
+        setContents(result.data.content || []);
+        setTotal(result.data.totalElements || 0);
+      }
     } catch (error) {
       console.error('Failed to load contents:', error);
       message.error('加载内容列表失败');

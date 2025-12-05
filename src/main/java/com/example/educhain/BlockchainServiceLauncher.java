@@ -246,8 +246,7 @@ public class BlockchainServiceLauncher {
    */
   private static boolean checkDependenciesInstalled(String condaEnv) {
     try {
-      // 检查关键依赖包是否已安装，使用与启动时完全相同的 conda run 命令
-      // 必须检查 uvicorn 的完整导入，因为 uvicorn[standard] 包含多个子包
+      // 检查所有关键依赖包是否已安装
       ProcessBuilder pb = new ProcessBuilder(
           "conda", "run", "-n", condaEnv, "--no-capture-output",
           "python", "-c", 
@@ -255,20 +254,32 @@ public class BlockchainServiceLauncher {
           "missing = []\n" +
           "try:\n" +
           "    import fastapi\n" +
-          "except ImportError as e:\n" +
+          "except ImportError:\n" +
           "    missing.append('fastapi')\n" +
           "try:\n" +
           "    import uvicorn\n" +
-          "except ImportError as e:\n" +
+          "except ImportError:\n" +
           "    missing.append('uvicorn')\n" +
           "try:\n" +
           "    import pydantic\n" +
-          "except ImportError as e:\n" +
+          "except ImportError:\n" +
           "    missing.append('pydantic')\n" +
           "try:\n" +
           "    import sqlalchemy\n" +
-          "except ImportError as e:\n" +
+          "except ImportError:\n" +
           "    missing.append('sqlalchemy')\n" +
+          "try:\n" +
+          "    import reportlab\n" +
+          "except ImportError:\n" +
+          "    missing.append('reportlab')\n" +
+          "try:\n" +
+          "    import qrcode\n" +
+          "except ImportError:\n" +
+          "    missing.append('qrcode')\n" +
+          "try:\n" +
+          "    from PIL import Image\n" +
+          "except ImportError:\n" +
+          "    missing.append('Pillow')\n" +
           "if missing:\n" +
           "    print('MISSING:', ','.join(missing))\n" +
           "    sys.exit(1)\n" +

@@ -1,5 +1,6 @@
 package com.example.educhain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
       @Index(name = "idx_file_hash", columnList = "file_hash")
     })
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "uploader", "knowledgeItem"})
 public class FileUpload {
 
   @Id
