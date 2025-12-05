@@ -343,10 +343,10 @@ const TagCloud: React.FC<TagCloudProps> = ({
 
     const color =
       tag.trend === 'up'
-        ? '#52c41a'
+        ? 'var(--accent-success)'
         : tag.trend === 'down'
-          ? '#ff4d4f'
-          : '#666';
+          ? 'var(--accent-error)'
+          : 'var(--text-secondary)';
     const icon = tag.trend === 'up' ? '↗' : tag.trend === 'down' ? '↘' : '→';
 
     return (
@@ -404,18 +404,18 @@ const TagCloud: React.FC<TagCloudProps> = ({
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: '8px 12px',
-              border: '1px solid #f0f0f0',
+              border: '1px solid var(--border-color)',
               borderRadius: 4,
               cursor: 'pointer',
               transition: 'all 0.3s ease',
             }}
             onClick={() => handleTagClick(tag)}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = '#1890ff';
-              e.currentTarget.style.backgroundColor = '#f6ffed';
+              e.currentTarget.style.borderColor = 'var(--accent-primary)';
+              e.currentTarget.style.backgroundColor = 'var(--success-bg)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = '#f0f0f0';
+              e.currentTarget.style.borderColor = 'var(--border-color)';
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
@@ -525,7 +525,7 @@ const TagCloud: React.FC<TagCloudProps> = ({
           style={{
             marginTop: 16,
             paddingTop: 16,
-            borderTop: '1px solid #f0f0f0',
+            borderTop: '1px solid var(--border-color)',
           }}
         >
           <Text type="secondary" style={{ marginBottom: 8, display: 'block' }}>

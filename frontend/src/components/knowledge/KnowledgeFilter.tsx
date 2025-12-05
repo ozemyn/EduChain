@@ -355,7 +355,7 @@ const KnowledgeFilter: React.FC<KnowledgeFilterProps> = ({
 
         .filter-tag.tag-selected {
           background: linear-gradient(135deg, var(--accent-primary), var(--primary-600));
-          color: white;
+          color: var(--text-inverse);
           border-color: var(--accent-primary);
           box-shadow: var(--glass-shadow-sm);
         }

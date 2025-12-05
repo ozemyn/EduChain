@@ -262,16 +262,16 @@ const cnkiSearchStyles = `
 /* ===== 知网风格搜索页面样式 ===== */
 .cnki-search-container {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--bg-secondary);
   font-family: var(--font-system);
 }
 
 /* 顶部搜索区域 */
 .cnki-search-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
   padding: var(--spacing-lg) 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px var(--glass-shadow);
 }
 
 .cnki-header-content {
@@ -307,7 +307,7 @@ const cnkiSearchStyles = `
 
 /* 主体内容区域 */
 .cnki-main-content {
-  background: #f8f9fa;
+  background: var(--bg-secondary);
   min-height: calc(100vh - 120px);
 }
 
@@ -318,16 +318,16 @@ const cnkiSearchStyles = `
 }
 
 .cnki-layout {
-  background: #ffffff;
+  background: var(--bg-primary);
   border-radius: var(--radius-md);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px var(--glass-shadow);
   overflow: hidden;
 }
 
 /* 左侧筛选面板 */
 .cnki-sidebar {
-  border-right: 1px solid #e5e7eb;
-  background: #fafbfc;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
 }
 
 .cnki-filters-panel {
@@ -337,7 +337,7 @@ const cnkiSearchStyles = `
 
 /* 右侧结果区域 */
 .cnki-results-area {
-  background: #ffffff;
+  background: var(--bg-primary);
 }
 
 /* 结果工具栏 */
@@ -346,8 +346,8 @@ const cnkiSearchStyles = `
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid #e5e7eb;
-  background: #fafbfc;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
 }
 
 .cnki-toolbar-left {
@@ -390,13 +390,14 @@ const cnkiSearchStyles = `
 .cnki-back-top {
   background: var(--accent-primary) !important;
   border-radius: var(--radius-md) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 2px 8px var(--glass-shadow) !important;
+  will-change: transform, box-shadow;
 }
 
 .cnki-back-top:hover {
   background: var(--primary-600) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 4px 12px var(--glass-shadow) !important;
 }
 
 /* 响应式设计 */
@@ -411,7 +412,7 @@ const cnkiSearchStyles = `
   
   .cnki-sidebar {
     border-right: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
   }
 }
 
@@ -457,20 +458,27 @@ const cnkiSearchStyles = `
   }
 }
 
-/* 知网风格的简洁设计 */
-.cnki-search-container * {
-  transition: all var(--transition-fast) ease;
+/* 知网风格的简洁设计 - 性能优化：只对需要过渡的元素应用 */
+.cnki-search-container .ant-card,
+.cnki-search-container .ant-btn,
+.cnki-search-container .ant-select-selector,
+.cnki-result-item {
+  transition: background-color var(--transition-fast) ease,
+              border-color var(--transition-fast) ease,
+              color var(--transition-fast) ease,
+              transform var(--transition-fast) ease;
+  will-change: background-color, border-color, color, transform;
 }
 
 .cnki-search-container .ant-card {
   border-radius: var(--radius-md);
   box-shadow: none;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
 }
 
 .cnki-search-container .ant-card-head {
-  background: #fafbfc;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .cnki-search-container .ant-select-selector {

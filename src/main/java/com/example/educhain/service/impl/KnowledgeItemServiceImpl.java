@@ -7,6 +7,7 @@ import com.example.educhain.repository.*;
 import com.example.educhain.service.FileUploadService;
 import com.example.educhain.service.KnowledgeItemService;
 import com.example.educhain.util.PermissionChecker;
+import com.example.educhain.util.HashUtil;
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.Patch;
 import java.time.LocalDateTime;
@@ -48,6 +49,9 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
   @Autowired private PermissionChecker permissionChecker;
 
   @Autowired private jakarta.persistence.EntityManager entityManager;
+
+  @Autowired(required = false)
+  private com.example.educhain.service.BlockchainService blockchainService;
 
   /**
    * 创建新的知识内容 验证请求参数，创建知识内容实体，初始化统计信息和版本历史 处理标签关联和媒体文件
@@ -91,6 +95,25 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
 
     // 处理标签关联
     processTagAssociation(savedItem, null, tags);
+
+    // 区块链存证（异步，不阻塞主流程）
+    if (blockchainService != null && savedItem.getStatus() == 1) {
+      try {
+        String contentHash =
+            HashUtil.calculateKnowledgeHash(savedItem.getTitle(), savedItem.getContent());
+        blockchainService.certifyKnowledge(savedItem.getId(), uploaderId, contentHash);
+        logger.info(
+            "Knowledge item certified on blockchain: {} by user {}",
+            savedItem.getId(),
+            uploaderId);
+      } catch (Exception e) {
+        // 区块链存证失败不影响主流程，只记录日志
+        logger.warn(
+            "Failed to certify knowledge on blockchain: knowledgeId={}, error={}",
+            savedItem.getId(),
+            e.getMessage());
+      }
+    }
 
     logger.info("Knowledge item created: {} by user {}", savedItem.getId(), uploaderId);
 

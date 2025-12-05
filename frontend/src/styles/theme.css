@@ -177,9 +177,9 @@
   --warning-border: rgba(245, 158, 11, 0.3);
   --warning-text: #fcd34d;
 
-  --error-bg: rgba(239, 68, 68, 0.1);
-  --error-border: rgba(239, 68, 68, 0.3);
-  --error-text: #fca5a5;
+  --error-bg: rgba(245, 158, 11, 0.1);
+  --error-border: rgba(245, 158, 11, 0.3);
+  --error-text: #fcd34d;
 
   --info-bg: rgba(59, 130, 246, 0.1);
   --info-border: rgba(59, 130, 246, 0.3);

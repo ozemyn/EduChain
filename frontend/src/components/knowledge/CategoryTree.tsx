@@ -384,7 +384,7 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
               style={{
                 marginBottom: 16,
                 padding: 12,
-                backgroundColor: '#f5f5f5',
+                backgroundColor: 'var(--bg-tertiary)',
                 borderRadius: 4,
               }}
             >

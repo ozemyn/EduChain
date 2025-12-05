@@ -31,6 +31,9 @@ export const ROUTES = {
   // 推荐
   RECOMMENDATIONS: '/recommendations',
 
+  // 社区
+  COMMUNITY: '/community',
+
   // 分类
   CATEGORY: '/category/:id',
 
@@ -67,6 +70,7 @@ export const ROUTE_TITLES = {
   [ROUTES.SEARCH]: '搜索结果',
   [ROUTES.SEARCH_ADVANCED]: '高级搜索',
   [ROUTES.RECOMMENDATIONS]: '推荐内容',
+  [ROUTES.COMMUNITY]: '学习社区',
   [ROUTES.ADMIN.DASHBOARD]: '管理后台',
   [ROUTES.ADMIN.USERS]: '用户管理',
   [ROUTES.ADMIN.KNOWLEDGE]: '内容管理',
@@ -109,5 +113,9 @@ export const BREADCRUMB_CONFIG = {
   [ROUTES.RECOMMENDATIONS]: [
     { title: '首页', path: ROUTES.HOME },
     { title: '推荐内容' },
+  ],
+  [ROUTES.COMMUNITY]: [
+    { title: '首页', path: ROUTES.HOME },
+    { title: '学习社区' },
   ],
 } as const;

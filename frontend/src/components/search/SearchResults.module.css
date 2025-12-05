@@ -4,8 +4,8 @@
 
 .resultSummary {
   padding: 16px 0;
-  color: #666;
-  border-bottom: 1px solid #f0f0f0;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 16px;
 }
 
@@ -32,14 +32,14 @@
 .title {
   font-size: 18px;
   font-weight: 600;
-  color: #1890ff;
+  color: var(--accent-primary);
   text-decoration: none;
   line-height: 1.4;
   display: block;
 }
 
 .title:hover {
-  color: #40a9ff;
+  color: var(--primary-600);
 }
 
 .tags {
@@ -54,13 +54,13 @@
 
 .content {
   margin: 0;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 .highlight {
-  background-color: #fff2e6;
-  color: #d46b08;
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
   padding: 0 2px;
   border-radius: 2px;
 }
@@ -70,7 +70,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color);
 }
 
 .authorInfo {
@@ -81,13 +81,13 @@
 }
 
 .authorName {
-  color: #666;
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
 }
 
 .authorName:hover {
-  color: #1890ff;
+  color: var(--accent-primary);
 }
 
 .date {
@@ -95,20 +95,20 @@
 }
 
 .category {
-  color: #1890ff;
+  color: var(--accent-primary);
   text-decoration: none;
   font-size: 12px;
   padding: 2px 6px;
-  background-color: #f0f8ff;
+  background-color: var(--info-bg);
   border-radius: 4px;
 }
 
 .category:hover {
-  background-color: #e6f7ff;
+  background-color: var(--info-border);
 }
 
 .stats {
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 14px;
 }
 
@@ -124,8 +124,8 @@
 }
 
 .loadMore button {
-  background: #1890ff;
-  color: white;
+  background: var(--accent-primary);
+  color: var(--text-inverse);
   border: none;
   padding: 8px 24px;
   border-radius: 6px;
@@ -135,11 +135,11 @@
 }
 
 .loadMore button:hover:not(:disabled) {
-  background: #40a9ff;
+  background: var(--primary-600);
 }
 
 .loadMore button:disabled {
-  background: #d9d9d9;
+  background: var(--text-quaternary);
   cursor: not-allowed;
 }
 

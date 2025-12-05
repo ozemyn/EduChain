@@ -90,7 +90,7 @@ const AdminLogin: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px',
-              color: '#fff',
+              color: 'var(--text-inverse)',
               fontSize: '24px',
               fontWeight: 'bold',
             }}
@@ -184,12 +184,12 @@ const AdminLogin: React.FC = () => {
           style={{
             marginTop: '24px',
             padding: '16px',
-            background: '#f6ffed',
+            background: 'var(--success-bg)',
             border: '1px solid #b7eb8f',
             borderRadius: '6px',
           }}
         >
-          <Text style={{ fontSize: '12px', color: '#52c41a' }}>
+          <Text style={{ fontSize: '12px', color: 'var(--accent-success)' }}>
             <strong>演示账号：</strong>
             <br />
             用户名: admin

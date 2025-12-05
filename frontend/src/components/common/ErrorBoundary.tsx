@@ -62,7 +62,7 @@ class ErrorBoundary extends Component<Props, State> {
               <div
                 style={{
                   textAlign: 'left',
-                  background: '#f5f5f5',
+                  background: 'var(--bg-tertiary)',
                   padding: '16px',
                   borderRadius: '4px',
                   marginTop: '16px',

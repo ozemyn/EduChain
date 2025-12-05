@@ -20,6 +20,10 @@ const CreateKnowledgePage = React.lazy(
   () => import('@/pages/knowledge/CreateKnowledge')
 );
 const SearchPage = React.lazy(() => import('@/pages/search/Search'));
+const RecommendationsPage = React.lazy(
+  () => import('@/pages/recommendation/Recommendations')
+);
+const CommunityPage = React.lazy(() => import('@/pages/community/Community'));
 const NotFoundPage = React.lazy(() => import('@/pages/error/NotFound'));
 
 // 管理员页面
@@ -110,6 +114,22 @@ export const router = createBrowserRouter([
         element: (
           <LoadingWrapper>
             <SearchPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'recommendations',
+        element: (
+          <LoadingWrapper>
+            <RecommendationsPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'community',
+        element: (
+          <LoadingWrapper>
+            <CommunityPage />
           </LoadingWrapper>
         ),
       },

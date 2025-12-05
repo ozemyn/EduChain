@@ -108,13 +108,13 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
     const iconProps = { size: 16 };
     switch (type) {
       case 'LIKE':
-        return <BellOutlined {...iconProps} style={{ color: '#ff4d4f' }} />;
+        return <BellOutlined {...iconProps} style={{ color: 'var(--accent-error)' }} />;
       case 'COMMENT':
-        return <BellOutlined {...iconProps} style={{ color: '#1890ff' }} />;
+        return <BellOutlined {...iconProps} style={{ color: 'var(--accent-primary)' }} />;
       case 'FOLLOW':
-        return <BellOutlined {...iconProps} style={{ color: '#52c41a' }} />;
+        return <BellOutlined {...iconProps} style={{ color: 'var(--accent-success)' }} />;
       case 'SYSTEM':
-        return <BellOutlined {...iconProps} style={{ color: '#faad14' }} />;
+        return <BellOutlined {...iconProps} style={{ color: 'var(--accent-warning)' }} />;
       default:
         return <BellOutlined {...iconProps} />;
     }
@@ -122,7 +122,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
 
   const dropdownContent = (
     <div style={{ width: 320, maxHeight: 400, overflow: 'auto' }}>
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid #f0f0f0' }}>
+      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-color)' }}>
         <Space style={{ width: '100%', justifyContent: 'space-between' }}>
           <Text strong>通知</Text>
           <Link to="/notifications">
@@ -144,7 +144,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                   padding: '12px 16px',
                   backgroundColor: notification.isRead
                     ? 'transparent'
-                    : '#f6ffed',
+                    : 'var(--success-bg)',
                   cursor: 'pointer',
                 }}
                 onClick={() => {

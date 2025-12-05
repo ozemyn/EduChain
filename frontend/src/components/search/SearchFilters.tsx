@@ -250,7 +250,7 @@ export default SearchFilters;
 // 知网风格筛选面板样式
 const cnkiFiltersStyles = `
 .cnki-filters-panel {
-  background: #fafbfc;
+  background: var(--bg-elevated);
   height: 100%;
 }
 
@@ -260,7 +260,7 @@ const cnkiFiltersStyles = `
   align-items: center;
   padding-bottom: var(--spacing-md);
   margin-bottom: var(--spacing-md);
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .cnki-filters-title {
@@ -297,7 +297,7 @@ const cnkiFiltersStyles = `
   color: var(--text-secondary);
   margin: 0;
   padding-bottom: var(--spacing-xs);
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .cnki-tags-container {
@@ -320,8 +320,8 @@ const cnkiFiltersStyles = `
 }
 
 .cnki-filters-collapsed {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
 }
@@ -329,8 +329,8 @@ const cnkiFiltersStyles = `
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .cnki-filters-panel {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: var(--spacing-md);
   }

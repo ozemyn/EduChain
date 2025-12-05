@@ -9,6 +9,8 @@ import {
   LoginOutlined,
   LogoutOutlined,
   PlusOutlined,
+  ThunderboltOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@contexts/AuthContext';
 import { ThemeToggle } from '@components/common';
@@ -62,6 +64,21 @@ const Header: React.FC = () => {
       key: 'knowledge',
       icon: <BookOutlined />,
       label: <Link to="/knowledge">知识库</Link>,
+    },
+    {
+      key: 'search',
+      icon: <SearchOutlined />,
+      label: <Link to="/search">搜索</Link>,
+    },
+    {
+      key: 'recommendations',
+      icon: <ThunderboltOutlined />,
+      label: <Link to="/recommendations">推荐</Link>,
+    },
+    {
+      key: 'community',
+      icon: <TeamOutlined />,
+      label: <Link to="/community">社区</Link>,
     },
   ];
 

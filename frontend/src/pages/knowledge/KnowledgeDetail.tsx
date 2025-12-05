@@ -846,18 +846,18 @@ const KnowledgeDetail: React.FC = () => {
         }
 
         .liked {
-          background: linear-gradient(135deg, var(--accent-error), #f56565) !important;
-          color: white !important;
+          background: linear-gradient(135deg, var(--accent-error), var(--accent-warning)) !important;
+          color: var(--text-inverse) !important;
         }
 
         .favorited {
-          background: linear-gradient(135deg, var(--accent-warning), #ed8936) !important;
-          color: white !important;
+          background: linear-gradient(135deg, var(--accent-warning), var(--accent-warning)) !important;
+          color: var(--text-inverse) !important;
         }
 
         .danger-button {
-          background: linear-gradient(135deg, var(--accent-error), #f56565) !important;
-          color: white !important;
+          background: linear-gradient(135deg, var(--accent-error), var(--accent-warning)) !important;
+          color: var(--text-inverse) !important;
         }
 
         /* 侧边栏 */
@@ -943,7 +943,7 @@ const KnowledgeDetail: React.FC = () => {
         .follow-button {
           background: linear-gradient(135deg, var(--accent-primary), var(--primary-600)) !important;
           border: none !important;
-          color: white !important;
+          color: var(--text-inverse) !important;
           font-weight: 600 !important;
         }
 

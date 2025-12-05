@@ -991,7 +991,7 @@ const CreateKnowledge: React.FC = () => {
         .primary-button {
           background: linear-gradient(135deg, var(--accent-primary), var(--primary-600)) !important;
           border: none !important;
-          color: white !important;
+          color: var(--text-inverse) !important;
           font-weight: 600 !important;
         }
 

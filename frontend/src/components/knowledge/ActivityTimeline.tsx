@@ -183,17 +183,17 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'like':
-        return { icon: <LikeOutlined />, color: '#ff4d4f' };
+        return { icon: <LikeOutlined />, color: 'var(--accent-error)' };
       case 'favorite':
-        return { icon: <StarOutlined />, color: '#faad14' };
+        return { icon: <StarOutlined />, color: 'var(--accent-warning)' };
       case 'comment':
-        return { icon: <CommentOutlined />, color: '#1890ff' };
+        return { icon: <CommentOutlined />, color: 'var(--accent-primary)' };
       case 'publish':
-        return { icon: <FileTextOutlined />, color: '#52c41a' };
+        return { icon: <FileTextOutlined />, color: 'var(--accent-success)' };
       case 'follow':
-        return { icon: <UserAddOutlined />, color: '#722ed1' };
+        return { icon: <UserAddOutlined />, color: 'var(--primary-600)' };
       default:
-        return { icon: <ClockCircleOutlined />, color: '#d9d9d9' };
+        return { icon: <ClockCircleOutlined />, color: 'var(--text-quaternary)' };
     }
   };
 

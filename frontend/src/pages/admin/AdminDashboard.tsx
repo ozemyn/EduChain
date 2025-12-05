@@ -207,7 +207,7 @@ const AdminDashboard: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       render: (title: string) => (
-        <Text strong style={{ color: '#1890ff', cursor: 'pointer' }}>
+        <Text strong style={{ color: 'var(--accent-primary)', cursor: 'pointer' }}>
           {title}
         </Text>
       ),
@@ -324,7 +324,7 @@ const AdminDashboard: React.FC = () => {
               title="总用户数"
               value={stats.totalUsers}
               prefix={<UserOutlined />}
-              valueStyle={{ color: '#3f8600' }}
+              valueStyle={{ color: 'var(--accent-success)' }}
             />
             <div style={{ marginTop: '8px' }}>
               <Text type="secondary">今日新增: {stats.newUsersToday}</Text>
@@ -337,7 +337,7 @@ const AdminDashboard: React.FC = () => {
               title="总内容数"
               value={stats.totalKnowledge}
               prefix={<FileTextOutlined />}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: 'var(--accent-primary)' }}
             />
             <div style={{ marginTop: '8px' }}>
               <Text type="secondary">今日新增: {stats.newKnowledgeToday}</Text>
@@ -350,7 +350,7 @@ const AdminDashboard: React.FC = () => {
               title="总浏览量"
               value={stats.totalViews}
               prefix={<EyeOutlined />}
-              valueStyle={{ color: '#722ed1' }}
+              valueStyle={{ color: 'var(--primary-600)' }}
             />
           </Card>
         </Col>
@@ -360,7 +360,7 @@ const AdminDashboard: React.FC = () => {
               title="活跃用户"
               value={stats.activeUsers}
               prefix={<TrophyOutlined />}
-              valueStyle={{ color: '#eb2f96' }}
+              valueStyle={{ color: 'var(--primary-500)' }}
             />
           </Card>
         </Col>
@@ -444,10 +444,10 @@ const AdminDashboard: React.FC = () => {
                         style={{
                           color:
                             alert.type === 'error'
-                              ? '#ff4d4f'
+                              ? 'var(--accent-error)'
                               : alert.type === 'warning'
-                                ? '#faad14'
-                                : '#1890ff',
+                                ? 'var(--accent-warning)'
+                                : 'var(--accent-primary)',
                         }}
                       />
                     }
@@ -486,7 +486,7 @@ const AdminDashboard: React.FC = () => {
               type="circle"
               percent={78}
               format={percent => `${percent}%`}
-              strokeColor="#1890ff"
+              strokeColor="var(--accent-primary)"
             />
           </Card>
         </Col>
@@ -496,7 +496,7 @@ const AdminDashboard: React.FC = () => {
               type="circle"
               percent={85}
               format={percent => `${percent}%`}
-              strokeColor="#faad14"
+              strokeColor="var(--accent-warning)"
             />
           </Card>
         </Col>

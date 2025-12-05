@@ -225,7 +225,7 @@ const UserManagement: React.FC = () => {
           />
           <div>
             <div style={{ fontWeight: 'bold' }}>{user.fullName}</div>
-            <div style={{ fontSize: '12px', color: '#666' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
               @{user.username}
             </div>
           </div>
@@ -408,7 +408,7 @@ const UserManagement: React.FC = () => {
               />
               <div style={{ marginTop: '8px' }}>
                 <h3>{selectedUser.fullName}</h3>
-                <p style={{ color: '#666' }}>@{selectedUser.username}</p>
+                <p style={{ color: 'var(--text-secondary)' }}>@{selectedUser.username}</p>
               </div>
             </div>
 

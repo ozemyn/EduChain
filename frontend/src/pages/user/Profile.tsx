@@ -897,7 +897,7 @@ const Profile: React.FC = () => {
 
         .admin-badge {
           background: linear-gradient(135deg, var(--accent-warning), #d97706);
-          color: white;
+          color: var(--text-inverse);
         }
 
         .profile-bio {
@@ -962,7 +962,7 @@ const Profile: React.FC = () => {
           justify-content: center;
           margin: 0 auto var(--spacing-md);
           font-size: 1.5rem;
-          color: white;
+          color: var(--text-inverse);
           box-shadow: var(--glass-shadow-md);
         }
 

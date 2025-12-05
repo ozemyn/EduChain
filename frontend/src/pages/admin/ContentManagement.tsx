@@ -330,13 +330,13 @@ const ContentManagement: React.FC = () => {
             {TYPE_ICONS[record.type]}
             <Text
               strong
-              style={{ color: '#1890ff', cursor: 'pointer' }}
+              style={{ color: 'var(--accent-primary)', cursor: 'pointer' }}
               onClick={() => handleViewContent(record)}
             >
               {title}
             </Text>
           </Space>
-          <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
             {record.tags && (
               <Space size={4}>
                 {record.tags.split(',').map((tag, index) => (
@@ -354,7 +354,7 @@ const ContentManagement: React.FC = () => {
       render: (_, record) => (
         <div>
           <div>{record.uploaderName || `用户 ${record.uploaderId}`}</div>
-          <div style={{ fontSize: '12px', color: '#666' }}>
+          <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
             @{record.uploaderId}
           </div>
         </div>
@@ -588,7 +588,7 @@ const ContentManagement: React.FC = () => {
               <div
                 style={{
                   padding: '16px',
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: 'var(--bg-tertiary)',
                   borderRadius: '6px',
                   maxHeight: '300px',
                   overflow: 'auto',

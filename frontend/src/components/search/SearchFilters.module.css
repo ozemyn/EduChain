@@ -23,7 +23,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .tagContainer {
@@ -47,7 +47,7 @@
   display: flex;
   justify-content: flex-end;
   padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color);
 }
 
 @media (max-width: 768px) {

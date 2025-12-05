@@ -525,7 +525,7 @@ const Home: React.FC = () => {
           justify-content: center;
           margin: 0 auto var(--spacing-lg);
           font-size: 2rem;
-          color: white;
+          color: var(--text-inverse);
           box-shadow: var(--glass-shadow-lg);
         }
 

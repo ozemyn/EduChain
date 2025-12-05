@@ -173,7 +173,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      backgroundColor: '#f5f5f5',
+                      backgroundColor: 'var(--bg-tertiary)',
                       cursor: 'pointer',
                     }}
                     onClick={() => handlePreview(url)}
@@ -190,7 +190,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      backgroundColor: '#f5f5f5',
+                      backgroundColor: 'var(--bg-tertiary)',
                       cursor: 'pointer',
                     }}
                     onClick={() => handlePreview(url)}
@@ -268,14 +268,14 @@ const MediaUpload: React.FC<MediaUploadProps> = ({
               style={{
                 width: 104,
                 height: 104,
-                border: '1px dashed #d9d9d9',
+                border: '1px dashed var(--border-color)',
                 borderRadius: 6,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                backgroundColor: '#fafafa',
+                backgroundColor: 'var(--bg-tertiary)',
               }}
             >
               {uploadButton}

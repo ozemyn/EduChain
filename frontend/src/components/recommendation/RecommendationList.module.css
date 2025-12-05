@@ -11,16 +11,16 @@
 
 .title {
   margin: 0 !important;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .refreshBtn {
-  color: #666;
+  color: var(--text-secondary);
   transition: all 0.3s ease;
 }
 
 .refreshBtn:hover {
-  color: #1890ff;
+  color: var(--accent-primary);
   transform: rotate(180deg);
 }
 
@@ -33,7 +33,7 @@
 }
 
 .tabs .ant-tabs-tab-active {
-  color: #1890ff;
+  color: var(--accent-primary);
 }
 
 .loading {
@@ -46,7 +46,7 @@
 .footer {
   text-align: center;
   padding: 24px 0;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color);
   margin-top: 24px;
 }
 

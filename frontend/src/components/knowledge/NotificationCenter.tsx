@@ -150,13 +150,13 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'LIKE':
-        return <LikeOutlined style={{ color: '#ff4d4f' }} />;
+        return <LikeOutlined style={{ color: 'var(--accent-error)' }} />;
       case 'COMMENT':
-        return <CommentOutlined style={{ color: '#1890ff' }} />;
+        return <CommentOutlined style={{ color: 'var(--accent-primary)' }} />;
       case 'FOLLOW':
-        return <UserAddOutlined style={{ color: '#52c41a' }} />;
+        return <UserAddOutlined style={{ color: 'var(--accent-success)' }} />;
       case 'SYSTEM':
-        return <NotificationOutlined style={{ color: '#faad14' }} />;
+        return <NotificationOutlined style={{ color: 'var(--accent-warning)' }} />;
       default:
         return <BellOutlined />;
     }
@@ -177,7 +177,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     <List.Item
       key={notification.id}
       style={{
-        backgroundColor: notification.isRead ? 'transparent' : '#f6ffed',
+        backgroundColor: notification.isRead ? 'transparent' : 'var(--success-bg)',
         padding: '16px',
         borderRadius: '8px',
         marginBottom: '8px',

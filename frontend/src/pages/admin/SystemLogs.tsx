@@ -264,13 +264,13 @@ const SystemLogs: React.FC = () => {
   const getLevelIcon = (level: string) => {
     switch (level) {
       case 'ERROR':
-        return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
+        return <CloseCircleOutlined style={{ color: 'var(--accent-error)' }} />;
       case 'WARN':
-        return <WarningOutlined style={{ color: '#faad14' }} />;
+        return <WarningOutlined style={{ color: 'var(--accent-warning)' }} />;
       case 'INFO':
-        return <InfoCircleOutlined style={{ color: '#1890ff' }} />;
+        return <InfoCircleOutlined style={{ color: 'var(--accent-info)' }} />;
       case 'DEBUG':
-        return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
+        return <CheckCircleOutlined style={{ color: 'var(--accent-success)' }} />;
       default:
         return null;
     }
@@ -324,7 +324,7 @@ const SystemLogs: React.FC = () => {
             {message}
           </Text>
           {record.username && (
-            <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               用户: {record.username} | IP: {record.ipAddress}
             </div>
           )}
@@ -371,23 +371,23 @@ const SystemLogs: React.FC = () => {
           </div>
           <div>
             <InfoCircleOutlined
-              style={{ color: '#1890ff', marginRight: '4px' }}
+              style={{ color: 'var(--accent-info)', marginRight: '4px' }}
             />
             <Text>信息: {logStats.info.toLocaleString()}</Text>
           </div>
           <div>
-            <WarningOutlined style={{ color: '#faad14', marginRight: '4px' }} />
+            <WarningOutlined style={{ color: 'var(--accent-warning)', marginRight: '4px' }} />
             <Text>警告: {logStats.warn.toLocaleString()}</Text>
           </div>
           <div>
             <CloseCircleOutlined
-              style={{ color: '#ff4d4f', marginRight: '4px' }}
+              style={{ color: 'var(--accent-error)', marginRight: '4px' }}
             />
             <Text>错误: {logStats.error.toLocaleString()}</Text>
           </div>
           <div>
             <CheckCircleOutlined
-              style={{ color: '#52c41a', marginRight: '4px' }}
+              style={{ color: 'var(--accent-success)', marginRight: '4px' }}
             />
             <Text>调试: {logStats.debug.toLocaleString()}</Text>
           </div>
@@ -559,7 +559,7 @@ const SystemLogs: React.FC = () => {
               <div
                 style={{
                   padding: '12px',
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: 'var(--bg-tertiary)',
                   borderRadius: '6px',
                   fontFamily: 'monospace',
                   fontSize: '13px',
@@ -575,7 +575,7 @@ const SystemLogs: React.FC = () => {
                 <div
                   style={{
                     padding: '12px',
-                    backgroundColor: '#f5f5f5',
+                    backgroundColor: 'var(--bg-tertiary)',
                     borderRadius: '6px',
                     fontFamily: 'monospace',
                     fontSize: '13px',
@@ -592,8 +592,8 @@ const SystemLogs: React.FC = () => {
                 <div
                   style={{
                     padding: '12px',
-                    backgroundColor: '#fff2f0',
-                    border: '1px solid #ffccc7',
+                    backgroundColor: 'var(--error-bg)',
+                    border: '1px solid var(--error-border)',
                     borderRadius: '6px',
                     fontFamily: 'monospace',
                     fontSize: '12px',

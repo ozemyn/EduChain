@@ -297,14 +297,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   return (
     <div
       className={className}
-      style={{ border: '1px solid #d9d9d9', borderRadius: 6 }}
+      style={{ border: '1px solid var(--border-color)', borderRadius: 6 }}
     >
       {/* 工具栏 */}
       <div
         style={{
           padding: '8px 12px',
-          borderBottom: '1px solid #d9d9d9',
-          backgroundColor: '#fafafa',
+          borderBottom: '1px solid var(--border-color)',
+          backgroundColor: 'var(--bg-tertiary)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -370,10 +370,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                           ),
                           '--color':
                             stats.words >= targetWords
-                              ? '#52c41a'
+                              ? 'var(--accent-success)'
                               : stats.words >= targetWords * 0.7
-                                ? '#faad14'
-                                : '#ff4d4f',
+                                ? 'var(--accent-warning)'
+                                : 'var(--accent-error)',
                         } as React.CSSProperties
                       }
                     >
@@ -399,8 +399,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           outline: 'none',
           lineHeight: 1.6,
           fontSize: 14,
-          color: disabled ? '#999' : '#000',
-          backgroundColor: disabled ? '#f5f5f5' : '#fff',
+          color: disabled ? 'var(--text-tertiary)' : 'var(--text-primary)',
+          backgroundColor: disabled ? 'var(--bg-tertiary)' : 'var(--bg-elevated)',
         }}
         onInput={handleContentChange}
         onBlur={handleContentChange}
@@ -412,7 +412,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         {`
           [contenteditable]:empty:before {
             content: attr(data-placeholder);
-            color: #999;
+            color: var(--text-placeholder);
             pointer-events: none;
           }
           
@@ -424,20 +424,22 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           }
           
           [contenteditable] pre {
-            background-color: #f6f8fa;
+            background-color: var(--code-bg);
             border-radius: 4px;
             padding: 12px;
             margin: 8px 0;
             font-family: 'Monaco', 'Consolas', monospace;
             font-size: 13px;
             overflow-x: auto;
+            color: var(--code-text);
+            border: 1px solid var(--code-border);
           }
           
           [contenteditable] blockquote {
-            border-left: 4px solid #ddd;
+            border-left: 4px solid var(--border-color);
             margin: 8px 0;
             padding-left: 12px;
-            color: #666;
+            color: var(--text-secondary);
           }
           
           [contenteditable] ul, [contenteditable] ol {
@@ -503,7 +505,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             border-radius: 50%;
             background: conic-gradient(
               var(--color) calc(var(--progress) * 1%),
-              #f0f0f0 calc(var(--progress) * 1%)
+              var(--bg-tertiary) calc(var(--progress) * 1%)
             );
             display: flex;
             align-items: center;
@@ -516,7 +518,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: #fafafa;
+            background: var(--bg-tertiary);
           }
 
           .progress-text {

@@ -13,6 +13,8 @@ import '@/styles/globals.css';
 import '@/styles/theme.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
+import '@/styles/performance.css';
+import '@/styles/dark-mode-fixes.css';
 
 const App: React.FC = () => {
   return (

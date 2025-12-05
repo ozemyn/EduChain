@@ -120,6 +120,16 @@ logging:
   ansi:
     enabled: always
 
+# Blockchain Service Configuration
+blockchain:
+  service:
+    url: ${BLOCKCHAIN_SERVICE_URL:http://localhost:8000}
+    timeout: ${BLOCKCHAIN_SERVICE_TIMEOUT:5000}
+    retry:
+      enabled: ${BLOCKCHAIN_RETRY_ENABLED:true}
+      max-attempts: ${BLOCKCHAIN_RETRY_MAX_ATTEMPTS:3}
+      backoff: ${BLOCKCHAIN_RETRY_BACKOFF:1000}
+
 # Swagger/OpenAPI Configuration
 springdoc:
   api-docs:

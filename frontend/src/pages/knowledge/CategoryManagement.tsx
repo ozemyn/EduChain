@@ -885,7 +885,7 @@ const CategoryManagement: React.FC = () => {
           width: 32px;
           height: 32px;
           background: linear-gradient(135deg, var(--accent-primary), var(--primary-600));
-          color: white;
+          color: var(--text-inverse);
           border-radius: 50%;
           font-weight: 600;
           font-size: 0.875rem;

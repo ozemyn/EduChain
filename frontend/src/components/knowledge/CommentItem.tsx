@@ -183,7 +183,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
   return (
     <div style={{ marginBottom: 16 }}>
-      <Card size="small" style={{ backgroundColor: '#fafafa' }}>
+      <Card size="small" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
         <div style={{ display: 'flex', gap: 12 }}>
           <Avatar src={comment.user.avatarUrl} alt={comment.user.fullName}>
             {comment.user.fullName?.charAt(0)}

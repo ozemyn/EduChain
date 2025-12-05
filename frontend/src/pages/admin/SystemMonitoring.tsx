@@ -258,11 +258,11 @@ const SystemMonitoring: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'running':
-        return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
+        return <CheckCircleOutlined style={{ color: 'var(--accent-success)' }} />;
       case 'stopped':
-        return <WarningOutlined style={{ color: '#faad14' }} />;
+        return <WarningOutlined style={{ color: 'var(--accent-warning)' }} />;
       case 'error':
-        return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
+        return <CloseCircleOutlined style={{ color: 'var(--accent-error)' }} />;
       default:
         return null;
     }
@@ -272,13 +272,13 @@ const SystemMonitoring: React.FC = () => {
   const getAlertColor = (level: string) => {
     switch (level) {
       case 'critical':
-        return '#ff4d4f';
+        return 'var(--accent-error)';
       case 'warning':
-        return '#faad14';
+        return 'var(--accent-warning)';
       case 'info':
-        return '#1890ff';
+        return 'var(--accent-primary)';
       default:
-        return '#d9d9d9';
+        return 'var(--text-quaternary)';
     }
   };
 
@@ -397,7 +397,7 @@ const SystemMonitoring: React.FC = () => {
                     ? '#ff4d4f'
                     : metrics.cpu.usage > 60
                       ? '#faad14'
-                      : '#52c41a',
+                      : 'var(--accent-success)',
               }}
             />
             <div style={{ marginTop: '8px' }}>
@@ -432,7 +432,7 @@ const SystemMonitoring: React.FC = () => {
                     ? '#ff4d4f'
                     : metrics.memory.usage > 60
                       ? '#faad14'
-                      : '#52c41a',
+                      : 'var(--accent-success)',
               }}
             />
             <div style={{ marginTop: '8px' }}>
@@ -467,7 +467,7 @@ const SystemMonitoring: React.FC = () => {
                     ? '#ff4d4f'
                     : metrics.disk.usage > 60
                       ? '#faad14'
-                      : '#52c41a',
+                      : 'var(--accent-success)',
               }}
             />
             <div style={{ marginTop: '8px' }}>
@@ -496,7 +496,7 @@ const SystemMonitoring: React.FC = () => {
               value={metrics.network.inbound + metrics.network.outbound}
               suffix="MB/s"
               prefix={<SafetyOutlined />}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: 'var(--accent-primary)' }}
             />
             <div style={{ marginTop: '8px' }}>
               <Text type="secondary" style={{ fontSize: '12px' }}>
@@ -602,7 +602,7 @@ const SystemMonitoring: React.FC = () => {
                 <LineChartOutlined
                   style={{
                     fontSize: '48px',
-                    color: '#d9d9d9',
+                    color: 'var(--text-quaternary)',
                     marginBottom: '16px',
                   }}
                 />

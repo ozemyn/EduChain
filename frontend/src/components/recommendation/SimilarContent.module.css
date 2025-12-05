@@ -11,7 +11,7 @@
 
 .listItem {
   padding: 12px 0 !important;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .listItem:last-child {
@@ -25,7 +25,7 @@
 .title {
   font-size: 14px;
   font-weight: 500;
-  color: #1890ff;
+  color: var(--accent-primary);
   text-decoration: none;
   line-height: 1.4;
   display: block;
@@ -33,7 +33,7 @@
 }
 
 .title:hover {
-  color: #40a9ff;
+  color: var(--primary-600);
 }
 
 .meta {
@@ -49,7 +49,7 @@
 }
 
 .stats {
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 12px;
 }
 

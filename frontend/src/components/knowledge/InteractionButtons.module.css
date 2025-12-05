@@ -16,19 +16,21 @@
 }
 
 .interactionButton.liked {
-  color: #ff4d4f;
+  color: var(--accent-error);
 }
 
 .interactionButton.favorited {
-  color: #faad14;
+  color: var(--accent-warning);
 }
 
 .interactionButton.liked:hover {
-  color: #ff7875;
+  color: var(--accent-error);
+  opacity: 0.8;
 }
 
 .interactionButton.favorited:hover {
-  color: #ffc53d;
+  color: var(--accent-warning);
+  opacity: 0.8;
 }
 
 .count {

@@ -12,9 +12,9 @@
   justify-content: space-between;
   padding: 8px 12px;
   font-weight: 500;
-  color: #666;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e8e8e8;
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .sectionHeader .anticon {
@@ -22,14 +22,14 @@
 }
 
 .clearBtn {
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 12px;
   padding: 0 4px;
   height: auto;
 }
 
 .clearBtn:hover {
-  color: #1890ff;
+  color: var(--accent-primary);
 }
 
 .suggestionItem {
@@ -40,7 +40,7 @@
 }
 
 .count {
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 12px;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .deleteBtn {
-  color: #ccc;
+  color: var(--text-quaternary);
   font-size: 16px;
   padding: 0;
   width: 20px;
@@ -64,8 +64,8 @@
 }
 
 .deleteBtn:hover {
-  color: #ff4d4f;
-  background-color: #fff2f0;
+  color: var(--accent-error);
+  background-color: var(--error-bg);
 }
 
 .hotKeywordItem {
@@ -81,13 +81,13 @@
 }
 
 .trend.up {
-  color: #52c41a;
+  color: var(--accent-success);
 }
 
 .trend.down {
-  color: #ff4d4f;
+  color: var(--accent-error);
 }
 
 .trend.stable {
-  color: #999;
+  color: var(--text-tertiary);
 }

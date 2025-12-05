@@ -154,8 +154,8 @@ const AdminLayout: React.FC = () => {
         collapsed={collapsed}
         width={240}
         style={{
-          background: '#fff',
-          boxShadow: '2px 0 8px 0 rgba(29,35,41,.05)',
+          background: 'var(--bg-elevated)',
+          boxShadow: '2px 0 8px 0 var(--glass-shadow)',
         }}
       >
         {/* Logo */}
@@ -174,12 +174,12 @@ const AdminLayout: React.FC = () => {
               style={{
                 width: '32px',
                 height: '32px',
-                background: '#1890ff',
+                background: 'var(--accent-primary)',
                 borderRadius: '6px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#fff',
+                color: 'var(--text-inverse)',
                 fontWeight: 'bold',
               }}
             >
@@ -202,7 +202,7 @@ const AdminLayout: React.FC = () => {
               >
                 E
               </div>
-              <Title level={4} style={{ margin: 0, color: '#1890ff' }}>
+              <Title level={4} style={{ margin: 0, color: 'var(--accent-primary)' }}>
                 EduChain
               </Title>
             </Space>
@@ -228,8 +228,8 @@ const AdminLayout: React.FC = () => {
         <Header
           style={{
             padding: '0 24px',
-            background: '#fff',
-            borderBottom: '1px solid #f0f0f0',
+            background: 'var(--bg-elevated)',
+            borderBottom: '1px solid var(--border-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -274,7 +274,7 @@ const AdminLayout: React.FC = () => {
                   <div style={{ fontSize: '14px', fontWeight: 500 }}>
                     {user?.fullName}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#666' }}>管理员</div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>管理员</div>
                 </div>
               </Space>
             </Dropdown>
@@ -285,7 +285,7 @@ const AdminLayout: React.FC = () => {
         <div
           style={{
             padding: '16px 24px 0',
-            background: '#fff',
+            background: 'var(--bg-elevated)',
           }}
         >
           <Breadcrumb items={generateBreadcrumb()} />
@@ -295,7 +295,7 @@ const AdminLayout: React.FC = () => {
         <Content
           style={{
             margin: '0',
-            background: '#f5f5f5',
+            background: 'var(--bg-primary)',
             minHeight: 'calc(100vh - 64px - 48px)',
           }}
         >
