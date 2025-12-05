@@ -1,0 +1,603 @@
+/* ===================================
+   系统监控页面样式 - System Monitoring Page Styles
+   ===================================
+   
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
+.system-monitoring-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-xl);
+}
+
+.monitoring-content {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   页面头部
+   ================================== */
+
+.monitoring-header {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.title-section {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-title-icon {
+  font-size: 2.5rem;
+  color: var(--primary-600);
+}
+
+/* 深色模式标题图标 */
+[data-theme='dark'] .page-title-icon {
+  color: var(--text-primary);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.refresh-button {
+  border-radius: var(--radius-lg) !important;
+}
+
+.auto-refresh-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+}
+
+.auto-refresh-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ===================================
+   系统状态概览
+   ================================== */
+
+.status-overview {
+  margin-bottom: var(--spacing-xl);
+}
+
+.status-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  text-align: center;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.status-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-md);
+  border-radius: var(--radius-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  transition: all var(--transition-base) var(--ease-spring-ios);
+}
+
+.status-card:hover .status-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.status-icon-wrapper.status-healthy {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.status-icon-wrapper.status-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.status-icon-wrapper.status-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+/* 深色模式状态图标 */
+[data-theme='dark'] .status-icon-wrapper.status-healthy,
+[data-theme='dark'] .status-icon-wrapper.status-warning,
+[data-theme='dark'] .status-icon-wrapper.status-error {
+  background: linear-gradient(135deg, #404040, #262626);
+  color: var(--text-primary);
+}
+
+.status-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.status-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.status-description {
+  font-size: var(--font-size-xs);
+  color: var(--text-quaternary);
+  margin-top: var(--spacing-xs);
+}
+
+/* ===================================
+   性能指标
+   ================================== */
+
+.performance-metrics {
+  margin-bottom: var(--spacing-xl);
+}
+
+.metrics-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.metrics-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.metrics-time {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.metric-item {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.metric-item:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-2px);
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.metric-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.metric-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-600);
+}
+
+/* 深色模式指标值 */
+[data-theme='dark'] .metric-value {
+  color: var(--text-primary);
+}
+
+.metric-progress {
+  margin-bottom: var(--spacing-sm);
+}
+
+.metric-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metric-status {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.metric-trend {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.metric-trend.trend-up {
+  color: var(--accent-success);
+}
+
+.metric-trend.trend-down {
+  color: var(--accent-error);
+}
+
+/* ===================================
+   实时监控图表
+   ================================== */
+
+.realtime-charts {
+  margin-bottom: var(--spacing-xl);
+}
+
+.chart-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  height: 100%;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.chart-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.chart-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.chart-container {
+  height: 300px;
+  position: relative;
+}
+
+.chart-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ===================================
+   服务状态列表
+   ================================== */
+
+.services-status {
+  margin-bottom: var(--spacing-xl);
+}
+
+.services-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.service-item {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.service-item:hover {
+  background: var(--bg-secondary);
+}
+
+.service-status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.service-status-indicator.status-running {
+  background: var(--accent-success);
+  box-shadow: 0 0 8px var(--accent-success);
+}
+
+.service-status-indicator.status-stopped {
+  background: var(--accent-error);
+  box-shadow: 0 0 8px var(--accent-error);
+}
+
+.service-status-indicator.status-warning {
+  background: var(--accent-warning);
+  box-shadow: 0 0 8px var(--accent-warning);
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.service-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.service-metrics {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-right: var(--spacing-lg);
+}
+
+.service-metric {
+  text-align: center;
+}
+
+.service-metric-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-quaternary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.service-metric-value {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.service-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* ===================================
+   系统告警
+   ================================== */
+
+.system-alerts {
+  margin-bottom: var(--spacing-xl);
+}
+
+.alerts-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.alert-item {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.alert-item:hover {
+  background: var(--bg-secondary);
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.alert-icon.alert-error {
+  color: var(--accent-error);
+}
+
+.alert-icon.alert-warning {
+  color: var(--accent-warning);
+}
+
+.alert-icon.alert-info {
+  color: var(--accent-info);
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.alert-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.alert-time {
+  font-size: var(--font-size-xs);
+  color: var(--text-quaternary);
+}
+
+.alert-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+/* ===================================
+   响应式设计
+   ================================== */
+
+@media (max-width: 1024px) {
+  .system-monitoring-page {
+    padding: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+
+  .service-metrics {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .system-monitoring-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .monitoring-header {
+    padding: var(--spacing-lg);
+  }
+
+  .status-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+
+  .chart-container {
+    height: 200px;
+  }
+
+  .service-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .service-metrics {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .service-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .alert-item {
+    flex-direction: column;
+  }
+
+  .alert-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-xl);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .auto-refresh-switch {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ===================================
+   性能优化
+   ================================== */
+
+.status-card,
+.metric-item,
+.service-item,
+.alert-item {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .monitoring-header,
+  .status-card,
+  .metrics-card,
+  .chart-card,
+  .services-card,
+  .alerts-card {
+    border: 2px solid var(--border-strong);
+  }
+}
+
+/* ===================================
+   完成 - SystemMonitoring.css
+   ================================== */

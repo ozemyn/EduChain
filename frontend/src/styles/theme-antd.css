@@ -1,0 +1,630 @@
+/* ===================================
+   Ant Design 主题适配
+   Ant Design Theme Adaptation
+   ===================================
+   
+   说明：
+   - 专门处理 Ant Design 组件在深色模式下的样式适配
+   - 不使用 !important，通过选择器优先级控制
+   - 保持 Ant Design 组件的原生交互体验
+   - 深色模式下使用纯黑白配色
+   
+   ================================== */
+
+/* ===================================
+   深色模式全局适配
+   Dark Mode Global Adaptation
+   ================================== */
+
+[data-theme='dark'] {
+  /* Ant Design 全局文本颜色 */
+  color: var(--text-primary);
+}
+
+/* ===================================
+   布局组件 - Layout Components
+   ================================== */
+
+/* Layout 布局 */
+[data-theme='dark'] .ant-layout {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-layout-header {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-layout-content {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-layout-footer {
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-layout-sider {
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border-color);
+}
+
+/* ===================================
+   卡片组件 - Card Components
+   ================================== */
+
+[data-theme='dark'] .ant-card {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-card-head {
+  background: var(--bg-elevated);
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-card-head-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-card-body {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-card-actions {
+  background: var(--bg-elevated);
+  border-top-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-card-actions > li {
+  border-right-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-card-actions > li > span {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-card-actions > li > span:hover {
+  color: var(--text-primary);
+}
+
+/* 卡片悬停效果 */
+[data-theme='dark'] .ant-card-hoverable:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+/* ===================================
+   按钮组件 - Button Components
+   ================================== */
+
+/* 默认按钮 */
+[data-theme='dark'] .ant-btn {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* 主要按钮 */
+[data-theme='dark'] .ant-btn-primary {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--text-inverse);
+}
+
+[data-theme='dark'] .ant-btn-primary:hover {
+  background: var(--text-secondary);
+  border-color: var(--text-secondary);
+}
+
+/* 文本按钮 */
+[data-theme='dark'] .ant-btn-text {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-btn-text:hover {
+  background: var(--hover-overlay);
+}
+
+/* 链接按钮 */
+[data-theme='dark'] .ant-btn-link {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-btn-link:hover {
+  color: var(--text-secondary);
+}
+
+/* 危险按钮 - 深色模式下使用灰色 */
+[data-theme='dark'] .ant-btn-dangerous,
+[data-theme='dark'] .ant-btn-danger {
+  background: var(--bg-tertiary);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-btn-dangerous:hover,
+[data-theme='dark'] .ant-btn-danger:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+/* 禁用按钮 */
+[data-theme='dark'] .ant-btn-disabled,
+[data-theme='dark'] .ant-btn[disabled] {
+  background: var(--bg-secondary);
+  border-color: var(--border-light);
+  color: var(--text-quaternary);
+}
+
+/* ===================================
+   输入框组件 - Input Components
+   ================================== */
+
+[data-theme='dark'] .ant-input,
+[data-theme='dark'] .ant-input-affix-wrapper {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-input::placeholder,
+[data-theme='dark'] .ant-input-affix-wrapper input::placeholder {
+  color: var(--text-placeholder);
+}
+
+[data-theme='dark'] .ant-input:hover,
+[data-theme='dark'] .ant-input-affix-wrapper:hover {
+  border-color: var(--border-strong);
+}
+
+[data-theme='dark'] .ant-input:focus,
+[data-theme='dark'] .ant-input-affix-wrapper:focus,
+[data-theme='dark'] .ant-input-affix-wrapper-focused {
+  background: var(--bg-elevated);
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* 输入框前缀后缀 */
+[data-theme='dark'] .ant-input-prefix,
+[data-theme='dark'] .ant-input-suffix {
+  color: var(--text-tertiary);
+}
+
+/* 文本域 */
+[data-theme='dark'] .ant-input-textarea-show-count::after {
+  color: var(--text-quaternary);
+}
+
+/* ===================================
+   选择器组件 - Select Components
+   ================================== */
+
+[data-theme='dark'] .ant-select-selector {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-select-selector:hover {
+  border-color: var(--border-strong);
+}
+
+[data-theme='dark'] .ant-select-focused .ant-select-selector {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .ant-select-arrow {
+  color: var(--text-tertiary);
+}
+
+/* 下拉菜单 */
+[data-theme='dark'] .ant-select-dropdown {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .ant-select-item {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-select-item:hover {
+  background: var(--hover-overlay);
+}
+
+[data-theme='dark'] .ant-select-item-option-selected {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* ===================================
+   模态框组件 - Modal Components
+   ================================== */
+
+[data-theme='dark'] .ant-modal-content {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme='dark'] .ant-modal-header {
+  background: var(--bg-elevated);
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-modal-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-modal-body {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-modal-footer {
+  background: var(--bg-elevated);
+  border-top-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-modal-close {
+  color: var(--text-tertiary);
+}
+
+[data-theme='dark'] .ant-modal-close:hover {
+  color: var(--text-primary);
+}
+
+/* 模态框遮罩 */
+[data-theme='dark'] .ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* ===================================
+   表格组件 - Table Components
+   ================================== */
+
+[data-theme='dark'] .ant-table {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-table-thead > tr > th {
+  background: var(--bg-elevated);
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-table-tbody > tr > td {
+  background: var(--bg-elevated);
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-table-tbody > tr:hover > td {
+  background: var(--bg-tertiary);
+}
+
+[data-theme='dark'] .ant-table-tbody > tr.ant-table-row-selected > td {
+  background: var(--bg-tertiary);
+}
+
+/* 表格边框 */
+[data-theme='dark'] .ant-table-bordered .ant-table-container {
+  border-color: var(--border-color);
+}
+
+/* 表格分页 */
+[data-theme='dark'] .ant-table-pagination {
+  color: var(--text-primary);
+}
+
+/* ===================================
+   分页组件 - Pagination Components
+   ================================== */
+
+[data-theme='dark'] .ant-pagination-item {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-pagination-item a {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-pagination-item:hover {
+  border-color: var(--border-strong);
+}
+
+[data-theme='dark'] .ant-pagination-item-active {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-pagination-item-active a {
+  color: var(--text-inverse);
+}
+
+[data-theme='dark'] .ant-pagination-prev,
+[data-theme='dark'] .ant-pagination-next {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-pagination-prev button,
+[data-theme='dark'] .ant-pagination-next button {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-pagination-disabled button {
+  color: var(--text-quaternary);
+}
+
+/* ===================================
+   下拉菜单组件 - Dropdown Components
+   ================================== */
+
+[data-theme='dark'] .ant-dropdown {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .ant-dropdown-menu {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-dropdown-menu-item {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-dropdown-menu-item:hover {
+  background: var(--hover-overlay);
+}
+
+[data-theme='dark'] .ant-dropdown-menu-item-divider {
+  background-color: var(--border-color);
+}
+
+/* ===================================
+   标签组件 - Tag Components
+   ================================== */
+
+[data-theme='dark'] .ant-tag {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-tag-close-icon {
+  color: var(--text-tertiary);
+}
+
+[data-theme='dark'] .ant-tag-close-icon:hover {
+  color: var(--text-primary);
+}
+
+/* 深色模式下移除彩色标签，统一使用灰度 */
+[data-theme='dark'] .ant-tag-red,
+[data-theme='dark'] .ant-tag-orange,
+[data-theme='dark'] .ant-tag-yellow,
+[data-theme='dark'] .ant-tag-green,
+[data-theme='dark'] .ant-tag-blue,
+[data-theme='dark'] .ant-tag-purple,
+[data-theme='dark'] .ant-tag-error,
+[data-theme='dark'] .ant-tag-success,
+[data-theme='dark'] .ant-tag-warning {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ===================================
+   提示组件 - Alert Components
+   ================================== */
+
+[data-theme='dark'] .ant-alert {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-alert-success {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-text);
+}
+
+[data-theme='dark'] .ant-alert-warning {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning-text);
+}
+
+[data-theme='dark'] .ant-alert-error {
+  background: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error-text);
+}
+
+[data-theme='dark'] .ant-alert-info {
+  background: var(--info-bg);
+  border-color: var(--info-border);
+  color: var(--info-text);
+}
+
+/* ===================================
+   消息提示 - Message Components
+   ================================== */
+
+[data-theme='dark'] .ant-message-notice-content {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* ===================================
+   通知提醒 - Notification Components
+   ================================== */
+
+[data-theme='dark'] .ant-notification-notice {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .ant-notification-notice-message {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-notification-notice-description {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-notification-notice-close {
+  color: var(--text-tertiary);
+}
+
+[data-theme='dark'] .ant-notification-notice-close:hover {
+  color: var(--text-primary);
+}
+
+/* ===================================
+   统计数值 - Statistic Components
+   ================================== */
+
+[data-theme='dark'] .ant-statistic-title {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-statistic-content {
+  color: var(--text-primary);
+}
+
+/* ===================================
+   开关组件 - Switch Components
+   ================================== */
+
+[data-theme='dark'] .ant-switch {
+  background: var(--bg-tertiary);
+}
+
+[data-theme='dark'] .ant-switch-checked {
+  background: var(--text-primary);
+}
+
+/* ===================================
+   徽标组件 - Badge Components
+   ================================== */
+
+[data-theme='dark'] .ant-badge-status-dot {
+  background-color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-badge-status-text {
+  color: var(--text-secondary);
+}
+
+/* ===================================
+   评论组件 - Comment Components
+   ================================== */
+
+[data-theme='dark'] .ant-comment {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-comment-inner {
+  background: var(--bg-elevated);
+}
+
+[data-theme='dark'] .ant-comment-author-name {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-comment-author-time {
+  color: var(--text-tertiary);
+}
+
+[data-theme='dark'] .ant-comment-content {
+  color: var(--text-secondary);
+}
+
+/* ===================================
+   空状态组件 - Empty Components
+   ================================== */
+
+[data-theme='dark'] .ant-empty-description {
+  color: var(--text-tertiary);
+}
+
+/* ===================================
+   加载组件 - Spin Components
+   ================================== */
+
+[data-theme='dark'] .ant-spin-dot-item {
+  background-color: var(--text-primary);
+}
+
+/* ===================================
+   骨架屏组件 - Skeleton Components
+   ================================== */
+
+[data-theme='dark'] .ant-skeleton-content .ant-skeleton-title,
+[data-theme='dark'] .ant-skeleton-content .ant-skeleton-paragraph > li {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-secondary) 50%,
+    var(--bg-tertiary) 75%
+  );
+}
+
+/* ===================================
+   响应式优化 - Responsive Optimization
+   ================================== */
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  /* 移动端增加触摸目标大小 */
+  [data-theme='dark'] .ant-btn {
+    min-height: 44px;
+  }
+
+  [data-theme='dark'] .ant-input,
+  [data-theme='dark'] .ant-select-selector {
+    min-height: 44px;
+  }
+}
+
+/* ===================================
+   性能优化 - Performance Optimization
+   ================================== */
+
+/* 减少动画偏好时移除过渡效果 */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme='dark'] .ant-btn,
+  [data-theme='dark'] .ant-input,
+  [data-theme='dark'] .ant-select-selector,
+  [data-theme='dark'] .ant-card {
+    transition: none;
+  }
+}

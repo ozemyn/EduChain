@@ -1,0 +1,512 @@
+/* ===================================
+   主题变量定义 - Theme Variables
+   ===================================
+   
+   说明：
+   - 浅色模式：粉色系主题，保持现有设计风格
+   - 深色模式：纯黑背景 + 白色文字，极简设计
+   - 使用 CSS 变量实现主题切换，性能最优
+   - 所有变量都有详细注释，方便维护和扩展
+   
+   使用方法：
+   - 在组件中直接使用 var(--变量名)
+   - 例如：color: var(--text-primary);
+   
+   ================================== */
+
+/* ===================================
+   浅色主题 - Light Theme
+   ================================== */
+
+:root,
+[data-theme='light'] {
+  /* ========== 主色调 - Primary Colors ========== */
+  /* 粉色系渐变，用于品牌色和强调元素 */
+  --primary-50: #fdf2f8; /* 最浅粉 - 背景装饰 */
+  --primary-100: #fce7f3; /* 浅粉 - 悬停背景 */
+  --primary-200: #fbcfe8; /* 柔和粉 - 选中背景 */
+  --primary-300: #f9a8d4; /* 中粉 - 边框 */
+  --primary-400: #f472b6; /* 亮粉 - 次要按钮 */
+  --primary-500: #ec4899; /* 标准粉 - 主要按钮、链接 */
+  --primary-600: #db2777; /* 深粉 - 按钮悬停 */
+  --primary-700: #be185d; /* 更深粉 - 按钮按下 */
+  --primary-800: #9d174d; /* 暗粉 - 深色文本 */
+  --primary-900: #831843; /* 最深粉 - 标题 */
+
+  /* ========== 辅助色 - Secondary Colors ========== */
+  /* 灰色系，用于文本、边框、背景层次 */
+  --secondary-50: #f8fafc; /* 最浅灰 - 背景 */
+  --secondary-100: #f1f5f9; /* 浅灰 - 卡片背景 */
+  --secondary-200: #e2e8f0; /* 柔和灰 - 分割线 */
+  --secondary-300: #cbd5e1; /* 中灰 - 边框 */
+  --secondary-400: #94a3b8; /* 灰色 - 禁用文本 */
+  --secondary-500: #64748b; /* 标准灰 - 次要文本 */
+  --secondary-600: #475569; /* 深灰 - 正文 */
+  --secondary-700: #334155; /* 更深灰 - 标题 */
+  --secondary-800: #1e293b; /* 暗灰 - 深色标题 */
+  --secondary-900: #0f172a; /* 最深灰 - 黑色文本 */
+
+  /* ========== 强调色 - Accent Colors ========== */
+  /* 用于不同状态和功能的颜色 */
+  --accent-primary: var(--primary-500); /* 主强调色 - 粉色 */
+  --accent-secondary: #06b6d4; /* 次强调色 - 青色 */
+  --accent-success: #10b981; /* 成功 - 绿色 */
+  --accent-warning: #f59e0b; /* 警告 - 橙色 */
+  --accent-error: #ef4444; /* 错误 - 红色 */
+  --accent-info: #3b82f6; /* 信息 - 蓝色 */
+
+  /* ========== 背景色 - Background Colors ========== */
+  /* 多层次背景，用于创建深度感 */
+  --bg-primary: #ffffff; /* 主背景 - 纯白 */
+  --bg-secondary: #f8fafc; /* 次背景 - 浅灰 */
+  --bg-tertiary: #f1f5f9; /* 三级背景 - 灰白 */
+  --bg-elevated: #ffffff; /* 悬浮背景 - 卡片 */
+  --bg-overlay: rgba(255, 255, 255, 0.8); /* 遮罩背景 - 半透明白 */
+
+  /* ========== 玻璃效果背景 - Glass Effect Backgrounds ========== */
+  /* 用于玻璃态设计 */
+  --bg-glass: rgba(255, 255, 255, 0.7); /* 标准玻璃 */
+  --bg-glass-light: rgba(255, 255, 255, 0.25); /* 轻度玻璃 */
+  --bg-glass-medium: rgba(255, 255, 255, 0.45); /* 中度玻璃 */
+  --bg-glass-strong: rgba(255, 255, 255, 0.65); /* 强度玻璃 */
+
+  /* ========== 文本颜色 - Text Colors ========== */
+  /* 多层次文本颜色，用于创建视觉层次 */
+  --text-primary: #0f172a; /* 主文本 - 最深 */
+  --text-secondary: #475569; /* 次文本 - 深灰 */
+  --text-tertiary: #64748b; /* 三级文本 - 中灰 */
+  --text-quaternary: #94a3b8; /* 四级文本 - 浅灰 */
+  --text-placeholder: #cbd5e1; /* 占位文本 - 很浅灰 */
+  --text-inverse: #ffffff; /* 反色文本 - 白色 */
+  --text-accent: var(--primary-600); /* 强调文本 - 粉色 */
+
+  /* ========== 边框颜色 - Border Colors ========== */
+  /* 用于分割线、边框 */
+  --border-color: #e2e8f0; /* 标准边框 */
+  --border-light: #f1f5f9; /* 浅色边框 */
+  --border-strong: #cbd5e1; /* 深色边框 */
+  --border-accent: var(--primary-300); /* 强调边框 */
+
+  /* ========== 链接颜色 - Link Colors ========== */
+  --link-color: var(--primary-600); /* 链接默认 */
+  --link-hover: var(--primary-700); /* 链接悬停 */
+  --link-active: var(--primary-800); /* 链接激活 */
+
+  /* ========== 状态颜色 - State Colors ========== */
+  /* 成功状态 */
+  --success-bg: #ecfdf5; /* 成功背景 */
+  --success-border: #a7f3d0; /* 成功边框 */
+  --success-text: #065f46; /* 成功文本 */
+
+  /* 警告状态 */
+  --warning-bg: #fffbeb; /* 警告背景 */
+  --warning-border: #fde68a; /* 警告边框 */
+  --warning-text: #92400e; /* 警告文本 */
+
+  /* 错误状态 */
+  --error-bg: #fef2f2; /* 错误背景 */
+  --error-border: #fecaca; /* 错误边框 */
+  --error-text: #991b1b; /* 错误文本 */
+
+  /* 信息状态 */
+  --info-bg: #eff6ff; /* 信息背景 */
+  --info-border: #bfdbfe; /* 信息边框 */
+  --info-text: #1e40af; /* 信息文本 */
+
+  /* ========== 交互状态 - Interaction States ========== */
+  --hover-overlay: rgba(0, 0, 0, 0.04); /* 悬停遮罩 */
+  --active-overlay: rgba(0, 0, 0, 0.08); /* 激活遮罩 */
+  --focus-ring: var(--primary-500); /* 焦点环 */
+  --selection-bg: var(--primary-200); /* 选中背景 */
+  --selection-text: var(--primary-900); /* 选中文本 */
+
+  /* ========== 滚动条 - Scrollbar ========== */
+  --scrollbar-thumb: rgba(0, 0, 0, 0.2); /* 滚动条滑块 */
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.3); /* 滚动条悬停 */
+
+  /* ========== 代码高亮 - Code Highlighting ========== */
+  --code-bg: #f8fafc; /* 代码背景 */
+  --code-text: #475569; /* 代码文本 */
+  --code-border: #e2e8f0; /* 代码边框 */
+
+  /* ========== 玻璃效果专用 - Glass Effect Specific ========== */
+  --glass-border: rgba(255, 255, 255, 0.3); /* 玻璃边框 */
+  --glass-shadow: rgba(0, 0, 0, 0.1); /* 玻璃阴影 */
+}
+
+/* ===================================
+   深色主题 - Dark Theme
+   ===================================
+   
+   设计理念：
+   - 纯黑背景 (#000000) - 极致简约
+   - 纯白文字 (#ffffff) - 最高对比度
+   - 不使用任何彩色 - 只有黑白灰
+   - OLED 友好 - 省电且护眼
+   
+   ================================== */
+
+[data-theme='dark'] {
+  /* ========== 主色调 - Primary Colors ========== */
+  /* 深色模式下使用灰度，不使用彩色 */
+  --primary-50: #1a1a1a; /* 最浅灰 */
+  --primary-100: #262626; /* 浅灰 */
+  --primary-200: #333333; /* 柔和灰 */
+  --primary-300: #404040; /* 中灰 */
+  --primary-400: #525252; /* 亮灰 */
+  --primary-500: #737373; /* 标准灰 - 主要强调 */
+  --primary-600: #a3a3a3; /* 深灰 */
+  --primary-700: #d4d4d4; /* 更深灰 */
+  --primary-800: #e5e5e5; /* 暗灰 */
+  --primary-900: #f5f5f5; /* 最深灰 */
+
+  /* ========== 辅助色 - Secondary Colors ========== */
+  /* 深色模式的灰度系统 */
+  --secondary-50: #0a0a0a; /* 最深黑 */
+  --secondary-100: #141414; /* 深黑 */
+  --secondary-200: #1f1f1f; /* 黑灰 */
+  --secondary-300: #2a2a2a; /* 深灰 */
+  --secondary-400: #404040; /* 中深灰 */
+  --secondary-500: #737373; /* 中灰 */
+  --secondary-600: #a3a3a3; /* 浅灰 */
+  --secondary-700: #d4d4d4; /* 亮灰 */
+  --secondary-800: #e5e5e5; /* 很亮灰 */
+  --secondary-900: #f5f5f5; /* 接近白 */
+
+  /* ========== 强调色 - Accent Colors ========== */
+  /* 深色模式下全部使用灰度，不使用彩色 */
+  --accent-primary: #ffffff; /* 主强调 - 纯白 */
+  --accent-secondary: #d4d4d4; /* 次强调 - 亮灰 */
+  --accent-success: #a3a3a3; /* 成功 - 中灰 */
+  --accent-warning: #737373; /* 警告 - 灰色 */
+  --accent-error: #525252; /* 错误 - 深灰 */
+  --accent-info: #404040; /* 信息 - 更深灰 */
+
+  /* ========== 背景色 - Background Colors ========== */
+  /* 纯黑背景系统 */
+  --bg-primary: #000000; /* 主背景 - 纯黑 */
+  --bg-secondary: #0a0a0a; /* 次背景 - 极深黑 */
+  --bg-tertiary: #141414; /* 三级背景 - 深黑 */
+  --bg-elevated: #1a1a1a; /* 悬浮背景 - 卡片 */
+  --bg-overlay: rgba(0, 0, 0, 0.9); /* 遮罩背景 */
+
+  /* ========== 玻璃效果背景 - Glass Effect Backgrounds ========== */
+  /* 深色玻璃效果 */
+  --bg-glass: rgba(26, 26, 26, 0.7); /* 标准玻璃 */
+  --bg-glass-light: rgba(26, 26, 26, 0.3); /* 轻度玻璃 */
+  --bg-glass-medium: rgba(26, 26, 26, 0.5); /* 中度玻璃 */
+  --bg-glass-strong: rgba(26, 26, 26, 0.8); /* 强度玻璃 */
+
+  /* ========== 文本颜色 - Text Colors ========== */
+  /* 纯白文字系统 */
+  --text-primary: #ffffff; /* 主文本 - 纯白 */
+  --text-secondary: #e5e5e5; /* 次文本 - 亮灰 */
+  --text-tertiary: #d4d4d4; /* 三级文本 - 灰白 */
+  --text-quaternary: #a3a3a3; /* 四级文本 - 中灰 */
+  --text-placeholder: #737373; /* 占位文本 - 深灰 */
+  --text-inverse: #000000; /* 反色文本 - 黑色 */
+  --text-accent: #ffffff; /* 强调文本 - 纯白 */
+
+  /* ========== 边框颜色 - Border Colors ========== */
+  /* 深色边框系统 */
+  --border-color: #262626; /* 标准边框 */
+  --border-light: #1a1a1a; /* 浅色边框 */
+  --border-strong: #333333; /* 深色边框 */
+  --border-accent: #404040; /* 强调边框 */
+
+  /* ========== 链接颜色 - Link Colors ========== */
+  --link-color: #ffffff; /* 链接默认 - 纯白 */
+  --link-hover: #e5e5e5; /* 链接悬停 - 亮灰 */
+  --link-active: #d4d4d4; /* 链接激活 - 灰白 */
+
+  /* ========== 状态颜色 - State Colors ========== */
+  /* 深色模式下的状态使用灰度 */
+
+  /* 成功状态 */
+  --success-bg: rgba(163, 163, 163, 0.1); /* 成功背景 */
+  --success-border: rgba(163, 163, 163, 0.3); /* 成功边框 */
+  --success-text: #a3a3a3; /* 成功文本 */
+
+  /* 警告状态 */
+  --warning-bg: rgba(115, 115, 115, 0.1); /* 警告背景 */
+  --warning-border: rgba(115, 115, 115, 0.3); /* 警告边框 */
+  --warning-text: #737373; /* 警告文本 */
+
+  /* 错误状态 */
+  --error-bg: rgba(82, 82, 82, 0.1); /* 错误背景 */
+  --error-border: rgba(82, 82, 82, 0.3); /* 错误边框 */
+  --error-text: #525252; /* 错误文本 */
+
+  /* 信息状态 */
+  --info-bg: rgba(64, 64, 64, 0.1); /* 信息背景 */
+  --info-border: rgba(64, 64, 64, 0.3); /* 信息边框 */
+  --info-text: #404040; /* 信息文本 */
+
+  /* ========== 交互状态 - Interaction States ========== */
+  --hover-overlay: rgba(255, 255, 255, 0.05); /* 悬停遮罩 */
+  --active-overlay: rgba(255, 255, 255, 0.1); /* 激活遮罩 */
+  --focus-ring: #ffffff; /* 焦点环 - 纯白 */
+  --selection-bg: #333333; /* 选中背景 */
+  --selection-text: #ffffff; /* 选中文本 */
+
+  /* ========== 滚动条 - Scrollbar ========== */
+  --scrollbar-thumb: rgba(255, 255, 255, 0.2); /* 滚动条滑块 */
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3); /* 滚动条悬停 */
+
+  /* ========== 代码高亮 - Code Highlighting ========== */
+  --code-bg: #141414; /* 代码背景 */
+  --code-text: #e5e5e5; /* 代码文本 */
+  --code-border: #262626; /* 代码边框 */
+
+  /* ========== 玻璃效果专用 - Glass Effect Specific ========== */
+  --glass-border: rgba(255, 255, 255, 0.1); /* 玻璃边框 */
+  --glass-shadow: rgba(0, 0, 0, 0.5); /* 玻璃阴影 */
+}
+
+/* ===================================
+   系统主题自动检测
+   System Theme Auto Detection
+   ===================================
+   
+   当用户未手动设置主题时，自动跟随系统主题
+   
+   ================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* 自动应用深色主题变量 */
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #141414;
+    --bg-elevated: #1a1a1a;
+
+    --text-primary: #ffffff;
+    --text-secondary: #e5e5e5;
+    --text-tertiary: #d4d4d4;
+
+    --border-color: #262626;
+    --hover-overlay: rgba(255, 255, 255, 0.05);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* ===================================
+   主题切换动画优化
+   Theme Transition Optimization
+   ===================================
+   
+   只对关键属性应用过渡，提升性能
+   
+   ================================== */
+
+:root {
+  /* 主题切换过渡时间 - 快速切换避免闪烁 */
+  --theme-transition-duration: 0.2s;
+  --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 只对这些元素应用主题过渡，避免全局性能问题 */
+body,
+.glass-light,
+.glass-medium,
+.glass-strong,
+.glass-button,
+.glass-card,
+.glass-navbar,
+.glass-floating-card {
+  transition:
+    background-color var(--theme-transition-duration)
+      var(--theme-transition-timing),
+    border-color var(--theme-transition-duration) var(--theme-transition-timing),
+    color var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+/* ===================================
+   色彩方案声明
+   Color Scheme Declaration
+   ===================================
+   
+   告诉浏览器当前使用的色彩方案
+   用于优化表单控件、滚动条等原生元素
+   
+   ================================== */
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* ===================================
+   高对比度模式支持
+   High Contrast Mode Support
+   ===================================
+   
+   为视力障碍用户提供更好的可访问性
+   
+   ================================== */
+
+@media (prefers-contrast: high) {
+  :root,
+  [data-theme='light'],
+  [data-theme='dark'] {
+    /* 移除阴影，增强边框 */
+    --glass-shadow: transparent;
+    --border-color: currentColor;
+
+    /* 增强文本对比度 */
+    --text-secondary: var(--text-primary);
+    --text-tertiary: var(--text-primary);
+  }
+}
+
+/* ===================================
+   响应式主题调整
+   Responsive Theme Adjustments
+   ===================================
+   
+   移动端优化：减少透明度和模糊效果以提升性能
+   
+   ================================== */
+
+/* 平板设备 */
+@media (max-width: 1024px) {
+  :root,
+  [data-theme='light'] {
+    /* 稍微降低玻璃效果透明度 */
+    --bg-glass-light: rgba(255, 255, 255, 0.3);
+    --bg-glass-medium: rgba(255, 255, 255, 0.5);
+    --bg-glass-strong: rgba(255, 255, 255, 0.7);
+  }
+
+  [data-theme='dark'] {
+    --bg-glass-light: rgba(26, 26, 26, 0.4);
+    --bg-glass-medium: rgba(26, 26, 26, 0.6);
+    --bg-glass-strong: rgba(26, 26, 26, 0.85);
+  }
+}
+
+/* 手机设备 */
+@media (max-width: 768px) {
+  :root,
+  [data-theme='light'] {
+    /* 移动端进一步降低透明度，提升性能 */
+    --bg-glass-light: rgba(255, 255, 255, 0.4);
+    --bg-glass-medium: rgba(255, 255, 255, 0.6);
+    --bg-glass-strong: rgba(255, 255, 255, 0.8);
+  }
+
+  [data-theme='dark'] {
+    --bg-glass-light: rgba(26, 26, 26, 0.5);
+    --bg-glass-medium: rgba(26, 26, 26, 0.7);
+    --bg-glass-strong: rgba(26, 26, 26, 0.9);
+  }
+}
+
+/* ===================================
+   主题工具类
+   Theme Utility Classes
+   ===================================
+   
+   方便在 JavaScript 中判断当前主题
+   
+   ================================== */
+
+.theme-light {
+  --current-theme: 'light';
+}
+
+.theme-dark {
+  --current-theme: 'dark';
+}
+
+/* ===================================
+   主题感知渐变
+   Theme-Aware Gradients
+   ===================================
+   
+   根据主题自动调整的渐变效果
+   
+   ================================== */
+
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+}
+
+.gradient-secondary {
+  background: linear-gradient(
+    135deg,
+    var(--secondary-500),
+    var(--secondary-600)
+  );
+}
+
+.gradient-glass {
+  background: linear-gradient(
+    135deg,
+    var(--glass-bg-medium),
+    var(--glass-bg-light)
+  );
+}
+
+/* 深色模式下的渐变使用灰度 */
+[data-theme='dark'] .gradient-primary,
+[data-theme='dark'] .gradient-secondary {
+  background: linear-gradient(135deg, #333333, #1a1a1a);
+}
+
+/* ===================================
+   打印样式优化
+   Print Style Optimization
+   ===================================
+   
+   打印时强制使用浅色主题
+   
+   ================================== */
+
+@media print {
+  :root,
+  [data-theme='dark'] {
+    /* 打印时使用浅色主题，节省墨水 */
+    --bg-primary: #ffffff;
+    --text-primary: #000000;
+    --border-color: #e2e8f0;
+
+    /* 移除所有阴影和透明效果 */
+    --glass-shadow: none;
+    --bg-glass: #ffffff;
+  }
+}
+
+/* ===================================
+   变量使用示例
+   Variable Usage Examples
+   ===================================
+
+   背景色：
+   background: var(--bg-primary);
+   background: var(--bg-elevated);
+   background: var(--bg-glass-medium);
+
+   文本色：
+   color: var(--text-primary);
+   color: var(--text-secondary);
+   color: var(--text-accent);
+
+   边框：
+   border: 1px solid var(--border-color);
+   border-color: var(--border-accent);
+
+   状态：
+   background: var(--success-bg);
+   color: var(--success-text);
+   border-color: var(--success-border);
+
+   交互：
+   &:hover { background: var(--hover-overlay); }
+   &:focus { outline: 2px solid var(--focus-ring); }
+
+   ================================== */

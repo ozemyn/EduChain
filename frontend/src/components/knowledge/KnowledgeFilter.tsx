@@ -7,7 +7,7 @@ import {
 } from '@ant-design/icons';
 import { CategorySelector } from '@/components/knowledge';
 import '@/styles/globals.css';
-import '@/styles/theme.css';
+import '@/styles/theme-variables.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
 

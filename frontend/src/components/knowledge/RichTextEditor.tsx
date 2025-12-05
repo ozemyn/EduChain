@@ -400,7 +400,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           lineHeight: 1.6,
           fontSize: 14,
           color: disabled ? 'var(--text-tertiary)' : 'var(--text-primary)',
-          backgroundColor: disabled ? 'var(--bg-tertiary)' : 'var(--bg-elevated)',
+          backgroundColor: disabled
+            ? 'var(--bg-tertiary)'
+            : 'var(--bg-elevated)',
         }}
         onInput={handleContentChange}
         onBlur={handleContentChange}

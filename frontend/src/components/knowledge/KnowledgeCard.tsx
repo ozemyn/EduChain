@@ -6,7 +6,7 @@ import type { KnowledgeItem } from '@/types';
 import { formatDate } from '@/utils/format';
 import InteractionButtons from './InteractionButtons';
 import '@/styles/globals.css';
-import '@/styles/theme.css';
+import '@/styles/theme-variables.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
 
@@ -118,15 +118,23 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
             <div className="author-info">
               <Avatar
                 src={knowledge.uploaderAvatar || knowledge.uploader?.avatarUrl}
-                alt={knowledge.uploaderName || knowledge.uploader?.fullName || '用户'}
+                alt={
+                  knowledge.uploaderName ||
+                  knowledge.uploader?.fullName ||
+                  '用户'
+                }
                 icon={<UserOutlined />}
                 className="author-avatar"
               >
-                {(knowledge.uploaderName || knowledge.uploader?.fullName)?.charAt(0) || 'U'}
+                {(
+                  knowledge.uploaderName || knowledge.uploader?.fullName
+                )?.charAt(0) || 'U'}
               </Avatar>
               <div className="author-details">
                 <Text strong className="author-name">
-                  {knowledge.uploaderName || knowledge.uploader?.fullName || `用户 ${knowledge.uploaderId}`}
+                  {knowledge.uploaderName ||
+                    knowledge.uploader?.fullName ||
+                    `用户 ${knowledge.uploaderId}`}
                 </Text>
                 <Text type="secondary" className="publish-date">
                   {formatDate(knowledge.createdAt)}

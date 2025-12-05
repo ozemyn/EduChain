@@ -1,0 +1,293 @@
+/* ===================================
+   推荐页面样式 - Recommendations Page Styles
+   ===================================
+   
+   使用全局样式系统
+   完整的响应式设计
+   
+   ================================== */
+
+/* ===================================
+   1. 页面容器
+   ================================== */
+
+.recommendations-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+/* ===================================
+   2. 页面标题
+   ================================== */
+
+.recommendations-header {
+  padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+.header-content {
+  max-width: 1000px;
+  text-align: center;
+}
+
+.header-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 深色模式图标 */
+[data-theme='dark'] .header-icon {
+  background: linear-gradient(135deg, #404040, #262626);
+  color: var(--text-primary);
+}
+
+.header-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.01em;
+}
+
+.header-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: var(--line-height-relaxed);
+}
+
+/* 特色标签 */
+.header-features {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.feature-item svg {
+  font-size: 1rem;
+}
+
+/* ===================================
+   3. 推荐内容区域
+   ================================== */
+
+.recommendations-main {
+  padding: var(--spacing-3xl) 0;
+  background: var(--bg-secondary);
+}
+
+.recommendations-content {
+  max-width: 1400px;
+}
+
+.recommendations-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-xl);
+  min-height: 600px;
+}
+
+/* ===================================
+   4. 响应式设计
+   ================================== */
+
+/* 平板设备 (768px - 1024px) */
+@media (max-width: 1024px) {
+  .recommendations-header {
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
+  }
+
+  .header-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 1.75rem;
+  }
+
+  .header-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .header-description {
+    font-size: var(--font-size-base);
+  }
+
+  .recommendations-main {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .recommendations-card {
+    padding: var(--spacing-xl);
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .recommendations-header {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .header-icon-wrapper {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .header-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 1.5rem;
+  }
+
+  .header-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .header-description {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .header-features {
+    gap: var(--spacing-sm);
+  }
+
+  .feature-item {
+    font-size: var(--font-size-xs);
+  }
+
+  .recommendations-main {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .recommendations-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 小屏手机 (< 480px) */
+@media (max-width: 480px) {
+  .recommendations-header {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .header-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.25rem;
+  }
+
+  .header-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .header-description {
+    font-size: var(--font-size-xs);
+  }
+
+  .header-features {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .recommendations-card {
+    padding: var(--spacing-md);
+  }
+}
+
+/* ===================================
+   5. 性能优化
+   ================================== */
+
+/* GPU 加速 */
+.recommendations-header,
+.header-icon,
+.feature-item,
+.recommendations-card {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .recommendations-page,
+  .recommendations-header,
+  .header-icon,
+  .feature-item,
+  .recommendations-card {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .feature-item:hover {
+    transform: none;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .recommendations-header,
+  .recommendations-card {
+    border: 2px solid var(--border-strong);
+  }
+
+  .header-icon {
+    border: 2px solid currentColor;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .recommendations-header {
+    padding: var(--spacing-lg) 0;
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  .header-icon-wrapper,
+  .header-features {
+    display: none;
+  }
+
+  .recommendations-main {
+    padding: var(--spacing-lg) 0;
+    background: transparent;
+  }
+
+  .recommendations-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+  }
+}
+
+/* ===================================
+   完成 - Recommendations.css
+   ================================== */

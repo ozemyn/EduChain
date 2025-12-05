@@ -1,0 +1,353 @@
+/* ===================================
+   管理仪表盘样式 - Admin Dashboard Styles
+   ===================================
+   
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
+.admin-dashboard-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-xl);
+}
+
+.dashboard-content {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   页面头部
+   ================================== */
+
+.dashboard-header {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.title-section {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.time-select,
+.date-picker {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* ===================================
+   统计卡片
+   ================================== */
+
+.stats-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.stat-footer {
+  margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.growth-indicator {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.growth-indicator.positive {
+  color: var(--accent-success);
+}
+
+.growth-indicator.negative {
+  color: var(--accent-error);
+}
+
+/* ===================================
+   主要内容区域
+   ================================== */
+
+.main-content {
+  margin-bottom: var(--spacing-xl);
+}
+
+.content-card,
+.users-card {
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.content-card .ant-card-head,
+.users-card .ant-card-head {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-title {
+  color: var(--primary-600);
+  cursor: pointer;
+  transition: color var(--transition-fast) var(--ease-ios);
+}
+
+.content-title:hover {
+  color: var(--primary-700);
+}
+
+.content-table .ant-table {
+  background: transparent;
+}
+
+.content-table .ant-table-thead > tr > th {
+  background: var(--bg-secondary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.content-table .ant-table-tbody > tr:hover > td {
+  background: var(--bg-secondary);
+}
+
+/* ===================================
+   活跃用户
+   ================================== */
+
+.user-item {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.user-rank {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
+.user-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.user-score {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.user-time {
+  font-size: var(--font-size-xs);
+}
+
+/* ===================================
+   系统状态
+   ================================== */
+
+.system-status {
+  margin-bottom: var(--spacing-xl);
+}
+
+.status-card {
+  border-radius: var(--liquid-border-radius-lg);
+  text-align: center;
+}
+
+.status-content {
+  padding: var(--spacing-lg) 0;
+  display: flex;
+  justify-content: center;
+}
+
+.status-progress {
+  transform: scale(1);
+  transition: transform var(--transition-base) var(--ease-ios);
+}
+
+.status-card:hover .status-progress {
+  transform: scale(1.05);
+}
+
+/* ===================================
+   系统告警
+   ================================== */
+
+.alerts-card {
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.alert-item {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+}
+
+.alert-icon.warning {
+  color: var(--accent-warning);
+}
+
+.alert-icon.info {
+  color: var(--accent-info);
+}
+
+.alert-icon.error {
+  color: var(--accent-error);
+}
+
+.alert-title {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.alert-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.alert-time {
+  font-size: var(--font-size-xs);
+}
+
+/* ===================================
+   响应式设计
+   ================================== */
+
+@media (max-width: 1024px) {
+  .admin-dashboard-page {
+    padding: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .time-select,
+  .date-picker {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .dashboard-header {
+    padding: var(--spacing-lg);
+  }
+
+  .stat-card {
+    padding: var(--spacing-lg);
+  }
+
+  .stat-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .user-rank {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* ===================================
+   性能优化
+   ================================== */
+
+.stat-card,
+.user-item,
+.alert-item,
+.status-progress {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .stat-card,
+  .content-card,
+  .users-card,
+  .status-card,
+  .alerts-card {
+    border: 2px solid var(--border-strong);
+  }
+}

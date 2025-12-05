@@ -1,6 +1,28 @@
-/* ===== 玻璃液态效果 - iOS 风格 ===== */
+/* ===================================
+   玻璃液态效果 - Glass Morphism Effects
+   ===================================
+   
+   说明：
+   - iOS 风格的玻璃态设计
+   - 高性能的模糊效果
+   - 多种强度和变体
+   - 响应式优化
+   - 移动端性能优化
+   
+   文件结构：
+   1. 玻璃效果变量
+   2. 基础玻璃容器
+   3. 玻璃组件变体
+   4. 液态形状
+   5. 玻璃效果增强
+   6. 响应式优化
+   
+   ================================== */
 
-/* ===== 基础玻璃效果变量 ===== */
+/* ===================================
+   1. 玻璃效果变量 - Glass Effect Variables
+   ================================== */
+
 :root {
   /* 模糊强度 */
   --blur-xs: blur(2px);
@@ -21,13 +43,15 @@
   --glass-shadow-lg: 0 8px 32px var(--glass-shadow);
   --glass-shadow-xl: 0 16px 48px var(--glass-shadow);
 
-  /* 液态效果 */
+  /* 液态圆角 */
   --liquid-border-radius: 20px;
   --liquid-border-radius-lg: 28px;
   --liquid-border-radius-xl: 36px;
 }
 
-/* ===== 基础玻璃容器 ===== */
+/* ===================================
+   2. 基础玻璃容器 - Base Glass Containers
+   ================================== */
 
 /* 轻度玻璃效果 */
 .glass-light {
@@ -81,7 +105,9 @@
   overflow: hidden;
 }
 
-/* ===== 玻璃卡片变体 ===== */
+/* ===================================
+   3. 玻璃组件变体 - Glass Component Variants
+   ================================== */
 
 /* 玻璃卡片 */
 .glass-card {
@@ -114,7 +140,7 @@
   border-radius: var(--liquid-border-radius);
   padding: var(--spacing-sm) var(--spacing-lg);
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast) var(--ease-ios);
   position: relative;
@@ -134,6 +160,12 @@
 .glass-button:active {
   transform: translateY(0);
   background: var(--glass-bg-strong);
+}
+
+.glass-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* 玻璃导航栏 */
@@ -184,7 +216,64 @@
   overflow: auto;
 }
 
-/* ===== 液态形状变体 ===== */
+/* 玻璃浮动卡片 */
+.glass-floating-card {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
+  border-radius: var(--liquid-border-radius-lg);
+  box-shadow: var(--glass-shadow-lg);
+  padding: var(--spacing-xl);
+  transition: all var(--transition-base) var(--ease-spring-ios);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-floating-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--glass-shadow-xl);
+  background: var(--glass-bg-strong);
+}
+
+/* 玻璃工具提示 */
+.glass-tooltip {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
+  border-radius: var(--liquid-border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  box-shadow: var(--glass-shadow-md);
+  position: absolute;
+  z-index: var(--z-tooltip);
+  white-space: nowrap;
+}
+
+/* 玻璃徽章 */
+.glass-badge {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: var(--glass-border-width) var(--glass-border-style)
+    var(--glass-border);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* ===================================
+   4. 液态形状变体 - Liquid Shape Variants
+   ================================== */
 
 /* 圆形液态 */
 .liquid-circle {
@@ -206,7 +295,9 @@
   border-radius: var(--liquid-border-radius-xl);
 }
 
-/* ===== 玻璃效果增强 ===== */
+/* ===================================
+   5. 玻璃效果增强 - Glass Effect Enhancements
+   ================================== */
 
 /* 玻璃反光效果 */
 .glass-shine::before {
@@ -224,6 +315,7 @@
   );
   transition: left var(--duration-slow) var(--ease-ios);
   z-index: 1;
+  pointer-events: none;
 }
 
 .glass-shine:hover::before {
@@ -246,6 +338,7 @@
   );
   border-radius: inherit;
   z-index: 1;
+  pointer-events: none;
 }
 
 /* 玻璃内阴影 */
@@ -256,7 +349,18 @@
     var(--glass-shadow-md);
 }
 
-/* ===== 动态玻璃效果 ===== */
+/* 玻璃渐变背景 */
+.glass-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--glass-bg-medium),
+    var(--glass-bg-light)
+  );
+}
+
+/* ===================================
+   6. 动态玻璃效果 - Dynamic Glass Effects
+   ================================== */
 
 /* 呼吸玻璃效果 */
 @keyframes glass-breathe {
@@ -305,6 +409,7 @@
   transition:
     width 0.6s,
     height 0.6s;
+  pointer-events: none;
 }
 
 .glass-ripple:active::after {
@@ -313,7 +418,9 @@
   animation: glass-ripple 0.6s ease-out;
 }
 
-/* ===== 玻璃文本效果 ===== */
+/* ===================================
+   7. 玻璃文本效果 - Glass Text Effects
+   ================================== */
 
 /* 玻璃文本 */
 .glass-text {
@@ -329,21 +436,22 @@
   filter: drop-shadow(0 2px 4px var(--glass-shadow));
 }
 
-/* 霓虹玻璃文本 */
+/* 霓虹玻璃文本 - 深色模式下使用白色 */
 .glass-neon-text {
-  color: var(--accent-primary);
+  color: var(--text-primary);
   text-shadow:
     0 0 5px currentColor,
     0 0 10px currentColor,
-    0 0 15px currentColor,
-    0 0 20px currentColor;
+    0 0 15px currentColor;
   filter: blur(0.5px);
 }
 
-/* ===== 响应式玻璃效果 ===== */
+/* ===================================
+   8. 响应式玻璃效果 - Responsive Glass Effects
+   ================================== */
 
-/* 移动端优化 */
-@media (max-width: 768px) {
+/* 平板设备优化 */
+@media (max-width: 1024px) {
   .glass-light,
   .glass-medium,
   .glass-strong {
@@ -355,6 +463,45 @@
     backdrop-filter: var(--blur-sm);
     -webkit-backdrop-filter: var(--blur-sm);
   }
+}
+
+/* 移动端优化 - 减少模糊以提升性能 */
+@media (max-width: 768px) {
+  .glass-light,
+  .glass-medium,
+  .glass-strong,
+  .glass-ultra,
+  .glass-card,
+  .glass-button,
+  .glass-navbar,
+  .glass-sidebar,
+  .glass-modal,
+  .glass-floating-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* 移动端使用纯色背景替代玻璃效果 */
+  .glass-light,
+  .glass-button {
+    background: var(--bg-secondary);
+  }
+
+  .glass-medium,
+  .glass-card {
+    background: var(--bg-elevated);
+  }
+
+  .glass-strong,
+  .glass-navbar,
+  .glass-modal {
+    background: var(--bg-elevated);
+  }
+
+  .glass-ultra,
+  .glass-floating-card {
+    background: var(--bg-elevated);
+  }
 
   /* 简化移动端动画 */
   .glass-breathe {
@@ -364,14 +511,27 @@
   .glass-shine::before {
     display: none;
   }
+
+  .glass-ripple::after {
+    display: none;
+  }
 }
 
-/* 低性能设备优化 */
+/* ===================================
+   9. 低性能设备优化 - Low Performance Optimization
+   ================================== */
+
 @media (prefers-reduced-motion: reduce) {
   .glass-light,
   .glass-medium,
   .glass-strong,
-  .glass-ultra {
+  .glass-ultra,
+  .glass-card,
+  .glass-button,
+  .glass-navbar,
+  .glass-sidebar,
+  .glass-modal,
+  .glass-floating-card {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: var(--bg-elevated);
@@ -384,14 +544,27 @@
   .glass-ripple::after {
     display: none;
   }
+
+  .glass-shine::before {
+    display: none;
+  }
 }
 
-/* 高对比度模式 */
+/* ===================================
+   10. 高对比度模式 - High Contrast Mode
+   ================================== */
+
 @media (prefers-contrast: high) {
   .glass-light,
   .glass-medium,
   .glass-strong,
-  .glass-ultra {
+  .glass-ultra,
+  .glass-card,
+  .glass-button,
+  .glass-navbar,
+  .glass-sidebar,
+  .glass-modal,
+  .glass-floating-card {
     background: var(--bg-elevated);
     border: 2px solid var(--border-strong);
     backdrop-filter: none;
@@ -399,59 +572,29 @@
   }
 }
 
-/* ===== 玻璃效果组合类 ===== */
+/* ===================================
+   11. 打印样式 - Print Styles
+   ================================== */
 
-/* 浮动玻璃卡片 */
-.glass-floating-card {
-  background: var(--glass-bg-medium);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
-  border: var(--glass-border-width) var(--glass-border-style)
-    var(--glass-border);
-  border-radius: var(--liquid-border-radius-lg);
-  box-shadow: var(--glass-shadow-lg);
-  padding: var(--spacing-xl);
-  transition: all var(--transition-base) var(--ease-spring-ios);
-  position: relative;
-  overflow: hidden;
+@media print {
+  .glass-light,
+  .glass-medium,
+  .glass-strong,
+  .glass-ultra,
+  .glass-card,
+  .glass-button,
+  .glass-navbar,
+  .glass-sidebar,
+  .glass-modal,
+  .glass-floating-card {
+    background: white;
+    border: 1px solid black;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
 }
 
-.glass-floating-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: var(--glass-shadow-xl);
-  background: var(--glass-bg-strong);
-}
-
-/* 玻璃工具提示 */
-.glass-tooltip {
-  background: var(--glass-bg-strong);
-  backdrop-filter: var(--blur-lg);
-  -webkit-backdrop-filter: var(--blur-lg);
-  border: var(--glass-border-width) var(--glass-border-style)
-    var(--glass-border);
-  border-radius: var(--liquid-border-radius);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 0.875rem;
-  color: var(--text-primary);
-  box-shadow: var(--glass-shadow-md);
-  position: absolute;
-  z-index: var(--z-tooltip);
-  white-space: nowrap;
-}
-
-/* 玻璃徽章 */
-.glass-badge {
-  background: var(--glass-bg-light);
-  backdrop-filter: var(--blur-sm);
-  -webkit-backdrop-filter: var(--blur-sm);
-  border: var(--glass-border-width) var(--glass-border-style)
-    var(--glass-border);
-  border-radius: var(--radius-full);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
+/* ===================================
+   完成 - glass-effects.css
+   ================================== */

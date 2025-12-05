@@ -1,0 +1,117 @@
+/* ===================================
+   关注页面样式 - Follow Page Styles
+   ===================================
+   
+   使用全局样式系统
+   完整的响应式设计
+   
+   ================================== */
+
+/* 页面容器 */
+.follow-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-2xl) 0;
+}
+
+.follow-content {
+  max-width: 900px;
+}
+
+/* 页面标题 */
+.follow-header {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.follow-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.01em;
+}
+
+.follow-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 关注列表 */
+.follow-list-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.follow-list-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+  min-height: 500px;
+}
+
+/* 错误状态 */
+.follow-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--spacing-xl);
+}
+
+.error-card {
+  padding: var(--spacing-3xl);
+  text-align: center;
+  border-radius: var(--liquid-border-radius-lg);
+  max-width: 500px;
+}
+
+.error-card h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.error-card p {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .follow-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .follow-header {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .follow-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .follow-description {
+    font-size: var(--font-size-base);
+  }
+
+  .follow-list-card {
+    padding: var(--spacing-lg);
+  }
+
+  .error-card {
+    padding: var(--spacing-2xl);
+  }
+}
+
+/* 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  .follow-page,
+  .follow-header,
+  .follow-list-section,
+  .follow-error {
+    animation: none !important;
+  }
+}

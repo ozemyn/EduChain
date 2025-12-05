@@ -1,0 +1,106 @@
+/* ===================================
+   活动页面样式 - Activity Page Styles
+   ===================================
+   
+   使用全局样式系统
+   完整的响应式设计
+   
+   ================================== */
+
+/* 页面容器 */
+.activity-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-2xl) 0;
+}
+
+.activity-content {
+  max-width: 1400px;
+}
+
+/* 页面标题 */
+.activity-header {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.activity-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.01em;
+}
+
+.activity-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 双栏布局 */
+.activity-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacing-xl);
+}
+
+.activity-section {
+  min-height: 600px;
+}
+
+.activity-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  height: 100%;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .activity-grid {
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 992px) {
+  .activity-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .activity-section {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .activity-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .activity-header {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .activity-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .activity-description {
+    font-size: var(--font-size-base);
+  }
+
+  .activity-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  .activity-page,
+  .activity-header,
+  .activity-section {
+    animation: none !important;
+  }
+}

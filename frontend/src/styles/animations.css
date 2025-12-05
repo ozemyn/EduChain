@@ -1,15 +1,29 @@
-/* ===== 动画效果 - iOS 风格流畅动画 ===== */
+/* ===================================
+   动画效果 - Animation Effects
+   ===================================
+   
+   说明：
+   - iOS 风格的流畅动画
+   - 高性能的 GPU 加速
+   - 完整的动画工具类
+   - 响应式动画优化
+   - 减少动画偏好支持
+   
+   文件结构：
+   1. 动画变量
+   2. 关键帧动画
+   3. 动画工具类
+   4. 交互动画
+   5. 页面过渡
+   6. 响应式优化
+   
+   ================================== */
 
-/* 核心动画变量 */
+/* ===================================
+   1. 动画变量 - Animation Variables
+   ================================== */
+
 :root {
-  /* iOS 风格缓动函数 */
-  --ease-in-ios: cubic-bezier(0.4, 0, 1, 1);
-  --ease-out-ios: cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out-ios: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring-ios: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  --ease-bounce-ios: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --ease-elastic-ios: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
   /* 动画持续时间 */
   --duration-instant: 100ms;
   --duration-fast: 150ms;
@@ -17,11 +31,21 @@
   --duration-slow: 350ms;
   --duration-slower: 500ms;
   --duration-slowest: 750ms;
+
+  /* iOS 风格缓动函数 */
+  --ease-in-ios: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out-ios: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out-ios: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring-ios: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-bounce-ios: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic-ios: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ===== 基础动画类 ===== */
+/* ===================================
+   2. 关键帧动画 - Keyframe Animations
+   ================================== */
 
-/* 淡入淡出 */
+/* ========== 淡入淡出 - Fade ========== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -84,7 +108,7 @@
   }
 }
 
-/* 缩放动画 */
+/* ========== 缩放 - Scale ========== */
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -125,7 +149,7 @@
   }
 }
 
-/* 滑动动画 */
+/* ========== 滑动 - Slide ========== */
 @keyframes slideInUp {
   from {
     transform: translateY(100%);
@@ -162,7 +186,7 @@
   }
 }
 
-/* 旋转动画 */
+/* ========== 旋转 - Rotate ========== */
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -172,6 +196,16 @@
   }
 }
 
+@keyframes spinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* ========== 脉冲 - Pulse ========== */
 @keyframes pulse {
   0%,
   100% {
@@ -182,6 +216,17 @@
   }
 }
 
+@keyframes pulseScale {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ========== 弹跳 - Bounce ========== */
 @keyframes bounce {
   0%,
   20%,
@@ -205,7 +250,7 @@
   }
 }
 
-/* 摇摆动画 */
+/* ========== 摇摆 - Shake ========== */
 @keyframes shake {
   0%,
   100% {
@@ -226,7 +271,7 @@
   }
 }
 
-/* 心跳动画 */
+/* ========== 心跳 - Heartbeat ========== */
 @keyframes heartbeat {
   0% {
     transform: scale(1);
@@ -245,9 +290,64 @@
   }
 }
 
-/* ===== 动画工具类 ===== */
+/* ========== 闪烁 - Blink ========== */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
 
-/* 基础动画类 */
+/* ========== 摆动 - Swing ========== */
+@keyframes swing {
+  20% {
+    transform: rotate(15deg);
+  }
+  40% {
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* ========== 翻转 - Flip ========== */
+@keyframes flipX {
+  from {
+    transform: perspective(400px) rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(400px) rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flipY {
+  from {
+    transform: perspective(400px) rotateY(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(400px) rotateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   3. 动画工具类 - Animation Utility Classes
+   ================================== */
+
+/* ========== 淡入淡出类 ========== */
 .animate-fade-in {
   animation: fadeIn var(--duration-normal) var(--ease-out-ios) forwards;
 }
@@ -272,6 +372,7 @@
   animation: fadeInRight var(--duration-normal) var(--ease-out-ios) forwards;
 }
 
+/* ========== 缩放类 ========== */
 .animate-scale-in {
   animation: scaleIn var(--duration-normal) var(--ease-spring-ios) forwards;
 }
@@ -284,6 +385,7 @@
   animation: scaleInBounce var(--duration-slow) var(--ease-bounce-ios) forwards;
 }
 
+/* ========== 滑动类 ========== */
 .animate-slide-in-up {
   animation: slideInUp var(--duration-normal) var(--ease-out-ios) forwards;
 }
@@ -300,29 +402,68 @@
   animation: slideInRight var(--duration-normal) var(--ease-out-ios) forwards;
 }
 
+/* ========== 旋转类 ========== */
 .animate-spin {
   animation: spin 1s linear infinite;
 }
 
+.animate-spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spinReverse 1s linear infinite;
+}
+
+/* ========== 脉冲类 ========== */
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+.animate-pulse-scale {
+  animation: pulseScale 2s ease-in-out infinite;
+}
+
+/* ========== 弹跳类 ========== */
 .animate-bounce {
   animation: bounce 1s infinite;
 }
 
+/* ========== 摇摆类 ========== */
 .animate-shake {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
+/* ========== 心跳类 ========== */
 .animate-heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite both;
 }
 
-/* ===== 交互动画 ===== */
+/* ========== 闪烁类 ========== */
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
 
-/* 悬停效果 */
+/* ========== 摆动类 ========== */
+.animate-swing {
+  animation: swing 1s ease-in-out;
+  transform-origin: top center;
+}
+
+/* ========== 翻转类 ========== */
+.animate-flip-x {
+  animation: flipX var(--duration-slow) var(--ease-out-ios) forwards;
+}
+
+.animate-flip-y {
+  animation: flipY var(--duration-slow) var(--ease-out-ios) forwards;
+}
+
+/* ===================================
+   4. 交互动画 - Interaction Animations
+   ================================== */
+
+/* ========== 悬停效果 ========== */
 .hover-lift {
   transition:
     transform var(--duration-fast) var(--ease-out-ios),
@@ -350,7 +491,31 @@
   transform: scale(1.02);
 }
 
-/* 点击效果 */
+.hover-scale-lg {
+  transition: transform var(--duration-fast) var(--ease-out-ios);
+}
+
+.hover-scale-lg:hover {
+  transform: scale(1.1);
+}
+
+.hover-rotate {
+  transition: transform var(--duration-fast) var(--ease-out-ios);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+.hover-brightness {
+  transition: filter var(--duration-fast) var(--ease-out-ios);
+}
+
+.hover-brightness:hover {
+  filter: brightness(1.1);
+}
+
+/* ========== 点击效果 ========== */
 .active-scale {
   transition: transform var(--duration-instant) var(--ease-in-ios);
 }
@@ -367,7 +532,7 @@
   transform: translateY(1px);
 }
 
-/* 焦点效果 */
+/* ========== 焦点效果 ========== */
 .focus-ring {
   transition: box-shadow var(--duration-fast) var(--ease-out-ios);
 }
@@ -376,9 +541,47 @@
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-/* ===== 页面过渡动画 ===== */
+/* ===================================
+   5. 延迟动画工具 - Animation Delays
+   ================================== */
 
-/* 页面进入动画 */
+.delay-75 {
+  animation-delay: 75ms;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-150 {
+  animation-delay: 150ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-700 {
+  animation-delay: 700ms;
+}
+
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+/* ===================================
+   6. 页面过渡动画 - Page Transitions
+   ================================== */
+
+/* 页面进入 */
 .page-enter {
   opacity: 0;
   transform: translateY(20px);
@@ -392,6 +595,7 @@
     transform var(--duration-normal) var(--ease-out-ios);
 }
 
+/* 页面退出 */
 .page-exit {
   opacity: 1;
   transform: translateY(0);
@@ -405,7 +609,9 @@
     transform var(--duration-fast) var(--ease-in-ios);
 }
 
-/* ===== 模态框动画 ===== */
+/* ===================================
+   7. 模态框动画 - Modal Animations
+   ================================== */
 
 /* 模态框背景 */
 .modal-backdrop-enter {
@@ -453,7 +659,9 @@
     transform var(--duration-fast) var(--ease-in-ios);
 }
 
-/* ===== 列表动画 ===== */
+/* ===================================
+   8. 列表动画 - List Animations
+   ================================== */
 
 /* 列表项进入 */
 .list-item-enter {
@@ -469,6 +677,7 @@
     transform var(--duration-normal) var(--ease-out-ios);
 }
 
+/* 列表项退出 */
 .list-item-exit {
   opacity: 1;
   transform: translateX(0);
@@ -482,7 +691,9 @@
     transform var(--duration-fast) var(--ease-in-ios);
 }
 
-/* ===== 加载动画 ===== */
+/* ===================================
+   9. 加载动画 - Loading Animations
+   ================================== */
 
 /* 骨架屏动画 */
 @keyframes skeleton-loading {
@@ -502,7 +713,7 @@
     var(--bg-tertiary) 75%
   );
   background-size: 200px 100%;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
 }
 
 /* 进度条动画 */
@@ -530,15 +741,45 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--accent-primary),
+    var(--text-primary),
     transparent
   );
   animation: progress-indeterminate 1.5s infinite;
 }
 
-/* ===== 响应式动画优化 ===== */
+/* 加载点动画 */
+@keyframes loading-dots {
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
 
-/* 移动端动画优化 */
+.loading-dots span {
+  animation: loading-dots 1.4s infinite both;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ===================================
+   10. 响应式动画优化 - Responsive Optimization
+   ================================== */
+
+/* 移动端动画优化 - 减少动画时长 */
 @media (max-width: 768px) {
   :root {
     --duration-fast: 100ms;
@@ -546,13 +787,22 @@
     --duration-slow: 300ms;
   }
 
-  /* 减少复杂动画 */
+  /* 简化复杂动画 */
   .animate-scale-in-bounce {
     animation: scaleIn var(--duration-normal) var(--ease-out-ios) forwards;
   }
+
+  .animate-bounce,
+  .animate-heartbeat,
+  .animate-swing {
+    animation: none;
+  }
 }
 
-/* 减少动画偏好 */
+/* ===================================
+   11. 减少动画偏好 - Reduced Motion
+   ================================== */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -570,45 +820,34 @@
   .progress-indeterminate::after {
     animation: none;
   }
+
+  .loading-dots span {
+    animation: none;
+    opacity: 1;
+  }
 }
 
-/* 高性能模式 */
+/* ===================================
+   12. 高性能模式 - Performance Mode
+   ================================== */
+
+/* 启用硬件加速 */
 @media (prefers-reduced-motion: no-preference) {
-  /* 启用硬件加速 */
   .animate-fade-in,
   .animate-fade-out,
   .animate-scale-in,
   .animate-scale-out,
   .hover-lift,
   .hover-scale,
-  .active-scale {
+  .active-scale,
+  .page-enter-active,
+  .page-exit-active,
+  .modal-content-enter-active,
+  .modal-content-exit-active {
     will-change: transform, opacity;
   }
 }
 
-/* ===== 延迟动画工具 ===== */
-
-.delay-75 {
-  animation-delay: 75ms;
-}
-.delay-100 {
-  animation-delay: 100ms;
-}
-.delay-150 {
-  animation-delay: 150ms;
-}
-.delay-200 {
-  animation-delay: 200ms;
-}
-.delay-300 {
-  animation-delay: 300ms;
-}
-.delay-500 {
-  animation-delay: 500ms;
-}
-.delay-700 {
-  animation-delay: 700ms;
-}
-.delay-1000 {
-  animation-delay: 1000ms;
-}
+/* ===================================
+   完成 - animations.css
+   ================================== */

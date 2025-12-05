@@ -1,0 +1,631 @@
+/* ===================================
+   登录页面样式 - Login Page Styles
+   ===================================
+   
+   说明：
+   - 使用全局样式系统的类名
+   - 完整的响应式设计
+   - iOS 风格的现代化设计
+   - 浅色模式接近白色背景
+   - 高性能优化
+   - 移动端友好
+   
+   文件结构：
+   1. 页面容器
+   2. 左侧品牌区
+   3. 右侧表单区
+   4. 响应式优化
+   
+   ================================== */
+
+/* ===================================
+   1. 页面容器 - Page Container
+   ================================== */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 50%, #f5f5f5 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 深色模式背景 */
+[data-theme='dark'] .login-page {
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 50%,
+    var(--bg-primary) 100%
+  );
+}
+
+/* ===================================
+   2. 左侧品牌区 - Brand Section
+   ================================== */
+
+.login-brand-section {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.05) 0%,
+    rgba(219, 39, 119, 0.08) 100%
+  );
+}
+
+/* 深色模式品牌区 */
+[data-theme='dark'] .login-brand-section {
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.03) 0%,
+    rgba(219, 39, 119, 0.05) 100%
+  );
+}
+
+/* 背景装饰 */
+.brand-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.brand-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite;
+}
+
+.brand-blob-1 {
+  top: 10%;
+  left: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.2), transparent);
+  animation-delay: 0s;
+}
+
+.brand-blob-2 {
+  bottom: 20%;
+  right: 15%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(219, 39, 119, 0.15), transparent);
+  animation-delay: 2s;
+}
+
+.brand-blob-3 {
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.1), transparent);
+  animation-delay: 4s;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.1);
+  }
+}
+
+.brand-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(236, 72, 153, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 72, 153, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+/* 品牌内容 */
+.brand-content {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+  text-align: center;
+}
+
+.brand-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.logo-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--primary-600);
+  box-shadow: var(--shadow-lg);
+}
+
+.logo-text {
+  font-size: 3.5rem;
+  font-weight: var(--font-weight-extrabold);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.brand-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -0.01em;
+}
+
+.brand-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* 特性列表 */
+.brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-3xl);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  border-radius: var(--liquid-border-radius);
+  text-align: left;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--primary-600);
+  background: linear-gradient(135deg, var(--primary-100), var(--primary-50));
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .feature-icon {
+  background: linear-gradient(135deg, var(--primary-900), var(--primary-800));
+}
+
+.feature-text h4 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.feature-text p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* 底部文字 */
+.brand-footer {
+  margin-top: var(--spacing-3xl);
+}
+
+.footer-text {
+  font-size: var(--font-size-base);
+  color: var(--text-tertiary);
+  line-height: var(--line-height-relaxed);
+  font-style: italic;
+}
+
+/* ===================================
+   3. 右侧表单区 - Form Section
+   ================================== */
+
+.login-form-section {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-theme='dark'] .login-form-section {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.form-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+/* 表单卡片 */
+.form-card {
+  padding: var(--spacing-3xl);
+  border-radius: var(--liquid-border-radius-lg);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-2xl);
+}
+
+[data-theme='dark'] .form-card {
+  background: var(--bg-secondary);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.form-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm) !important;
+  letter-spacing: -0.01em;
+}
+
+.form-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  display: block;
+}
+
+/* 表单样式 */
+.login-form {
+  margin-top: var(--spacing-xl);
+}
+
+.form-input {
+  height: 50px !important;
+  border-radius: var(--radius-lg) !important;
+  border: 2px solid var(--border-color) !important;
+  font-size: var(--font-size-base) !important;
+  transition: all var(--transition-fast) var(--ease-ios) !important;
+  background: var(--bg-primary) !important;
+}
+
+.form-input:hover {
+  border-color: var(--primary-400) !important;
+}
+
+.form-input:focus,
+.form-input-focused {
+  border-color: var(--primary-600) !important;
+  box-shadow: 0 0 0 4px var(--primary-100) !important;
+}
+
+[data-theme='dark'] .form-input:focus,
+[data-theme='dark'] .form-input-focused {
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1) !important;
+}
+
+.input-icon {
+  color: var(--text-tertiary);
+  font-size: 1.125rem;
+}
+
+/* 提交按钮 */
+.submit-button {
+  height: 50px !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  border-radius: var(--radius-lg) !important;
+  margin-top: var(--spacing-md) !important;
+}
+
+/* 分隔线 */
+.form-divider {
+  margin: var(--spacing-xl) 0;
+  text-align: center;
+  position: relative;
+}
+
+.form-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.divider-text {
+  position: relative;
+  display: inline-block;
+  padding: 0 var(--spacing-md);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+[data-theme='dark'] .divider-text {
+  background: var(--bg-secondary);
+}
+
+/* 底部链接 */
+.form-footer {
+  text-align: center;
+}
+
+.footer-link {
+  display: block;
+}
+
+.link-button {
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-medium) !important;
+  color: var(--primary-600) !important;
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.link-button:hover {
+  color: var(--primary-700) !important;
+}
+
+/* 底部提示文字 */
+.form-bottom-text {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+}
+
+.bottom-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+.bottom-link {
+  color: var(--primary-600);
+  text-decoration: none;
+  margin: 0 var(--spacing-xs);
+  transition: color var(--transition-fast) var(--ease-ios);
+}
+
+.bottom-link:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+/* ===================================
+   4. 响应式设计 - Responsive Design
+   ================================== */
+
+/* 平板设备 (768px - 1024px) */
+@media (max-width: 1024px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-brand-section {
+    min-height: 40vh;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+  }
+
+  .brand-logo {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .logo-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 2rem;
+  }
+
+  .logo-text {
+    font-size: 2.5rem;
+  }
+
+  .brand-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .brand-description {
+    font-size: var(--font-size-base);
+  }
+
+  .brand-features {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .feature-item {
+    padding: var(--spacing-md);
+  }
+
+  .login-form-section {
+    min-height: 60vh;
+    padding: var(--spacing-xl);
+  }
+
+  .brand-blob {
+    opacity: 0.3;
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .login-brand-section {
+    min-height: 35vh;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .brand-logo {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .logo-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+
+  .logo-text {
+    font-size: 2rem;
+  }
+
+  .brand-title {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .brand-description {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .brand-features {
+    display: none;
+  }
+
+  .brand-footer {
+    margin-top: var(--spacing-xl);
+  }
+
+  .footer-text {
+    font-size: var(--font-size-sm);
+  }
+
+  .login-form-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .form-card {
+    padding: var(--spacing-xl);
+  }
+
+  .form-title {
+    font-size: var(--font-size-2xl) !important;
+  }
+
+  .form-subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .form-input {
+    height: 46px !important;
+  }
+
+  .submit-button {
+    height: 46px !important;
+    font-size: var(--font-size-base) !important;
+  }
+
+  .brand-blob {
+    display: none;
+  }
+}
+
+/* 小屏手机 (< 480px) */
+@media (max-width: 480px) {
+  .login-brand-section {
+    min-height: 30vh;
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .logo-text {
+    font-size: 1.75rem;
+  }
+
+  .brand-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .brand-description {
+    font-size: var(--font-size-xs);
+  }
+
+  .form-card {
+    padding: var(--spacing-lg);
+  }
+
+  .form-title {
+    font-size: var(--font-size-xl) !important;
+  }
+}
+
+/* ===================================
+   5. 性能优化 - Performance
+   ================================== */
+
+.brand-blob,
+.feature-item,
+.form-card {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .login-page,
+  .brand-content,
+  .feature-item,
+  .form-card,
+  .brand-blob {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .form-input {
+    border-width: 3px !important;
+  }
+
+  .feature-item {
+    border: 2px solid var(--border-strong);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .form-input,
+  .submit-button,
+  .link-button {
+    min-height: 44px;
+  }
+}
+
+/* ===================================
+   完成 - Login.css
+   ================================== */

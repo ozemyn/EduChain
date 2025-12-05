@@ -202,7 +202,10 @@ const AdminLayout: React.FC = () => {
               >
                 E
               </div>
-              <Title level={4} style={{ margin: 0, color: 'var(--accent-primary)' }}>
+              <Title
+                level={4}
+                style={{ margin: 0, color: 'var(--accent-primary)' }}
+              >
                 EduChain
               </Title>
             </Space>
@@ -274,7 +277,11 @@ const AdminLayout: React.FC = () => {
                   <div style={{ fontSize: '14px', fontWeight: 500 }}>
                     {user?.fullName}
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>管理员</div>
+                  <div
+                    style={{ fontSize: '12px', color: 'var(--text-secondary)' }}
+                  >
+                    管理员
+                  </div>
                 </div>
               </Space>
             </Dropdown>

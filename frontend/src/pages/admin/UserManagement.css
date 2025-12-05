@@ -1,0 +1,359 @@
+/* ===================================
+   用户管理页面样式 - User Management Page Styles
+   ===================================
+   
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
+.user-management-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-xl);
+}
+
+.management-content {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   页面头部
+   ================================== */
+
+.management-header {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-section {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ===================================
+   主要内容
+   ================================== */
+
+.management-main {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+/* 筛选区域 */
+.filter-section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-input {
+  border-radius: var(--radius-lg) !important;
+}
+
+.search-input .ant-input {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* 操作区域 */
+.action-section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 表格区域 */
+.table-section {
+  margin-top: var(--spacing-lg);
+}
+
+.user-table .ant-table {
+  background: transparent;
+}
+
+.user-table .ant-table-thead > tr > th {
+  background: var(--bg-secondary);
+  font-weight: var(--font-weight-semibold);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.user-table .ant-table-tbody > tr {
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.user-table .ant-table-tbody > tr:hover > td {
+  background: var(--bg-secondary);
+}
+
+.user-fullname {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.user-username {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+/* ===================================
+   用户详情抽屉
+   ================================== */
+
+.user-detail-drawer .ant-drawer-body {
+  padding: var(--spacing-xl);
+  background: var(--bg-primary);
+}
+
+.user-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl);
+  background: var(--bg-secondary);
+  border-radius: var(--liquid-border-radius);
+  text-align: center;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.profile-info h3 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.user-descriptions {
+  margin-top: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.user-descriptions .ant-descriptions-item-label {
+  background: var(--bg-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.user-stats {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background: var(--bg-secondary);
+  border-radius: var(--liquid-border-radius);
+}
+
+.user-stats h4 {
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--text-primary);
+}
+
+.stat-item {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-item .ant-statistic-title {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.stat-item .ant-statistic-content {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ===================================
+   编辑模态框
+   ================================== */
+
+.edit-user-modal .ant-modal-body {
+  padding: var(--spacing-xl);
+}
+
+.edit-user-modal .ant-form-item-label > label {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.edit-user-modal .ant-input,
+.edit-user-modal .ant-select-selector,
+.edit-user-modal .ant-input-textarea {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* ===================================
+   响应式设计
+   ================================== */
+
+@media (max-width: 1024px) {
+  .user-management-page {
+    padding: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .management-main {
+    padding: var(--spacing-lg);
+  }
+
+  .user-table {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .user-management-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .management-header {
+    padding: var(--spacing-lg);
+  }
+
+  .management-main {
+    padding: var(--spacing-md);
+  }
+
+  .filter-section,
+  .action-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-section .ant-space,
+  .action-section .ant-space {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .filter-section .ant-space-item,
+  .action-section .ant-space-item {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100% !important;
+  }
+
+  .filter-section .ant-select,
+  .action-section .ant-btn {
+    width: 100%;
+  }
+
+  .user-detail-drawer {
+    width: 100% !important;
+  }
+
+  .user-stats .ant-row {
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-xl);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stat-item {
+    padding: var(--spacing-md);
+  }
+
+  .user-profile {
+    padding: var(--spacing-lg);
+  }
+
+  .user-stats {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ===================================
+   性能优化
+   ================================== */
+
+.stat-item,
+.user-table .ant-table-tbody > tr {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .management-header,
+  .management-main,
+  .user-profile,
+  .user-stats,
+  .stat-item {
+    border: 2px solid var(--border-strong);
+  }
+
+  .user-table .ant-table-thead > tr > th {
+    border-bottom: 3px solid var(--border-strong);
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .filter-section,
+  .action-section,
+  .user-table .ant-table-column-has-actions {
+    display: none;
+  }
+
+  .management-main {
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+  }
+}

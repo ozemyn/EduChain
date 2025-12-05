@@ -1,2 +1,9 @@
-export { default as Community } from './Community';
+/* ===================================
+   社区页面导出文件 - Community Pages Export
+   ===================================
+   
+   统一导出所有社区相关页面组件
+   
+   ================================== */
 
+export { default as Community } from './Community';

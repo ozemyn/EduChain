@@ -10,11 +10,11 @@ import router from './router';
 import zhCN from 'antd/locale/zh_CN';
 import './App.css';
 import '@/styles/globals.css';
-import '@/styles/theme.css';
+import '@/styles/theme-variables.css';
+import '@/styles/theme-antd.css';
 import '@/styles/animations.css';
 import '@/styles/glass-effects.css';
 import '@/styles/performance.css';
-import '@/styles/dark-mode-fixes.css';
 
 const App: React.FC = () => {
   return (

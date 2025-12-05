@@ -156,7 +156,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
       case 'FOLLOW':
         return <UserAddOutlined style={{ color: 'var(--accent-success)' }} />;
       case 'SYSTEM':
-        return <NotificationOutlined style={{ color: 'var(--accent-warning)' }} />;
+        return (
+          <NotificationOutlined style={{ color: 'var(--accent-warning)' }} />
+        );
       default:
         return <BellOutlined />;
     }
@@ -177,7 +179,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     <List.Item
       key={notification.id}
       style={{
-        backgroundColor: notification.isRead ? 'transparent' : 'var(--success-bg)',
+        backgroundColor: notification.isRead
+          ? 'transparent'
+          : 'var(--success-bg)',
         padding: '16px',
         borderRadius: '8px',
         marginBottom: '8px',

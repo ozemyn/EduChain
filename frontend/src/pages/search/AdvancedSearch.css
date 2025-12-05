@@ -1,0 +1,389 @@
+/* ===================================
+   高级搜索页面样式 - Advanced Search Page Styles
+   ===================================
+   
+   使用全局样式系统
+   完整的响应式设计
+   
+   ================================== */
+
+/* ===================================
+   1. 页面容器
+   ================================== */
+
+.advanced-search-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+/* ===================================
+   2. 页面标题
+   ================================== */
+
+.advanced-search-header {
+  padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+  text-align: center;
+  position: relative;
+}
+
+.header-content {
+  max-width: 800px;
+}
+
+.header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.header-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.01em;
+}
+
+.header-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===================================
+   3. 搜索表单
+   ================================== */
+
+.advanced-search-main {
+  padding: 0 0 var(--spacing-3xl);
+}
+
+.search-form-container {
+  max-width: 1000px;
+}
+
+.search-form-card {
+  padding: var(--spacing-3xl);
+  border-radius: var(--liquid-border-radius-xl);
+}
+
+.advanced-search-form {
+  width: 100%;
+}
+
+/* 表单网格 */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg) var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.form-item-wrapper {
+  min-width: 0;
+}
+
+.form-item-full {
+  grid-column: 1 / -1;
+}
+
+/* 表单项样式 */
+.advanced-search-form .ant-form-item-label > label {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+}
+
+.advanced-search-form .ant-form-item-label > label::after {
+  display: none;
+}
+
+.advanced-search-form .ant-input,
+.advanced-search-form .ant-input-textarea,
+.advanced-search-form .ant-select-selector,
+.advanced-search-form .ant-picker {
+  border-radius: var(--radius-md) !important;
+  border: 2px solid var(--border-color) !important;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.advanced-search-form .ant-input:hover,
+.advanced-search-form .ant-input-textarea:hover,
+.advanced-search-form .ant-select-selector:hover,
+.advanced-search-form .ant-picker:hover {
+  border-color: var(--primary-600) !important;
+}
+
+.advanced-search-form .ant-input:focus,
+.advanced-search-form .ant-input-textarea:focus,
+.advanced-search-form .ant-select-focused .ant-select-selector,
+.advanced-search-form .ant-picker-focused {
+  border-color: var(--primary-600) !important;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1) !important;
+}
+
+/* 深色模式表单 */
+[data-theme='dark'] .advanced-search-form .ant-input:focus,
+[data-theme='dark'] .advanced-search-form .ant-input-textarea:focus,
+[data-theme='dark']
+  .advanced-search-form
+  .ant-select-focused
+  .ant-select-selector,
+[data-theme='dark'] .advanced-search-form .ant-picker-focused {
+  border-color: var(--text-primary) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ===================================
+   4. 标签选择
+   ================================== */
+
+.tag-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border-color);
+}
+
+.tag-item {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast) var(--ease-ios);
+  user-select: none;
+}
+
+.tag-item:hover {
+  transform: scale(1.05);
+}
+
+.tag-item:active {
+  transform: scale(0.95);
+}
+
+/* 已选择的标签 */
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+}
+
+.selected-tags-label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.selected-tag {
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+
+/* ===================================
+   5. 操作按钮
+   ================================== */
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--spacing-xl);
+  border-top: 2px solid var(--border-color);
+}
+
+.form-actions .ant-btn {
+  min-width: 160px;
+  height: 48px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--liquid-border-radius);
+}
+
+/* ===================================
+   6. 响应式设计
+   ================================== */
+
+/* 平板设备 (768px - 1024px) */
+@media (max-width: 1024px) {
+  .search-form-card {
+    padding: var(--spacing-2xl);
+  }
+
+  .form-grid {
+    gap: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .advanced-search-header {
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
+  }
+
+  .header-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .header-description {
+    font-size: var(--font-size-base);
+  }
+
+  .search-form-card {
+    padding: var(--spacing-xl);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .form-item-full {
+    grid-column: 1;
+  }
+
+  .tag-container {
+    padding: var(--spacing-sm);
+  }
+
+  .selected-tags {
+    padding: var(--spacing-sm);
+  }
+
+  .form-actions {
+    padding-top: var(--spacing-lg);
+  }
+
+  .form-actions .ant-space {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-actions .ant-btn {
+    width: 100%;
+  }
+}
+
+/* 小屏手机 (< 480px) */
+@media (max-width: 480px) {
+  .advanced-search-header {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .header-icon {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .header-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .header-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .search-form-card {
+    padding: var(--spacing-lg);
+  }
+
+  .form-grid {
+    gap: var(--spacing-sm);
+  }
+
+  .tag-item {
+    font-size: var(--font-size-xs);
+    padding: 4px var(--spacing-sm);
+  }
+
+  .selected-tag {
+    font-size: var(--font-size-xs);
+  }
+
+  .form-actions .ant-btn {
+    height: 44px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ===================================
+   7. 性能优化
+   ================================== */
+
+/* GPU 加速 */
+.search-form-card,
+.tag-item,
+.form-actions .ant-btn {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .advanced-search-page,
+  .advanced-search-header,
+  .search-form-card,
+  .tag-item {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .tag-item:hover,
+  .tag-item:active {
+    transform: none;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .search-form-card,
+  .tag-container,
+  .selected-tags {
+    border: 2px solid var(--border-strong);
+  }
+
+  .advanced-search-form .ant-input,
+  .advanced-search-form .ant-input-textarea,
+  .advanced-search-form .ant-select-selector,
+  .advanced-search-form .ant-picker {
+    border: 2px solid var(--border-strong) !important;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .advanced-search-header {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .form-actions {
+    display: none;
+  }
+
+  .search-form-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ===================================
+   完成 - AdvancedSearch.css
+   ================================== */

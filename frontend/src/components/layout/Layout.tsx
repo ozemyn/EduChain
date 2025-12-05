@@ -3,10 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { Layout as AntLayout } from 'antd';
 import Header from './Header';
 import Footer from './Footer';
-import '@/styles/globals.css';
-import '@/styles/theme.css';
-import '@/styles/animations.css';
-import '@/styles/glass-effects.css';
 
 const { Content } = AntLayout;
 

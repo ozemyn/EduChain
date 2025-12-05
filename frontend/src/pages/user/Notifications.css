@@ -1,0 +1,82 @@
+/* ===================================
+   通知页面样式 - Notifications Page Styles
+   ===================================
+   
+   使用全局样式系统
+   完整的响应式设计
+   
+   ================================== */
+
+/* 页面容器 */
+.notifications-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-2xl) 0;
+}
+
+.notifications-content {
+  max-width: 900px;
+}
+
+/* 页面标题 */
+.notifications-header {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.notifications-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.01em;
+}
+
+.notifications-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 通知列表 */
+.notifications-list-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.notifications-list-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+  min-height: 500px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .notifications-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .notifications-header {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .notifications-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .notifications-description {
+    font-size: var(--font-size-base);
+  }
+
+  .notifications-list-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  .notifications-page,
+  .notifications-header,
+  .notifications-list-section {
+    animation: none !important;
+  }
+}

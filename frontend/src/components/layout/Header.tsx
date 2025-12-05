@@ -1,6 +1,20 @@
-import React from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown, Input, Space } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+/* ===================================
+   现代化导航栏组件 - Modern Header Component
+   ===================================
+   
+   特性：
+   - 使用全局样式系统
+   - 完整的响应式设计
+   - 玻璃态效果
+   - 流畅的动画
+   - 移动端抽屉菜单
+   - 滚动时动态效果
+   
+   ================================== */
+
+import React, { useState, useEffect } from 'react';
+import { Layout, Button, Avatar, Dropdown, Input, Drawer, Badge } from 'antd';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   HomeOutlined,
   BookOutlined,
@@ -11,32 +25,52 @@ import {
   PlusOutlined,
   ThunderboltOutlined,
   TeamOutlined,
+  MenuOutlined,
+  BellOutlined,
+  CloseOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@contexts/AuthContext';
 import { ThemeToggle } from '@components/common';
-import '@/styles/globals.css';
-import '@/styles/theme.css';
-import '@/styles/animations.css';
-import '@/styles/glass-effects.css';
+import './Header.css';
 
 const { Header: AntHeader } = Layout;
 const { Search } = Input;
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
 
+  // 状态管理
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+
+  // 监听滚动，添加导航栏效果
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 搜索处理
   const handleSearch = (value: string) => {
     if (value.trim()) {
       navigate(`/search?q=${encodeURIComponent(value.trim())}`);
+      setMobileMenuOpen(false);
     }
   };
 
+  // 登出处理
   const handleLogout = () => {
     logout();
     navigate('/');
+    setMobileMenuOpen(false);
   };
 
+  // 用户下拉菜单
   const userMenuItems = [
     {
       key: 'profile',
@@ -54,340 +88,235 @@ const Header: React.FC = () => {
     },
   ];
 
-  const menuItems = [
+  // 导航链接配置
+  const navLinks = [
     {
       key: 'home',
       icon: <HomeOutlined />,
-      label: <Link to="/">首页</Link>,
+      label: '首页',
+      path: '/',
     },
     {
       key: 'knowledge',
       icon: <BookOutlined />,
-      label: <Link to="/knowledge">知识库</Link>,
+      label: '知识库',
+      path: '/knowledge',
     },
     {
       key: 'search',
       icon: <SearchOutlined />,
-      label: <Link to="/search">搜索</Link>,
+      label: '搜索',
+      path: '/search',
     },
     {
       key: 'recommendations',
       icon: <ThunderboltOutlined />,
-      label: <Link to="/recommendations">推荐</Link>,
+      label: '推荐',
+      path: '/recommendations',
     },
     {
       key: 'community',
       icon: <TeamOutlined />,
-      label: <Link to="/community">社区</Link>,
+      label: '社区',
+      path: '/community',
     },
   ];
 
+  // 判断当前路由是否激活
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
-    <AntHeader className="glass-navbar animate-fade-in-down">
-      <div className="header-container">
-        {/* Logo */}
-        <div className="logo-section">
-          <Link to="/" className="logo-link hover-scale">
-            <span className="logo-text glass-text">EduChain</span>
+    <>
+      {/* 主导航栏 */}
+      <AntHeader
+        className={`modern-navbar glass-navbar optimized-card ${
+          scrolled ? 'scrolled' : ''
+        } ${searchFocused ? 'search-focused' : ''}`}
+      >
+        <div className="navbar-container container">
+          {/* Logo 区域 */}
+          <Link
+            to="/"
+            className="logo-section hover-scale active-press gpu-accelerated"
+          >
+            <div className="logo-icon glass-badge">
+              <BookOutlined />
+            </div>
+            <span className="logo-text gradient-text">EduChain</span>
           </Link>
-        </div>
 
-        {/* 导航菜单 */}
-        <div className="nav-menu">
-          <Menu mode="horizontal" items={menuItems} className="glass-menu" />
-        </div>
+          {/* 桌面端导航链接 */}
+          <nav className="nav-links desktop-only">
+            {navLinks.map(link => (
+              <Link
+                key={link.key}
+                to={link.path}
+                className={`nav-link glass-button hover-lift active-scale ${
+                  isActive(link.path) ? 'active' : ''
+                }`}
+              >
+                <span className="nav-icon">{link.icon}</span>
+                <span className="nav-label">{link.label}</span>
+              </Link>
+            ))}
+          </nav>
 
-        {/* 搜索框 */}
-        <div className="search-section">
-          <Search
-            placeholder="搜索知识内容..."
-            allowClear
-            onSearch={handleSearch}
-            className="glass-search"
-            prefix={<SearchOutlined />}
-          />
-        </div>
+          {/* 搜索框 - 桌面端 */}
+          <div className="search-wrapper desktop-only">
+            <Search
+              placeholder="搜索知识、课程、专家..."
+              allowClear
+              onSearch={handleSearch}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              className="navbar-search glass-medium"
+              prefix={<SearchOutlined />}
+            />
+          </div>
 
-        {/* 用户操作区域 */}
-        <div className="user-actions">
-          <Space size="middle">
-            {/* 主题切换器 */}
-            <ThemeToggle variant="glass" size="middle" />
+          {/* 右侧操作区 */}
+          <div className="navbar-actions">
+            {/* 通知 - 仅登录用户 */}
+            {user && (
+              <Badge count={3} size="small" className="desktop-only">
+                <Button
+                  className="action-button glass-button hover-scale active-scale"
+                  icon={<BellOutlined />}
+                  shape="circle"
+                />
+              </Badge>
+            )}
 
+            {/* 主题切换 */}
+            <div className="desktop-only">
+              <ThemeToggle variant="glass" size="middle" />
+            </div>
+
+            {/* 用户区域 */}
             {user ? (
               <>
                 <Button
-                  className="glass-button hover-lift active-scale"
+                  className="create-button glass-button glass-strong hover-lift active-scale desktop-only"
                   icon={<PlusOutlined />}
                   onClick={() => navigate('/knowledge/create')}
                 >
-                  发布内容
+                  发布
                 </Button>
                 <Dropdown
                   menu={{ items: userMenuItems }}
                   placement="bottomRight"
+                  trigger={['click']}
                 >
-                  <div className="user-profile hover-scale active-press">
+                  <div className="user-profile glass-light hover-scale active-press">
                     <Avatar
                       src={user.avatarUrl}
                       icon={<UserOutlined />}
+                      size="default"
                       className="user-avatar"
                     />
-                    <span className="user-name">
+                    <span className="user-name desktop-only">
                       {user.fullName || user.username}
                     </span>
                   </div>
                 </Dropdown>
               </>
             ) : (
-              <Space size="small">
+              <>
                 <Button
-                  className="glass-button hover-scale active-scale"
+                  className="login-button glass-button hover-scale active-scale desktop-only"
                   onClick={() => navigate('/login')}
                 >
                   登录
                 </Button>
                 <Button
-                  className="glass-button glass-strong hover-lift active-scale"
+                  className="register-button glass-button glass-strong hover-lift active-scale"
                   icon={<LoginOutlined />}
                   onClick={() => navigate('/register')}
                 >
-                  注册
+                  <span className="desktop-only">注册</span>
                 </Button>
-              </Space>
+              </>
             )}
-          </Space>
+
+            {/* 移动端菜单按钮 */}
+            <Button
+              className="mobile-menu-button glass-button hover-scale active-scale mobile-only"
+              icon={<MenuOutlined />}
+              onClick={() => setMobileMenuOpen(true)}
+              shape="circle"
+            />
+          </div>
         </div>
-      </div>
+      </AntHeader>
 
-      <style>{`
-        .glass-navbar {
-          position: sticky;
-          top: 0;
-          z-index: var(--z-sticky);
-          padding: 0;
-          height: auto;
-          min-height: 64px;
-          border-bottom: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
+      {/* 移动端抽屉菜单 */}
+      <Drawer
+        title={
+          <div className="mobile-drawer-header">
+            <span className="logo-text gradient-text">EduChain</span>
+            <ThemeToggle variant="glass" size="small" />
+          </div>
         }
+        placement="right"
+        onClose={() => setMobileMenuOpen(false)}
+        open={mobileMenuOpen}
+        className="mobile-nav-drawer"
+        closeIcon={<CloseOutlined />}
+        width={280}
+      >
+        {/* 移动端搜索 */}
+        <div className="mobile-search">
+          <Search
+            placeholder="搜索..."
+            allowClear
+            onSearch={handleSearch}
+            className="glass-medium"
+            prefix={<SearchOutlined />}
+            size="large"
+          />
+        </div>
 
-        .header-container {
-          display: flex;
-          align-items: center;
-          padding: var(--spacing-sm) var(--spacing-lg);
-          max-width: 1400px;
-          margin: 0 auto;
-          gap: var(--spacing-lg);
-        }
+        {/* 移动端导航链接 */}
+        <nav className="mobile-nav-links">
+          {navLinks.map(link => (
+            <Link
+              key={link.key}
+              to={link.path}
+              className={`mobile-nav-link glass-light hover-lift ${
+                isActive(link.path) ? 'active' : ''
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span className="nav-icon">{link.icon}</span>
+              <span className="nav-label">{link.label}</span>
+              {isActive(link.path) && (
+                <div className="active-indicator animate-scale-in" />
+              )}
+            </Link>
+          ))}
+        </nav>
 
-        .logo-section {
-          flex-shrink: 0;
-        }
-
-        .logo-link {
-          display: inline-block;
-          text-decoration: none;
-          transition: all var(--transition-fast) var(--ease-ios);
-        }
-
-        .logo-text {
-          font-size: 1.5rem;
-          font-weight: 700;
-          background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          filter: drop-shadow(0 2px 4px var(--glass-shadow));
-        }
-
-        .nav-menu {
-          flex: 1;
-          min-width: 0;
-        }
-
-        .glass-menu {
-          background: transparent !important;
-          border: none !important;
-          font-weight: 500;
-        }
-
-        .glass-menu .ant-menu-item {
-          border-radius: var(--radius-md);
-          margin: 0 var(--spacing-xs);
-          transition: all var(--transition-fast) var(--ease-ios);
-        }
-
-        .glass-menu .ant-menu-item:hover {
-          background: var(--glass-bg-light) !important;
-          backdrop-filter: var(--blur-sm);
-          -webkit-backdrop-filter: var(--blur-sm);
-        }
-
-        .glass-menu .ant-menu-item-selected {
-          background: var(--glass-bg-medium) !important;
-          backdrop-filter: var(--blur-md);
-          -webkit-backdrop-filter: var(--blur-md);
-          color: var(--accent-primary) !important;
-        }
-
-        .search-section {
-          flex-shrink: 0;
-        }
-
-        .glass-search {
-          width: 280px;
-          background: var(--glass-bg-light) !important;
-          backdrop-filter: var(--blur-sm) !important;
-          -webkit-backdrop-filter: var(--blur-sm) !important;
-          border: var(--glass-border-width) var(--glass-border-style) var(--glass-border) !important;
-          border-radius: var(--liquid-border-radius) !important;
-          transition: all var(--transition-fast) var(--ease-ios) !important;
-        }
-
-        .glass-search:hover {
-          background: var(--glass-bg-medium) !important;
-          box-shadow: var(--glass-shadow-sm) !important;
-        }
-
-        .glass-search:focus-within {
-          background: var(--glass-bg-medium) !important;
-          box-shadow: var(--glass-shadow-md) !important;
-          border-color: var(--accent-primary) !important;
-        }
-
-        .glass-search .ant-input {
-          background: transparent !important;
-          border: none !important;
-          color: var(--text-primary) !important;
-          font-weight: 500 !important;
-        }
-
-        .glass-search .ant-input::placeholder {
-          color: var(--text-placeholder) !important;
-        }
-
-        .glass-search .ant-input-prefix {
-          color: var(--text-tertiary) !important;
-        }
-
-        .user-actions {
-          flex-shrink: 0;
-        }
-
-        .glass-button {
-          background: var(--glass-bg-light) !important;
-          backdrop-filter: var(--blur-sm) !important;
-          -webkit-backdrop-filter: var(--blur-sm) !important;
-          border: var(--glass-border-width) var(--glass-border-style) var(--glass-border) !important;
-          border-radius: var(--liquid-border-radius) !important;
-          color: var(--text-primary) !important;
-          font-weight: 500 !important;
-          transition: all var(--transition-fast) var(--ease-ios) !important;
-        }
-
-        .glass-button:hover {
-          background: var(--glass-bg-medium) !important;
-          box-shadow: var(--glass-shadow-sm) !important;
-          transform: translateY(-1px) !important;
-        }
-
-        .glass-button.glass-strong {
-          background: var(--glass-bg-medium) !important;
-          backdrop-filter: var(--blur-md) !important;
-          -webkit-backdrop-filter: var(--blur-md) !important;
-        }
-
-        .glass-button.glass-strong:hover {
-          background: var(--glass-bg-strong) !important;
-          box-shadow: var(--glass-shadow-md) !important;
-        }
-
-        .user-profile {
-          display: flex;
-          align-items: center;
-          gap: var(--spacing-sm);
-          padding: var(--spacing-sm) var(--spacing-md);
-          border-radius: var(--liquid-border-radius);
-          cursor: pointer;
-          transition: all var(--transition-fast) var(--ease-ios);
-          background: var(--glass-bg-light);
-          backdrop-filter: var(--blur-sm);
-          -webkit-backdrop-filter: var(--blur-sm);
-          border: var(--glass-border-width) var(--glass-border-style) var(--glass-border);
-        }
-
-        .user-profile:hover {
-          background: var(--glass-bg-medium);
-          box-shadow: var(--glass-shadow-sm);
-        }
-
-        .user-avatar {
-          border: 2px solid var(--glass-border);
-          transition: all var(--transition-fast) var(--ease-ios);
-        }
-
-        .user-name {
-          font-weight: 500;
-          color: var(--text-primary);
-          white-space: nowrap;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 1200px) {
-          .glass-search {
-            width: 240px;
-          }
-        }
-
-        @media (max-width: 992px) {
-          .header-container {
-            gap: var(--spacing-md);
-          }
-          
-          .glass-search {
-            width: 200px;
-          }
-          
-          .user-name {
-            display: none;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .header-container {
-            padding: var(--spacing-xs) var(--spacing-md);
-            gap: var(--spacing-sm);
-          }
-          
-          .nav-menu {
-            display: none;
-          }
-          
-          .search-section {
-            flex: 1;
-          }
-          
-          .glass-search {
-            width: 100%;
-          }
-          
-          .glass-button span:not(.anticon) {
-            display: none;
-          }
-        }
-
-        /* 性能优化 */
-        @media (prefers-reduced-motion: reduce) {
-          .glass-navbar,
-          .logo-link,
-          .glass-button,
-          .user-profile {
-            transition: none;
-            animation: none;
-          }
-        }
-      `}</style>
-    </AntHeader>
+        {/* 移动端用户操作 */}
+        {user && (
+          <div className="mobile-user-actions">
+            <Button
+              className="glass-button glass-strong hover-lift"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                navigate('/knowledge/create');
+                setMobileMenuOpen(false);
+              }}
+              block
+              size="large"
+            >
+              发布内容
+            </Button>
+          </div>
+        )}
+      </Drawer>
+    </>
   );
 };
 

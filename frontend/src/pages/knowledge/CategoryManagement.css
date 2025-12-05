@@ -1,0 +1,570 @@
+/* ===================================
+   分类管理页面样式 - Category Management Page Styles
+   ===================================
+   
+   使用全局样式系统
+   
+   ================================== */
+
+/* ===================================
+   页面容器 - Page Container
+   ================================== */
+
+.category-management-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-lg) 0;
+}
+
+/* 权限拒绝页面 */
+.category-access-denied {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+
+.access-denied-card {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  border-radius: var(--liquid-border-radius-lg);
+  max-width: 400px;
+}
+
+.access-denied-icon {
+  font-size: 4rem;
+  color: var(--text-quaternary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.access-denied-title {
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.access-denied-description {
+  display: block;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ===================================
+   背景装饰 - Background Decoration
+   ================================== */
+
+.category-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.category-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: var(--blur-2xl);
+  opacity: 0.5;
+  animation: float 10s ease-in-out infinite;
+}
+
+.category-blob-1 {
+  top: 10%;
+  right: 5%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, var(--primary-200) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.category-blob-2 {
+  top: 50%;
+  left: 5%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(
+    circle,
+    var(--accent-success) 0%,
+    transparent 70%
+  );
+  animation-delay: 3s;
+}
+
+.category-blob-3 {
+  bottom: 20%;
+  right: 30%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle,
+    var(--accent-warning) 0%,
+    transparent 70%
+  );
+  animation-delay: 6s;
+}
+
+/* ===================================
+   内容容器 - Content Container
+   ================================== */
+
+.category-content {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* ===================================
+   面包屑导航 - Breadcrumb
+   ================================== */
+
+.category-breadcrumb {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--liquid-border-radius);
+  margin-bottom: var(--spacing-xl);
+}
+
+.breadcrumb-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast) var(--ease-ios);
+}
+
+.breadcrumb-link:hover {
+  color: var(--accent-primary);
+}
+
+.breadcrumb-current {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ===================================
+   页面头部 - Page Header
+   ================================== */
+
+.category-header {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.title-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: linear-gradient(
+    135deg,
+    var(--primary-600),
+    var(--accent-secondary)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* ===================================
+   主要内容区域 - Main Content
+   ================================== */
+
+.category-main-content {
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* 卡片通用样式 */
+.category-tree-card,
+.stats-card,
+.popular-card,
+.detail-card,
+.tag-cloud-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius);
+}
+
+.card-header {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* ===================================
+   统计卡片 - Stats Card
+   ================================== */
+
+.stats-grid {
+  margin: 0;
+}
+
+.stat-item {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+/* ===================================
+   热门分类卡片 - Popular Card
+   ================================== */
+
+.popular-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.popular-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.popular-rank {
+  flex-shrink: 0;
+}
+
+.rank-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--primary-600)
+  );
+  color: var(--text-inverse);
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.popular-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-name {
+  color: var(--text-primary);
+}
+
+.category-count {
+  font-size: 0.875rem;
+}
+
+/* ===================================
+   分类详情卡片 - Detail Card
+   ================================== */
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.detail-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.detail-value {
+  color: var(--text-primary);
+}
+
+.detail-actions {
+  margin-top: var(--spacing-md);
+}
+
+/* ===================================
+   标签云区域 - Tag Cloud Section
+   ================================== */
+
+.tag-cloud-section {
+  margin-top: var(--spacing-2xl);
+}
+
+/* ===================================
+   响应式设计 - Responsive Design
+   ================================== */
+
+/* 平板横屏 (1024px - 1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .page-title {
+    font-size: 2.25rem;
+  }
+}
+
+/* 平板竖屏 (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .category-header {
+    padding: var(--spacing-xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .title-section {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    justify-content: center;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .category-tree-card,
+  .stats-card,
+  .popular-card,
+  .detail-card,
+  .tag-cloud-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 手机横屏 (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .category-header {
+    padding: var(--spacing-lg);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    justify-content: center;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .stats-grid .ant-col {
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+/* 手机竖屏 (< 640px) */
+@media (max-width: 639px) {
+  .category-management-page {
+    padding: var(--spacing-md) 0;
+  }
+
+  .category-content {
+    padding: 0 var(--spacing-md);
+  }
+
+  .category-breadcrumb {
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .category-header {
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-md);
+  }
+
+  .title-section {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    justify-content: center;
+  }
+
+  .page-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions button {
+    width: 100%;
+  }
+
+  .category-tree-card,
+  .stats-card,
+  .popular-card,
+  .detail-card,
+  .tag-cloud-card {
+    padding: var(--spacing-md);
+  }
+
+  .stats-grid .ant-col {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .popular-item {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+
+  .popular-info {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  /* 隐藏背景装饰 */
+  .category-blob {
+    display: none;
+  }
+}
+
+/* 超小屏幕 (< 375px) */
+@media (max-width: 374px) {
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .category-header {
+    padding: var(--spacing-md);
+  }
+
+  .category-tree-card,
+  .stats-card,
+  .popular-card,
+  .detail-card,
+  .tag-cloud-card {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* ===================================
+   触摸设备优化 - Touch Device Optimization
+   ================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  .header-actions button {
+    min-height: 44px;
+  }
+}
+
+/* ===================================
+   减少动画偏好 - Reduced Motion
+   ================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .category-blob {
+    animation: none;
+  }
+}
+
+/* ===================================
+   打印样式 - Print Styles
+   ================================== */
+
+@media print {
+  .category-background,
+  .category-breadcrumb,
+  .header-actions,
+  .card-header button {
+    display: none !important;
+  }
+
+  .category-tree-card,
+  .stats-card,
+  .popular-card,
+  .detail-card,
+  .tag-cloud-card {
+    background: white;
+    border: 1px solid #000;
+    box-shadow: none;
+  }
+}
+
+/* ===================================
+   深色模式特定样式 - Dark Mode Specific
+   ================================== */
+
+[data-theme='dark'] .category-blob {
+  opacity: 0.3;
+}
+
+[data-theme='dark'] .category-blob-1 {
+  background: radial-gradient(circle, #333333 0%, transparent 70%);
+}
+
+[data-theme='dark'] .category-blob-2 {
+  background: radial-gradient(circle, #404040 0%, transparent 70%);
+}
+
+[data-theme='dark'] .category-blob-3 {
+  background: radial-gradient(circle, #525252 0%, transparent 70%);
+}

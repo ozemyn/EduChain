@@ -54,7 +54,11 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   const convertToTreeData = (categories: Category[]): TreeNode[] => {
     return categories.map(category => {
       // 适配后端返回的字段名（knowledgeItemCount 或 knowledgeCount）
-      const count = (category as any).knowledgeItemCount ?? category.knowledgeCount;
+      const categoryWithCount = category as Category & {
+        knowledgeItemCount?: number;
+      };
+      const count =
+        categoryWithCount.knowledgeItemCount ?? category.knowledgeCount;
       return {
         title:
           showCount && count !== undefined

@@ -1,0 +1,824 @@
+/* ===================================
+   个人资料页面样式 - Profile Page Styles
+   ===================================
+   
+   使用全局样式系统
+   完整的响应式设计
+   
+   ================================== */
+
+/* ===================================
+   1. 页面容器
+   ================================== */
+
+.profile-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-2xl) 0;
+}
+
+.profile-content {
+  max-width: 1400px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 背景装饰 */
+.profile-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.profile-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: var(--blur-xl);
+  animation: float 8s ease-in-out infinite;
+}
+
+.profile-blob-1 {
+  top: 10%;
+  left: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--primary-200) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.profile-blob-2 {
+  top: 60%;
+  right: 10%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, var(--primary-100) 0%, transparent 70%);
+  animation-delay: 2s;
+}
+
+.profile-blob-3 {
+  bottom: 20%;
+  left: 20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, var(--secondary-100) 0%, transparent 70%);
+  animation-delay: 4s;
+}
+
+/* 深色模式背景 */
+[data-theme='dark'] .profile-blob-1,
+[data-theme='dark'] .profile-blob-2,
+[data-theme='dark'] .profile-blob-3 {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.02) 0%,
+    transparent 70%
+  );
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* 加载状态 */
+.profile-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+
+.loading-card {
+  padding: var(--spacing-3xl);
+  text-align: center;
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-600);
+  border-radius: 50%;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.loading-card p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ===================================
+   2. 个人资料头部
+   ================================== */
+
+.profile-header {
+  margin-bottom: var(--spacing-2xl);
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-xl);
+}
+
+.profile-header-grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing-2xl);
+  align-items: center;
+}
+
+/* 头像区域 */
+.profile-avatar-section {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition-base) var(--ease-spring-ios);
+}
+
+.profile-avatar {
+  border: 4px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.profile-avatar-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 16px;
+  opacity: 0;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.profile-avatar-wrapper:hover .profile-avatar-overlay {
+  opacity: 1;
+}
+
+/* 用户信息 */
+.profile-user-info {
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: 2.5rem;
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm);
+  letter-spacing: -0.01em;
+}
+
+.profile-username {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-md);
+}
+
+.profile-badges {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.admin-badge {
+  background: linear-gradient(135deg, var(--accent-warning), #d97706);
+  color: var(--text-inverse);
+}
+
+/* 深色模式徽章 */
+[data-theme='dark'] .admin-badge {
+  background: linear-gradient(135deg, #737373, #404040);
+  color: var(--text-primary);
+}
+
+.profile-bio {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 var(--spacing-lg);
+  max-width: 500px;
+}
+
+.profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.profile-meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.profile-meta-item svg {
+  color: var(--primary-600);
+}
+
+/* 深色模式图标 */
+[data-theme='dark'] .profile-meta-item svg {
+  color: var(--text-primary);
+}
+
+/* 快速操作 */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* ===================================
+   3. 统计数据卡片
+   ================================== */
+
+.profile-stats-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.stat-card {
+  padding: var(--spacing-xl);
+  text-align: center;
+  border-radius: var(--liquid-border-radius-lg);
+  transition: all var(--transition-base) var(--ease-spring-ios);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  font-size: 1.5rem;
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon-primary {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+}
+
+.stat-icon-success {
+  background: linear-gradient(135deg, var(--accent-success), #059669);
+}
+
+.stat-icon-warning {
+  background: linear-gradient(135deg, var(--accent-warning), #d97706);
+}
+
+.stat-icon-info {
+  background: linear-gradient(135deg, var(--accent-info), #2563eb);
+}
+
+/* 深色模式统计图标 */
+[data-theme='dark'] .stat-icon {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .stat-icon-primary {
+  background: linear-gradient(135deg, #404040, #262626);
+}
+
+[data-theme='dark'] .stat-icon-success {
+  background: linear-gradient(135deg, #525252, #333333);
+}
+
+[data-theme='dark'] .stat-icon-warning {
+  background: linear-gradient(135deg, #737373, #404040);
+}
+
+[data-theme='dark'] .stat-icon-info {
+  background: linear-gradient(135deg, #a3a3a3, #525252);
+}
+
+.stat-card .ant-statistic-title {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-card .ant-statistic-content {
+  font-size: var(--font-size-2xl);
+}
+
+/* ===================================
+   4. 标签页导航
+   ================================== */
+
+.profile-tabs-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.profile-tabs {
+  display: flex;
+  padding: var(--spacing-sm);
+  border-radius: var(--liquid-border-radius-lg);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.profile-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-glass-light);
+}
+
+.profile-tab.active {
+  color: var(--primary-600);
+  background: var(--bg-glass-medium);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 深色模式标签 */
+[data-theme='dark'] .profile-tab.active {
+  color: var(--text-primary);
+}
+
+/* ===================================
+   5. 内容区域
+   ================================== */
+
+.profile-content-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xl);
+}
+
+/* 概览页面 */
+.profile-overview {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+}
+
+.overview-item h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg);
+}
+
+.progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.progress-item span {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.activity-item svg {
+  color: var(--primary-600);
+  font-size: 1.125rem;
+}
+
+/* 深色模式活动图标 */
+[data-theme='dark'] .activity-item svg {
+  color: var(--text-primary);
+}
+
+.activity-item span {
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.activity-item time {
+  color: var(--text-quaternary);
+  font-size: var(--font-size-xs);
+}
+
+/* ===================================
+   6. 统计详情
+   ================================== */
+
+.profile-stats-detail {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.stats-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+}
+
+.stats-category h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg);
+}
+
+.stats-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.stats-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.stats-item svg {
+  color: var(--primary-600);
+  font-size: 1.125rem;
+}
+
+/* 深色模式统计图标 */
+[data-theme='dark'] .stats-item svg {
+  color: var(--text-primary);
+}
+
+.stats-item span {
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.stats-item strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+}
+
+/* ===================================
+   7. 设置页面
+   ================================== */
+
+.profile-settings {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.settings-overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.settings-info h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.settings-info p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+/* 表单样式 */
+.profile-form {
+  max-width: 600px;
+}
+
+.profile-form .ant-form-item-label > label {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.profile-form .ant-input,
+.profile-form .ant-input-password,
+.profile-form .ant-select-selector,
+.profile-form .ant-input-textarea {
+  border-radius: var(--radius-md) !important;
+  border: 2px solid var(--border-color) !important;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.profile-form .ant-input:hover,
+.profile-form .ant-input-password:hover,
+.profile-form .ant-select-selector:hover,
+.profile-form .ant-input-textarea:hover {
+  border-color: var(--primary-600) !important;
+}
+
+.profile-form .ant-input:focus,
+.profile-form .ant-input-password:focus,
+.profile-form .ant-select-focused .ant-select-selector,
+.profile-form .ant-input-textarea:focus {
+  border-color: var(--primary-600) !important;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1) !important;
+}
+
+/* 深色模式表单 */
+[data-theme='dark'] .profile-form .ant-input:focus,
+[data-theme='dark'] .profile-form .ant-input-password:focus,
+[data-theme='dark'] .profile-form .ant-select-focused .ant-select-selector,
+[data-theme='dark'] .profile-form .ant-input-textarea:focus {
+  border-color: var(--text-primary) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ===================================
+   8. 模态框样式
+   ================================== */
+
+.profile-modal .ant-modal-content {
+  background: var(--bg-glass-strong) !important;
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--liquid-border-radius-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
+}
+
+.profile-modal .ant-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.profile-modal .ant-modal-title {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+}
+
+.password-form {
+  margin-top: var(--spacing-lg);
+}
+
+.modal-actions {
+  margin-top: var(--spacing-xl);
+  text-align: right;
+}
+
+/* ===================================
+   9. 响应式设计
+   ================================== */
+
+/* 平板设备 (768px - 1024px) */
+@media (max-width: 1024px) {
+  .profile-header-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: var(--spacing-xl);
+  }
+
+  .profile-avatar-section {
+    justify-content: center;
+  }
+
+  .profile-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .overview-grid,
+  .stats-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .profile-header {
+    padding: var(--spacing-xl);
+  }
+
+  .profile-name {
+    font-size: 2rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .profile-tabs {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .profile-tab {
+    justify-content: flex-start;
+  }
+
+  .profile-overview,
+  .profile-stats-detail,
+  .profile-settings {
+    padding: var(--spacing-xl);
+  }
+
+  .settings-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .settings-item .glass-button {
+    width: 100%;
+  }
+}
+
+/* 小屏手机 (< 640px) */
+@media (max-width: 640px) {
+  .profile-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .profile-actions .glass-button {
+    width: 100%;
+  }
+
+  .profile-meta {
+    align-items: flex-start;
+  }
+
+  .modal-actions {
+    text-align: center;
+  }
+
+  .modal-actions .ant-space {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-actions .glass-button {
+    flex: 1;
+  }
+}
+
+/* ===================================
+   10. 性能优化
+   ================================== */
+
+/* GPU 加速 */
+.profile-avatar-wrapper,
+.stat-card,
+.profile-tab,
+.activity-item,
+.stats-item,
+.settings-item {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .profile-page,
+  .profile-header,
+  .profile-stats-section,
+  .profile-tabs-section,
+  .profile-content-section,
+  .stat-card,
+  .profile-tab,
+  .profile-avatar-wrapper,
+  .profile-blob,
+  .activity-item,
+  .stats-item,
+  .settings-item {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .profile-header,
+  .stat-card,
+  .profile-tabs,
+  .profile-overview,
+  .profile-stats-detail,
+  .profile-settings,
+  .activity-item,
+  .stats-item,
+  .settings-item {
+    border: 2px solid var(--border-strong);
+  }
+
+  .stat-icon {
+    border: 2px solid currentColor;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .profile-background {
+    display: none;
+  }
+
+  .profile-actions,
+  .profile-tabs {
+    display: none;
+  }
+
+  .profile-header,
+  .stat-card,
+  .profile-overview,
+  .profile-stats-detail {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ===================================
+   完成 - Profile.css
+   ================================== */

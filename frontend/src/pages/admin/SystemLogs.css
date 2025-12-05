@@ -1,0 +1,644 @@
+/* ===================================
+   系统日志页面样式 - System Logs Page Styles
+   ===================================
+   
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
+.system-logs-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-xl);
+}
+
+.logs-content {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   页面头部
+   ================================== */
+
+.logs-header {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.title-section {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-title-icon {
+  font-size: 2.5rem;
+  color: var(--primary-600);
+}
+
+/* 深色模式标题图标 */
+[data-theme='dark'] .page-title-icon {
+  color: var(--text-primary);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+/* ===================================
+   日志筛选区域
+   ================================== */
+
+.logs-filters {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.filters-row {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.filter-input,
+.filter-select,
+.filter-date-picker {
+  width: 100%;
+  border-radius: var(--radius-lg) !important;
+}
+
+.filter-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.filter-button {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* ===================================
+   日志统计
+   ================================== */
+
+.logs-stats {
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+  padding: var(--spacing-lg);
+  border-radius: var(--liquid-border-radius);
+  text-align: center;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--spacing-sm);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.stat-icon.stat-total {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.stat-icon.stat-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.stat-icon.stat-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.stat-icon.stat-info {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+/* 深色模式统计图标 */
+[data-theme='dark'] .stat-icon {
+  background: linear-gradient(135deg, #404040, #262626) !important;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+/* ===================================
+   日志列表
+   ================================== */
+
+.logs-list {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.logs-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logs-list-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.logs-list-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* 日志项 */
+.log-item {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid transparent;
+  transition: all var(--transition-base) var(--ease-ios);
+  margin-bottom: var(--spacing-sm);
+}
+
+.log-item:hover {
+  background: var(--bg-secondary);
+  transform: translateX(4px);
+}
+
+.log-item.log-error {
+  border-left-color: var(--accent-error);
+  background: var(--error-bg);
+}
+
+.log-item.log-warning {
+  border-left-color: var(--accent-warning);
+  background: var(--warning-bg);
+}
+
+.log-item.log-info {
+  border-left-color: var(--accent-info);
+  background: var(--info-bg);
+}
+
+.log-item.log-debug {
+  border-left-color: var(--border-color);
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-md);
+}
+
+.log-level-badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.log-level-badge.level-error {
+  background: var(--accent-error);
+  color: white;
+}
+
+.log-level-badge.level-warning {
+  background: var(--accent-warning);
+  color: white;
+}
+
+.log-level-badge.level-info {
+  background: var(--accent-info);
+  color: white;
+}
+
+.log-level-badge.level-debug {
+  background: var(--secondary-300);
+  color: var(--secondary-700);
+}
+
+.log-time {
+  font-size: var(--font-size-xs);
+  color: var(--text-quaternary);
+  white-space: nowrap;
+}
+
+.log-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-mono);
+}
+
+.log-details {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.log-detail-item {
+  display: flex;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.log-detail-label {
+  font-weight: var(--font-weight-medium);
+}
+
+.log-detail-value {
+  font-family: var(--font-mono);
+}
+
+.log-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.log-action-button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+/* ===================================
+   日志详情抽屉
+   ================================== */
+
+.log-detail-drawer .ant-drawer-body {
+  padding: var(--spacing-xl);
+  background: var(--bg-primary);
+}
+
+.log-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.log-detail-section {
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+}
+
+.log-detail-section-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.log-detail-code {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--code-text);
+  overflow-x: auto;
+  line-height: var(--line-height-relaxed);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.log-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.log-detail-table tr {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.log-detail-table tr:last-child {
+  border-bottom: none;
+}
+
+.log-detail-table td {
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-sm);
+}
+
+.log-detail-table td:first-child {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  width: 120px;
+}
+
+.log-detail-table td:last-child {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+/* ===================================
+   空状态
+   ================================== */
+
+.logs-empty {
+  text-align: center;
+  padding: var(--spacing-4xl) var(--spacing-xl);
+}
+
+.logs-empty-icon {
+  font-size: 4rem;
+  color: var(--text-quaternary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.logs-empty-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.logs-empty-description {
+  font-size: var(--font-size-base);
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ===================================
+   分页
+   ================================== */
+
+.logs-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ===================================
+   实时日志流
+   ================================== */
+
+.realtime-logs {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.realtime-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.realtime-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.realtime-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-success);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.realtime-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.realtime-console {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  height: 400px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.realtime-log-line {
+  padding: var(--spacing-xs) 0;
+  color: var(--code-text);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.realtime-log-line:hover {
+  background: var(--hover-overlay);
+}
+
+/* ===================================
+   响应式设计
+   ================================== */
+
+@media (max-width: 1024px) {
+  .system-logs-page {
+    padding: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filters-row {
+    flex-direction: column;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+
+  .log-details {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .system-logs-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .logs-header {
+    padding: var(--spacing-lg);
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .log-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .log-time {
+    order: -1;
+  }
+
+  .log-detail-drawer {
+    width: 100% !important;
+  }
+
+  .realtime-console {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-xl);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .log-message {
+    font-size: var(--font-size-xs);
+  }
+
+  .realtime-console {
+    height: 250px;
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* ===================================
+   性能优化
+   ================================== */
+
+.stat-card,
+.log-item {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .realtime-indicator {
+    animation: none;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .logs-header,
+  .logs-filters,
+  .stat-card,
+  .logs-list,
+  .realtime-logs {
+    border: 2px solid var(--border-strong);
+  }
+
+  .log-item {
+    border: 1px solid var(--border-strong);
+  }
+}
+
+/* ===================================
+   完成 - SystemLogs.css
+   ================================== */

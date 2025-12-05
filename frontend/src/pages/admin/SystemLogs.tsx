@@ -1,658 +1,597 @@
-import React, { useState, useEffect } from 'react';
+/* ===================================
+   系统日志页面 - System Logs Page
+   ===================================
+   
+   特性：
+   - 使用全局样式系统
+   - 完整的响应式设计
+   - 日志筛选和搜索
+   - 实时日志流
+   - 现代化的 iOS 风格
+   
+   ================================== */
+
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Card,
-  Table,
-  Button,
-  Space,
+  Row,
+  Col,
   Input,
   Select,
-  Tag,
   DatePicker,
-  Typography,
-  Modal,
+  Button,
+  Space,
+  Tag,
   Drawer,
-  Descriptions,
-  Alert,
-  Tooltip,
-  message,
+  Pagination,
+  Switch,
 } from 'antd';
+import type { Dayjs } from 'dayjs';
 import {
-  EyeOutlined,
-  DownloadOutlined,
+  FileTextOutlined,
+  SearchOutlined,
   ReloadOutlined,
+  DownloadOutlined,
   ClearOutlined,
+  EyeOutlined,
+  CopyOutlined,
   FilterOutlined,
-  InfoCircleOutlined,
+  ClockCircleOutlined,
+  BugOutlined,
   WarningOutlined,
+  InfoCircleOutlined,
   CloseCircleOutlined,
-  CheckCircleOutlined,
 } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
-import type { RangePickerProps } from 'antd/es/date-picker';
-import dayjs from 'dayjs';
+import './SystemLogs.css';
 
-const { Search } = Input;
-const { Option } = Select;
 const { RangePicker } = DatePicker;
-const { Title, Text } = Typography;
+const { Option } = Select;
 
-// 日志级别类型
-type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
-
-// 日志类型
-interface SystemLog {
-  id: number;
-  timestamp: string;
-  level: LogLevel;
-  logger: string;
+interface LogEntry {
+  id: string;
+  level: 'error' | 'warning' | 'info' | 'debug';
   message: string;
-  details?: string;
-  userId?: number;
-  username?: string;
-  ipAddress?: string;
-  userAgent?: string;
-  requestId?: string;
-  duration?: number;
-  stackTrace?: string;
-}
-
-// 日志统计类型
-interface LogStats {
-  total: number;
-  info: number;
-  warn: number;
-  error: number;
-  debug: number;
+  timestamp: string;
+  source: string;
+  user?: string;
+  ip?: string;
+  details?: Record<string, unknown>;
 }
 
 const SystemLogs: React.FC = () => {
+  const [searchText, setSearchText] = useState('');
+  const [logLevel, setLogLevel] = useState<string>('all');
+  const [dateRange, setDateRange] = useState<
+    [Dayjs | null, Dayjs | null] | null
+  >(null);
   const [loading, setLoading] = useState(false);
-  const [logs, setLogs] = useState<SystemLog[]>([]);
-  const [total, setTotal] = useState(0);
+  const [selectedLog, setSelectedLog] = useState<LogEntry | null>(null);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [levelFilter, setLevelFilter] = useState<string>('');
-  const [loggerFilter, setLoggerFilter] = useState<string>('');
-  const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(
-    null
-  );
-  const [selectedLog, setSelectedLog] = useState<SystemLog | null>(null);
-  const [logDetailVisible, setLogDetailVisible] = useState(false);
-  const [clearLogsModalVisible, setClearLogsModalVisible] = useState(false);
-  const [logStats, setLogStats] = useState<LogStats>({
-    total: 0,
-    info: 0,
-    warn: 0,
-    error: 0,
-    debug: 0,
-  });
+  const [pageSize] = useState(20);
+  const [realtimeEnabled, setRealtimeEnabled] = useState(false);
+  const realtimeConsoleRef = useRef<HTMLDivElement>(null);
 
-  // 加载日志数据
-  const loadLogs = async () => {
-    setLoading(true);
-    try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // 模拟日志数据
-      const mockLogs: SystemLog[] = [
-        {
-          id: 1,
-          timestamp: dayjs()
-            .subtract(5, 'minute')
-            .format('YYYY-MM-DD HH:mm:ss.SSS'),
-          level: 'ERROR',
-          logger: 'com.example.educhain.service.FileUploadService',
-          message: '文件上传失败: 连接超时',
-          details: '尝试上传文件到云存储时发生连接超时错误',
-          userId: 123,
-          username: 'zhangsan',
-          ipAddress: '192.168.1.100',
-          userAgent:
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          requestId: 'req-123456789',
-          duration: 5000,
-          stackTrace:
-            'java.net.SocketTimeoutException: Read timed out\n\tat java.net.SocketInputStream.socketRead0(Native Method)\n\tat java.net.SocketInputStream.socketRead(SocketInputStream.java:116)',
-        },
-        {
-          id: 2,
-          timestamp: dayjs()
-            .subtract(10, 'minute')
-            .format('YYYY-MM-DD HH:mm:ss.SSS'),
-          level: 'WARN',
-          logger: 'com.example.educhain.security.JwtAuthenticationFilter',
-          message: '检测到可疑登录尝试',
-          details: '来自IP 192.168.1.200的用户尝试使用无效token访问系统',
-          ipAddress: '192.168.1.200',
-          userAgent: 'curl/7.68.0',
-          requestId: 'req-123456788',
-          duration: 100,
-        },
-        {
-          id: 3,
-          timestamp: dayjs()
-            .subtract(15, 'minute')
-            .format('YYYY-MM-DD HH:mm:ss.SSS'),
-          level: 'INFO',
-          logger: 'com.example.educhain.controller.KnowledgeItemController',
-          message: '用户创建知识内容成功',
-          details: '用户zhangsan成功创建了标题为"React 18新特性"的知识内容',
-          userId: 123,
-          username: 'zhangsan',
-          ipAddress: '192.168.1.100',
-          userAgent:
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          requestId: 'req-123456787',
-          duration: 250,
-        },
-        {
-          id: 4,
-          timestamp: dayjs()
-            .subtract(20, 'minute')
-            .format('YYYY-MM-DD HH:mm:ss.SSS'),
-          level: 'DEBUG',
-          logger: 'com.example.educhain.service.SearchService',
-          message: '执行搜索查询',
-          details: '搜索关键词: "React", 返回结果: 25条',
-          userId: 456,
-          username: 'lisi',
-          ipAddress: '192.168.1.101',
-          requestId: 'req-123456786',
-          duration: 150,
-        },
-        {
-          id: 5,
-          timestamp: dayjs()
-            .subtract(25, 'minute')
-            .format('YYYY-MM-DD HH:mm:ss.SSS'),
-          level: 'ERROR',
-          logger: 'com.example.educhain.service.NotificationService',
-          message: '发送邮件通知失败',
-          details: 'SMTP服务器连接失败，无法发送邮件通知',
-          requestId: 'req-123456785',
-          stackTrace:
-            'javax.mail.MessagingException: Could not connect to SMTP host\n\tat com.sun.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2118)',
-        },
-      ];
-
-      setLogs(mockLogs);
-      setTotal(mockLogs.length);
-
-      // 模拟日志统计
-      setLogStats({
-        total: 1250,
-        info: 800,
-        warn: 200,
-        error: 150,
-        debug: 100,
-      });
-    } catch (error) {
-      console.error('Failed to load logs:', error);
-      message.error('加载日志失败');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 初始化加载
-  useEffect(() => {
-    loadLogs();
-  }, [
-    currentPage,
-    pageSize,
-    searchKeyword,
-    levelFilter,
-    loggerFilter,
-    dateRange,
+  // 模拟日志数据
+  const [logs] = useState<LogEntry[]>([
+    {
+      id: '1',
+      level: 'error',
+      message: '数据库连接失败: Connection timeout after 30000ms',
+      timestamp: '2024-12-05 14:32:15',
+      source: 'DatabaseService',
+      user: 'system',
+      ip: '192.168.1.100',
+      details: {
+        errorCode: 'DB_TIMEOUT',
+        database: 'educhain_main',
+        retryCount: 3,
+      },
+    },
+    {
+      id: '2',
+      level: 'warning',
+      message: 'API 响应时间超过阈值: 2500ms > 2000ms',
+      timestamp: '2024-12-05 14:30:42',
+      source: 'APIGateway',
+      user: 'user_1234',
+      ip: '192.168.1.105',
+      details: {
+        endpoint: '/api/knowledge/list',
+        responseTime: 2500,
+        threshold: 2000,
+      },
+    },
+    {
+      id: '3',
+      level: 'info',
+      message: '用户登录成功',
+      timestamp: '2024-12-05 14:28:30',
+      source: 'AuthService',
+      user: 'admin',
+      ip: '192.168.1.101',
+      details: {
+        loginMethod: 'password',
+        sessionId: 'sess_abc123',
+      },
+    },
+    {
+      id: '4',
+      level: 'debug',
+      message: '缓存命中: knowledge_list_page_1',
+      timestamp: '2024-12-05 14:25:18',
+      source: 'CacheService',
+      details: {
+        cacheKey: 'knowledge_list_page_1',
+        ttl: 300,
+      },
+    },
   ]);
 
-  // 查看日志详情
-  const handleViewLogDetail = (log: SystemLog) => {
-    setSelectedLog(log);
-    setLogDetailVisible(true);
+  // 日志统计
+  const [stats] = useState({
+    total: 15234,
+    error: 45,
+    warning: 128,
+    info: 14892,
+  });
+
+  // 实时日志
+  const [realtimeLogs, setRealtimeLogs] = useState<string[]>([
+    '[14:32:15] INFO - System started successfully',
+    '[14:32:16] DEBUG - Loading configuration from config.yml',
+    '[14:32:17] INFO - Database connection established',
+  ]);
+
+  // 实时日志模拟
+  useEffect(() => {
+    if (!realtimeEnabled) return;
+
+    const interval = setInterval(() => {
+      const newLog = `[${new Date().toLocaleTimeString()}] ${
+        ['INFO', 'DEBUG', 'WARNING'][Math.floor(Math.random() * 3)]
+      } - ${['Request processed', 'Cache updated', 'User action logged'][Math.floor(Math.random() * 3)]}`;
+
+      setRealtimeLogs(prev => [...prev, newLog].slice(-100)); // 保留最近100条
+
+      // 自动滚动到底部
+      if (realtimeConsoleRef.current) {
+        realtimeConsoleRef.current.scrollTop =
+          realtimeConsoleRef.current.scrollHeight;
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [realtimeEnabled]);
+
+  // 搜索和筛选
+  const handleSearch = () => {
+    setLoading(true);
+    // TODO: 实际的搜索逻辑
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  };
+
+  // 重置筛选
+  const handleReset = () => {
+    setSearchText('');
+    setLogLevel('all');
+    setDateRange(null);
+    setCurrentPage(1);
   };
 
   // 导出日志
-  const handleExportLogs = () => {
-    message.info('导出功能开发中...');
+  const handleExport = () => {
+    // TODO: 实现日志导出功能
+    console.log('Exporting logs...');
   };
 
-  // 清理日志
-  const handleClearLogs = () => {
-    setClearLogsModalVisible(true);
+  // 清空日志
+  const handleClear = () => {
+    // TODO: 实现清空日志功能
+    console.log('Clearing logs...');
   };
 
-  // 确认清理日志
-  const handleConfirmClearLogs = async () => {
-    try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      message.success('日志清理成功');
-      setClearLogsModalVisible(false);
-      loadLogs();
-    } catch (error) {
-      console.error('Failed to clear logs:', error);
-      message.error('清理失败');
-    }
+  // 查看日志详情
+  const handleViewDetails = (log: LogEntry) => {
+    setSelectedLog(log);
+    setDrawerVisible(true);
   };
 
-  // 日期范围变化处理
-  const handleDateRangeChange: RangePickerProps['onChange'] = dates => {
-    setDateRange(dates as [dayjs.Dayjs, dayjs.Dayjs] | null);
-  };
-
-  // 获取日志级别颜色
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'ERROR':
-        return 'red';
-      case 'WARN':
-        return 'orange';
-      case 'INFO':
-        return 'blue';
-      case 'DEBUG':
-        return 'default';
-      default:
-        return 'default';
-    }
+  // 复制日志
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
   };
 
   // 获取日志级别图标
   const getLevelIcon = (level: string) => {
     switch (level) {
-      case 'ERROR':
-        return <CloseCircleOutlined style={{ color: 'var(--accent-error)' }} />;
-      case 'WARN':
-        return <WarningOutlined style={{ color: 'var(--accent-warning)' }} />;
-      case 'INFO':
-        return <InfoCircleOutlined style={{ color: 'var(--accent-info)' }} />;
-      case 'DEBUG':
-        return <CheckCircleOutlined style={{ color: 'var(--accent-success)' }} />;
+      case 'error':
+        return <CloseCircleOutlined />;
+      case 'warning':
+        return <WarningOutlined />;
+      case 'info':
+        return <InfoCircleOutlined />;
+      case 'debug':
+        return <BugOutlined />;
       default:
-        return null;
+        return <FileTextOutlined />;
     }
   };
 
-  // 表格列定义
-  const columns: ColumnsType<SystemLog> = [
-    {
-      title: '时间',
-      dataIndex: 'timestamp',
-      key: 'timestamp',
-      width: 180,
-      render: timestamp => (
-        <Text style={{ fontSize: '12px', fontFamily: 'monospace' }}>
-          {timestamp}
-        </Text>
-      ),
-    },
-    {
-      title: '级别',
-      dataIndex: 'level',
-      key: 'level',
-      width: 80,
-      render: level => (
-        <Space>
-          {getLevelIcon(level)}
-          <Tag color={getLevelColor(level)}>{level}</Tag>
-        </Space>
-      ),
-    },
-    {
-      title: '日志器',
-      dataIndex: 'logger',
-      key: 'logger',
-      width: 200,
-      render: logger => (
-        <Tooltip title={logger}>
-          <Text ellipsis style={{ fontSize: '12px', fontFamily: 'monospace' }}>
-            {logger.split('.').pop()}
-          </Text>
-        </Tooltip>
-      ),
-    },
-    {
-      title: '消息',
-      dataIndex: 'message',
-      key: 'message',
-      render: (message, record) => (
-        <div>
-          <Text ellipsis style={{ maxWidth: '300px' }}>
-            {message}
-          </Text>
-          {record.username && (
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-              用户: {record.username} | IP: {record.ipAddress}
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
-      title: '耗时',
-      dataIndex: 'duration',
-      key: 'duration',
-      width: 80,
-      render: duration => (duration ? `${duration}ms` : '-'),
-    },
-    {
-      title: '操作',
-      key: 'actions',
-      width: 100,
-      render: (_, log) => (
-        <Button
-          type="link"
-          size="small"
-          icon={<EyeOutlined />}
-          onClick={() => handleViewLogDetail(log)}
-        >
-          详情
-        </Button>
-      ),
-    },
-  ];
+  // 筛选后的日志
+  const filteredLogs = logs.filter(log => {
+    if (logLevel !== 'all' && log.level !== logLevel) return false;
+    if (
+      searchText &&
+      !log.message.toLowerCase().includes(searchText.toLowerCase())
+    )
+      return false;
+    return true;
+  });
+
+  // 分页后的日志
+  const paginatedLogs = filteredLogs.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
-    <div style={{ padding: '24px' }}>
-      {/* 页面标题 */}
-      <div style={{ marginBottom: '24px' }}>
-        <Title level={2}>系统日志</Title>
-      </div>
-
-      {/* 日志统计 */}
-      <div style={{ marginBottom: '16px' }}>
-        <Space size="large">
-          <div>
-            <Text strong>总计: </Text>
-            <Text>{logStats.total.toLocaleString()}</Text>
+    <div className="system-logs-page animate-fade-in">
+      <div className="logs-content">
+        {/* 页面头部 */}
+        <div className="logs-header glass-card">
+          <div className="header-content">
+            <div className="title-section">
+              <h1 className="page-title">
+                <FileTextOutlined className="page-title-icon" />
+                系统日志
+              </h1>
+              <p className="page-subtitle">
+                查看和管理系统运行日志 · 共 {stats.total.toLocaleString()}{' '}
+                条记录
+              </p>
+            </div>
+            <div className="header-actions">
+              <Button
+                icon={<DownloadOutlined />}
+                onClick={handleExport}
+                className="glass-button hover-scale active-scale"
+              >
+                导出日志
+              </Button>
+              <Button
+                icon={<ClearOutlined />}
+                onClick={handleClear}
+                danger
+                className="glass-button hover-scale active-scale"
+              >
+                清空日志
+              </Button>
+            </div>
           </div>
-          <div>
-            <InfoCircleOutlined
-              style={{ color: 'var(--accent-info)', marginRight: '4px' }}
-            />
-            <Text>信息: {logStats.info.toLocaleString()}</Text>
-          </div>
-          <div>
-            <WarningOutlined style={{ color: 'var(--accent-warning)', marginRight: '4px' }} />
-            <Text>警告: {logStats.warn.toLocaleString()}</Text>
-          </div>
-          <div>
-            <CloseCircleOutlined
-              style={{ color: 'var(--accent-error)', marginRight: '4px' }}
-            />
-            <Text>错误: {logStats.error.toLocaleString()}</Text>
-          </div>
-          <div>
-            <CheckCircleOutlined
-              style={{ color: 'var(--accent-success)', marginRight: '4px' }}
-            />
-            <Text>调试: {logStats.debug.toLocaleString()}</Text>
-          </div>
-        </Space>
-      </div>
-
-      <Card>
-        {/* 搜索和筛选 */}
-        <div style={{ marginBottom: '16px' }}>
-          <Space wrap>
-            <Search
-              placeholder="搜索日志消息或用户名"
-              allowClear
-              style={{ width: 300 }}
-              onSearch={setSearchKeyword}
-            />
-            <Select
-              placeholder="选择日志级别"
-              allowClear
-              style={{ width: 120 }}
-              value={levelFilter}
-              onChange={setLevelFilter}
-            >
-              <Option value="ERROR">错误</Option>
-              <Option value="WARN">警告</Option>
-              <Option value="INFO">信息</Option>
-              <Option value="DEBUG">调试</Option>
-            </Select>
-            <Select
-              placeholder="选择日志器"
-              allowClear
-              style={{ width: 200 }}
-              value={loggerFilter}
-              onChange={setLoggerFilter}
-            >
-              <Option value="FileUploadService">文件上传服务</Option>
-              <Option value="JwtAuthenticationFilter">JWT认证过滤器</Option>
-              <Option value="KnowledgeItemController">知识内容控制器</Option>
-              <Option value="SearchService">搜索服务</Option>
-              <Option value="NotificationService">通知服务</Option>
-            </Select>
-            <RangePicker
-              value={dateRange}
-              onChange={handleDateRangeChange}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              style={{ width: 350 }}
-            />
-            <Button
-              icon={<FilterOutlined />}
-              onClick={() => {
-                setSearchKeyword('');
-                setLevelFilter('');
-                setLoggerFilter('');
-                setDateRange(null);
-              }}
-            >
-              清除筛选
-            </Button>
-          </Space>
         </div>
 
-        {/* 操作按钮 */}
-        <div style={{ marginBottom: '16px' }}>
-          <Space>
-            <Button
-              icon={<ReloadOutlined />}
-              onClick={loadLogs}
-              loading={loading}
-            >
-              刷新
-            </Button>
-            <Button icon={<DownloadOutlined />} onClick={handleExportLogs}>
-              导出日志
-            </Button>
-            <Button icon={<ClearOutlined />} danger onClick={handleClearLogs}>
-              清理日志
-            </Button>
-          </Space>
+        {/* 日志筛选 */}
+        <div className="logs-filters glass-card">
+          <div className="filters-row">
+            <div className="filter-item">
+              <label className="filter-label">搜索关键词</label>
+              <Input
+                className="filter-input"
+                placeholder="搜索日志内容..."
+                prefix={<SearchOutlined />}
+                value={searchText}
+                onChange={e => setSearchText(e.target.value)}
+                onPressEnter={handleSearch}
+                allowClear
+              />
+            </div>
+            <div className="filter-item">
+              <label className="filter-label">日志级别</label>
+              <Select
+                className="filter-select"
+                value={logLevel}
+                onChange={setLogLevel}
+                style={{ width: '100%' }}
+              >
+                <Option value="all">全部</Option>
+                <Option value="error">错误</Option>
+                <Option value="warning">警告</Option>
+                <Option value="info">信息</Option>
+                <Option value="debug">调试</Option>
+              </Select>
+            </div>
+            <div className="filter-item">
+              <label className="filter-label">时间范围</label>
+              <RangePicker
+                className="filter-date-picker"
+                value={dateRange}
+                onChange={setDateRange}
+                showTime
+                style={{ width: '100%' }}
+              />
+            </div>
+            <div className="filter-actions">
+              <Button
+                type="primary"
+                icon={<FilterOutlined />}
+                onClick={handleSearch}
+                loading={loading}
+                className="filter-button glass-button glass-strong hover-scale active-scale"
+              >
+                筛选
+              </Button>
+              <Button
+                icon={<ReloadOutlined />}
+                onClick={handleReset}
+                className="filter-button glass-button hover-scale active-scale"
+              >
+                重置
+              </Button>
+            </div>
+          </div>
         </div>
 
-        {/* 日志表格 */}
-        <Table
-          columns={columns}
-          dataSource={logs}
-          rowKey="id"
-          loading={loading}
-          size="small"
-          pagination={{
-            current: currentPage,
-            pageSize: pageSize,
-            total: total,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) =>
-              `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
-            onChange: (page, size) => {
-              setCurrentPage(page);
-              setPageSize(size || 20);
-            },
-          }}
-          scroll={{ x: 1000 }}
-        />
-      </Card>
+        {/* 日志统计 */}
+        <div className="logs-stats">
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={12} lg={6}>
+              <div className="stat-card glass-card hover-lift gpu-accelerated">
+                <div className="stat-icon stat-total">
+                  <FileTextOutlined />
+                </div>
+                <div className="stat-label">总日志数</div>
+                <div className="stat-value">{stats.total.toLocaleString()}</div>
+              </div>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <div className="stat-card glass-card hover-lift gpu-accelerated delay-100">
+                <div className="stat-icon stat-error">
+                  <CloseCircleOutlined />
+                </div>
+                <div className="stat-label">错误</div>
+                <div className="stat-value">{stats.error}</div>
+              </div>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <div className="stat-card glass-card hover-lift gpu-accelerated delay-200">
+                <div className="stat-icon stat-warning">
+                  <WarningOutlined />
+                </div>
+                <div className="stat-label">警告</div>
+                <div className="stat-value">{stats.warning}</div>
+              </div>
+            </Col>
+            <Col xs={24} sm={12} lg={6}>
+              <div className="stat-card glass-card hover-lift gpu-accelerated delay-300">
+                <div className="stat-icon stat-info">
+                  <InfoCircleOutlined />
+                </div>
+                <div className="stat-label">信息</div>
+                <div className="stat-value">{stats.info.toLocaleString()}</div>
+              </div>
+            </Col>
+          </Row>
+        </div>
 
-      {/* 日志详情抽屉 */}
-      <Drawer
-        title="日志详情"
-        placement="right"
-        width={800}
-        open={logDetailVisible}
-        onClose={() => setLogDetailVisible(false)}
-      >
-        {selectedLog && (
-          <div>
-            <Descriptions column={1} bordered>
-              <Descriptions.Item label="时间戳">
-                <Text style={{ fontFamily: 'monospace' }}>
-                  {selectedLog.timestamp}
-                </Text>
-              </Descriptions.Item>
-              <Descriptions.Item label="日志级别">
-                <Space>
-                  {getLevelIcon(selectedLog.level)}
-                  <Tag color={getLevelColor(selectedLog.level)}>
-                    {selectedLog.level}
-                  </Tag>
-                </Space>
-              </Descriptions.Item>
-              <Descriptions.Item label="日志器">
-                <Text style={{ fontFamily: 'monospace', fontSize: '12px' }}>
-                  {selectedLog.logger}
-                </Text>
-              </Descriptions.Item>
-              <Descriptions.Item label="请求ID">
-                {selectedLog.requestId || '-'}
-              </Descriptions.Item>
-              <Descriptions.Item label="用户信息">
-                {selectedLog.username ? (
-                  <div>
-                    <div>用户名: {selectedLog.username}</div>
-                    <div>用户ID: {selectedLog.userId}</div>
-                  </div>
-                ) : (
-                  '-'
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="客户端信息">
-                {selectedLog.ipAddress && (
-                  <div>
-                    <div>IP地址: {selectedLog.ipAddress}</div>
-                    {selectedLog.userAgent && (
-                      <div style={{ marginTop: '4px' }}>
-                        <Text style={{ fontSize: '12px' }}>
-                          User-Agent: {selectedLog.userAgent}
-                        </Text>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="执行耗时">
-                {selectedLog.duration ? `${selectedLog.duration}ms` : '-'}
-              </Descriptions.Item>
-            </Descriptions>
-
-            <div style={{ marginTop: '24px' }}>
-              <Title level={5}>日志消息</Title>
+        {/* 实时日志流 */}
+        <div className="realtime-logs glass-card">
+          <div className="realtime-header">
+            <div className="realtime-title">
+              {realtimeEnabled && <div className="realtime-indicator" />}
+              实时日志流
+            </div>
+            <div className="realtime-controls">
+              <Switch
+                checked={realtimeEnabled}
+                onChange={setRealtimeEnabled}
+                checkedChildren="开启"
+                unCheckedChildren="关闭"
+              />
+              <Button
+                size="small"
+                icon={<ClearOutlined />}
+                onClick={() => setRealtimeLogs([])}
+                className="glass-button"
+              >
+                清空
+              </Button>
+            </div>
+          </div>
+          <div className="realtime-console" ref={realtimeConsoleRef}>
+            {realtimeLogs.length === 0 ? (
               <div
                 style={{
-                  padding: '12px',
-                  backgroundColor: 'var(--bg-tertiary)',
-                  borderRadius: '6px',
-                  fontFamily: 'monospace',
-                  fontSize: '13px',
+                  textAlign: 'center',
+                  padding: '40px',
+                  color: 'var(--text-tertiary)',
                 }}
               >
-                {selectedLog.message}
+                暂无实时日志
               </div>
-            </div>
-
-            {selectedLog.details && (
-              <div style={{ marginTop: '16px' }}>
-                <Title level={5}>详细信息</Title>
-                <div
-                  style={{
-                    padding: '12px',
-                    backgroundColor: 'var(--bg-tertiary)',
-                    borderRadius: '6px',
-                    fontFamily: 'monospace',
-                    fontSize: '13px',
-                  }}
-                >
-                  {selectedLog.details}
+            ) : (
+              realtimeLogs.map((log, index) => (
+                <div key={index} className="realtime-log-line">
+                  {log}
                 </div>
-              </div>
+              ))
             )}
-
-            {selectedLog.stackTrace && (
-              <div style={{ marginTop: '16px' }}>
-                <Title level={5}>堆栈跟踪</Title>
-                <div
-                  style={{
-                    padding: '12px',
-                    backgroundColor: 'var(--error-bg)',
-                    border: '1px solid var(--error-border)',
-                    borderRadius: '6px',
-                    fontFamily: 'monospace',
-                    fontSize: '12px',
-                    maxHeight: '300px',
-                    overflow: 'auto',
-                  }}
-                >
-                  <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-                    {selectedLog.stackTrace}
-                  </pre>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </Drawer>
-
-      {/* 清理日志确认模态框 */}
-      <Modal
-        title="清理日志"
-        open={clearLogsModalVisible}
-        onOk={handleConfirmClearLogs}
-        onCancel={() => setClearLogsModalVisible(false)}
-        okText="确认清理"
-        cancelText="取消"
-        okButtonProps={{ danger: true }}
-      >
-        <Alert
-          message="警告"
-          description="此操作将永久删除所有历史日志数据，无法恢复。请确认是否继续？"
-          type="warning"
-          showIcon
-          style={{ marginBottom: '16px' }}
-        />
-        <div>
-          <Text>清理选项:</Text>
-          <div style={{ marginTop: '8px' }}>
-            <Space direction="vertical">
-              <label>
-                <input
-                  type="radio"
-                  name="clearOption"
-                  value="all"
-                  defaultChecked
-                />
-                <span style={{ marginLeft: '8px' }}>清理所有日志</span>
-              </label>
-              <label>
-                <input type="radio" name="clearOption" value="old" />
-                <span style={{ marginLeft: '8px' }}>只清理30天前的日志</span>
-              </label>
-              <label>
-                <input type="radio" name="clearOption" value="level" />
-                <span style={{ marginLeft: '8px' }}>只清理DEBUG级别日志</span>
-              </label>
-            </Space>
           </div>
         </div>
-      </Modal>
+
+        {/* 日志列表 */}
+        <div className="logs-list glass-card">
+          <div className="logs-list-header">
+            <h2 className="logs-list-title">日志记录</h2>
+            <div className="logs-list-actions">
+              <Button
+                size="small"
+                icon={<ReloadOutlined />}
+                onClick={handleSearch}
+                className="glass-button"
+              >
+                刷新
+              </Button>
+            </div>
+          </div>
+
+          {paginatedLogs.length === 0 ? (
+            <div className="logs-empty">
+              <div className="logs-empty-icon">
+                <FileTextOutlined />
+              </div>
+              <div className="logs-empty-title">暂无日志记录</div>
+              <div className="logs-empty-description">
+                尝试调整筛选条件或等待新的日志生成
+              </div>
+            </div>
+          ) : (
+            <>
+              <Space
+                direction="vertical"
+                style={{ width: '100%' }}
+                size="small"
+              >
+                {paginatedLogs.map((log, index) => (
+                  <div
+                    key={log.id}
+                    className={`log-item log-${log.level} animate-fade-in-up delay-${index * 50}`}
+                  >
+                    <div className="log-header">
+                      <Tag className={`log-level-badge level-${log.level}`}>
+                        {log.level}
+                      </Tag>
+                      <span className="log-time">
+                        <ClockCircleOutlined /> {log.timestamp}
+                      </span>
+                    </div>
+                    <div className="log-message">{log.message}</div>
+                    <div className="log-details">
+                      <div className="log-detail-item">
+                        <span className="log-detail-label">来源:</span>
+                        <span className="log-detail-value">{log.source}</span>
+                      </div>
+                      {log.user && (
+                        <div className="log-detail-item">
+                          <span className="log-detail-label">用户:</span>
+                          <span className="log-detail-value">{log.user}</span>
+                        </div>
+                      )}
+                      {log.ip && (
+                        <div className="log-detail-item">
+                          <span className="log-detail-label">IP:</span>
+                          <span className="log-detail-value">{log.ip}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="log-actions">
+                      <Button
+                        size="small"
+                        type="link"
+                        icon={<EyeOutlined />}
+                        onClick={() => handleViewDetails(log)}
+                        className="log-action-button"
+                      >
+                        查看详情
+                      </Button>
+                      <Button
+                        size="small"
+                        type="link"
+                        icon={<CopyOutlined />}
+                        onClick={() => handleCopy(log.message)}
+                        className="log-action-button"
+                      >
+                        复制
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </Space>
+
+              {/* 分页 */}
+              <div className="logs-pagination">
+                <Pagination
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={filteredLogs.length}
+                  onChange={setCurrentPage}
+                  showSizeChanger={false}
+                  showTotal={total => `共 ${total} 条`}
+                />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 日志详情抽屉 */}
+        <Drawer
+          title="日志详情"
+          placement="right"
+          width={600}
+          onClose={() => setDrawerVisible(false)}
+          open={drawerVisible}
+          className="log-detail-drawer"
+        >
+          {selectedLog && (
+            <div className="log-detail-content">
+              <div className="log-detail-section">
+                <h3 className="log-detail-section-title">
+                  {getLevelIcon(selectedLog.level)} 基本信息
+                </h3>
+                <table className="log-detail-table">
+                  <tbody>
+                    <tr>
+                      <td>日志级别</td>
+                      <td>
+                        <Tag
+                          className={`log-level-badge level-${selectedLog.level}`}
+                        >
+                          {selectedLog.level}
+                        </Tag>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>时间戳</td>
+                      <td>{selectedLog.timestamp}</td>
+                    </tr>
+                    <tr>
+                      <td>来源</td>
+                      <td>{selectedLog.source}</td>
+                    </tr>
+                    {selectedLog.user && (
+                      <tr>
+                        <td>用户</td>
+                        <td>{selectedLog.user}</td>
+                      </tr>
+                    )}
+                    {selectedLog.ip && (
+                      <tr>
+                        <td>IP 地址</td>
+                        <td>{selectedLog.ip}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="log-detail-section">
+                <h3 className="log-detail-section-title">日志消息</h3>
+                <div className="log-detail-code">{selectedLog.message}</div>
+              </div>
+
+              {selectedLog.details && (
+                <div className="log-detail-section">
+                  <h3 className="log-detail-section-title">详细信息</h3>
+                  <div className="log-detail-code">
+                    {JSON.stringify(selectedLog.details, null, 2)}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </Drawer>
+      </div>
     </div>
   );
 };

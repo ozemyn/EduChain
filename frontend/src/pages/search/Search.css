@@ -1,0 +1,410 @@
+/* ===================================
+   搜索页面样式 - Search Page Styles
+   ===================================
+   
+   使用全局样式系统
+   知网风格的搜索界面
+   完整的响应式设计
+   
+   ================================== */
+
+/* ===================================
+   1. 页面容器
+   ================================== */
+
+.search-page {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+/* ===================================
+   2. 顶部搜索区域
+   ================================== */
+
+.search-header {
+  padding: var(--spacing-xl) 0;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+.search-header-content {
+  max-width: 1200px;
+}
+
+.search-box-wrapper {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-md);
+}
+
+.main-search-input {
+  width: 100%;
+}
+
+.search-info {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.search-keyword {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.search-count {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.search-count strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ===================================
+   3. 主体内容区域
+   ================================== */
+
+.search-main {
+  padding: var(--spacing-2xl) 0;
+  min-height: calc(100vh - 200px);
+}
+
+.search-content {
+  max-width: 1400px;
+}
+
+.search-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+/* ===================================
+   4. 左侧筛选栏
+   ================================== */
+
+.search-sidebar {
+  position: sticky;
+  top: calc(var(--spacing-xl) + 120px);
+}
+
+.filters-panel {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.filters-header svg {
+  color: var(--primary-600);
+  font-size: 1.25rem;
+}
+
+/* 深色模式图标 */
+[data-theme='dark'] .filters-header svg {
+  color: var(--text-primary);
+}
+
+.filters-header h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ===================================
+   5. 右侧结果区域
+   ================================== */
+
+.search-results-area {
+  min-height: 600px;
+}
+
+/* 结果工具栏 */
+.results-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--liquid-border-radius);
+  margin-bottom: var(--spacing-lg);
+}
+
+.toolbar-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.results-summary {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.keyword-highlight {
+  color: var(--primary-600);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* 深色模式关键词 */
+[data-theme='dark'] .keyword-highlight {
+  color: var(--text-primary);
+}
+
+.results-summary strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+.sort-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.sort-select {
+  min-width: 120px;
+}
+
+.sort-select .ant-select-selector {
+  border-radius: var(--radius-md) !important;
+  border: 2px solid var(--border-color) !important;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.sort-select .ant-select-selector:hover {
+  border-color: var(--primary-600) !important;
+}
+
+.sort-select.ant-select-focused .ant-select-selector {
+  border-color: var(--primary-600) !important;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1) !important;
+}
+
+/* 深色模式选择器 */
+[data-theme='dark'] .sort-select.ant-select-focused .ant-select-selector {
+  border-color: var(--text-primary) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 错误提示 */
+.error-alert {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--liquid-border-radius);
+}
+
+/* 结果容器 */
+.results-container {
+  min-height: 500px;
+}
+
+/* ===================================
+   6. 返回顶部按钮
+   ================================== */
+
+.back-top-button {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base) var(--ease-spring-ios);
+}
+
+.back-top-button:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ===================================
+   7. 响应式设计
+   ================================== */
+
+/* 大屏幕 (1200px+) */
+@media (min-width: 1200px) {
+  .search-layout {
+    grid-template-columns: 300px 1fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+/* 平板设备 (768px - 1024px) */
+@media (max-width: 1024px) {
+  .search-layout {
+    grid-template-columns: 260px 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .search-sidebar {
+    top: calc(var(--spacing-lg) + 100px);
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .search-header {
+    padding: var(--spacing-md) 0;
+  }
+
+  .search-box-wrapper {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .search-info {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .search-main {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .search-layout {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .search-sidebar {
+    position: static;
+    order: 2;
+  }
+
+  .search-results-area {
+    order: 1;
+  }
+
+  .filters-panel {
+    padding: var(--spacing-lg);
+  }
+
+  .results-toolbar {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+    padding: var(--spacing-md);
+  }
+
+  .toolbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sort-select {
+    flex: 1;
+  }
+}
+
+/* 小屏手机 (< 480px) */
+@media (max-width: 480px) {
+  .search-header {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .search-keyword {
+    font-size: var(--font-size-base);
+  }
+
+  .search-count {
+    font-size: var(--font-size-sm);
+  }
+
+  .filters-panel {
+    padding: var(--spacing-md);
+  }
+
+  .results-toolbar {
+    padding: var(--spacing-sm);
+  }
+
+  .toolbar-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .sort-select {
+    width: 100%;
+  }
+}
+
+/* ===================================
+   8. 性能优化
+   ================================== */
+
+/* GPU 加速 */
+.search-header,
+.filters-panel,
+.results-toolbar,
+.back-top-button {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .search-page,
+  .search-header,
+  .search-sidebar,
+  .search-results-area,
+  .back-top-button {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .search-header,
+  .filters-panel,
+  .results-toolbar {
+    border: 2px solid var(--border-strong);
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .search-header,
+  .search-sidebar,
+  .results-toolbar,
+  .back-top-button {
+    display: none;
+  }
+
+  .search-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .search-results-area {
+    order: 1;
+  }
+}
+
+/* ===================================
+   完成 - Search.css
+   ================================== */

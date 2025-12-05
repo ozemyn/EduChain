@@ -193,7 +193,10 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
       case 'follow':
         return { icon: <UserAddOutlined />, color: 'var(--primary-600)' };
       default:
-        return { icon: <ClockCircleOutlined />, color: 'var(--text-quaternary)' };
+        return {
+          icon: <ClockCircleOutlined />,
+          color: 'var(--text-quaternary)',
+        };
     }
   };
 

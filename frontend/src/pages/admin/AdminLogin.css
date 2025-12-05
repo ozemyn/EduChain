@@ -1,0 +1,393 @@
+/* ===================================
+   管理员登录页面样式 - Admin Login Page Styles
+   ===================================
+   
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
+.admin-login-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰渐变 */
+.admin-login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 30% 30%, var(--primary-100) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, var(--secondary-50) 0%, transparent 50%);
+  opacity: 0.3;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 深色模式背景 */
+[data-theme='dark'] .admin-login-page::before {
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.02) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 70%,
+      rgba(255, 255, 255, 0.01) 0%,
+      transparent 50%
+    );
+  opacity: 1;
+}
+
+/* ===================================
+   登录容器
+   ================================== */
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  z-index: 1;
+}
+
+.login-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.login-card:hover {
+  box-shadow: var(--shadow-2xl);
+  transform: translateY(-2px);
+}
+
+/* ===================================
+   登录头部
+   ================================== */
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.login-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base) var(--ease-spring-ios);
+}
+
+/* 深色模式图标 */
+[data-theme='dark'] .login-icon {
+  background: linear-gradient(135deg, #404040, #262626);
+  color: var(--text-primary);
+}
+
+.login-card:hover .login-icon {
+  transform: scale(1.05) rotate(5deg);
+}
+
+.login-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.login-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ===================================
+   登录表单
+   ================================== */
+
+.login-form {
+  margin-top: var(--spacing-xl);
+}
+
+.login-form .ant-form-item {
+  margin-bottom: var(--spacing-lg);
+}
+
+.login-form .ant-form-item-label > label {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.login-form .ant-input,
+.login-form .ant-input-password {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.login-form .ant-input:hover,
+.login-form .ant-input-password:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-elevated);
+}
+
+.login-form .ant-input:focus,
+.login-form .ant-input-password:focus,
+.login-form .ant-input-affix-wrapper-focused {
+  border-color: var(--primary-500);
+  background: var(--bg-elevated);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+/* 深色模式焦点 */
+[data-theme='dark'] .login-form .ant-input:focus,
+[data-theme='dark'] .login-form .ant-input-password:focus,
+[data-theme='dark'] .login-form .ant-input-affix-wrapper-focused {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.login-form .ant-input-prefix {
+  color: var(--text-tertiary);
+  font-size: 1.125rem;
+  margin-right: var(--spacing-sm);
+}
+
+.login-form .ant-input-suffix {
+  color: var(--text-tertiary);
+}
+
+/* 登录按钮 */
+.login-button {
+  width: 100%;
+  height: auto !important;
+  padding: var(--spacing-md) !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  border-radius: var(--radius-lg) !important;
+  margin-top: var(--spacing-md);
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.login-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+/* ===================================
+   登录选项
+   ================================== */
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.login-remember {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.login-forgot {
+  color: var(--primary-600);
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast) var(--ease-ios);
+}
+
+.login-forgot:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+/* 深色模式链接 */
+[data-theme='dark'] .login-forgot {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .login-forgot:hover {
+  color: var(--text-secondary);
+}
+
+/* ===================================
+   登录页脚
+   ================================== */
+
+.login-footer {
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-color);
+}
+
+.login-footer-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.login-footer-link {
+  color: var(--primary-600);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast) var(--ease-ios);
+}
+
+.login-footer-link:hover {
+  color: var(--primary-700);
+}
+
+/* 深色模式页脚链接 */
+[data-theme='dark'] .login-footer-link {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .login-footer-link:hover {
+  color: var(--text-secondary);
+}
+
+/* ===================================
+   安全提示
+   ================================== */
+
+.security-notice {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-md);
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.security-notice-icon {
+  color: var(--info-text);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.security-notice-text {
+  font-size: var(--font-size-sm);
+  color: var(--info-text);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===================================
+   响应式设计
+   ================================== */
+
+@media (max-width: 768px) {
+  .admin-login-page {
+    padding: var(--spacing-lg);
+  }
+
+  .login-container {
+    max-width: 100%;
+  }
+
+  .login-card {
+    padding: var(--spacing-xl);
+  }
+
+  .login-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 2rem;
+  }
+
+  .login-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .login-options {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-login-page {
+    padding: var(--spacing-md);
+  }
+
+  .login-card {
+    padding: var(--spacing-lg);
+  }
+
+  .login-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.75rem;
+  }
+
+  .login-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .login-subtitle {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ===================================
+   性能优化
+   ================================== */
+
+.login-card,
+.login-icon,
+.login-button {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .login-card {
+    border: 2px solid var(--border-strong);
+  }
+
+  .login-icon {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ===================================
+   完成 - AdminLogin.css
+   ================================== */

@@ -1,6 +1,14 @@
+/* ===================================
+   内容管理页面 - Content Management Page
+   ===================================
+   
+   完整功能的内容管理系统
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
 import React, { useState, useEffect } from 'react';
 import {
-  Card,
   Table,
   Button,
   Space,
@@ -12,13 +20,11 @@ import {
   Popconfirm,
   Drawer,
   Descriptions,
-  Image,
   Typography,
   Row,
   Col,
   Statistic,
   Form,
-  Switch,
 } from 'antd';
 import {
   EyeOutlined,
@@ -28,28 +34,47 @@ import {
   ExportOutlined,
   ReloadOutlined,
   FileTextOutlined,
+  SearchOutlined,
+  FilterOutlined,
   PictureOutlined,
   VideoCameraOutlined,
   FilePdfOutlined,
   LinkOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import type { KnowledgeItem, KnowledgeStats } from '@/types/api';
 import dayjs from 'dayjs';
+import './ContentManagement.css';
 
 const { Search } = Input;
 const { Option } = Select;
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
-// 内容状态枚举
-const CONTENT_STATUS = {
-  DRAFT: 0,
-  PUBLISHED: 1,
-  REVIEWING: 2,
-  REJECTED: 3,
-  DELETED: 4,
-} as const;
+// 内容类型
+interface KnowledgeItem {
+  id: number;
+  title: string;
+  content: string;
+  type: 'TEXT' | 'IMAGE' | 'VIDEO' | 'PDF' | 'LINK';
+  uploaderId: number;
+  uploaderName?: string;
+  categoryId?: number;
+  categoryName?: string;
+  tags?: string;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 内容统计类型
+interface ContentStats {
+  knowledgeId: number;
+  viewCount: number;
+  likeCount: number;
+  favoriteCount: number;
+  commentCount: number;
+  score: number;
+}
 
 // 内容类型图标映射
 const TYPE_ICONS = {
@@ -60,7 +85,18 @@ const TYPE_ICONS = {
   LINK: <LinkOutlined />,
 };
 
-// 内容管理页面组件
+// 内容类型名称映射
+const TYPE_NAMES = {
+  TEXT: '文本',
+  IMAGE: '图片',
+  VIDEO: '视频',
+  PDF: 'PDF',
+  LINK: '链接',
+};
+
+/**
+ * 内容管理页面组件
+ */
 const ContentManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [contents, setContents] = useState<KnowledgeItem[]>([]);
@@ -76,50 +112,26 @@ const ContentManagement: React.FC = () => {
   );
   const [contentDetailVisible, setContentDetailVisible] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
-  const [contentStats, setContentStats] = useState<KnowledgeStats | null>(null);
+  const [contentStats, setContentStats] = useState<ContentStats | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [reviewForm] = Form.useForm();
 
   // 加载内容列表
   const loadContents = async () => {
     setLoading(true);
     try {
-      // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // 模拟内容数据
       const mockContents: KnowledgeItem[] = [
         {
           id: 1,
           title: 'React 18 新特性详解',
-          content:
-            '本文详细介绍了React 18的新特性，包括并发渲染、自动批处理、Suspense改进等...',
+          content: '本文详细介绍了React 18的新特性...',
           type: 'TEXT',
-          mediaUrls: [],
-          linkUrl: undefined,
           uploaderId: 1,
-          uploader: {
-            id: 1,
-            username: 'zhangsan',
-            email: 'zhangsan@example.com',
-            fullName: '张三',
-            avatarUrl: undefined,
-            school: '清华大学',
-            level: 5,
-            bio: '热爱学习的程序员',
-            role: 'LEARNER',
-            status: 1,
-            createdAt: '2024-01-01T00:00:00Z',
-            updatedAt: '2024-01-15T00:00:00Z',
-          },
+          uploaderName: '张三',
           categoryId: 1,
-          category: {
-            id: 1,
-            name: '前端开发',
-            description: '前端开发相关内容',
-            parentId: undefined,
-            sortOrder: 1,
-            createdAt: '2024-01-01T00:00:00Z',
-          },
+          categoryName: '前端开发',
           tags: 'React,JavaScript,前端',
           status: 1,
           createdAt: '2024-01-15T10:30:00Z',
@@ -128,72 +140,26 @@ const ContentManagement: React.FC = () => {
         {
           id: 2,
           title: 'TypeScript 高级类型应用',
-          content:
-            '深入探讨TypeScript的高级类型系统，包括泛型、条件类型、映射类型等...',
+          content: '深入探讨TypeScript的高级类型系统...',
           type: 'TEXT',
-          mediaUrls: [],
-          linkUrl: undefined,
           uploaderId: 2,
-          uploader: {
-            id: 2,
-            username: 'lisi',
-            email: 'lisi@example.com',
-            fullName: '李四',
-            avatarUrl: undefined,
-            school: '北京大学',
-            level: 3,
-            bio: '前端开发工程师',
-            role: 'LEARNER',
-            status: 1,
-            createdAt: '2024-01-02T00:00:00Z',
-            updatedAt: '2024-01-14T00:00:00Z',
-          },
+          uploaderName: '李四',
           categoryId: 1,
-          category: {
-            id: 1,
-            name: '前端开发',
-            description: '前端开发相关内容',
-            parentId: undefined,
-            sortOrder: 1,
-            createdAt: '2024-01-01T00:00:00Z',
-          },
-          tags: 'TypeScript,JavaScript,类型系统',
-          status: 2, // 审核中
+          categoryName: '前端开发',
+          tags: 'TypeScript,JavaScript',
+          status: 2,
           createdAt: '2024-01-14T15:20:00Z',
           updatedAt: '2024-01-14T15:20:00Z',
         },
         {
           id: 3,
           title: '机器学习入门教程',
-          content:
-            '从零开始学习机器学习，包括基本概念、算法原理、实践案例等...',
+          content: '从零开始学习机器学习...',
           type: 'VIDEO',
-          mediaUrls: ['https://example.com/video1.mp4'],
-          linkUrl: undefined,
           uploaderId: 1,
-          uploader: {
-            id: 1,
-            username: 'zhangsan',
-            email: 'zhangsan@example.com',
-            fullName: '张三',
-            avatarUrl: undefined,
-            school: '清华大学',
-            level: 5,
-            bio: '热爱学习的程序员',
-            role: 'LEARNER',
-            status: 1,
-            createdAt: '2024-01-01T00:00:00Z',
-            updatedAt: '2024-01-15T00:00:00Z',
-          },
+          uploaderName: '张三',
           categoryId: 2,
-          category: {
-            id: 2,
-            name: '人工智能',
-            description: '人工智能相关内容',
-            parentId: undefined,
-            sortOrder: 2,
-            createdAt: '2024-01-01T00:00:00Z',
-          },
+          categoryName: '人工智能',
           tags: '机器学习,AI,Python',
           status: 1,
           createdAt: '2024-01-13T09:15:00Z',
@@ -228,10 +194,8 @@ const ContentManagement: React.FC = () => {
     setSelectedContent(content);
     setContentDetailVisible(true);
 
-    // 加载内容统计数据
     try {
-      // 模拟API调用
-      const mockStats: KnowledgeStats = {
+      const mockStats: ContentStats = {
         knowledgeId: content.id,
         viewCount: 1234,
         likeCount: 156,
@@ -258,7 +222,6 @@ const ContentManagement: React.FC = () => {
       const values = await reviewForm.validateFields();
       console.log('Review result:', values);
 
-      // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       message.success('审核结果已提交');
@@ -274,7 +237,6 @@ const ContentManagement: React.FC = () => {
   const handleDeleteContent = async (contentId: number) => {
     try {
       console.log('Deleting content:', contentId);
-      // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       message.success('内容删除成功');
@@ -285,13 +247,33 @@ const ContentManagement: React.FC = () => {
     }
   };
 
-  // 批量操作
-  const handleBatchOperation = (
-    operation: string,
-    selectedRowKeys: React.Key[]
-  ) => {
-    console.log(`Batch ${operation}:`, selectedRowKeys);
-    message.info(`批量${operation}功能开发中...`);
+  // 批量删除
+  const handleBatchDelete = async () => {
+    if (selectedRowKeys.length === 0) {
+      message.warning('请先选择要删除的内容');
+      return;
+    }
+
+    Modal.confirm({
+      title: '批量删除确认',
+      content: `确定要删除选中的 ${selectedRowKeys.length} 个内容吗？`,
+      okText: '确定',
+      cancelText: '取消',
+      okButtonProps: { danger: true },
+      onOk: async () => {
+        try {
+          console.log('Batch deleting contents:', selectedRowKeys);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          message.success('批量删除成功');
+          setSelectedRowKeys([]);
+          loadContents();
+        } catch (error) {
+          console.error('Failed to batch delete:', error);
+          message.error('批量删除失败');
+        }
+      },
+    });
   };
 
   // 导出内容数据
@@ -302,15 +284,15 @@ const ContentManagement: React.FC = () => {
   // 获取状态标签
   const getStatusTag = (status: number) => {
     switch (status) {
-      case CONTENT_STATUS.DRAFT:
+      case 0:
         return <Tag color="default">草稿</Tag>;
-      case CONTENT_STATUS.PUBLISHED:
+      case 1:
         return <Tag color="green">已发布</Tag>;
-      case CONTENT_STATUS.REVIEWING:
+      case 2:
         return <Tag color="orange">审核中</Tag>;
-      case CONTENT_STATUS.REJECTED:
+      case 3:
         return <Tag color="red">已拒绝</Tag>;
-      case CONTENT_STATUS.DELETED:
+      case 4:
         return <Tag color="red">已删除</Tag>;
       default:
         return <Tag>未知</Tag>;
@@ -330,74 +312,73 @@ const ContentManagement: React.FC = () => {
             {TYPE_ICONS[record.type]}
             <Text
               strong
-              style={{ color: 'var(--accent-primary)', cursor: 'pointer' }}
+              className="content-title hover-scale"
               onClick={() => handleViewContent(record)}
             >
               {title}
             </Text>
           </Space>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {record.tags && (
+          {record.tags && (
+            <div className="content-tags">
               <Space size={4}>
                 {record.tags.split(',').map((tag, index) => (
-                  <Tag key={index}>{tag.trim()}</Tag>
+                  <Tag key={index} className="tag-item">
+                    {tag.trim()}
+                  </Tag>
                 ))}
               </Space>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       ),
     },
     {
       title: '作者',
       key: 'author',
+      width: 120,
       render: (_, record) => (
         <div>
-          <div>{record.uploaderName || `用户 ${record.uploaderId}`}</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-            @{record.uploaderId}
+          <div className="author-name">
+            {record.uploaderName || `用户 ${record.uploaderId}`}
           </div>
+          <div className="author-id">ID: {record.uploaderId}</div>
         </div>
       ),
     },
     {
       title: '分类',
       key: 'category',
+      width: 120,
       render: (_, record) => (
-        <Tag color="blue">{record.category?.name || '未分类'}</Tag>
+        <Tag color="blue">{record.categoryName || '未分类'}</Tag>
       ),
     },
     {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
-      render: type => {
-        const typeMap = {
-          TEXT: '文本',
-          IMAGE: '图片',
-          VIDEO: '视频',
-          PDF: 'PDF',
-          LINK: '链接',
-        };
-        return <Tag>{typeMap[type as keyof typeof typeMap]}</Tag>;
-      },
+      width: 100,
+      render: (type: keyof typeof TYPE_NAMES) => <Tag>{TYPE_NAMES[type]}</Tag>,
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
+      width: 100,
       render: status => getStatusTag(status),
     },
     {
       title: '发布时间',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      width: 180,
       render: date => dayjs(date).format('YYYY-MM-DD HH:mm'),
     },
     {
       title: '操作',
       key: 'actions',
-      width: 200,
+      fixed: 'right',
+      width: 220,
       render: (_, record) => (
         <Space size="small">
           <Button
@@ -405,20 +386,27 @@ const ContentManagement: React.FC = () => {
             size="small"
             icon={<EyeOutlined />}
             onClick={() => handleViewContent(record)}
+            className="hover-scale"
           >
             查看
           </Button>
-          {record.status === CONTENT_STATUS.REVIEWING && (
+          {record.status === 2 && (
             <Button
               type="link"
               size="small"
               icon={<CheckOutlined />}
               onClick={() => handleReviewContent(record)}
+              className="hover-scale"
             >
               审核
             </Button>
           )}
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button
+            type="link"
+            size="small"
+            icon={<EditOutlined />}
+            className="hover-scale"
+          >
             编辑
           </Button>
           <Popconfirm
@@ -427,7 +415,13 @@ const ContentManagement: React.FC = () => {
             okText="确定"
             cancelText="取消"
           >
-            <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+            <Button
+              type="link"
+              size="small"
+              danger
+              icon={<DeleteOutlined />}
+              className="hover-scale"
+            >
               删除
             </Button>
           </Popconfirm>
@@ -438,103 +432,141 @@ const ContentManagement: React.FC = () => {
 
   // 行选择配置
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: KnowledgeItem[]) => {
-      console.log('Selected rows:', selectedRowKeys, selectedRows);
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      setSelectedRowKeys(newSelectedRowKeys);
     },
   };
 
   return (
-    <div style={{ padding: '24px' }}>
-      <Card>
-        <div style={{ marginBottom: '16px' }}>
-          <Space wrap>
-            <Search
-              placeholder="搜索标题或内容"
-              allowClear
-              style={{ width: 300 }}
-              onSearch={setSearchKeyword}
+    <div className="content-management-page animate-fade-in">
+      <div className="management-content container">
+        {/* 页面头部 */}
+        <header className="management-header glass-light animate-fade-in-up">
+          <div className="header-content">
+            <div className="title-section">
+              <h1 className="page-title gradient-text">
+                <FileTextOutlined />
+                内容管理
+              </h1>
+              <p className="page-subtitle">管理系统内容，审核用户发布</p>
+            </div>
+          </div>
+        </header>
+
+        {/* 主要内容 */}
+        <div className="management-main glass-card animate-fade-in-up delay-100">
+          {/* 搜索和筛选 */}
+          <div className="filter-section">
+            <Space wrap size="middle">
+              <Search
+                placeholder="搜索标题或内容"
+                allowClear
+                style={{ width: 300 }}
+                onSearch={setSearchKeyword}
+                prefix={<SearchOutlined />}
+                className="search-input"
+              />
+              <Select
+                placeholder="选择状态"
+                allowClear
+                style={{ width: 120 }}
+                value={statusFilter}
+                onChange={setStatusFilter}
+                suffixIcon={<FilterOutlined />}
+              >
+                <Option value="0">草稿</Option>
+                <Option value="1">已发布</Option>
+                <Option value="2">审核中</Option>
+                <Option value="3">已拒绝</Option>
+                <Option value="4">已删除</Option>
+              </Select>
+              <Select
+                placeholder="选择类型"
+                allowClear
+                style={{ width: 120 }}
+                value={typeFilter}
+                onChange={setTypeFilter}
+                suffixIcon={<FilterOutlined />}
+              >
+                <Option value="TEXT">文本</Option>
+                <Option value="IMAGE">图片</Option>
+                <Option value="VIDEO">视频</Option>
+                <Option value="PDF">PDF</Option>
+                <Option value="LINK">链接</Option>
+              </Select>
+              <Select
+                placeholder="选择分类"
+                allowClear
+                style={{ width: 120 }}
+                value={categoryFilter}
+                onChange={setCategoryFilter}
+                suffixIcon={<FilterOutlined />}
+              >
+                <Option value="1">前端开发</Option>
+                <Option value="2">人工智能</Option>
+                <Option value="3">后端开发</Option>
+              </Select>
+            </Space>
+          </div>
+
+          {/* 操作按钮 */}
+          <div className="action-section">
+            <Space wrap>
+              <Button
+                icon={<DeleteOutlined />}
+                danger
+                onClick={handleBatchDelete}
+                disabled={selectedRowKeys.length === 0}
+                className="glass-button hover-scale active-scale"
+              >
+                批量删除{' '}
+                {selectedRowKeys.length > 0 && `(${selectedRowKeys.length})`}
+              </Button>
+              <Button
+                icon={<ExportOutlined />}
+                onClick={handleExportContents}
+                className="glass-button hover-scale active-scale"
+              >
+                导出数据
+              </Button>
+              <Button
+                icon={<ReloadOutlined />}
+                onClick={loadContents}
+                className="glass-button hover-scale active-scale"
+              >
+                刷新
+              </Button>
+            </Space>
+          </div>
+
+          {/* 内容表格 */}
+          <div className="table-section">
+            <Table
+              columns={columns}
+              dataSource={contents}
+              rowKey="id"
+              loading={loading}
+              rowSelection={rowSelection}
+              scroll={{ x: 1200 }}
+              pagination={{
+                current: currentPage,
+                pageSize: pageSize,
+                total: total,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                showTotal: (total, range) =>
+                  `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
+                onChange: (page, size) => {
+                  setCurrentPage(page);
+                  setPageSize(size || 10);
+                },
+              }}
+              className="content-table"
             />
-            <Select
-              placeholder="选择状态"
-              allowClear
-              style={{ width: 120 }}
-              value={statusFilter}
-              onChange={setStatusFilter}
-            >
-              <Option value="0">草稿</Option>
-              <Option value="1">已发布</Option>
-              <Option value="2">审核中</Option>
-              <Option value="3">已拒绝</Option>
-              <Option value="4">已删除</Option>
-            </Select>
-            <Select
-              placeholder="选择类型"
-              allowClear
-              style={{ width: 120 }}
-              value={typeFilter}
-              onChange={setTypeFilter}
-            >
-              <Option value="TEXT">文本</Option>
-              <Option value="IMAGE">图片</Option>
-              <Option value="VIDEO">视频</Option>
-              <Option value="PDF">PDF</Option>
-              <Option value="LINK">链接</Option>
-            </Select>
-            <Select
-              placeholder="选择分类"
-              allowClear
-              style={{ width: 120 }}
-              value={categoryFilter}
-              onChange={setCategoryFilter}
-            >
-              <Option value="1">前端开发</Option>
-              <Option value="2">人工智能</Option>
-              <Option value="3">后端开发</Option>
-            </Select>
-            <Button icon={<ExportOutlined />} onClick={handleExportContents}>
-              导出数据
-            </Button>
-            <Button icon={<ReloadOutlined />} onClick={loadContents}>
-              刷新
-            </Button>
-          </Space>
+          </div>
         </div>
-
-        <div style={{ marginBottom: '16px' }}>
-          <Space>
-            <Button onClick={() => handleBatchOperation('审核通过', [])}>
-              批量审核通过
-            </Button>
-            <Button onClick={() => handleBatchOperation('审核拒绝', [])}>
-              批量审核拒绝
-            </Button>
-            <Button danger onClick={() => handleBatchOperation('删除', [])}>
-              批量删除
-            </Button>
-          </Space>
-        </div>
-
-        <Table
-          columns={columns}
-          dataSource={contents}
-          rowKey="id"
-          loading={loading}
-          rowSelection={rowSelection}
-          pagination={{
-            current: currentPage,
-            pageSize: pageSize,
-            total: total,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) =>
-              `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
-            onChange: (page, size) => {
-              setCurrentPage(page);
-              setPageSize(size || 10);
-            },
-          }}
-        />
-      </Card>
+      </div>
 
       {/* 内容详情抽屉 */}
       <Drawer
@@ -543,24 +575,25 @@ const ContentManagement: React.FC = () => {
         width={800}
         open={contentDetailVisible}
         onClose={() => setContentDetailVisible(false)}
+        className="content-detail-drawer"
       >
         {selectedContent && (
-          <div>
-            <Descriptions column={1} bordered>
+          <div className="content-detail-content">
+            <Descriptions column={1} bordered className="content-descriptions">
               <Descriptions.Item label="标题">
                 {selectedContent.title}
               </Descriptions.Item>
               <Descriptions.Item label="作者">
-                {selectedContent.uploaderName || `用户 ${selectedContent.uploaderId}`} (@
-                {selectedContent.uploaderId})
+                {selectedContent.uploaderName ||
+                  `用户 ${selectedContent.uploaderId}`}
               </Descriptions.Item>
               <Descriptions.Item label="分类">
-                {selectedContent.category?.name || '未分类'}
+                {selectedContent.categoryName || '未分类'}
               </Descriptions.Item>
               <Descriptions.Item label="类型">
                 <Space>
                   {TYPE_ICONS[selectedContent.type]}
-                  {selectedContent.type}
+                  {TYPE_NAMES[selectedContent.type]}
                 </Space>
               </Descriptions.Item>
               <Descriptions.Item label="标签">
@@ -583,83 +616,63 @@ const ContentManagement: React.FC = () => {
               </Descriptions.Item>
             </Descriptions>
 
-            <div style={{ marginTop: '24px' }}>
+            <div className="content-body">
               <h4>内容</h4>
-              <div
-                style={{
-                  padding: '16px',
-                  backgroundColor: 'var(--bg-tertiary)',
-                  borderRadius: '6px',
-                  maxHeight: '300px',
-                  overflow: 'auto',
-                }}
-              >
+              <div className="content-text">
                 <Paragraph>{selectedContent.content}</Paragraph>
               </div>
             </div>
 
-            {selectedContent.mediaUrls &&
-              selectedContent.mediaUrls.length > 0 && (
-                <div style={{ marginTop: '24px' }}>
-                  <h4>媒体文件</h4>
-                  <Space wrap>
-                    {selectedContent.mediaUrls.map((url, index) => (
-                      <Image
-                        key={index}
-                        width={100}
-                        height={100}
-                        src={url}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    ))}
-                  </Space>
-                </div>
-              )}
-
-            {selectedContent.linkUrl && (
-              <div style={{ marginTop: '24px' }}>
-                <h4>链接地址</h4>
-                <a
-                  href={selectedContent.linkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {selectedContent.linkUrl}
-                </a>
-              </div>
-            )}
-
             {contentStats && (
-              <div style={{ marginTop: '24px' }}>
+              <div className="content-stats">
                 <h4>统计数据</h4>
-                <Row gutter={16}>
+                <Row gutter={[16, 16]}>
                   <Col span={6}>
-                    <Statistic title="浏览量" value={contentStats.viewCount} />
+                    <div className="stat-item glass-light">
+                      <Statistic
+                        title="浏览量"
+                        value={contentStats.viewCount}
+                      />
+                    </div>
                   </Col>
                   <Col span={6}>
-                    <Statistic title="点赞数" value={contentStats.likeCount} />
+                    <div className="stat-item glass-light">
+                      <Statistic
+                        title="点赞数"
+                        value={contentStats.likeCount}
+                      />
+                    </div>
                   </Col>
                   <Col span={6}>
-                    <Statistic
-                      title="收藏数"
-                      value={contentStats.favoriteCount}
-                    />
+                    <div className="stat-item glass-light">
+                      <Statistic
+                        title="收藏数"
+                        value={contentStats.favoriteCount}
+                      />
+                    </div>
                   </Col>
                   <Col span={6}>
-                    <Statistic
-                      title="评论数"
-                      value={contentStats.commentCount}
-                    />
+                    <div className="stat-item glass-light">
+                      <Statistic
+                        title="评论数"
+                        value={contentStats.commentCount}
+                      />
+                    </div>
                   </Col>
                 </Row>
-                <Row gutter={16} style={{ marginTop: '16px' }}>
+                <Row
+                  gutter={[16, 16]}
+                  style={{ marginTop: 'var(--spacing-md)' }}
+                >
                   <Col span={6}>
-                    <Statistic
-                      title="质量评分"
-                      value={contentStats.score}
-                      precision={1}
-                      suffix="/ 10"
-                    />
+                    <div className="stat-item glass-light">
+                      <Statistic
+                        title="质量评分"
+                        value={contentStats.score}
+                        precision={1}
+                        suffix="/ 10"
+                      />
+                    </div>
                   </Col>
                 </Row>
               </div>
@@ -675,6 +688,9 @@ const ContentManagement: React.FC = () => {
         onOk={handleSubmitReview}
         onCancel={() => setReviewModalVisible(false)}
         width={600}
+        okText="提交"
+        cancelText="取消"
+        className="review-modal"
       >
         <Form form={reviewForm} layout="vertical">
           <Form.Item
@@ -699,15 +715,6 @@ const ContentManagement: React.FC = () => {
               maxLength={500}
               showCount
             />
-          </Form.Item>
-
-          <Form.Item
-            name="notifyAuthor"
-            label="通知作者"
-            valuePropName="checked"
-            initialValue={true}
-          >
-            <Switch />
           </Form.Item>
         </Form>
       </Modal>

@@ -1,6 +1,29 @@
-/* ===== 性能优化样式 ===== */
+/* ===================================
+   性能优化样式 - Performance Optimization Styles
+   ===================================
+   
+   说明：
+   - GPU 加速优化
+   - 渲染性能优化
+   - 滚动性能优化
+   - 动画性能优化
+   - 移动端性能优化
+   
+   文件结构：
+   1. GPU 加速
+   2. 渲染优化
+   3. 滚动优化
+   4. 动画优化
+   5. 图片优化
+   6. 移动端优化
+   
+   ================================== */
 
-/* 使用GPU加速的变换 */
+/* ===================================
+   1. GPU 加速 - GPU Acceleration
+   ================================== */
+
+/* 使用 GPU 加速的变换 */
 .gpu-accelerated {
   transform: translateZ(0);
   will-change: transform;
@@ -8,90 +31,123 @@
   perspective: 1000px;
 }
 
-/* 优化动画性能 - 只对transform和opacity使用GPU */
+/* 优化动画性能 - 只对 transform 和 opacity 使用 GPU */
 .optimized-transition {
-  transition: transform var(--transition-fast) ease,
-              opacity var(--transition-fast) ease;
+  transition:
+    transform var(--transition-fast) ease,
+    opacity var(--transition-fast) ease;
   will-change: transform, opacity;
 }
+
+/* 3D 变换优化 */
+.transform-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* ===================================
+   2. 渲染优化 - Rendering Optimization
+   ================================== */
 
 /* 避免重绘的优化 */
 .no-repaint {
   contain: layout style paint;
 }
 
-/* 优化滚动性能 */
+/* 内容可见性优化 - 延迟渲染屏幕外内容 */
+.content-visibility-auto {
+  content-visibility: auto;
+}
+
+/* 布局隔离 - 防止布局抖动 */
+.contain-layout {
+  contain: layout;
+}
+
+/* 样式隔离 */
+.contain-style {
+  contain: style;
+}
+
+/* 绘制隔离 */
+.contain-paint {
+  contain: paint;
+}
+
+/* 完全隔离 */
+.contain-strict {
+  contain: strict;
+}
+
+/* ===================================
+   3. 滚动优化 - Scroll Optimization
+   ================================== */
+
+/* 平滑滚动 */
 .smooth-scroll {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
 
-/* 减少动画的优化 */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* 滚动捕捉 */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* 优化图片加载 */
+.scroll-snap-y {
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-start {
+  scroll-snap-align: start;
+}
+
+.scroll-snap-center {
+  scroll-snap-align: center;
+}
+
+.scroll-snap-end {
+  scroll-snap-align: end;
+}
+
+/* 滚动性能优化 */
+.scroll-optimized {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  will-change: scroll-position;
+}
+
+/* ===================================
+   4. 动画优化 - Animation Optimization
+   ================================== */
+
+/* 动画性能优化 - 使用 transform 和 opacity */
+.animate-optimized {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 移除 will-change - 动画结束后 */
+.animate-complete {
+  will-change: auto;
+}
+
+/* ===================================
+   5. 图片优化 - Image Optimization
+   ================================== */
+
+/* 图片加载优化 */
 img {
   content-visibility: auto;
   image-rendering: -webkit-optimize-contrast;
 }
 
-/* 优化字体渲染 */
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-/* 优化列表渲染 */
-.virtual-list {
-  contain: layout style paint;
-  content-visibility: auto;
-}
-
-/* 优化卡片渲染 */
-.optimized-card {
-  contain: layout style;
-  will-change: transform;
-}
-
-/* 优化按钮点击 */
-.optimized-button {
-  touch-action: manipulation;
-  will-change: transform;
-}
-
-.optimized-button:active {
-  transform: scale(0.98);
-}
-
-/* 优化输入框 */
-.optimized-input {
-  will-change: border-color, background-color;
-}
-
-/* 优化模态框 */
-.optimized-modal {
-  contain: layout style paint;
-  will-change: opacity, transform;
-}
-
-/* 优化下拉菜单 */
-.optimized-dropdown {
-  contain: layout style;
-  will-change: opacity, transform;
-}
-
-/* 响应式图片优化 */
+/* 响应式图片 */
 .responsive-image {
   max-width: 100%;
   height: auto;
@@ -99,17 +155,18 @@ body {
   content-visibility: auto;
 }
 
-/* 懒加载占位符 */
+/* 图片懒加载占位符 */
 .lazy-placeholder {
   background: var(--bg-tertiary);
   min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+  content-visibility: auto;
 }
 
-/* 骨架屏优化 */
-.skeleton {
+/* 图片加载动画 */
+.image-loading {
   background: linear-gradient(
     90deg,
     var(--bg-tertiary) 25%,
@@ -118,7 +175,6 @@ body {
   );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
-  will-change: background-position;
 }
 
 @keyframes skeleton-loading {
@@ -130,89 +186,261 @@ body {
   }
 }
 
-/* 优化表格渲染 */
+/* ===================================
+   6. 字体优化 - Font Optimization
+   ================================== */
+
+/* 字体渲染优化 */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 字体加载优化 */
+.font-display-swap {
+  font-display: swap;
+}
+
+/* ===================================
+   7. 列表优化 - List Optimization
+   ================================== */
+
+/* 虚拟列表优化 */
+.virtual-list {
+  contain: layout style paint;
+  content-visibility: auto;
+}
+
+.virtual-list-item {
+  contain: layout style;
+  content-visibility: auto;
+}
+
+/* ===================================
+   8. 组件优化 - Component Optimization
+   ================================== */
+
+/* 卡片渲染优化 */
+.optimized-card {
+  contain: layout style;
+  will-change: transform;
+}
+
+/* 按钮点击优化 */
+.optimized-button {
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+.optimized-button:active {
+  transform: scale(0.98);
+}
+
+/* 输入框优化 */
+.optimized-input {
+  will-change: border-color, background-color;
+}
+
+/* 模态框优化 */
+.optimized-modal {
+  contain: layout style paint;
+  will-change: opacity, transform;
+}
+
+/* 下拉菜单优化 */
+.optimized-dropdown {
+  contain: layout style;
+  will-change: opacity, transform;
+}
+
+/* 表格优化 */
 .optimized-table {
   contain: layout style;
 }
 
-.optimized-table .ant-table-tbody > tr {
+.optimized-table tbody tr {
   contain: layout style;
 }
 
-/* 优化图表渲染 */
+/* 图表优化 */
 .optimized-chart {
   contain: layout style paint;
   will-change: contents;
 }
 
-/* 优化视频播放 */
-.optimized-video {
-  contain: layout style paint;
-  object-fit: cover;
-}
+/* ===================================
+   9. 移动端优化 - Mobile Optimization
+   ================================== */
 
-/* 优化搜索输入 */
-.optimized-search {
-  will-change: border-color, box-shadow;
-}
-
-/* 优化标签云 */
-.optimized-tag-cloud {
-  contain: layout style;
-}
-
-/* 优化分页器 */
-.optimized-pagination {
-  contain: layout style;
-}
-
-/* 优化加载状态 */
-.optimized-loading {
-  contain: layout style paint;
-  will-change: opacity;
-}
-
-/* 优化错误提示 */
-.optimized-error {
-  contain: layout style;
-  will-change: opacity, transform;
-}
-
-/* 移动端优化 */
+/* 移动端触摸优化 */
 @media (max-width: 768px) {
-  /* 减少移动端的阴影和模糊效果以提高性能 */
+  /* 减少阴影和模糊效果 */
   .glass-effect {
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
-  /* 减少移动端的动画 */
+  /* 减少动画时长 */
   * {
-    transition-duration: 0.15s !important;
+    transition-duration: 0.15s;
   }
 
-  /* 优化移动端滚动 */
+  /* 优化滚动 */
   body {
     -webkit-overflow-scrolling: touch;
   }
+
+  /* 移除复杂动画 */
+  .complex-animation {
+    animation: none;
+  }
+
+  /* 简化阴影 */
+  .shadow-complex {
+    box-shadow: var(--shadow-sm);
+  }
 }
 
-/* 低性能设备优化 */
+/* ===================================
+   10. 低性能设备优化 - Low Performance Optimization
+   ================================== */
+
 @media (prefers-reduced-motion: reduce) {
+  /* 移除玻璃效果 */
   .glass-effect {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: var(--bg-primary) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--bg-primary);
+  }
+
+  /* 移除所有动画 */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* 移除 will-change */
+  * {
+    will-change: auto !important;
   }
 }
 
-/* 高对比度模式优化 */
+/* ===================================
+   11. 高对比度模式优化 - High Contrast Optimization
+   ================================== */
+
 @media (prefers-contrast: high) {
+  /* 移除玻璃效果 */
   .glass-effect {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: var(--bg-primary) !important;
-    border: 2px solid var(--border-strong) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-strong);
+  }
+
+  /* 移除阴影 */
+  * {
+    box-shadow: none !important;
+  }
+
+  /* 增强边框 */
+  * {
+    border-width: 2px;
   }
 }
 
+/* ===================================
+   12. 打印优化 - Print Optimization
+   ================================== */
+
+@media print {
+  /* 移除所有动画和过渡 */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* 移除阴影和背景 */
+  * {
+    box-shadow: none !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* 优化分页 */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+
+  /* 移除不必要的元素 */
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ===================================
+   13. 性能监控类 - Performance Monitoring Classes
+   ================================== */
+
+/* 标记需要性能优化的元素 */
+.perf-critical {
+  /* 关键渲染路径元素 */
+  contain: layout style paint;
+  will-change: transform, opacity;
+}
+
+.perf-heavy {
+  /* 性能消耗大的元素 */
+  content-visibility: auto;
+  contain: layout style;
+}
+
+.perf-lazy {
+  /* 延迟加载元素 */
+  content-visibility: auto;
+}
+
+/* ===================================
+   14. 实用性能工具类 - Utility Performance Classes
+   ================================== */
+
+/* 硬件加速 */
+.hw-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 防止布局抖动 */
+.prevent-layout-shift {
+  contain: layout;
+}
+
+/* 防止重绘 */
+.prevent-repaint {
+  contain: paint;
+}
+
+/* 防止样式重算 */
+.prevent-recalc {
+  contain: style;
+}
+
+/* 完全隔离 */
+.isolate {
+  contain: strict;
+  isolation: isolate;
+}
+
+/* ===================================
+   完成 - performance.css
+   ================================== */

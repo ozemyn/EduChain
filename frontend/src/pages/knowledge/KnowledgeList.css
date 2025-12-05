@@ -1,0 +1,464 @@
+/* ===================================
+   知识列表页面样式 - Knowledge List Page Styles
+   ===================================
+   
+   使用全局样式系统：
+   - animations.css - 动画效果
+   - glass-effects.css - 玻璃效果
+   - theme-variables.css - 主题变量
+   - globals.css - 基础样式
+   
+   ================================== */
+
+/* ===================================
+   页面容器 - Page Container
+   ================================== */
+
+.knowledge-list-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-lg) 0;
+}
+
+/* ===================================
+   背景装饰 - Background Decoration
+   ================================== */
+
+.knowledge-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.knowledge-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: var(--blur-2xl);
+  opacity: 0.6;
+  animation: float 12s ease-in-out infinite;
+}
+
+.knowledge-blob-1 {
+  top: 10%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--primary-200) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.knowledge-blob-2 {
+  top: 50%;
+  left: 5%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(
+    circle,
+    var(--accent-secondary) 0%,
+    transparent 70%
+  );
+  animation-delay: 4s;
+}
+
+.knowledge-blob-3 {
+  bottom: 15%;
+  right: 25%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    var(--accent-success) 0%,
+    transparent 70%
+  );
+  animation-delay: 8s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* ===================================
+   内容容器 - Content Container
+   ================================== */
+
+.knowledge-content {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* ===================================
+   页面头部 - Page Header
+   ================================== */
+
+.knowledge-header {
+  padding: var(--spacing-2xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.title-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: linear-gradient(
+    135deg,
+    var(--primary-600),
+    var(--accent-secondary)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* ===================================
+   筛选器区域 - Filter Section
+   ================================== */
+
+.knowledge-filter-section {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius);
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* ===================================
+   知识列表主区域 - Main Section
+   ================================== */
+
+.knowledge-main {
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* 知识卡片网格 */
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.knowledge-card-wrapper {
+  height: 100%;
+}
+
+/* ===================================
+   分页器 - Pagination
+   ================================== */
+
+.knowledge-pagination {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius);
+}
+
+/* ===================================
+   空状态 - Empty State
+   ================================== */
+
+.knowledge-empty {
+  padding: var(--spacing-3xl);
+  border-radius: var(--liquid-border-radius);
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================================
+   响应式设计 - Responsive Design
+   ================================== */
+
+/* 大屏幕 (1536px+) */
+@media (min-width: 1536px) {
+  .knowledge-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 桌面 (1280px - 1535px) */
+@media (min-width: 1280px) and (max-width: 1535px) {
+  .knowledge-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 平板横屏 (1024px - 1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .knowledge-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: 2.25rem;
+  }
+}
+
+/* 平板竖屏 (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .knowledge-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .knowledge-header {
+    padding: var(--spacing-xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .title-section {
+    width: 100%;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    justify-content: center;
+  }
+}
+
+/* 手机横屏 (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .knowledge-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .knowledge-header {
+    padding: var(--spacing-lg);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    justify-content: center;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .knowledge-filter-section {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 手机竖屏 (< 640px) */
+@media (max-width: 639px) {
+  .knowledge-list-page {
+    padding: var(--spacing-md) 0;
+  }
+
+  .knowledge-content {
+    padding: 0 var(--spacing-md);
+  }
+
+  .knowledge-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .knowledge-header {
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-md);
+  }
+
+  .title-section {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    justify-content: center;
+  }
+
+  .page-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .header-actions button,
+  .header-actions a {
+    width: 100%;
+  }
+
+  .knowledge-filter-section {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .knowledge-pagination {
+    padding: var(--spacing-md);
+  }
+
+  .knowledge-empty {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    min-height: 300px;
+  }
+
+  /* 隐藏背景装饰以提升性能 */
+  .knowledge-blob {
+    display: none;
+  }
+}
+
+/* 超小屏幕 (< 375px) */
+@media (max-width: 374px) {
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .knowledge-header {
+    padding: var(--spacing-md);
+  }
+
+  .knowledge-filter-section {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* ===================================
+   触摸设备优化 - Touch Device Optimization
+   ================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* 增加触摸目标大小 */
+  .header-actions button {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+
+  /* 移除悬停效果 */
+  .knowledge-card-wrapper:hover {
+    transform: none;
+  }
+}
+
+/* ===================================
+   减少动画偏好 - Reduced Motion
+   ================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .knowledge-blob {
+    animation: none;
+  }
+
+  .knowledge-card-wrapper {
+    animation: none !important;
+  }
+}
+
+/* ===================================
+   打印样式 - Print Styles
+   ================================== */
+
+@media print {
+  .knowledge-background,
+  .header-actions,
+  .knowledge-filter-section,
+  .knowledge-pagination {
+    display: none !important;
+  }
+
+  .knowledge-header {
+    background: white;
+    border: 1px solid #000;
+  }
+
+  .knowledge-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* ===================================
+   深色模式特定样式 - Dark Mode Specific
+   ================================== */
+
+[data-theme='dark'] .knowledge-blob {
+  opacity: 0.3;
+}
+
+[data-theme='dark'] .knowledge-blob-1 {
+  background: radial-gradient(circle, #333333 0%, transparent 70%);
+}
+
+[data-theme='dark'] .knowledge-blob-2 {
+  background: radial-gradient(circle, #404040 0%, transparent 70%);
+}
+
+[data-theme='dark'] .knowledge-blob-3 {
+  background: radial-gradient(circle, #525252 0%, transparent 70%);
+}
