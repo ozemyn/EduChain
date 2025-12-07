@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Card, Descriptions, Button, Spin, message, Tag, Space, Alert } from 'antd';
+import {
+  Card,
+  Descriptions,
+  Button,
+  Spin,
+  message,
+  Tag,
+  Space,
+  Alert,
+} from 'antd';
 import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
@@ -145,7 +154,10 @@ const TransactionDetail: React.FC = () => {
                 </Space>
               }
             >
-              <Tag color={getTypeColor(transaction.type)} icon={<SafetyOutlined />}>
+              <Tag
+                color={getTypeColor(transaction.type)}
+                icon={<SafetyOutlined />}
+              >
                 {getTypeText(transaction.type)}
               </Tag>
             </Descriptions.Item>
@@ -159,7 +171,9 @@ const TransactionDetail: React.FC = () => {
               }
             >
               <Tag
-                color={transaction.status === 'confirmed' ? 'success' : 'warning'}
+                color={
+                  transaction.status === 'confirmed' ? 'success' : 'warning'
+                }
                 icon={
                   transaction.status === 'confirmed' ? (
                     <CheckCircleOutlined />
@@ -285,27 +299,28 @@ const TransactionDetail: React.FC = () => {
         </Card>
 
         {/* 元数据信息 */}
-        {transaction.metadata && Object.keys(transaction.metadata).length > 0 && (
-          <Card
-            className="metadata-card glass-card"
-            title={
-              <Space>
-                <FileTextOutlined />
-                <span>元数据</span>
-              </Space>
-            }
-          >
-            <Descriptions column={1} bordered>
-              {Object.entries(transaction.metadata).map(([key, value]) => (
-                <Descriptions.Item key={key} label={key}>
-                  {typeof value === 'object'
-                    ? JSON.stringify(value, null, 2)
-                    : String(value)}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
-          </Card>
-        )}
+        {transaction.metadata &&
+          Object.keys(transaction.metadata).length > 0 && (
+            <Card
+              className="metadata-card glass-card"
+              title={
+                <Space>
+                  <FileTextOutlined />
+                  <span>元数据</span>
+                </Space>
+              }
+            >
+              <Descriptions column={1} bordered>
+                {Object.entries(transaction.metadata).map(([key, value]) => (
+                  <Descriptions.Item key={key} label={key}>
+                    {typeof value === 'object'
+                      ? JSON.stringify(value, null, 2)
+                      : String(value)}
+                  </Descriptions.Item>
+                ))}
+              </Descriptions>
+            </Card>
+          )}
       </div>
     </div>
   );

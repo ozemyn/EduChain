@@ -74,10 +74,17 @@ const tags = [
 ];
 
 // 生成交易ID的辅助函数
-const generateTxId = (blockIndex: number, txIndex: number, knowledgeId: number): string => {
+const generateTxId = (
+  blockIndex: number,
+  txIndex: number,
+  knowledgeId: number
+): string => {
   // 生成固定的、可预测的交易ID
   const base = `${blockIndex}_${txIndex}_${knowledgeId}`;
-  return `tx_${base.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0).toString(36)}`;
+  return `tx_${base
+    .split('')
+    .reduce((acc, char) => acc + char.charCodeAt(0), 0)
+    .toString(36)}`;
 };
 
 // 生成区块数据
@@ -404,12 +411,12 @@ export const getTransactionById = (id: string) => {
   for (const block of mockBlocks) {
     // 先按交易ID精确匹配
     let tx = block.transactions.find(t => t.id === id);
-    
+
     // 如果没找到且ID是数字，尝试按知识ID查找
     if (!tx && !isNaN(Number(id))) {
       tx = block.transactions.find(t => t.knowledgeId === Number(id));
     }
-    
+
     if (tx) {
       return {
         transaction: tx,
@@ -417,6 +424,6 @@ export const getTransactionById = (id: string) => {
       };
     }
   }
-  
+
   return null;
 };

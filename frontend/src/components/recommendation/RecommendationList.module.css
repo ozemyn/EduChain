@@ -14,6 +14,11 @@
   color: var(--text-primary);
 }
 
+/* 深色模式下确保标题颜色清晰可见 */
+[data-theme='dark'] .title {
+  color: #ffffff !important;
+}
+
 .refreshBtn {
   color: var(--text-secondary);
   transition: all 0.3s ease;

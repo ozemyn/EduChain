@@ -166,13 +166,13 @@ export const mockKnowledgeVersions: KnowledgeVersion[] = [
 // 获取知识条目的版本历史
 export const getVersionsByKnowledgeId = (knowledgeId: number) => {
   return mockKnowledgeVersions
-    .filter((v) => v.knowledgeId === knowledgeId)
+    .filter(v => v.knowledgeId === knowledgeId)
     .sort((a, b) => b.versionNumber - a.versionNumber);
 };
 
 // 获取特定版本
 export const getVersion = (knowledgeId: number, versionNumber: number) => {
   return mockKnowledgeVersions.find(
-    (v) => v.knowledgeId === knowledgeId && v.versionNumber === versionNumber
+    v => v.knowledgeId === knowledgeId && v.versionNumber === versionNumber
   );
 };

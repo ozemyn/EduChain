@@ -177,7 +177,7 @@
 /* 知识卡片网格 */
 .knowledge-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-xl);
   margin-bottom: var(--spacing-2xl);
 }
@@ -218,21 +218,21 @@
 /* 大屏幕 (1536px+) */
 @media (min-width: 1536px) {
   .knowledge-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* 桌面 (1280px - 1535px) */
 @media (min-width: 1280px) and (max-width: 1535px) {
   .knowledge-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* 平板横屏 (1024px - 1279px) */
 @media (min-width: 1024px) and (max-width: 1279px) {
   .knowledge-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
   }
 
@@ -461,4 +461,63 @@
 
 [data-theme='dark'] .knowledge-blob-3 {
   background: radial-gradient(circle, #525252 0%, transparent 70%);
+}
+
+/* 深色模式下的分页器样式 */
+[data-theme='dark'] .knowledge-pagination {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 分页器文字颜色 */
+[data-theme='dark'] .knowledge-pagination .ant-pagination-total-text {
+  color: #d1d5db !important;
+}
+
+[data-theme='dark'] .knowledge-pagination .ant-pagination-options-quick-jumper {
+  color: #d1d5db !important;
+}
+
+[data-theme='dark']
+  .knowledge-pagination
+  .ant-pagination-options-quick-jumper
+  input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #d1d5db !important;
+}
+
+[data-theme='dark'] .knowledge-pagination .ant-select-selection-item {
+  color: #d1d5db !important;
+}
+
+[data-theme='dark'] .knowledge-pagination .ant-pagination-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .knowledge-pagination .ant-pagination-item a {
+  color: #d1d5db;
+}
+
+[data-theme='dark'] .knowledge-pagination .ant-pagination-item-active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+[data-theme='dark'] .knowledge-pagination .ant-pagination-item-active a {
+  color: white;
+}
+
+/* 深色模式下的页面标题 */
+[data-theme='dark'] .page-title {
+  background: linear-gradient(135deg, #ffffff, #e5e5e5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 深色模式下的页面副标题 */
+[data-theme='dark'] .page-subtitle {
+  color: #9ca3af;
 }

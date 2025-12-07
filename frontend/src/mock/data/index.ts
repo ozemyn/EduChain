@@ -17,3 +17,4 @@ export * from './achievements';
 export * from './files';
 export * from './logs';
 export * from './community';
+export * from './tickets';

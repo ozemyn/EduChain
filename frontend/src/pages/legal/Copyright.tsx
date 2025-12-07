@@ -27,7 +27,9 @@ const Copyright: React.FC = () => {
               <CopyrightOutlined />
             </div>
           </div>
-          <Title level={1} className="gradient-text">版权声明</Title>
+          <Title level={1} className="gradient-text">
+            版权声明
+          </Title>
           <Text type="secondary">最后更新：2025年12月5日</Text>
         </header>
 
@@ -36,7 +38,8 @@ const Copyright: React.FC = () => {
           <Typography>
             <Title level={2}>EduChain 版权声明</Title>
             <Paragraph>
-              本声明适用于 EduChain 教育知识共享平台（以下简称"本平台"）的所有内容和服务。
+              本声明适用于 EduChain
+              教育知识共享平台（以下简称"本平台"）的所有内容和服务。
               请仔细阅读以下版权声明，以了解您在使用本平台时的权利和义务。
             </Paragraph>
 
@@ -46,8 +49,8 @@ const Copyright: React.FC = () => {
             <Paragraph>
               <strong>1.1 平台所有权</strong>
               <br />
-              本平台的整体设计、功能、代码、图标、界面、文字、图片等所有内容的知识产权归 EduChain 所有，
-              受中华人民共和国著作权法及国际版权公约的保护。
+              本平台的整体设计、功能、代码、图标、界面、文字、图片等所有内容的知识产权归
+              EduChain 所有， 受中华人民共和国著作权法及国际版权公约的保护。
             </Paragraph>
             <Paragraph>
               <strong>1.2 商标权</strong>
@@ -169,7 +172,9 @@ const Copyright: React.FC = () => {
             <Title level={3}>7. 免责声明</Title>
             <Paragraph>
               <ul>
-                <li>平台仅提供信息存储和展示服务，不对用户发布的内容承担版权审查义务</li>
+                <li>
+                  平台仅提供信息存储和展示服务，不对用户发布的内容承担版权审查义务
+                </li>
                 <li>用户应自行判断内容的合法性和准确性</li>
                 <li>因用户违反版权法律法规造成的损失，由用户自行承担</li>
               </ul>

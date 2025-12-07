@@ -6,7 +6,15 @@
 export interface UserAchievement {
   id: number;
   userId: number;
-  achievementType: 'KNOWLEDGE_CREATOR' | 'KNOWLEDGE_SHARER' | 'ACTIVE_LEARNER' | 'SOCIAL_BUTTERFLY' | 'QUALITY_CONTRIBUTOR' | 'MILESTONE_ACHIEVER' | 'SPECIAL_EVENT' | 'SYSTEM_BADGE';
+  achievementType:
+    | 'KNOWLEDGE_CREATOR'
+    | 'KNOWLEDGE_SHARER'
+    | 'ACTIVE_LEARNER'
+    | 'SOCIAL_BUTTERFLY'
+    | 'QUALITY_CONTRIBUTOR'
+    | 'MILESTONE_ACHIEVER'
+    | 'SPECIAL_EVENT'
+    | 'SYSTEM_BADGE';
   achievementName: string;
   achievementDescription: string;
   achievementIcon: string;
@@ -351,15 +359,17 @@ export const mockUserAchievements: UserAchievement[] = [
 
 // 获取用户的成就列表
 export const getUserAchievements = (userId: number) => {
-  return mockUserAchievements.filter((a) => a.userId === userId);
+  return mockUserAchievements.filter(a => a.userId === userId);
 };
 
 // 获取用户已完成的成就
 export const getCompletedAchievements = (userId: number) => {
-  return mockUserAchievements.filter((a) => a.userId === userId && a.isCompleted);
+  return mockUserAchievements.filter(a => a.userId === userId && a.isCompleted);
 };
 
 // 获取用户进行中的成就
 export const getInProgressAchievements = (userId: number) => {
-  return mockUserAchievements.filter((a) => a.userId === userId && !a.isCompleted);
+  return mockUserAchievements.filter(
+    a => a.userId === userId && !a.isCompleted
+  );
 };

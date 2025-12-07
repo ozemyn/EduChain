@@ -30,7 +30,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'react-hooks-diagram.png',
     storedName: 'uploads/2024/11/react-hooks-diagram-abc123.png',
     filePath: '/uploads/2024/11/react-hooks-diagram-abc123.png',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/react-hooks-diagram-abc123.png',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/react-hooks-diagram-abc123.png',
     fileSize: 245678,
     fileType: 'IMAGE',
     mimeType: 'image/png',
@@ -50,7 +51,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'spring-boot-architecture.pdf',
     storedName: 'uploads/2024/11/spring-boot-architecture-def456.pdf',
     filePath: '/uploads/2024/11/spring-boot-architecture-def456.pdf',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/spring-boot-architecture-def456.pdf',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/spring-boot-architecture-def456.pdf',
     fileSize: 1234567,
     fileType: 'DOCUMENT',
     mimeType: 'application/pdf',
@@ -70,7 +72,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'mysql-optimization-guide.pdf',
     storedName: 'uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
     filePath: '/uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
     fileSize: 987654,
     fileType: 'DOCUMENT',
     mimeType: 'application/pdf',
@@ -90,7 +93,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'vue3-demo-video.mp4',
     storedName: 'uploads/2024/11/vue3-demo-video-jkl012.mp4',
     filePath: '/uploads/2024/11/vue3-demo-video-jkl012.mp4',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/vue3-demo-video-jkl012.mp4',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/vue3-demo-video-jkl012.mp4',
     fileSize: 15678900,
     fileType: 'VIDEO',
     mimeType: 'video/mp4',
@@ -110,7 +114,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'docker-compose-example.yml',
     storedName: 'uploads/2024/11/docker-compose-example-mno345.yml',
     filePath: '/uploads/2024/11/docker-compose-example-mno345.yml',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/docker-compose-example-mno345.yml',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/docker-compose-example-mno345.yml',
     fileSize: 2345,
     fileType: 'DOCUMENT',
     mimeType: 'text/yaml',
@@ -130,7 +135,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'python-ml-notebook.ipynb',
     storedName: 'uploads/2024/11/python-ml-notebook-pqr678.ipynb',
     filePath: '/uploads/2024/11/python-ml-notebook-pqr678.ipynb',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/python-ml-notebook-pqr678.ipynb',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/python-ml-notebook-pqr678.ipynb',
     fileSize: 456789,
     fileType: 'DOCUMENT',
     mimeType: 'application/x-ipynb+json',
@@ -150,7 +156,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'flutter-app-screenshot.png',
     storedName: 'uploads/2024/11/flutter-app-screenshot-stu901.png',
     filePath: '/uploads/2024/11/flutter-app-screenshot-stu901.png',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/flutter-app-screenshot-stu901.png',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/flutter-app-screenshot-stu901.png',
     fileSize: 345678,
     fileType: 'IMAGE',
     mimeType: 'image/png',
@@ -170,7 +177,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'redis-config.conf',
     storedName: 'uploads/2024/11/redis-config-vwx234.conf',
     filePath: '/uploads/2024/11/redis-config-vwx234.conf',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/redis-config-vwx234.conf',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/redis-config-vwx234.conf',
     fileSize: 3456,
     fileType: 'DOCUMENT',
     mimeType: 'text/plain',
@@ -190,7 +198,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'typescript-types.d.ts',
     storedName: 'uploads/2024/11/typescript-types-yza567.d.ts',
     filePath: '/uploads/2024/11/typescript-types-yza567.d.ts',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/typescript-types-yza567.d.ts',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/typescript-types-yza567.d.ts',
     fileSize: 12345,
     fileType: 'DOCUMENT',
     mimeType: 'text/plain',
@@ -210,7 +219,8 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'k8s-deployment.yaml',
     storedName: 'uploads/2024/11/k8s-deployment-bcd890.yaml',
     filePath: '/uploads/2024/11/k8s-deployment-bcd890.yaml',
-    fileUrl: 'https://cdn.educhain.com/uploads/2024/11/k8s-deployment-bcd890.yaml',
+    fileUrl:
+      'https://cdn.educhain.com/uploads/2024/11/k8s-deployment-bcd890.yaml',
     fileSize: 4567,
     fileType: 'DOCUMENT',
     mimeType: 'text/yaml',
@@ -229,15 +239,15 @@ export const mockFileUploads: FileUpload[] = [
 
 // 获取用户上传的文件
 export const getFilesByUploader = (uploaderId: number) => {
-  return mockFileUploads.filter((f) => f.uploaderId === uploaderId);
+  return mockFileUploads.filter(f => f.uploaderId === uploaderId);
 };
 
 // 获取知识条目的文件
 export const getFilesByKnowledge = (knowledgeId: number) => {
-  return mockFileUploads.filter((f) => f.knowledgeId === knowledgeId);
+  return mockFileUploads.filter(f => f.knowledgeId === knowledgeId);
 };
 
 // 按文件类型获取
 export const getFilesByType = (fileType: string) => {
-  return mockFileUploads.filter((f) => f.fileType === fileType);
+  return mockFileUploads.filter(f => f.fileType === fileType);
 };

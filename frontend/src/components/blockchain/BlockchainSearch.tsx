@@ -28,8 +28,11 @@ const BlockchainSearch: React.FC = () => {
       setLoading(true);
       const response = await blockchainService.search(value, searchType);
       if (response.success && response.data) {
-        const data = response.data as { type: string; data: Block | Transaction | null };
-        
+        const data = response.data as {
+          type: string;
+          data: Block | Transaction | null;
+        };
+
         if (data.type === 'block' && data.data) {
           setResults({ block: data.data as Block });
         } else if (data.type === 'transaction' && data.data) {

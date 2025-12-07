@@ -7,8 +7,28 @@ export interface AdminLog {
   id: number;
   adminId: number;
   adminUsername: string;
-  operationType: 'CREATE' | 'UPDATE' | 'DELETE' | 'APPROVE' | 'REJECT' | 'DISABLE' | 'ENABLE' | 'EXPORT' | 'IMPORT' | 'BACKUP' | 'RESTORE';
-  targetType: 'USER' | 'KNOWLEDGE_ITEM' | 'CATEGORY' | 'COMMENT' | 'TAG' | 'SYSTEM_CONFIG' | 'EXTERNAL_SOURCE' | 'NOTIFICATION' | 'LOG';
+  operationType:
+    | 'CREATE'
+    | 'UPDATE'
+    | 'DELETE'
+    | 'APPROVE'
+    | 'REJECT'
+    | 'DISABLE'
+    | 'ENABLE'
+    | 'EXPORT'
+    | 'IMPORT'
+    | 'BACKUP'
+    | 'RESTORE';
+  targetType:
+    | 'USER'
+    | 'KNOWLEDGE_ITEM'
+    | 'CATEGORY'
+    | 'COMMENT'
+    | 'TAG'
+    | 'SYSTEM_CONFIG'
+    | 'EXTERNAL_SOURCE'
+    | 'NOTIFICATION'
+    | 'LOG';
   targetId?: number;
   targetName?: string;
   operation: string;
@@ -300,15 +320,15 @@ export const mockSystemLogs: SystemLog[] = [
 
 // 获取管理员的操作日志
 export const getAdminLogsByAdmin = (adminId: number) => {
-  return mockAdminLogs.filter((log) => log.adminId === adminId);
+  return mockAdminLogs.filter(log => log.adminId === adminId);
 };
 
 // 获取特定类型的系统日志
 export const getSystemLogsByType = (logType: string) => {
-  return mockSystemLogs.filter((log) => log.logType === logType);
+  return mockSystemLogs.filter(log => log.logType === logType);
 };
 
 // 获取特定级别的系统日志
 export const getSystemLogsByLevel = (level: string) => {
-  return mockSystemLogs.filter((log) => log.level === level);
+  return mockSystemLogs.filter(log => log.level === level);
 };

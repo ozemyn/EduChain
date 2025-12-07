@@ -3,12 +3,14 @@ import { Outlet } from 'react-router-dom';
 import { Layout as AntLayout } from 'antd';
 import Header from './Header';
 import Footer from './Footer';
+import ScrollToTop from '../common/ScrollToTop';
 
 const { Content } = AntLayout;
 
 const Layout: React.FC = () => {
   return (
     <AntLayout className="main-layout">
+      <ScrollToTop />
       <Header />
       <Content className="main-content">
         <Outlet />

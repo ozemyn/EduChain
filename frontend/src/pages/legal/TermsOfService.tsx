@@ -27,7 +27,9 @@ const TermsOfService: React.FC = () => {
               <FileTextOutlined />
             </div>
           </div>
-          <Title level={1} className="gradient-text">服务条款</Title>
+          <Title level={1} className="gradient-text">
+            服务条款
+          </Title>
           <Text type="secondary">最后更新：2025年12月5日</Text>
         </header>
 
@@ -36,7 +38,8 @@ const TermsOfService: React.FC = () => {
           <Typography>
             <Title level={2}>欢迎使用 EduChain</Title>
             <Paragraph>
-              感谢您选择 EduChain 教育知识共享平台。在使用我们的服务之前，请仔细阅读以下服务条款。
+              感谢您选择 EduChain
+              教育知识共享平台。在使用我们的服务之前，请仔细阅读以下服务条款。
               使用本平台即表示您同意遵守这些条款。
             </Paragraph>
 
@@ -44,7 +47,8 @@ const TermsOfService: React.FC = () => {
 
             <Title level={3}>1. 服务说明</Title>
             <Paragraph>
-              EduChain 是一个基于区块链技术的教育知识共享平台，致力于为用户提供：
+              EduChain
+              是一个基于区块链技术的教育知识共享平台，致力于为用户提供：
             </Paragraph>
             <Paragraph>
               <ul>
@@ -81,7 +85,8 @@ const TermsOfService: React.FC = () => {
             <Paragraph>
               <strong>3.2 知识产权</strong>
               <br />
-              您对自己发布的内容拥有知识产权，但授予 EduChain 在平台上使用、展示和推广的权利。
+              您对自己发布的内容拥有知识产权，但授予 EduChain
+              在平台上使用、展示和推广的权利。
             </Paragraph>
             <Paragraph>
               <strong>3.3 内容审核</strong>
@@ -96,9 +101,7 @@ const TermsOfService: React.FC = () => {
             </Paragraph>
 
             <Title level={3}>5. 用户行为规范</Title>
-            <Paragraph>
-              您在使用平台时，不得：
-            </Paragraph>
+            <Paragraph>您在使用平台时，不得：</Paragraph>
             <Paragraph>
               <ul>
                 <li>发布违法、有害、虚假或侵权内容</li>

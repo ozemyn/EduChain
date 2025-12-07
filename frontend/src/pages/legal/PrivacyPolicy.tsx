@@ -27,7 +27,9 @@ const PrivacyPolicy: React.FC = () => {
               <SafetyOutlined />
             </div>
           </div>
-          <Title level={1} className="gradient-text">隐私政策</Title>
+          <Title level={1} className="gradient-text">
+            隐私政策
+          </Title>
           <Text type="secondary">最后更新：2025年12月5日</Text>
         </header>
 
@@ -69,9 +71,7 @@ const PrivacyPolicy: React.FC = () => {
             </Paragraph>
 
             <Title level={3}>2. 信息使用</Title>
-            <Paragraph>
-              我们收集的信息将用于以下目的：
-            </Paragraph>
+            <Paragraph>我们收集的信息将用于以下目的：</Paragraph>
             <Paragraph>
               <ul>
                 <li>提供、维护和改进我们的服务</li>
@@ -128,9 +128,7 @@ const PrivacyPolicy: React.FC = () => {
             </Paragraph>
 
             <Title level={3}>5. 信息安全</Title>
-            <Paragraph>
-              我们采取多种安全措施保护您的信息：
-            </Paragraph>
+            <Paragraph>我们采取多种安全措施保护您的信息：</Paragraph>
             <Paragraph>
               <ul>
                 <li>数据加密：使用SSL/TLS加密传输数据</li>
@@ -142,9 +140,7 @@ const PrivacyPolicy: React.FC = () => {
             </Paragraph>
 
             <Title level={3}>6. 您的权利</Title>
-            <Paragraph>
-              根据相关法律法规，您享有以下权利：
-            </Paragraph>
+            <Paragraph>根据相关法律法规，您享有以下权利：</Paragraph>
             <Paragraph>
               <ul>
                 <li>访问权：查看我们持有的您的个人信息</li>
@@ -158,7 +154,8 @@ const PrivacyPolicy: React.FC = () => {
 
             <Title level={3}>7. Cookie 和类似技术</Title>
             <Paragraph>
-              我们使用 Cookie 和类似技术来改善用户体验、分析使用情况和提供个性化服务。
+              我们使用 Cookie
+              和类似技术来改善用户体验、分析使用情况和提供个性化服务。
               您可以通过浏览器设置管理 Cookie，但这可能影响某些功能的使用。
             </Paragraph>
 

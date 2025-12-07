@@ -65,10 +65,55 @@
   transform: rotate(5deg) scale(1.1);
 }
 
+/* 修复logo transform冲突 */
+.logo-section.hover-scale:hover {
+  transform: none;
+}
+
+.logo-section.hover-scale:hover .logo-icon {
+  transform: rotate(5deg) scale(1.15);
+}
+
+/* 优化后的logo样式 - 合并重复规则 */
+.logo-section {
+  min-width: 140px;
+  max-width: 200px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+  font-size: 1.25rem;
+  transform-origin: center;
+}
+
 .logo-text {
   font-size: 1.5rem;
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.5px;
+  white-space: nowrap;
+  min-width: 100px;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* 关键保护：只在必要时使用!important */
+.logo-section:not(:hover) {
+  transform: none !important;
+}
+
+.logo-section:not(:hover) .logo-icon {
+  transform: none !important;
+}
+
+.logo-section:not(:hover) .logo-text {
+  transform: none !important;
 }
 
 /* ===================================
@@ -307,6 +352,11 @@
 
   .logo-text {
     font-size: 1.25rem;
+    min-width: 80px;
+  }
+
+  .logo-section {
+    min-width: 120px;
   }
 
   .navbar-actions {
@@ -333,6 +383,11 @@
 
   .logo-text {
     font-size: 1.1rem;
+    min-width: 70px;
+  }
+
+  .logo-section {
+    min-width: 100px;
   }
 
   .navbar-container {

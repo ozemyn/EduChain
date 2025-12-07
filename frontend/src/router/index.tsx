@@ -39,10 +39,30 @@ const CertificateVerifyPage = React.lazy(
 const NotFoundPage = React.lazy(() => import('../pages/error/NotFound'));
 
 // 法律页面
-const TermsOfServicePage = React.lazy(() => import('../pages/legal/TermsOfService'));
-const PrivacyPolicyPage = React.lazy(() => import('../pages/legal/PrivacyPolicy'));
+const TermsOfServicePage = React.lazy(
+  () => import('../pages/legal/TermsOfService')
+);
+const PrivacyPolicyPage = React.lazy(
+  () => import('../pages/legal/PrivacyPolicy')
+);
 const CopyrightPage = React.lazy(() => import('../pages/legal/Copyright'));
 const DisclaimerPage = React.lazy(() => import('../pages/legal/Disclaimer'));
+
+// 资源页面
+const HelpCenterPage = React.lazy(
+  () => import('../pages/resources/HelpCenter')
+);
+const TicketSubmitPage = React.lazy(
+  () => import('../pages/resources/TicketSubmit')
+);
+const TicketListPage = React.lazy(
+  () => import('../pages/resources/TicketList')
+);
+const DeveloperDocsPage = React.lazy(
+  () => import('../pages/resources/DeveloperDocs')
+);
+const ApiDocsPage = React.lazy(() => import('../pages/resources/ApiDocs'));
+const ChangelogPage = React.lazy(() => import('../pages/resources/Changelog'));
 
 // 管理员页面
 const AdminLoginPage = React.lazy(() => import('../pages/admin/AdminLogin'));
@@ -227,6 +247,54 @@ export const router = createBrowserRouter([
         element: (
           <LoadingWrapper>
             <DisclaimerPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'help',
+        element: (
+          <LoadingWrapper>
+            <HelpCenterPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'ticket',
+        element: (
+          <LoadingWrapper>
+            <TicketSubmitPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'tickets',
+        element: (
+          <LoadingWrapper>
+            <TicketListPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'docs',
+        element: (
+          <LoadingWrapper>
+            <DeveloperDocsPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'api',
+        element: (
+          <LoadingWrapper>
+            <ApiDocsPage />
+          </LoadingWrapper>
+        ),
+      },
+      {
+        path: 'changelog',
+        element: (
+          <LoadingWrapper>
+            <ChangelogPage />
           </LoadingWrapper>
         ),
       },

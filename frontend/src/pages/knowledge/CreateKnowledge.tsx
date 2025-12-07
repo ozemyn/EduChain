@@ -88,27 +88,23 @@ const CreateKnowledge: React.FC = () => {
   const [createdKnowledgeId, setCreatedKnowledgeId] = useState<number>();
 
   // 使用草稿管理器 - 禁用自动保存
-  const {
-    saveDraft,
-    clearDraft,
-    startAutoSave,
-    stopAutoSave,
-  } = useDraftManager({
-    autoSave: false, // 禁用自动保存，避免性能问题
-    showNotifications: false, // 禁用通知
-    onDraftLoaded: draft => {
-      const formValues = {
-        title: draft.title,
-        content: draft.content,
-        type: draft.type,
-        categoryId: draft.categoryId,
-        tags: draft.tags,
-        linkUrl: draft.linkUrl,
-      };
-      form.setFieldsValue(formValues);
-      setEditorKey(prev => prev + 1);
-    },
-  });
+  const { saveDraft, clearDraft, startAutoSave, stopAutoSave } =
+    useDraftManager({
+      autoSave: false, // 禁用自动保存，避免性能问题
+      showNotifications: false, // 禁用通知
+      onDraftLoaded: draft => {
+        const formValues = {
+          title: draft.title,
+          content: draft.content,
+          type: draft.type,
+          categoryId: draft.categoryId,
+          tags: draft.tags,
+          linkUrl: draft.linkUrl,
+        };
+        form.setFieldsValue(formValues);
+        setEditorKey(prev => prev + 1);
+      },
+    });
 
   const isEditing = !!id;
   const pageTitle = isEditing ? '编辑内容' : '发布内容';

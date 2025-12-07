@@ -1,26 +1,45 @@
 .recommendationCard {
-  margin-bottom: 16px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  overflow: hidden;
 }
 
 .recommendationCard :global(.ant-card-body) {
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
 .recommendationCard :global(.ant-card-actions) {
   margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
 }
 
 .recommendationCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+}
+
+/* 深色模式优化 */
+[data-theme='dark'] .recommendationCard {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .recommendationCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .recommendationCard.compact {
@@ -29,9 +48,19 @@
 
 .reason {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   z-index: 1;
+}
+
+.reason :global(.ant-tag) {
+  border-radius: 20px;
+  font-size: 11px;
+  padding: 2px 8px;
+  font-weight: 500;
+  border: none;
+  background: var(--accent-primary);
+  color: white;
 }
 
 .header {

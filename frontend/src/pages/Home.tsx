@@ -139,6 +139,15 @@ const Home: React.FC = () => {
     }
   };
 
+  // 功能卡片点击处理 - 导航并滚动到顶部
+  const handleFeatureClick = (path: string) => {
+    navigate(path);
+    // 使用 setTimeout 确保导航完成后再滚动
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <div className="home-page animate-fade-in">
       <div className="home-content">
@@ -196,7 +205,7 @@ const Home: React.FC = () => {
                 size="large"
                 className="hero-action-btn glass-button glass-strong hover-lift active-scale"
                 icon={<RocketOutlined />}
-                onClick={() => navigate('/knowledge')}
+                onClick={() => handleFeatureClick('/knowledge')}
               >
                 开始学习之旅
               </Button>
@@ -204,7 +213,7 @@ const Home: React.FC = () => {
                 size="large"
                 className="hero-action-btn glass-button hover-scale active-scale"
                 icon={<ThunderboltOutlined />}
-                onClick={() => navigate('/knowledge/create')}
+                onClick={() => handleFeatureClick('/knowledge/create')}
               >
                 分享知识
               </Button>
@@ -265,7 +274,7 @@ const Home: React.FC = () => {
                 <div
                   key={feature.key}
                   className={`feature-card glass-floating-card hover-lift active-scale animate-fade-in-up delay-${800 + index * 100}`}
-                  onClick={() => navigate(feature.path)}
+                  onClick={() => handleFeatureClick(feature.path)}
                 >
                   {/* 图标 */}
                   <div

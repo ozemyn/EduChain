@@ -105,9 +105,12 @@ class CommunityService {
    * @param limit 返回数量，默认10
    */
   async getTrendingDiscussions(limit: number = 10): Promise<Discussion[]> {
-    const response = await api.get<Discussion[]>('/community/discussions/trending', {
-      params: { limit },
-    });
+    const response = await api.get<Discussion[]>(
+      '/community/discussions/trending',
+      {
+        params: { limit },
+      }
+    );
     return response.data;
   }
 

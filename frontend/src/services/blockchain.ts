@@ -50,9 +50,12 @@ export const blockchainService = {
   },
 
   // 搜索
-  search: async (query: string, searchType?: string): Promise<ApiResponse<unknown>> => {
+  search: async (
+    query: string,
+    searchType?: string
+  ): Promise<ApiResponse<unknown>> => {
     const response = await api.get<ApiResponse<unknown>>('/blockchain/search', {
-      params: { 
+      params: {
         q: query,
         searchType: searchType || 'block',
         keyword: query,

@@ -12,7 +12,7 @@
    
    ================================== */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Layout, Button, Avatar, Dropdown, Drawer, Badge } from 'antd';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -45,6 +45,64 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // 强化的logo重置函数 - 确保完全重置
+  const resetLogoStyles = useCallback(() => {
+    const logoSection = document.querySelector('.logo-section');
+    if (!logoSection) return;
+
+    requestAnimationFrame(() => {
+      const sectionEl = logoSection as HTMLElement;
+      const logoIcon = logoSection.querySelector('.logo-icon') as HTMLElement;
+      const logoText = logoSection.querySelector('.logo-text') as HTMLElement;
+
+      // 强制重置section
+      if (sectionEl) {
+        sectionEl.style.transform = 'none';
+        sectionEl.style.width = 'auto';
+        sectionEl.style.maxWidth = '200px';
+        sectionEl.style.minWidth = '140px';
+      }
+
+      // 强制重置icon
+      if (logoIcon) {
+        logoIcon.style.transform = 'none';
+        logoIcon.style.width = '32px';
+        logoIcon.style.height = '32px';
+        logoIcon.style.fontSize = '1.25rem';
+      }
+
+      // 强制重置text
+      if (logoText) {
+        logoText.style.transform = 'none';
+        logoText.style.fontSize = '1.5rem';
+        logoText.style.width = 'auto';
+        logoText.style.maxWidth = 'none';
+      }
+    });
+  }, []);
+
+  // 统一的logo重置逻辑 - 合并所有事件监听
+  useEffect(() => {
+    let timeoutId: number | null = null;
+
+    const debouncedReset = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(resetLogoStyles, 50);
+    };
+
+    // 路由变化时重置
+    debouncedReset();
+
+    // 浏览器前进后退事件
+    const handlePopState = debouncedReset;
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location.pathname, resetLogoStyles]);
+
   // 监听滚动，添加导航栏效果
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +111,12 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // 组件挂载时立即重置logo样式
+  useEffect(() => {
+    const timer = setTimeout(resetLogoStyles, 0);
+    return () => clearTimeout(timer);
+  }, [resetLogoStyles]);
 
   // 登出处理
   const handleLogout = () => {

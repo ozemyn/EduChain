@@ -48,6 +48,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
   const [error, setError] = useState<string | null>(null);
   // 如果用户未登录，默认显示热门内容而不是个性化推荐
   const [activeTab, setActiveTab] = useState(user ? defaultTab : 'trending');
+  const [currentPage, setCurrentPage] = useState(0); // 当前页面索引
 
   useEffect(() => {
     loadRecommendations();
@@ -62,12 +63,12 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
       const promises = [
         // 个性化推荐（需要登录）
         user
-          ? searchService.getPersonalizedRecommendations(limit)
+          ? searchService.getPersonalizedRecommendations(8) // 固定获取8个
           : Promise.resolve({ data: [] }),
         // 热门内容
-        searchService.getTrendingContent('week', limit),
+        searchService.getTrendingContent('week', 8), // 固定获取8个
         // 通用推荐
-        searchService.getRecommendations(undefined, limit),
+        searchService.getRecommendations(undefined, 8), // 固定获取8个
       ];
 
       const [personalizedRes, trendingRes, generalRes] =
@@ -103,7 +104,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
         general: [],
       };
       setData(fallbackData);
-      
+
       // 切换到默认的热门内容标签
       setActiveTab('trending');
     } finally {
@@ -120,6 +121,8 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
           item => item.id !== itemId
         ),
       }));
+      // 重置页面索引，避免超出范围
+      setCurrentPage(0);
     }
   };
 
@@ -130,6 +133,8 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
         item => item.id !== itemId
       ),
     }));
+    // 重置页面索引，避免超出范围
+    setCurrentPage(0);
   };
 
   const getReasonText = (tab: string, index: number) => {
@@ -186,19 +191,29 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
       );
     }
 
+    // 根据屏幕尺寸决定每页显示数量
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+    const itemsPerPage = isDesktop ? 4 : 1; // 桌面端4个，移动端1个
+
+    // 计算当前页显示的项目
+    const startIndex = currentPage * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = items.slice(startIndex, endIndex);
+
     return (
       <Row gutter={[16, 16]}>
-        {items.map((item, index) => (
+        {currentItems.map((item, index) => (
           <Col
             key={item.id}
-            xs={24}
-            sm={compact ? 12 : 24}
-            md={compact ? 8 : 12}
-            lg={compact ? 6 : 8}
+            xs={24} // 移动端：1列
+            sm={24} // 小屏：1列
+            md={12} // 桌面端：2列
+            lg={12} // 大屏：2列
+            xl={12} // 超大屏：2列
           >
             <RecommendationCard
               item={item}
-              reason={getReasonText(tabKey, index)}
+              reason={getReasonText(tabKey, startIndex + index)}
               onFeedback={feedback => handleFeedback(item.id, feedback)}
               onRemove={() => handleRemoveItem(item.id)}
               compact={compact}
@@ -218,7 +233,20 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
         <Button
           type="text"
           icon={<ReloadOutlined />}
-          onClick={loadRecommendations}
+          onClick={() => {
+            const currentTabData = data[activeTab as keyof RecommendationData];
+            if (currentTabData.length > 0) {
+              // 桌面端：每页4个，移动端：每页1个
+              const isDesktop = window.innerWidth >= 768;
+              const itemsPerPage = isDesktop ? 4 : 1;
+              const totalPages = Math.ceil(
+                currentTabData.length / itemsPerPage
+              );
+              setCurrentPage(prev => (prev + 1) % totalPages);
+            } else {
+              loadRecommendations();
+            }
+          }}
           loading={loading}
           className={styles.refreshBtn}
         >
@@ -229,7 +257,10 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
       {showTabs ? (
         <Tabs
           activeKey={activeTab}
-          onChange={setActiveTab}
+          onChange={key => {
+            setActiveTab(key);
+            setCurrentPage(0); // 切换标签时重置页面
+          }}
           className={styles.tabs}
         >
           {user && (

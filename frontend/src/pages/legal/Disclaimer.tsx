@@ -27,7 +27,9 @@ const Disclaimer: React.FC = () => {
               <ExclamationCircleOutlined />
             </div>
           </div>
-          <Title level={1} className="gradient-text">免责声明</Title>
+          <Title level={1} className="gradient-text">
+            免责声明
+          </Title>
           <Text type="secondary">最后更新：2025年12月5日</Text>
         </header>
 
@@ -44,7 +46,8 @@ const Disclaimer: React.FC = () => {
           <Typography>
             <Title level={2}>EduChain 免责声明</Title>
             <Paragraph>
-              本免责声明适用于 EduChain 教育知识共享平台（以下简称"本平台"）提供的所有服务和内容。
+              本免责声明适用于 EduChain
+              教育知识共享平台（以下简称"本平台"）提供的所有服务和内容。
               请您在使用本平台前仔细阅读本声明。
             </Paragraph>
 
@@ -217,7 +220,10 @@ const Disclaimer: React.FC = () => {
               showIcon
             />
 
-            <Paragraph type="secondary" style={{ textAlign: 'center', marginTop: 24 }}>
+            <Paragraph
+              type="secondary"
+              style={{ textAlign: 'center', marginTop: 24 }}
+            >
               本免责声明的最终解释权归 EduChain 所有
             </Paragraph>
           </Typography>

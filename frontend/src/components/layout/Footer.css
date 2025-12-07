@@ -279,6 +279,38 @@
    性能优化
    ================================== */
 
+/* 硬件加速优化 */
+.footer-link,
+.social-link {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 减少重绘和回流 */
+.footer-link:hover,
+.social-link:hover {
+  transform: translate3d(4px, 0, 0);
+}
+
+.social-link:hover {
+  transform: translate3d(0, -2px, 0);
+}
+
+/* 移动端触摸优化 */
+@media (hover: none) and (pointer: coarse) {
+  .footer-link:hover,
+  .social-link:hover {
+    transform: none;
+  }
+
+  .footer-link:active,
+  .social-link:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* 减少动画的用户偏好设置 */
 @media (prefers-reduced-motion: reduce) {
   .social-link,
   .footer-link,
@@ -286,6 +318,20 @@
     animation: none !important;
     transition: none !important;
   }
+
+  .footer-link:hover,
+  .social-link:hover {
+    transform: none !important;
+  }
+}
+
+/* 防止布局抖动 */
+.link-list {
+  contain: layout style;
+}
+
+.footer-section {
+  contain: layout;
 }
 
 /* ===================================

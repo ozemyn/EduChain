@@ -535,29 +535,28 @@ export const setupMockServer = () => {
       return HttpResponse.json(createSuccessResponse(block));
     }),
 
-    http.get(
-      `${API_BASE}/blockchain/transactions/:id`,
-      async ({ params }) => {
-        await delay();
-        const { id } = params;
-        const { getTransactionById } = await import('./data/blockchain');
-        
-        const result = getTransactionById(id as string);
-        
-        if (!result) {
-          return HttpResponse.json(
-            { success: false, message: '交易不存在', data: null },
-            { status: 404 }
-          );
-        }
-        
-        return HttpResponse.json(createSuccessResponse({
+    http.get(`${API_BASE}/blockchain/transactions/:id`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      const { getTransactionById } = await import('./data/blockchain');
+
+      const result = getTransactionById(id as string);
+
+      if (!result) {
+        return HttpResponse.json(
+          { success: false, message: '交易不存在', data: null },
+          { status: 404 }
+        );
+      }
+
+      return HttpResponse.json(
+        createSuccessResponse({
           ...result.transaction,
           blockIndex: result.blockIndex,
-          status: 'confirmed'
-        }));
-      }
-    ),
+          status: 'confirmed',
+        })
+      );
+    }),
 
     http.get(
       `${API_BASE}/blockchain/certificates/knowledge/:id`,
@@ -621,7 +620,7 @@ export const setupMockServer = () => {
         // 按区块索引搜索
         const blockIndex = Number(keyword);
         const block = mockBlocks.find(b => b.index === blockIndex);
-        
+
         if (block) {
           return HttpResponse.json(
             createSuccessResponse({
@@ -635,7 +634,7 @@ export const setupMockServer = () => {
       if (searchType === 'transaction' || searchType === 'knowledge') {
         // 按交易ID或知识ID搜索
         const result = getTransactionById(keyword);
-        
+
         if (result) {
           return HttpResponse.json(
             createSuccessResponse({
@@ -672,22 +671,25 @@ export const setupMockServer = () => {
       return HttpResponse.json(createSuccessResponse(items));
     }),
 
-    http.get(`${API_BASE}/recommendations/personalized`, async ({ request }) => {
-      await delay();
-      const url = new URL(request.url);
-      const limit = Number(url.searchParams.get('limit')) || 10;
+    http.get(
+      `${API_BASE}/recommendations/personalized`,
+      async ({ request }) => {
+        await delay();
+        const url = new URL(request.url);
+        const limit = Number(url.searchParams.get('limit')) || 10;
 
-      // 个性化推荐：基于用户兴趣，这里简单模拟为随机推荐
-      const items = [...mockKnowledgeItems]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, limit)
-        .map(item => ({
-          ...item,
-          stats: mockKnowledgeStats[item.id],
-        }));
+        // 个性化推荐：基于用户兴趣，这里简单模拟为随机推荐
+        const items = [...mockKnowledgeItems]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, limit)
+          .map(item => ({
+            ...item,
+            stats: mockKnowledgeStats[item.id],
+          }));
 
-      return HttpResponse.json(createSuccessResponse(items));
-    }),
+        return HttpResponse.json(createSuccessResponse(items));
+      }
+    ),
 
     http.get(`${API_BASE}/recommendations/trending`, async ({ request }) => {
       await delay();
@@ -701,8 +703,10 @@ export const setupMockServer = () => {
           stats: mockKnowledgeStats[item.id],
         }))
         .sort((a, b) => {
-          const scoreA = (a.stats?.viewCount || 0) + (a.stats?.likeCount || 0) * 3;
-          const scoreB = (b.stats?.viewCount || 0) + (b.stats?.likeCount || 0) * 3;
+          const scoreA =
+            (a.stats?.viewCount || 0) + (a.stats?.likeCount || 0) * 3;
+          const scoreB =
+            (b.stats?.viewCount || 0) + (b.stats?.likeCount || 0) * 3;
           return scoreB - scoreA;
         })
         .slice(0, limit);
