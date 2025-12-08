@@ -35,30 +35,22 @@
    - 点击 "Save and Deploy"
    - 等待构建完成（约2-3分钟）
 
-### 方法二：Wrangler CLI（推荐开发者）
+### 方法二：手动上传（快速测试）
 
 ```bash
-# 1. 安装 Wrangler
-npm install -g wrangler
-
-# 2. 登录 Cloudflare
-wrangler login
-
-# 3. 构建前端
+# 1. 构建前端
 cd frontend
 npm install
 npm run build:mock
-cd ..
 
-# 4. 部署
-wrangler pages deploy frontend/dist --project-name educhain-frontend-mock
+# 2. 在Cloudflare Dashboard中选择 "Upload assets"
+# 3. 上传整个 frontend/dist 文件夹
 ```
 
 ## 🔧 配置文件说明
 
-项目根目录包含以下 Cloudflare 配置文件：
+项目根目录包含以下 Cloudflare Pages 配置文件：
 
-- **`wrangler.toml`**: Wrangler CLI 配置
 - **`_headers`**: HTTP 头配置（Service Worker 支持）
 - **`_redirects`**: SPA 路由重定向配置
 
