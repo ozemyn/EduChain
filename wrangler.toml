@@ -11,6 +11,5 @@ command = "cd frontend && npm install && npm run build:mock"
 cwd = "."
 watch_dir = "frontend/src"
 
-[[pages_build_output_dir]]
 # 构建输出目录
-value = "frontend/dist"
+pages_build_output_dir = "frontend/dist"
