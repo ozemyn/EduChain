@@ -4,10 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * 哈希工具类
- * 用于计算内容哈希值，用于区块链存证
- */
+/** 哈希工具类 用于计算内容哈希值，用于区块链存证 */
 public class HashUtil {
 
   private static final String ALGORITHM = "SHA-256";
@@ -54,4 +51,3 @@ public class HashUtil {
     return result.toString();
   }
 }
-

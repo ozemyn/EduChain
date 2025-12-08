@@ -53,7 +53,8 @@ public class KnowledgeItemController {
       @RequestPart(value = "files", required = false) List<MultipartFile> files,
       @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    KnowledgeItemDTO result = knowledgeItemService.createWithFiles(request, files, principal.getId());
+    KnowledgeItemDTO result =
+        knowledgeItemService.createWithFiles(request, files, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -76,7 +77,8 @@ public class KnowledgeItemController {
       @RequestPart(value = "files", required = false) List<MultipartFile> files,
       @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    KnowledgeItemDTO result = knowledgeItemService.updateWithFiles(id, request, files, principal.getId());
+    KnowledgeItemDTO result =
+        knowledgeItemService.updateWithFiles(id, request, files, principal.getId());
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -113,14 +115,13 @@ public class KnowledgeItemController {
   @GetMapping("/{id}")
   @Operation(summary = "获取知识内容详情", description = "根据ID获取知识内容的详细信息")
   public ResponseEntity<Result<KnowledgeItemDTO>> findById(
-      @PathVariable Long id,
-      Authentication authentication,
-      HttpServletRequest request) {
+      @PathVariable Long id, Authentication authentication, HttpServletRequest request) {
 
     Long userId = getUserId(authentication);
-    KnowledgeItemDTO result = (userId != null)
-        ? knowledgeItemService.findByIdWithUserStatus(id, userId)
-        : knowledgeItemService.findById(id);
+    KnowledgeItemDTO result =
+        (userId != null)
+            ? knowledgeItemService.findByIdWithUserStatus(id, userId)
+            : knowledgeItemService.findById(id);
 
     // 增加浏览量
     knowledgeItemService.incrementViewCount(id, getClientIpAddress(request));
@@ -135,9 +136,10 @@ public class KnowledgeItemController {
       Authentication authentication) {
 
     Long userId = getUserId(authentication);
-    Page<KnowledgeItemDTO> result = (userId != null)
-        ? knowledgeItemService.findAllWithUserStatus(pageable, filter, userId)
-        : knowledgeItemService.findAll(pageable, filter);
+    Page<KnowledgeItemDTO> result =
+        (userId != null)
+            ? knowledgeItemService.findAllWithUserStatus(pageable, filter, userId)
+            : knowledgeItemService.findAll(pageable, filter);
 
     return ResponseEntity.ok(Result.success(result));
   }
@@ -215,8 +217,7 @@ public class KnowledgeItemController {
   @GetMapping("/recommended")
   @Operation(summary = "获取推荐内容", description = "获取个性化推荐的知识内容")
   public ResponseEntity<Result<Page<KnowledgeItemDTO>>> getRecommendedContent(
-      @PageableDefault(size = 20) Pageable pageable,
-      Authentication authentication) {
+      @PageableDefault(size = 20) Pageable pageable, Authentication authentication) {
 
     Long userId = getUserId(authentication);
     Page<KnowledgeItemDTO> result = knowledgeItemService.getRecommendedContent(userId, pageable);
@@ -261,8 +262,8 @@ public class KnowledgeItemController {
       @RequestParam(required = false) String changeSummary,
       @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    KnowledgeItemDTO result = knowledgeItemService.restoreToVersion(
-        id, versionNumber, principal.getId(), changeSummary);
+    KnowledgeItemDTO result =
+        knowledgeItemService.restoreToVersion(id, versionNumber, principal.getId(), changeSummary);
     return ResponseEntity.ok(Result.success(result));
   }
 
@@ -313,7 +314,8 @@ public class KnowledgeItemController {
       @RequestBody BatchUpdateStatusRequest request,
       @AuthenticationPrincipal CustomUserDetailsService.CustomUserPrincipal principal) {
 
-    knowledgeItemService.batchUpdateStatus(request.getIds(), request.getStatus(), principal.getId());
+    knowledgeItemService.batchUpdateStatus(
+        request.getIds(), request.getStatus(), principal.getId());
     return ResponseEntity.ok(Result.success());
   }
 

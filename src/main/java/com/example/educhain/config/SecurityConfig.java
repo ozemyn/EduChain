@@ -156,7 +156,7 @@ public class SecurityConfig {
                     // 静态资源
                     .requestMatchers("/favicon.ico", "/error")
                     .permitAll()
-                    
+
                     // 上传文件访问
                     .requestMatchers("/uploads/**")
                     .permitAll()

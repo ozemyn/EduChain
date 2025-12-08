@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * 区块链验证响应DTO
- */
+/** 区块链验证响应DTO */
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,4 +24,3 @@ public class BlockchainVerifyResponse {
   /** 消息 */
   private String message;
 }
-

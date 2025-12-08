@@ -351,7 +351,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         logger.info("热门推荐查询结果为空，尝试获取随机内容: categoryId={}", categoryId);
         // 数据不足时，返回随机内容而不是抛异常
         popularContent = searchIndexRepository.findLatestContent(1, pageable).getContent();
-        
+
         if (popularContent.isEmpty()) {
           logger.warn("没有可用的推荐内容，返回空列表: categoryId={}", categoryId);
           return new ArrayList<>();
@@ -929,6 +929,142 @@ public class RecommendationServiceImpl implements RecommendationService {
       logger.error("获取推荐解释失败", e);
       return "为您推荐";
     }
+  }
+
+  /**
+   * 获取热门推荐内容
+   *
+   * @param limit 返回数量限制
+   * @return 热门推荐内容列表
+   */
+  @Override
+  public List<SearchResultDTO> getTrendingRecommendations(int limit) {
+    limit = Math.min(limit, MAX_LIMIT);
+
+    try {
+      // 使用热门内容作为趋势推荐
+      Pageable pageable = PageRequest.of(0, limit);
+
+      List<SearchIndex> trendingContent =
+          searchIndexRepository.findPopularContent(1, pageable).getContent();
+
+      if (trendingContent.isEmpty()) {
+        // 如果没有热门内容，返回最新内容
+        logger.info("没有找到热门内容，返回最新内容");
+        return getLatestRecommendations(null, limit);
+      }
+
+      return trendingContent.stream()
+          .map(this::convertToSearchResultDTO)
+          .collect(Collectors.toList());
+
+    } catch (Exception e) {
+      logger.error("获取热门推荐失败", e);
+      // 降级到最新推荐
+      return getLatestRecommendations(null, limit);
+    }
+  }
+
+  /**
+   * 记录推荐反馈
+   *
+   * @param userId 用户ID
+   * @param knowledgeId 内容ID
+   * @param feedback 反馈类型
+   */
+  @Override
+  @Transactional
+  public void recordRecommendationFeedback(Long userId, Long knowledgeId, String feedback) {
+    try {
+      // 根据反馈类型创建相应的用户互动记录
+      UserInteraction.InteractionType interactionType;
+
+      switch (feedback.toLowerCase()) {
+        case "like":
+          interactionType = UserInteraction.InteractionType.LIKE;
+          break;
+        case "dislike":
+          // 可以创建一个DISLIKE类型，或者记录为特殊的互动
+          logger.info("用户不喜欢推荐内容: userId={}, knowledgeId={}", userId, knowledgeId);
+          return; // 暂时不记录dislike
+        case "not_interested":
+          logger.info("用户对推荐内容不感兴趣: userId={}, knowledgeId={}", userId, knowledgeId);
+          return; // 暂时不记录not_interested
+        default:
+          logger.warn("未知的反馈类型: {}", feedback);
+          return;
+      }
+
+      // 检查是否已经存在相同的互动记录
+      boolean exists =
+          userInteractionRepository.existsByUserIdAndKnowledgeIdAndInteractionType(
+              userId, knowledgeId, interactionType);
+
+      if (!exists) {
+        UserInteraction interaction = new UserInteraction();
+        interaction.setUserId(userId);
+        interaction.setKnowledgeId(knowledgeId);
+        interaction.setInteractionType(interactionType);
+        interaction.setCreatedAt(LocalDateTime.now());
+
+        userInteractionRepository.save(interaction);
+        logger.debug(
+            "记录推荐反馈成功: userId={}, knowledgeId={}, feedback={}", userId, knowledgeId, feedback);
+      }
+
+    } catch (Exception e) {
+      logger.error(
+          "记录推荐反馈失败: userId={}, knowledgeId={}, feedback={}", userId, knowledgeId, feedback, e);
+    }
+  }
+
+  /**
+   * 获取推荐统计信息
+   *
+   * @param userId 用户ID
+   * @return 推荐统计数据
+   */
+  @Override
+  public Map<String, Object> getRecommendationStats(Long userId) {
+    Map<String, Object> stats = new HashMap<>();
+
+    try {
+      // 获取用户的总互动数
+      long totalInteractions = userInteractionRepository.countByUserId(userId);
+
+      // 获取用户的点赞数
+      long likeCount =
+          userInteractionRepository.countByUserIdAndInteractionType(
+              userId, UserInteraction.InteractionType.LIKE);
+
+      // 获取用户的收藏数
+      long favoriteCount =
+          userInteractionRepository.countByUserIdAndInteractionType(
+              userId, UserInteraction.InteractionType.FAVORITE);
+
+      // 获取用户的浏览数
+      long viewCount =
+          userInteractionRepository.countByUserIdAndInteractionType(
+              userId, UserInteraction.InteractionType.VIEW);
+
+      // 获取用户偏好分析
+      Map<String, Object> preferences = getUserPreferenceAnalysis(userId);
+
+      stats.put("totalInteractions", totalInteractions);
+      stats.put("likeCount", likeCount);
+      stats.put("favoriteCount", favoriteCount);
+      stats.put("viewCount", viewCount);
+      stats.put("preferences", preferences);
+      stats.put("lastUpdated", LocalDateTime.now());
+
+      logger.debug("获取推荐统计成功: userId={}, totalInteractions={}", userId, totalInteractions);
+
+    } catch (Exception e) {
+      logger.error("获取推荐统计失败: userId={}", userId, e);
+      stats.put("error", "获取统计信息失败");
+    }
+
+    return stats;
   }
 
   // 私有辅助方法

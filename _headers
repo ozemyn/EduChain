@@ -1,0 +1,19 @@
+# Cloudflare Pages Headers 配置
+# 用于配置 Service Worker 和静态资源的缓存策略
+
+# Service Worker 文件不缓存，确保 MSW 正常工作
+/mockServiceWorker.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+# 静态资源缓存策略
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML 文件不缓存，确保更新及时
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# API 路由处理（如果需要）
+/api/*
+  X-Robots-Tag: noindex

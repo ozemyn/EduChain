@@ -1,14 +1,12 @@
 package com.example.educhain.dto;
 
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Map;
 
-/**
- * 区块链统计DTO
- */
+/** 区块链统计DTO */
 @Data
 @Builder
 @NoArgsConstructor

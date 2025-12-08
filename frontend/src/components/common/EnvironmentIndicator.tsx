@@ -16,7 +16,7 @@ const EnvironmentIndicator: React.FC = () => {
     <div
       style={{
         position: 'fixed',
-        top: 10,
+        bottom: 10,
         right: 10,
         zIndex: 9999,
         pointerEvents: 'none',

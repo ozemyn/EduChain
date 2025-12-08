@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * 区块链存证请求DTO
- */
+/** 区块链存证请求DTO */
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,4 +27,3 @@ public class BlockchainCertifyRequest {
   /** 元数据 */
   private java.util.Map<String, Object> metadata;
 }
-

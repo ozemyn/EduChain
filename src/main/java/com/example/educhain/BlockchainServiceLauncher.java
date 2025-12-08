@@ -8,18 +8,12 @@ import java.util.Scanner;
 
 /**
  * 区块链服务启动器
- * 
- * 在 IntelliJ IDEA 中直接运行此类的 main 方法即可启动区块链服务
- * 
- * 功能特性：
- * - 自动检测 Anaconda 环境
- * - 自动创建虚拟环境（可选）
- * - 自动安装依赖
- * - 使用虚拟环境启动服务
- * 
- * 使用方法：
- * 1. 右键点击此类 -> Run 'BlockchainServiceLauncher.main()'
- * 2. 或点击类名左侧的绿色运行按钮
+ *
+ * <p>在 IntelliJ IDEA 中直接运行此类的 main 方法即可启动区块链服务
+ *
+ * <p>功能特性： - 自动检测 Anaconda 环境 - 自动创建虚拟环境（可选） - 自动安装依赖 - 使用虚拟环境启动服务
+ *
+ * <p>使用方法： 1. 右键点击此类 -> Run 'BlockchainServiceLauncher.main()' 2. 或点击类名左侧的绿色运行按钮
  */
 public class BlockchainServiceLauncher {
 
@@ -57,7 +51,7 @@ public class BlockchainServiceLauncher {
 
       // 检测并准备 Anaconda 环境
       String condaEnv = detectAndPrepareCondaEnvironment();
-      
+
       if (condaEnv == null) {
         System.err.println("无法使用 Anaconda 环境，将尝试使用系统 Python");
         System.out.println();
@@ -100,7 +94,7 @@ public class BlockchainServiceLauncher {
 
       // 获取并显示依赖安装目录
       String installDir = getDependencyInstallDir(condaEnv);
-      
+
       System.out.println("========================================");
       System.out.println("区块链服务启动成功！");
       System.out.println("服务地址: http://localhost:8000");
@@ -124,9 +118,7 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 检测并准备 Anaconda 环境
-   */
+  /** 检测并准备 Anaconda 环境 */
   private static String detectAndPrepareCondaEnvironment() {
     // 检查是否已有激活的 conda 环境
     String activeEnv = System.getenv("CONDA_DEFAULT_ENV");
@@ -150,10 +142,10 @@ public class BlockchainServiceLauncher {
     // 询问是否创建新环境
     System.out.println("未找到 Anaconda 虚拟环境: " + CONDA_ENV_NAME);
     System.out.println("是否自动创建虚拟环境并安装依赖？(y/n，默认: y)");
-    
+
     Scanner scanner = new Scanner(System.in);
     String answer = scanner.nextLine().trim().toLowerCase();
-    
+
     if (answer.isEmpty() || answer.equals("y") || answer.equals("yes")) {
       System.out.println("正在创建 Anaconda 虚拟环境...");
       if (createCondaEnvironment()) {
@@ -169,9 +161,7 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 检查命令是否可用
-   */
+  /** 检查命令是否可用 */
   private static boolean isCommandAvailable(String command) {
     try {
       ProcessBuilder pb = new ProcessBuilder(command, "--version");
@@ -184,17 +174,15 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 检查 conda 环境是否存在
-   */
+  /** 检查 conda 环境是否存在 */
   private static boolean isCondaEnvExists(String envName) {
     try {
       ProcessBuilder pb = new ProcessBuilder("conda", "env", "list");
       pb.redirectErrorStream(true);
       Process process = pb.start();
-      
-      try (BufferedReader reader = new BufferedReader(
-          new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
         String line;
         while ((line = reader.readLine()) != null) {
           if (line.contains(envName)) {
@@ -202,7 +190,7 @@ public class BlockchainServiceLauncher {
           }
         }
       }
-      
+
       process.waitFor();
       return false;
     } catch (Exception e) {
@@ -210,29 +198,26 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 创建 conda 虚拟环境
-   */
+  /** 创建 conda 虚拟环境 */
   private static boolean createCondaEnvironment() {
     try {
       System.out.println("正在创建环境: " + CONDA_ENV_NAME + " (Python " + PYTHON_VERSION + ")");
-      
-      ProcessBuilder pb = new ProcessBuilder(
-          "conda", "create", "-n", CONDA_ENV_NAME, 
-          "python=" + PYTHON_VERSION, "-y"
-      );
+
+      ProcessBuilder pb =
+          new ProcessBuilder(
+              "conda", "create", "-n", CONDA_ENV_NAME, "python=" + PYTHON_VERSION, "-y");
       pb.redirectErrorStream(true);
       Process process = pb.start();
-      
+
       // 输出创建日志
-      try (BufferedReader reader = new BufferedReader(
-          new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
         String line;
         while ((line = reader.readLine()) != null) {
           System.out.println("[Conda] " + line);
         }
       }
-      
+
       int exitCode = process.waitFor();
       return exitCode == 0;
     } catch (Exception e) {
@@ -241,59 +226,62 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 检查依赖是否已安装（更严格的检查）
-   */
+  /** 检查依赖是否已安装（更严格的检查） */
   private static boolean checkDependenciesInstalled(String condaEnv) {
     try {
       // 检查所有关键依赖包是否已安装
-      ProcessBuilder pb = new ProcessBuilder(
-          "conda", "run", "-n", condaEnv, "--no-capture-output",
-          "python", "-c", 
-          "import sys\n" +
-          "missing = []\n" +
-          "try:\n" +
-          "    import fastapi\n" +
-          "except ImportError:\n" +
-          "    missing.append('fastapi')\n" +
-          "try:\n" +
-          "    import uvicorn\n" +
-          "except ImportError:\n" +
-          "    missing.append('uvicorn')\n" +
-          "try:\n" +
-          "    import pydantic\n" +
-          "except ImportError:\n" +
-          "    missing.append('pydantic')\n" +
-          "try:\n" +
-          "    import sqlalchemy\n" +
-          "except ImportError:\n" +
-          "    missing.append('sqlalchemy')\n" +
-          "try:\n" +
-          "    import reportlab\n" +
-          "except ImportError:\n" +
-          "    missing.append('reportlab')\n" +
-          "try:\n" +
-          "    import qrcode\n" +
-          "except ImportError:\n" +
-          "    missing.append('qrcode')\n" +
-          "try:\n" +
-          "    from PIL import Image\n" +
-          "except ImportError:\n" +
-          "    missing.append('Pillow')\n" +
-          "if missing:\n" +
-          "    print('MISSING:', ','.join(missing))\n" +
-          "    sys.exit(1)\n" +
-          "else:\n" +
-          "    print('OK')\n" +
-          "    sys.exit(0)\n"
-      );
+      ProcessBuilder pb =
+          new ProcessBuilder(
+              "conda",
+              "run",
+              "-n",
+              condaEnv,
+              "--no-capture-output",
+              "python",
+              "-c",
+              "import sys\n"
+                  + "missing = []\n"
+                  + "try:\n"
+                  + "    import fastapi\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('fastapi')\n"
+                  + "try:\n"
+                  + "    import uvicorn\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('uvicorn')\n"
+                  + "try:\n"
+                  + "    import pydantic\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('pydantic')\n"
+                  + "try:\n"
+                  + "    import sqlalchemy\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('sqlalchemy')\n"
+                  + "try:\n"
+                  + "    import reportlab\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('reportlab')\n"
+                  + "try:\n"
+                  + "    import qrcode\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('qrcode')\n"
+                  + "try:\n"
+                  + "    from PIL import Image\n"
+                  + "except ImportError:\n"
+                  + "    missing.append('Pillow')\n"
+                  + "if missing:\n"
+                  + "    print('MISSING:', ','.join(missing))\n"
+                  + "    sys.exit(1)\n"
+                  + "else:\n"
+                  + "    print('OK')\n"
+                  + "    sys.exit(0)\n");
       pb.redirectErrorStream(true);
       Process process = pb.start();
-      
+
       boolean foundOk = false;
       boolean foundMissing = false;
-      try (BufferedReader reader = new BufferedReader(
-          new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
         String line;
         while ((line = reader.readLine()) != null) {
           if (line.contains("OK")) {
@@ -305,7 +293,7 @@ public class BlockchainServiceLauncher {
           }
         }
       }
-      
+
       int exitCode = process.waitFor();
       // 必须同时满足：退出码为0 且 找到OK 且 没有缺失
       return exitCode == 0 && foundOk && !foundMissing;
@@ -315,49 +303,54 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 安装依赖（仅在需要时安装）
-   */
+  /** 安装依赖（仅在需要时安装） */
   private static boolean installDependencies(String blockchainServicePath, String condaEnv) {
     try {
       // 先检查依赖是否已安装
       System.out.println("检查依赖是否已安装...");
       boolean dependenciesInstalled = checkDependenciesInstalled(condaEnv);
-      
+
       if (dependenciesInstalled) {
         System.out.println("✓ 依赖已安装，跳过安装步骤");
         return true;
       }
-      
+
       System.out.println("✗ 检测到依赖缺失，开始安装...");
-      
+
       // 输出依赖安装目录
       String installDir = getDependencyInstallDir(condaEnv);
       if (installDir != null && !installDir.isEmpty()) {
         System.out.println("📦 依赖安装目录: " + installDir);
       }
-      
+
       System.out.println("这可能需要几分钟时间，请耐心等待...");
       System.out.println();
-      
-      ProcessBuilder pb = new ProcessBuilder(
-          "conda", "run", "-n", condaEnv, "--no-capture-output",
-          "pip", "install", "-r", "requirements.txt"
-      );
+
+      ProcessBuilder pb =
+          new ProcessBuilder(
+              "conda",
+              "run",
+              "-n",
+              condaEnv,
+              "--no-capture-output",
+              "pip",
+              "install",
+              "-r",
+              "requirements.txt");
       pb.directory(new File(blockchainServicePath));
       pb.redirectErrorStream(true);
-      
+
       Process process = pb.start();
-      
+
       // 输出安装日志
-      try (BufferedReader reader = new BufferedReader(
-          new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
         String line;
         while ((line = reader.readLine()) != null) {
           System.out.println("[Install] " + line);
         }
       }
-      
+
       int exitCode = process.waitFor();
       if (exitCode == 0) {
         System.out.println("依赖安装成功！");
@@ -372,15 +365,12 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 构建启动命令
-   */
+  /** 构建启动命令 */
   private static ProcessBuilder buildStartCommand(String condaEnv, String blockchainServicePath) {
     if (condaEnv != null) {
       // 使用 conda run 启动
       return new ProcessBuilder(
-          "conda", "run", "-n", condaEnv, "--no-capture-output", "python", "main.py"
-      );
+          "conda", "run", "-n", condaEnv, "--no-capture-output", "python", "main.py");
     } else {
       // 使用系统 Python
       String pythonCmd = detectSystemPython();
@@ -388,41 +378,37 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 检测系统 Python 命令
-   */
+  /** 检测系统 Python 命令 */
   private static String detectSystemPython() {
     String os = System.getProperty("os.name").toLowerCase();
     return os.contains("win") ? "python" : "python3";
   }
 
-  /**
-   * 启动日志输出线程
-   */
+  /** 启动日志输出线程 */
   private static Thread startLogThread(Process process) {
-    Thread logThread = new Thread(() -> {
-      try (BufferedReader reader = new BufferedReader(
-          new InputStreamReader(process.getInputStream(), "UTF-8"))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-          System.out.println("[Blockchain] " + line);
-          
-          // 检测到模块缺失错误时给出提示
-          if (line.contains("ModuleNotFoundError")) {
-            printDependencyError();
-          }
-        }
-      } catch (Exception e) {
-        System.err.println("读取日志失败: " + e.getMessage());
-      }
-    });
+    Thread logThread =
+        new Thread(
+            () -> {
+              try (BufferedReader reader =
+                  new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                  System.out.println("[Blockchain] " + line);
+
+                  // 检测到模块缺失错误时给出提示
+                  if (line.contains("ModuleNotFoundError")) {
+                    printDependencyError();
+                  }
+                }
+              } catch (Exception e) {
+                System.err.println("读取日志失败: " + e.getMessage());
+              }
+            });
     logThread.setDaemon(true);
     return logThread;
   }
 
-  /**
-   * 打印依赖错误提示
-   */
+  /** 打印依赖错误提示 */
   private static void printDependencyError() {
     System.err.println();
     System.err.println("========================================");
@@ -430,7 +416,7 @@ public class BlockchainServiceLauncher {
     System.err.println();
     System.err.println("请执行以下命令安装依赖：");
     System.err.println();
-    
+
     String condaEnv = System.getenv("CONDA_DEFAULT_ENV");
     if (condaEnv != null && !condaEnv.isEmpty()) {
       System.err.println("  conda activate " + condaEnv);
@@ -453,37 +439,38 @@ public class BlockchainServiceLauncher {
     System.err.println();
   }
 
-  /**
-   * 添加关闭钩子
-   */
+  /** 添加关闭钩子 */
   private static void addShutdownHook(Process process) {
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      System.out.println("\n正在关闭区块链服务...");
-      if (process != null && process.isAlive()) {
-        process.destroy();
-        try {
-          process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS);
-          if (process.isAlive()) {
-            process.destroyForcibly();
-          }
-        } catch (InterruptedException e) {
-          process.destroyForcibly();
-        }
-      }
-    }));
+    Runtime.getRuntime()
+        .addShutdownHook(
+            new Thread(
+                () -> {
+                  System.out.println("\n正在关闭区块链服务...");
+                  if (process != null && process.isAlive()) {
+                    process.destroy();
+                    try {
+                      process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS);
+                      if (process.isAlive()) {
+                        process.destroyForcibly();
+                      }
+                    } catch (InterruptedException e) {
+                      process.destroyForcibly();
+                    }
+                  }
+                }));
   }
 
-  /**
-   * 处理退出
-   */
+  /** 处理退出 */
   private static void handleExit(int exitCode, String condaEnv) {
     if (exitCode != 0) {
       System.err.println("\n区块链服务异常退出，退出码: " + exitCode);
       System.err.println("请检查：");
       if (condaEnv != null) {
-        System.err.println("1. 是否已安装Python依赖: conda run -n " + condaEnv + " pip install -r requirements.txt");
+        System.err.println(
+            "1. 是否已安装Python依赖: conda run -n " + condaEnv + " pip install -r requirements.txt");
       } else {
-        System.err.println("1. 是否已安装Python依赖: cd blockchain-service && pip install -r requirements.txt");
+        System.err.println(
+            "1. 是否已安装Python依赖: cd blockchain-service && pip install -r requirements.txt");
       }
       System.err.println("2. Python版本是否正确: python3 --version (需要3.11+)");
       System.err.println("3. 查看上方错误信息");
@@ -492,21 +479,25 @@ public class BlockchainServiceLauncher {
     }
   }
 
-  /**
-   * 获取依赖安装目录
-   */
+  /** 获取依赖安装目录 */
   private static String getDependencyInstallDir(String condaEnv) {
     if (condaEnv == null) {
       return null;
     }
     try {
-      ProcessBuilder pb = new ProcessBuilder(
-          "conda", "run", "-n", condaEnv, "--no-capture-output",
-          "python", "-c", "import site; print(site.getsitepackages()[0] if site.getsitepackages() else '')"
-      );
+      ProcessBuilder pb =
+          new ProcessBuilder(
+              "conda",
+              "run",
+              "-n",
+              condaEnv,
+              "--no-capture-output",
+              "python",
+              "-c",
+              "import site; print(site.getsitepackages()[0] if site.getsitepackages() else '')");
       Process process = pb.start();
-      try (BufferedReader reader = new BufferedReader(
-          new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
         String line;
         while ((line = reader.readLine()) != null) {
           if (!line.trim().isEmpty()) {
@@ -522,9 +513,7 @@ public class BlockchainServiceLauncher {
     return null;
   }
 
-  /**
-   * 获取项目根目录
-   */
+  /** 获取项目根目录 */
   private static String getProjectRoot() {
     File currentDir = new File(System.getProperty("user.dir"));
 

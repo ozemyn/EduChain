@@ -6,6 +6,7 @@
 import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import type { ApiResponse, PageResponse } from '@/types/api';
+import { createErrorResponse } from './errorCodes';
 import {
   mockUsers,
   mockUserStats,
@@ -40,7 +41,7 @@ const createSuccessResponse = <T>(data: T): ApiResponse<T> => ({
   timestamp: new Date().toISOString(),
 });
 
-// 辅助函数：创建分页响应
+// 辅助函数：创建分页响应（与后端Spring Data Page格式完全一致）
 const createPageResponse = <T>(
   items: T[],
   page: number = 0,
@@ -59,6 +60,25 @@ const createPageResponse = <T>(
     first: page === 0,
     last: end >= items.length,
     empty: items.length === 0,
+    // 添加Spring Data Page的其他字段以确保完全一致
+    numberOfElements: content.length,
+    pageable: {
+      sort: {
+        sorted: false,
+        unsorted: true,
+        empty: true
+      },
+      pageNumber: page,
+      pageSize: size,
+      offset: start,
+      paged: true,
+      unpaged: false
+    },
+    sort: {
+      sorted: false,
+      unsorted: true,
+      empty: true
+    }
   };
 };
 
@@ -95,18 +115,48 @@ export const setupMockServer = () => {
       }
 
       return HttpResponse.json(
-        {
-          success: false,
-          message: '用户名或密码错误',
-          data: null,
-        },
+        createErrorResponse('INVALID_CREDENTIALS'),
         { status: 401 }
       );
     }),
 
     http.post(`${API_BASE}/auth/register`, async ({ request }) => {
       await delay();
-      const userData = (await request.json()) as Record<string, unknown>;
+      const userData = (await request.json()) as {
+        username: string;
+        email: string;
+        password: string;
+        fullName: string;
+        school?: string;
+      };
+
+      // 参数验证
+      const { validateRequired, validateEmail, validateUsername, validateStringLength, validate } = await import('./validation');
+      
+      const validationError = validate(
+        () => validateRequired(userData, ['username', 'email', 'password', 'fullName']),
+        () => validateUsername(userData.username),
+        () => validateEmail(userData.email),
+        () => validateStringLength(userData.password, '密码', 6, 50),
+        () => validateStringLength(userData.fullName, '姓名', 1, 50)
+      );
+      
+      if (validationError) {
+        return HttpResponse.json(validationError, { status: 400 });
+      }
+
+      // 检查用户名和邮箱是否已存在
+      const existingUser = mockUsers.find(u => 
+        u.username === userData.username || u.email === userData.email
+      );
+      
+      if (existingUser) {
+        if (existingUser.username === userData.username) {
+          return HttpResponse.json(createErrorResponse('DUPLICATE_ENTRY', '用户名已存在'), { status: 400 });
+        } else {
+          return HttpResponse.json(createErrorResponse('DUPLICATE_ENTRY', '邮箱已存在'), { status: 400 });
+        }
+      }
       const newUser = {
         id: mockUsers.length + 1,
         ...userData,
@@ -346,6 +396,49 @@ export const setupMockServer = () => {
       return HttpResponse.json(createSuccessResponse(notification));
     }),
 
+    // 获取最近通知接口
+    http.get(`${API_BASE}/notifications/recent`, async ({ request }) => {
+      await delay();
+      const url = new URL(request.url);
+      const limit = Number(url.searchParams.get('limit')) || 10;
+      const unreadOnly = url.searchParams.get('unreadOnly') === 'true';
+
+      let notifications = [...mockNotifications];
+      
+      if (unreadOnly) {
+        notifications = notifications.filter(n => !n.isRead);
+      }
+
+      // 按时间倒序排列，取最近的
+      notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      const recentNotifications = notifications.slice(0, limit);
+
+      return HttpResponse.json(createSuccessResponse(recentNotifications));
+    }),
+
+    // 获取通知统计接口
+    http.get(`${API_BASE}/notifications/stats`, async () => {
+      await delay();
+      const totalNotifications = mockNotifications.length;
+      const unreadCount = mockNotifications.filter(n => !n.isRead).length;
+      const readCount = totalNotifications - unreadCount;
+      
+      // 按类型统计
+      const typeStats = mockNotifications.reduce((acc, notification) => {
+        acc[notification.type] = (acc[notification.type] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const stats = {
+        totalNotifications,
+        unreadCount,
+        readCount,
+        typeStats
+      };
+
+      return HttpResponse.json(createSuccessResponse(stats));
+    }),
+
     // ==================== 互动相关 ====================
     http.post(`${API_BASE}/interactions/like/:id`, async ({ params }) => {
       await delay();
@@ -392,6 +485,30 @@ export const setupMockServer = () => {
       const { id } = params;
       const stats = mockInteractionStats[Number(id)];
       return HttpResponse.json(createSuccessResponse(stats));
+    }),
+
+    // 记录浏览行为接口
+    http.post(`${API_BASE}/interactions/view/:id`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      const stats = mockInteractionStats[Number(id)];
+      if (stats) {
+        stats.viewCount++;
+      }
+      return HttpResponse.json(createSuccessResponse({ success: true }));
+    }),
+
+    // 检查用户互动状态接口
+    http.get(`${API_BASE}/interactions/status/:id`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      // 模拟用户互动状态（基于ID生成一致的随机状态）
+      const numId = Number(id);
+      const status = {
+        hasLiked: (numId % 3) === 0,
+        hasFavorited: (numId % 5) === 0
+      };
+      return HttpResponse.json(createSuccessResponse(status));
     }),
 
     // ==================== 关注相关 ====================
@@ -463,6 +580,19 @@ export const setupMockServer = () => {
       };
       const { keyword, page = 0, size = 10 } = body;
 
+      // 参数验证
+      const { validateRequired, validatePagination, validateSearchKeyword, validate } = await import('./validation');
+      
+      const validationError = validate(
+        () => validateRequired(body, ['keyword']),
+        () => validateSearchKeyword(keyword),
+        () => validatePagination(page, size)
+      );
+      
+      if (validationError) {
+        return HttpResponse.json(validationError, { status: 400 });
+      }
+
       const items = mockKnowledgeItems
         .filter(
           item =>
@@ -501,6 +631,112 @@ export const setupMockServer = () => {
       const limit = Number(url.searchParams.get('limit')) || 20;
       const history = getUserSearchHistory(2, limit);
       return HttpResponse.json(createSuccessResponse(history));
+    }),
+
+    // 快速搜索接口
+    http.get(`${API_BASE}/search/quick`, async ({ request }) => {
+      await delay();
+      const url = new URL(request.url);
+      const keyword = url.searchParams.get('keyword') || '';
+      const page = Number(url.searchParams.get('page')) || 0;
+      const size = Number(url.searchParams.get('size')) || 20;
+
+      // 参数验证
+      const { validateSearchKeyword, validatePagination, validate } = await import('./validation');
+      
+      const validationError = validate(
+        () => validateSearchKeyword(keyword),
+        () => validatePagination(page, size)
+      );
+      
+      if (validationError) {
+        return HttpResponse.json(validationError, { status: 400 });
+      }
+
+      const items = mockKnowledgeItems
+        .filter(
+          item =>
+            item.title.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.content.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.tags.toLowerCase().includes(keyword.toLowerCase())
+        )
+        .map(item => ({
+          ...item,
+          stats: mockKnowledgeStats[item.id],
+        }));
+
+      const pageData = createPageResponse(items, page, size);
+      return HttpResponse.json(createSuccessResponse(pageData));
+    }),
+
+    // 高级搜索接口
+    http.post(`${API_BASE}/search/advanced`, async ({ request }) => {
+      await delay();
+      const body = (await request.json()) as {
+        keyword?: string;
+        categoryId?: number;
+        type?: string;
+        sortBy?: string;
+        page?: number;
+        size?: number;
+      };
+      const { keyword = '', categoryId, type, sortBy = 'RELEVANCE', page = 0, size = 20 } = body;
+
+      let items = [...mockKnowledgeItems];
+
+      // 关键词过滤
+      if (keyword) {
+        items = items.filter(
+          item =>
+            item.title.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.content.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.tags.toLowerCase().includes(keyword.toLowerCase())
+        );
+      }
+
+      // 分类过滤
+      if (categoryId) {
+        items = items.filter(item => item.categoryId === categoryId);
+      }
+
+      // 类型过滤
+      if (type) {
+        items = items.filter(item => item.type === type);
+      }
+
+      // 添加统计数据
+      items = items.map(item => ({
+        ...item,
+        stats: mockKnowledgeStats[item.id],
+      }));
+
+      // 排序
+      if (sortBy === 'TIME') {
+        items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      } else if (sortBy === 'POPULARITY') {
+        items.sort((a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0));
+      }
+
+      const pageData = createPageResponse(items, page, size);
+      return HttpResponse.json(createSuccessResponse(pageData));
+    }),
+
+    // 趋势关键词接口
+    http.get(`${API_BASE}/search/trending-keywords`, async ({ request }) => {
+      await delay();
+      const url = new URL(request.url);
+      const limit = Number(url.searchParams.get('limit')) || 15;
+      
+      // 模拟趋势关键词（带趋势标识）
+      const trendingKeywords = mockHotKeywords
+        .slice(0, limit)
+        .map(keyword => ({
+          ...keyword,
+          trend: Math.random() > 0.5 ? 'up' : 'stable',
+          changeRate: Math.floor(Math.random() * 50) + 10
+        }));
+      
+      return HttpResponse.json(createSuccessResponse(trendingKeywords));
     }),
 
     // ==================== 区块链相关 ====================

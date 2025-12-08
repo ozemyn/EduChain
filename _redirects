@@ -1,0 +1,8 @@
+# Cloudflare Pages 重定向配置
+# 用于 SPA 路由支持
+
+# SPA 路由重定向 - 所有非文件请求都重定向到 index.html
+/*    /index.html   200
+
+# 如果需要 API 代理（可选，mock 模式下通常不需要）
+# /api/*  https://your-backend-api.com/api/:splat  200

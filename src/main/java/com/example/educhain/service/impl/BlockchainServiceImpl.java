@@ -13,13 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
-/**
- * 区块链服务实现类
- * 通过HTTP调用Python区块链服务
- */
+/** 区块链服务实现类 通过HTTP调用Python区块链服务 */
 @Service
 public class BlockchainServiceImpl implements BlockchainService {
 
@@ -53,8 +50,7 @@ public class BlockchainServiceImpl implements BlockchainService {
       headers.setContentType(MediaType.APPLICATION_JSON);
       HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
 
-      ResponseEntity<Map> response =
-          restTemplate.postForEntity(url, entity, Map.class);
+      ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
 
       if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
         Map<String, Object> body = response.getBody();
@@ -96,8 +92,7 @@ public class BlockchainServiceImpl implements BlockchainService {
       headers.setContentType(MediaType.APPLICATION_JSON);
       HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
 
-      ResponseEntity<Map> response =
-          restTemplate.postForEntity(url, entity, Map.class);
+      ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
 
       if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
         Map<String, Object> body = response.getBody();
@@ -193,4 +188,3 @@ public class BlockchainServiceImpl implements BlockchainService {
     }
   }
 }
-

@@ -146,4 +146,29 @@ public interface RecommendationService {
    * @return 推荐理由
    */
   String getRecommendationExplanation(Long userId, Long knowledgeId, String recommendationType);
+
+  /**
+   * 获取热门推荐内容
+   *
+   * @param limit 返回数量限制
+   * @return 热门推荐内容列表
+   */
+  List<SearchResultDTO> getTrendingRecommendations(int limit);
+
+  /**
+   * 记录推荐反馈
+   *
+   * @param userId 用户ID
+   * @param knowledgeId 内容ID
+   * @param feedback 反馈类型
+   */
+  void recordRecommendationFeedback(Long userId, Long knowledgeId, String feedback);
+
+  /**
+   * 获取推荐统计信息
+   *
+   * @param userId 用户ID
+   * @return 推荐统计数据
+   */
+  Map<String, Object> getRecommendationStats(Long userId);
 }

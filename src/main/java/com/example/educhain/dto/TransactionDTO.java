@@ -1,14 +1,12 @@
 package com.example.educhain.dto;
 
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Map;
 
-/**
- * 交易DTO
- */
+/** 交易DTO */
 @Data
 @Builder
 @NoArgsConstructor

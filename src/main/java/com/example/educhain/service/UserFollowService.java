@@ -1,81 +1,188 @@
 package com.example.educhain.service;
 
-import com.example.educhain.entity.UserFollow;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import com.example.educhain.dto.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /** 用户关注服务接口 */
 public interface UserFollowService {
 
-  /** 关注用户 */
+  /**
+   * 关注用户
+   *
+   * @param followerId 关注者ID
+   * @param followingId 被关注者ID
+   */
   void followUser(Long followerId, Long followingId);
 
-  /** 取消关注用户 */
+  /**
+   * 取消关注用户
+   *
+   * @param followerId 关注者ID
+   * @param followingId 被关注者ID
+   */
   void unfollowUser(Long followerId, Long followingId);
 
-  /** 检查是否已关注 */
+  /**
+   * 检查是否关注
+   *
+   * @param followerId 关注者ID
+   * @param followingId 被关注者ID
+   * @return 是否关注
+   */
   boolean isFollowing(Long followerId, Long followingId);
 
-  /** 获取用户的关注列表 */
-  Page<UserFollow> getFollowingList(Long followerId, Pageable pageable);
+  /**
+   * 获取关注列表
+   *
+   * @param userId 用户ID
+   * @param pageable 分页参数
+   * @return 关注列表
+   */
+  Page<FollowDTO> getFollowing(Long userId, Pageable pageable);
 
-  /** 获取用户的粉丝列表 */
-  Page<UserFollow> getFollowersList(Long followingId, Pageable pageable);
+  /**
+   * 获取粉丝列表
+   *
+   * @param userId 用户ID
+   * @param pageable 分页参数
+   * @return 粉丝列表
+   */
+  Page<FollowDTO> getFollowers(Long userId, Pageable pageable);
 
-  /** 统计用户关注的人数 */
-  long getFollowingCount(Long followerId);
+  /**
+   * 获取关注统计
+   *
+   * @param userId 用户ID
+   * @return 关注统计
+   */
+  FollowStatsDTO getFollowStats(Long userId);
 
-  /** 统计用户的粉丝数 */
-  long getFollowersCount(Long followingId);
+  /**
+   * 获取互相关注列表
+   *
+   * @param userId 用户ID
+   * @param pageable 分页参数
+   * @return 互相关注列表
+   */
+  Page<UserDTO> getMutualFollows(Long userId, Pageable pageable);
 
-  /** 获取用户最近关注的人 */
-  List<UserFollow> getRecentFollowing(Long followerId, int limit);
+  /** 关注DTO */
+  class FollowDTO {
+    private Long id;
+    private Long followerId;
+    private Long followingId;
+    private String createdAt;
+    private UserDTO follower;
+    private UserDTO following;
 
-  /** 获取用户最近的粉丝 */
-  List<UserFollow> getRecentFollowers(Long followingId, int limit);
+    // Constructors
+    public FollowDTO() {}
 
-  /** 获取互相关注的用户 */
-  List<UserFollow> getMutualFollows(Long userId);
+    public FollowDTO(Long id, Long followerId, Long followingId, String createdAt) {
+      this.id = id;
+      this.followerId = followerId;
+      this.followingId = followingId;
+      this.createdAt = createdAt;
+    }
 
-  /** 获取用户关注的人的ID列表 */
-  List<Long> getFollowingIds(Long followerId);
+    // Getters and Setters
+    public Long getId() {
+      return id;
+    }
 
-  /** 获取用户粉丝的ID列表 */
-  List<Long> getFollowerIds(Long followingId);
+    public void setId(Long id) {
+      this.id = id;
+    }
 
-  /** 获取热门用户（按粉丝数排序） */
-  List<Map<String, Object>> getPopularUsers(int limit);
+    public Long getFollowerId() {
+      return followerId;
+    }
 
-  /** 获取最活跃的关注者（按关注数排序） */
-  List<Map<String, Object>> getActiveFollowers(int limit);
+    public void setFollowerId(Long followerId) {
+      this.followerId = followerId;
+    }
 
-  /** 获取关注关系统计 */
-  Map<String, Long> getFollowStats(Long userId);
+    public Long getFollowingId() {
+      return followingId;
+    }
 
-  /** 获取系统关注统计 */
-  Map<String, Long> getSystemFollowStats();
+    public void setFollowingId(Long followingId) {
+      this.followingId = followingId;
+    }
 
-  /** 获取最近的关注活动 */
-  List<UserFollow> getRecentFollowActivities(int limit);
+    public String getCreatedAt() {
+      return createdAt;
+    }
 
-  /** 批量检查关注关系 */
-  Map<Long, Boolean> batchCheckFollowing(Long followerId, List<Long> followingIds);
+    public void setCreatedAt(String createdAt) {
+      this.createdAt = createdAt;
+    }
 
-  /** 获取用户可能感兴趣的人（推荐关注） */
-  List<Long> getRecommendedUsers(Long userId, int limit);
+    public UserDTO getFollower() {
+      return follower;
+    }
 
-  /** 获取关注动态（被关注用户的新内容） */
-  List<Map<String, Object>> getFollowingActivities(Long userId, LocalDateTime since, int limit);
+    public void setFollower(UserDTO follower) {
+      this.follower = follower;
+    }
 
-  /** 通知关注者用户发布了新内容 */
-  void notifyFollowersOfNewContent(Long userId, Long knowledgeId);
+    public UserDTO getFollowing() {
+      return following;
+    }
 
-  /** 检查用户是否可以关注目标用户 */
-  boolean canFollow(Long followerId, Long followingId);
+    public void setFollowing(UserDTO following) {
+      this.following = following;
+    }
+  }
 
-  /** 获取关注关系详情 */
-  UserFollow getFollowRelation(Long followerId, Long followingId);
+  /** 关注统计DTO */
+  class FollowStatsDTO {
+    private Long userId;
+    private Long followingCount;
+    private Long followerCount;
+    private Boolean isFollowing;
+
+    // Constructors
+    public FollowStatsDTO() {}
+
+    public FollowStatsDTO(Long userId, Long followingCount, Long followerCount) {
+      this.userId = userId;
+      this.followingCount = followingCount;
+      this.followerCount = followerCount;
+    }
+
+    // Getters and Setters
+    public Long getUserId() {
+      return userId;
+    }
+
+    public void setUserId(Long userId) {
+      this.userId = userId;
+    }
+
+    public Long getFollowingCount() {
+      return followingCount;
+    }
+
+    public void setFollowingCount(Long followingCount) {
+      this.followingCount = followingCount;
+    }
+
+    public Long getFollowerCount() {
+      return followerCount;
+    }
+
+    public void setFollowerCount(Long followerCount) {
+      this.followerCount = followerCount;
+    }
+
+    public Boolean getIsFollowing() {
+      return isFollowing;
+    }
+
+    public void setIsFollowing(Boolean isFollowing) {
+      this.isFollowing = isFollowing;
+    }
+  }
 }

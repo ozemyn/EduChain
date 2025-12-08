@@ -90,4 +90,3 @@ public class SecurityUtils {
     return authentication != null && authentication.isAuthenticated();
   }
 }
-

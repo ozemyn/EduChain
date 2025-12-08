@@ -8,7 +8,7 @@ export interface ApiResponse<T = unknown> {
   path?: string;
 }
 
-// 分页响应类型
+// 分页响应类型（与Spring Data Page完全一致）
 export interface PageResponse<T> {
   content: T[];
   totalElements: number;
@@ -18,6 +18,24 @@ export interface PageResponse<T> {
   first: boolean;
   last: boolean;
   empty: boolean;
+  numberOfElements: number;
+  pageable: {
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    pageNumber: number;
+    pageSize: number;
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
 }
 
 // 分页请求参数

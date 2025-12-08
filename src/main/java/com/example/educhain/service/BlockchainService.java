@@ -1,12 +1,8 @@
 package com.example.educhain.service;
 
-import com.example.educhain.dto.BlockchainCertifyRequest;
 import com.example.educhain.dto.BlockchainVerifyResponse;
 
-/**
- * 区块链服务接口
- * 用于与Python区块链服务进行交互
- */
+/** 区块链服务接口 用于与Python区块链服务进行交互 */
 public interface BlockchainService {
 
   /**
@@ -53,4 +49,3 @@ public interface BlockchainService {
    */
   Object getChainInfo();
 }
-

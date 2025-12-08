@@ -6,8 +6,8 @@ import com.example.educhain.exception.BusinessException;
 import com.example.educhain.repository.*;
 import com.example.educhain.service.FileUploadService;
 import com.example.educhain.service.KnowledgeItemService;
-import com.example.educhain.util.PermissionChecker;
 import com.example.educhain.util.HashUtil;
+import com.example.educhain.util.PermissionChecker;
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.Patch;
 import java.time.LocalDateTime;
@@ -103,9 +103,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
             HashUtil.calculateKnowledgeHash(savedItem.getTitle(), savedItem.getContent());
         blockchainService.certifyKnowledge(savedItem.getId(), uploaderId, contentHash);
         logger.info(
-            "Knowledge item certified on blockchain: {} by user {}",
-            savedItem.getId(),
-            uploaderId);
+            "Knowledge item certified on blockchain: {} by user {}", savedItem.getId(), uploaderId);
       } catch (Exception e) {
         // 区块链存证失败不影响主流程，只记录日志
         logger.warn(

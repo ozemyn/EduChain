@@ -8,6 +8,7 @@
     "dev:mock": "vite --mode mock",
     "build": "tsc -b && vite build",
     "build:mock": "tsc -b && vite build --mode mock",
+    "deploy:cf": "npm run build:mock && wrangler pages deploy dist --project-name educhain-frontend-mock",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",

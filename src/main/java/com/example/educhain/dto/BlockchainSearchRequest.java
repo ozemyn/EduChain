@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * 区块链搜索请求DTO
- */
+/** 区块链搜索请求DTO */
 @Data
 @Builder
 @NoArgsConstructor
