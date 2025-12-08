@@ -117,7 +117,7 @@ const ContentManagement: React.FC = () => {
   const [reviewForm] = Form.useForm();
 
   // 加载内容列表
-  const loadContents = async () => {
+  const loadContents = React.useCallback(async () => {
     setLoading(true);
     try {
       // 构建查询参数
@@ -147,7 +147,14 @@ const ContentManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    currentPage,
+    pageSize,
+    searchKeyword,
+    statusFilter,
+    typeFilter,
+    categoryFilter,
+  ]);
 
   // 初始化加载
   useEffect(() => {
@@ -158,6 +165,7 @@ const ContentManagement: React.FC = () => {
     searchKeyword,
     statusFilter,
     typeFilter,
+    loadContents,
     categoryFilter,
   ]);
 

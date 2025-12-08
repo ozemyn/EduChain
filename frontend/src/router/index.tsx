@@ -72,6 +72,9 @@ const AdminDashboardPage = React.lazy(
 const UserManagementPage = React.lazy(
   () => import('../pages/admin/UserManagement')
 );
+const CategoryManagementPage = React.lazy(
+  () => import('../pages/admin/CategoryManagement')
+);
 const ContentManagementPage = React.lazy(
   () => import('../pages/admin/ContentManagement')
 );
@@ -361,7 +364,7 @@ export const router = createBrowserRouter([
         path: 'categories',
         element: (
           <LoadingWrapper>
-            <div style={{ padding: '24px' }}>分类管理页面开发中...</div>
+            <CategoryManagementPage />
           </LoadingWrapper>
         ),
       },

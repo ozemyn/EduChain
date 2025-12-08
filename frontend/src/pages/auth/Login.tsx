@@ -14,7 +14,7 @@
    ================================== */
 
 import React from 'react';
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button, Typography, Card, Space, Divider } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
@@ -24,10 +24,15 @@ import {
   SafetyOutlined,
   ThunderboltOutlined,
   TeamOutlined,
+  CrownOutlined,
+  ExperimentOutlined,
 } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { message } from 'antd';
 import type { LoginRequest } from '@/types/api';
+import { USE_MOCK } from '@/mock';
+import EnvironmentIndicator from '@/components/common/EnvironmentIndicator';
 import './Login.css';
 
 const { Title, Text } = Typography;
@@ -50,15 +55,42 @@ const Login: React.FC = () => {
 
   const onFinish = async (values: LoginRequest) => {
     try {
-      await login(values.usernameOrEmail, values.password);
+      // 普通用户登录页面只允许普通用户登录
+      await login(values.usernameOrEmail, values.password, 'LEARNER');
       navigate(from, { replace: true });
     } catch (error) {
       console.error('Login failed:', error);
+      // 如果是角色错误，提示用户使用正确的登录页面
+      if (error instanceof Error && error.message.includes('管理员')) {
+        message.warning('管理员请使用管理员登录页面');
+        setTimeout(() => {
+          navigate('/admin/login');
+        }, 1500);
+      }
+    }
+  };
+
+  // Mock模式下的快速登录
+  const handleQuickLogin = async (userType: 'user' | 'admin') => {
+    try {
+      if (userType === 'admin') {
+        // 管理员应该在管理员登录页面登录
+        message.info('正在跳转到管理员登录页面...');
+        navigate('/admin/login');
+        return;
+      } else {
+        // 普通用户登录，指定角色验证
+        await login('zhangsan', 'password', 'LEARNER');
+        navigate(from, { replace: true });
+      }
+    } catch (error) {
+      console.error('Quick login failed:', error);
     }
   };
 
   return (
     <div className="login-page animate-fade-in">
+      <EnvironmentIndicator />
       {/* 左侧品牌展示区 - 固定 */}
       <div className="login-brand-section">
         {/* 背景装饰 */}
@@ -192,6 +224,119 @@ const Login: React.FC = () => {
                 </Button>
               </Form.Item>
             </Form>
+
+            {/* Mock模式下的快速登录 */}
+            {USE_MOCK && (
+              <>
+                <Divider>
+                  <span
+                    style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}
+                  >
+                    <ExperimentOutlined /> Mock 模式快速登录
+                  </span>
+                </Divider>
+
+                <Card
+                  size="small"
+                  className="mock-login-card"
+                  style={{
+                    marginBottom: 'var(--spacing-lg)',
+                    background:
+                      'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+                    border: '1px solid #0ea5e9',
+                    borderRadius: 'var(--radius-lg)',
+                  }}
+                >
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      marginBottom: 'var(--spacing-md)',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: '13px',
+                        color: '#0369a1',
+                        fontWeight: 500,
+                      }}
+                    >
+                      开发测试模式 - 一键登录
+                    </Text>
+                  </div>
+
+                  <Space
+                    direction="vertical"
+                    style={{ width: '100%' }}
+                    size="small"
+                  >
+                    <Button
+                      type="default"
+                      icon={<UserOutlined />}
+                      onClick={() => handleQuickLogin('user')}
+                      loading={loading}
+                      block
+                      style={{
+                        height: '40px',
+                        borderColor: '#22c55e',
+                        color: '#16a34a',
+                        background:
+                          'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+                      }}
+                    >
+                      普通用户登录 (张三)
+                    </Button>
+
+                    <Button
+                      type="default"
+                      icon={<CrownOutlined />}
+                      onClick={() => handleQuickLogin('admin')}
+                      loading={loading}
+                      block
+                      style={{
+                        height: '40px',
+                        borderColor: '#f59e0b',
+                        color: '#d97706',
+                        background:
+                          'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
+                      }}
+                    >
+                      跳转管理员登录页面
+                    </Button>
+                  </Space>
+
+                  <Divider style={{ margin: '12px 0 8px 0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748b' }}>
+                      切换登录页面
+                    </span>
+                  </Divider>
+
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={() => navigate('/admin/login')}
+                    block
+                    style={{
+                      fontSize: '12px',
+                      color: '#6366f1',
+                      padding: '4px 0',
+                    }}
+                  >
+                    前往管理员登录页面 →
+                  </Button>
+
+                  <div
+                    style={{
+                      marginTop: 'var(--spacing-xs)',
+                      textAlign: 'center',
+                      fontSize: '11px',
+                      color: '#64748b',
+                    }}
+                  >
+                    仅在Mock模式下可用，使用虚拟数据
+                  </div>
+                </Card>
+              </>
+            )}
 
             {/* 分隔线 */}
             <div className="form-divider">

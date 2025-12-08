@@ -1,122 +1,63 @@
-import React, { useState } from 'react';
+/* ===================================
+   管理员布局容器 - Admin Layout Container
+   ===================================
+   
+   特性：
+   - 管理员页面的主容器
+   - 集成独立的侧边栏和顶部导航
+   - 内容区域
+   - 完整的响应式支持
+   
+   ================================== */
+
+import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import {
-  Layout,
-  Menu,
-  Avatar,
-  Dropdown,
-  Space,
-  Typography,
-  Button,
-  Badge,
-  Breadcrumb,
-} from 'antd';
-import {
-  DashboardOutlined,
-  UserOutlined,
-  FileTextOutlined,
-  TagsOutlined,
-  CommentOutlined,
-  BarChartOutlined,
-  FileSearchOutlined,
-  SettingOutlined,
-  LogoutOutlined,
-  BellOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  HomeOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { useAuth } from '@/contexts/AuthContext';
+import { Breadcrumb } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
 import { ROUTES, ROUTE_TITLES } from '@/constants/routes';
+import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminHeader from '@/components/admin/AdminHeader';
+import EnvironmentIndicator from '@/components/common/EnvironmentIndicator';
+import './AdminLayout.css';
 
-const { Header, Sider, Content } = Layout;
-const { Title } = Typography;
-
-// 管理员布局组件
+/**
+ * 管理员布局容器组件
+ */
 const AdminLayout: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth();
 
-  // 侧边栏菜单项
-  const menuItems: MenuProps['items'] = [
-    {
-      key: ROUTES.ADMIN.DASHBOARD,
-      icon: <DashboardOutlined />,
-      label: '仪表板',
-    },
-    {
-      key: ROUTES.ADMIN.USERS,
-      icon: <UserOutlined />,
-      label: '用户管理',
-    },
-    {
-      key: ROUTES.ADMIN.KNOWLEDGE,
-      icon: <FileTextOutlined />,
-      label: '内容管理',
-    },
-    {
-      key: ROUTES.ADMIN.CATEGORIES,
-      icon: <TagsOutlined />,
-      label: '分类管理',
-    },
-    {
-      key: ROUTES.ADMIN.COMMENTS,
-      icon: <CommentOutlined />,
-      label: '评论管理',
-    },
-    {
-      key: ROUTES.ADMIN.STATISTICS,
-      icon: <BarChartOutlined />,
-      label: '统计分析',
-    },
-    {
-      key: ROUTES.ADMIN.LOGS,
-      icon: <FileSearchOutlined />,
-      label: '系统日志',
-    },
-  ];
+  // 检测移动端
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setSidebarCollapsed(true);
+      }
+    };
 
-  // 用户下拉菜单
-  const userMenuItems: MenuProps['items'] = [
-    {
-      key: 'profile',
-      icon: <UserOutlined />,
-      label: '个人资料',
-      onClick: () => navigate(ROUTES.USER.PROFILE),
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: '系统设置',
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'home',
-      icon: <HomeOutlined />,
-      label: '返回首页',
-      onClick: () => navigate(ROUTES.HOME),
-    },
-    {
-      key: 'logout',
-      icon: <LogoutOutlined />,
-      label: '退出登录',
-      onClick: logout,
-    },
-  ];
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-  // 菜单点击处理
-  const handleMenuClick = ({ key }: { key: string }) => {
-    navigate(key);
+  // 处理菜单切换
+  const handleMenuToggle = () => {
+    if (isMobile) {
+      // 移动端触发侧边栏抽屉
+      const event = new CustomEvent('toggleMobileSidebar');
+      window.dispatchEvent(event);
+    } else {
+      // 桌面端切换侧边栏收缩状态
+      setSidebarCollapsed(!sidebarCollapsed);
+    }
   };
 
   // 生成面包屑
   const generateBreadcrumb = () => {
-    const pathSegments = location.pathname.split('/').filter(Boolean);
     const breadcrumbItems: Array<{
       title: React.ReactNode;
       onClick?: () => void;
@@ -132,184 +73,53 @@ const AdminLayout: React.FC = () => {
       },
     ];
 
-    if (pathSegments.length > 1) {
-      const currentPath = `/${pathSegments.join('/')}`;
-      const title = ROUTE_TITLES[currentPath as keyof typeof ROUTE_TITLES];
-      if (title) {
-        breadcrumbItems.push({
-          title: <span>{title}</span>,
-        });
-      }
+    const currentTitle =
+      ROUTE_TITLES[location.pathname as keyof typeof ROUTE_TITLES];
+    if (currentTitle && location.pathname !== ROUTES.ADMIN.DASHBOARD) {
+      breadcrumbItems.push({
+        title: <span>{currentTitle}</span>,
+      });
     }
 
     return breadcrumbItems;
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      {/* 侧边栏 */}
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        width={240}
-        style={{
-          background: 'var(--bg-elevated)',
-          boxShadow: '2px 0 8px 0 var(--glass-shadow)',
-        }}
-      >
-        {/* Logo */}
-        <div
-          style={{
-            height: '64px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            padding: collapsed ? '0' : '0 24px',
-            borderBottom: '1px solid #f0f0f0',
-          }}
-        >
-          {collapsed ? (
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                background: 'var(--accent-primary)',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-inverse)',
-                fontWeight: 'bold',
-              }}
-            >
-              E
-            </div>
-          ) : (
-            <Space>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  background: '#1890ff',
-                  borderRadius: '6px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                }}
-              >
-                E
-              </div>
-              <Title
-                level={4}
-                style={{ margin: 0, color: 'var(--accent-primary)' }}
-              >
-                EduChain
-              </Title>
-            </Space>
-          )}
-        </div>
+    <div className="admin-layout">
+      <EnvironmentIndicator />
 
-        {/* 菜单 */}
-        <Menu
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          onClick={handleMenuClick}
-          style={{
-            border: 'none',
-            height: 'calc(100vh - 64px)',
-          }}
-        />
-      </Sider>
+      {/* 侧边栏 */}
+      <AdminSidebar
+        collapsed={sidebarCollapsed}
+        onCollapse={setSidebarCollapsed}
+      />
 
       {/* 主内容区 */}
-      <Layout>
-        {/* 顶部导航 */}
-        <Header
-          style={{
-            padding: '0 24px',
-            background: 'var(--bg-elevated)',
-            borderBottom: '1px solid var(--border-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Space>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-                width: 64,
-                height: 64,
-              }}
-            />
-          </Space>
-
-          <Space size="large">
-            {/* 通知 */}
-            <Badge count={5} size="small">
-              <Button
-                type="text"
-                icon={<BellOutlined />}
-                style={{ fontSize: '16px' }}
-              />
-            </Badge>
-
-            {/* 用户信息 */}
-            <Dropdown
-              menu={{ items: userMenuItems }}
-              placement="bottomRight"
-              arrow
-            >
-              <Space style={{ cursor: 'pointer' }}>
-                <Avatar
-                  src={user?.avatarUrl}
-                  icon={!user?.avatarUrl && <UserOutlined />}
-                  size="small"
-                />
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 500 }}>
-                    {user?.fullName}
-                  </div>
-                  <div
-                    style={{ fontSize: '12px', color: 'var(--text-secondary)' }}
-                  >
-                    管理员
-                  </div>
-                </div>
-              </Space>
-            </Dropdown>
-          </Space>
-        </Header>
+      <div
+        className="admin-main-content"
+        style={{
+          marginLeft: isMobile ? 0 : sidebarCollapsed ? 64 : 260,
+        }}
+      >
+        {/* 顶部导航栏 */}
+        <AdminHeader
+          onMenuToggle={handleMenuToggle}
+          collapsed={sidebarCollapsed}
+        />
 
         {/* 面包屑 */}
-        <div
-          style={{
-            padding: '16px 24px 0',
-            background: 'var(--bg-elevated)',
-          }}
-        >
-          <Breadcrumb items={generateBreadcrumb()} />
-        </div>
+        {!isMobile && (
+          <div className="admin-breadcrumb">
+            <Breadcrumb items={generateBreadcrumb()} />
+          </div>
+        )}
 
         {/* 内容区域 */}
-        <Content
-          style={{
-            margin: '0',
-            background: 'var(--bg-primary)',
-            minHeight: 'calc(100vh - 64px - 48px)',
-          }}
-        >
+        <main className="admin-content">
           <Outlet />
-        </Content>
-      </Layout>
-    </Layout>
+        </main>
+      </div>
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@
 
 import type {
   Discussion,
-  ActiveUser,
+  CommunityActiveUser,
   HotTopic,
   CommunityStats,
   CommunityFeed,
@@ -89,7 +89,7 @@ export const mockDiscussions: Discussion[] = [
 /**
  * 活跃用户数据
  */
-export const mockActiveUsers: ActiveUser[] = [
+export const mockActiveUsers: CommunityActiveUser[] = [
   {
     id: 1,
     name: '张三',

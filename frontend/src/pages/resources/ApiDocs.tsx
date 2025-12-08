@@ -11,6 +11,34 @@
    ================================== */
 
 import React, { useState } from 'react';
+
+// API 端点类型定义
+interface ApiEndpoint {
+  path: string;
+  method: string;
+  summary: string;
+  description: string;
+  parameters?: Array<{
+    name: string;
+    type: string;
+    required: boolean;
+    description: string;
+  }>;
+  requestBody?: {
+    type: string;
+    properties: Record<string, { type: string; description: string }>;
+  };
+  responses?: Array<{
+    code: number;
+    description: string;
+  }>;
+  requestExample?: string;
+  responseExample?: string;
+  statusCodes?: Array<{
+    code: number;
+    description: string;
+  }>;
+}
 import {
   Card,
   Typography,
@@ -1414,7 +1442,7 @@ const ApiDocs: React.FC = () => {
     },
   ];
 
-  const renderEndpointDetails = (endpoint: any) => (
+  const renderEndpointDetails = (endpoint: ApiEndpoint) => (
     <div className="endpoint-details">
       <div className="endpoint-header">
         <Space>
@@ -1469,17 +1497,17 @@ const ApiDocs: React.FC = () => {
 
       <Title level={5}>请求示例</Title>
       <div className="code-block">
-        <pre>{endpoint.requestExample}</pre>
+        <pre>{endpoint.requestExample || '暂无示例'}</pre>
       </div>
 
       <Title level={5}>响应示例</Title>
       <div className="code-block">
-        <pre>{endpoint.responseExample}</pre>
+        <pre>{endpoint.responseExample || '暂无示例'}</pre>
       </div>
 
       <Title level={5}>状态码</Title>
       <Table
-        dataSource={endpoint.statusCodes}
+        dataSource={endpoint.statusCodes || endpoint.responses}
         columns={[
           {
             title: '状态码',

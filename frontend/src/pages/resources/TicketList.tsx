@@ -34,10 +34,7 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { 
-  mockTickets,
-  type Ticket 
-} from '@/mock/data/tickets';
+import { mockTickets, type Ticket } from '@/mock/data/tickets';
 import './Resources.css';
 
 const { Title, Text } = Typography;
@@ -185,7 +182,7 @@ const TicketList: React.FC = () => {
       title: '操作',
       key: 'action',
       width: 80,
-      render: (_: any, record: Ticket) => (
+      render: (_: unknown, record: Ticket) => (
         <Button
           type="text"
           icon={<EyeOutlined />}

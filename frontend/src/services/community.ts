@@ -24,9 +24,9 @@ export interface Discussion {
 }
 
 /**
- * 活跃用户数据类型
+ * 社区活跃用户数据类型
  */
-export interface ActiveUser {
+export interface CommunityActiveUser {
   id: number;
   name: string;
   avatar: string;
@@ -60,7 +60,7 @@ export interface CommunityStats {
  */
 export interface CommunityFeed {
   hotDiscussions: Discussion[];
-  activeUsers: ActiveUser[];
+  activeUsers: CommunityActiveUser[];
   hotTopics: HotTopic[];
   stats: CommunityStats;
 }
@@ -118,10 +118,13 @@ class CommunityService {
    * 获取活跃用户列表
    * @param limit 返回数量，默认10
    */
-  async getActiveUsers(limit: number = 10): Promise<ActiveUser[]> {
-    const response = await api.get<ActiveUser[]>('/community/users/active', {
-      params: { limit },
-    });
+  async getActiveUsers(limit: number = 10): Promise<CommunityActiveUser[]> {
+    const response = await api.get<CommunityActiveUser[]>(
+      '/community/users/active',
+      {
+        params: { limit },
+      }
+    );
     return response.data;
   }
 

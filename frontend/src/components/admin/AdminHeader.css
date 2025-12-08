@@ -1,0 +1,280 @@
+/* ===================================
+   管理员顶部导航样式 - Admin Header Styles
+   ===================================
+   
+   特性：
+   - 独立的顶部导航样式
+   - 左侧汉堡菜单
+   - 右侧功能区
+   - 现代化设计风格
+   - 完整的响应式支持
+   
+   ================================== */
+
+/* ===================================
+   1. 顶部导航容器
+   ================================== */
+
+.admin-header {
+  height: 64px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 深色模式 */
+[data-theme='dark'] .admin-header {
+  background: var(--bg-secondary);
+  border-bottom-color: var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================================
+   2. 左侧区域
+   ================================== */
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.admin-menu-toggle {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 8px !important;
+  font-size: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  color: var(--text-primary) !important;
+}
+
+.admin-menu-toggle:hover {
+  background: var(--bg-hover) !important;
+  color: #dc2626 !important;
+  transform: scale(1.05) !important;
+}
+
+.admin-menu-toggle:active {
+  transform: scale(0.95) !important;
+}
+
+/* ===================================
+   3. 右侧区域
+   ================================== */
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* 主题切换 */
+.admin-theme-switch {
+  display: flex;
+  align-items: center;
+}
+
+.theme-switch {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.theme-switch.ant-switch-checked {
+  background: #1890ff !important;
+}
+
+.theme-switch .ant-switch-handle {
+  background: #fff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 头部按钮 */
+.admin-header-button {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  color: var(--text-secondary) !important;
+}
+
+.admin-header-button:hover {
+  background: var(--bg-hover) !important;
+  color: #dc2626 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ===================================
+   4. 用户信息
+   ================================== */
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.admin-user-info:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.admin-user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-user-role {
+  font-size: 12px;
+  color: #dc2626;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* ===================================
+   5. 响应式设计
+   ================================== */
+
+/* 平板设备 */
+@media (max-width: 1024px) {
+  .admin-header {
+    padding: 0 16px;
+  }
+
+  .admin-user-name {
+    max-width: 100px;
+  }
+}
+
+/* 移动端 */
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  .admin-menu-toggle {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 16px !important;
+  }
+
+  .admin-header-button {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+  }
+
+  .admin-user-details {
+    display: none;
+  }
+
+  .admin-theme-switch {
+    display: none;
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 0 12px;
+  }
+
+  .admin-header-right .ant-space {
+    gap: 8px !important;
+  }
+}
+
+/* ===================================
+   6. 动画效果
+   ================================== */
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.admin-header {
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===================================
+   7. 性能优化
+   ================================== */
+
+.admin-header,
+.admin-menu-toggle,
+.admin-header-button,
+.admin-user-info {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .admin-header,
+  .admin-menu-toggle,
+  .admin-header-button,
+  .admin-user-info {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .admin-header {
+    border-bottom-width: 2px;
+  }
+
+  .admin-user-info {
+    border-width: 2px;
+  }
+
+  .admin-menu-toggle,
+  .admin-header-button {
+    border: 1px solid var(--border-strong);
+  }
+}
+
+/* ===================================
+   完成 - AdminHeader.css
+   ================================== */

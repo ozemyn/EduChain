@@ -1,9 +1,9 @@
 /* ===================================
-   管理仪表盘页面 - Admin Dashboard Page
+   管理员仪表盘页面 - Admin Dashboard Page
    ===================================
    
-   完整功能的管理后台仪表盘
-   使用全局样式系统，完整响应式设计
+   使用统一的服务层，自动适配mock和生产环境
+   现代化设计，完整响应式支持
    
    ================================== */
 
@@ -23,73 +23,40 @@ import {
   Typography,
   Select,
   DatePicker,
+  message,
 } from 'antd';
 import {
   UserOutlined,
   FileTextOutlined,
   EyeOutlined,
-  LikeOutlined,
   TrophyOutlined,
   WarningOutlined,
   ArrowUpOutlined,
   LineChartOutlined,
   CommentOutlined,
+  HeartOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { ROUTES } from '@/constants/routes';
+import {
+  adminService,
+  type DashboardStats,
+  type PopularContent,
+  type ActiveUser,
+  type SystemAlert,
+  type SystemMetrics,
+} from '@/services/admin';
 import './AdminDashboard.css';
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-
-// 统计数据类型
-interface DashboardStats {
-  totalUsers: number;
-  totalKnowledge: number;
-  totalViews: number;
-  totalLikes: number;
-  totalComments: number;
-  activeUsers: number;
-  newUsersToday: number;
-  newKnowledgeToday: number;
-  userGrowth: number;
-  knowledgeGrowth: number;
-}
-
-// 热门内容类型
-interface PopularContent {
-  id: number;
-  title: string;
-  author: string;
-  views: number;
-  likes: number;
-  comments: number;
-  createdAt: string;
-}
-
-// 活跃用户类型
-interface ActiveUser {
-  id: number;
-  username: string;
-  fullName: string;
-  avatarUrl?: string;
-  level: number;
-  contributionScore: number;
-  lastActiveAt: string;
-}
-
-// 系统告警类型
-interface SystemAlert {
-  id: number;
-  type: 'error' | 'warning' | 'info';
-  title: string;
-  message: string;
-  createdAt: string;
-  resolved: boolean;
-}
 
 /**
  * 管理仪表盘页面组件
@@ -97,21 +64,13 @@ interface SystemAlert {
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<DashboardStats>({
-    totalUsers: 0,
-    totalKnowledge: 0,
-    totalViews: 0,
-    totalLikes: 0,
-    totalComments: 0,
-    activeUsers: 0,
-    newUsersToday: 0,
-    newKnowledgeToday: 0,
-    userGrowth: 0,
-    knowledgeGrowth: 0,
-  });
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [popularContent, setPopularContent] = useState<PopularContent[]>([]);
   const [activeUsers, setActiveUsers] = useState<ActiveUser[]>([]);
   const [systemAlerts, setSystemAlerts] = useState<SystemAlert[]>([]);
+  const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(
+    null
+  );
   const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>([
     dayjs().subtract(7, 'day'),
     dayjs(),
@@ -122,105 +81,43 @@ const AdminDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // 模拟统计数据
-      setStats({
-        totalUsers: 1234,
-        totalKnowledge: 5678,
-        totalViews: 123456,
-        totalLikes: 23456,
-        totalComments: 12345,
-        activeUsers: 456,
-        newUsersToday: 23,
-        newKnowledgeToday: 45,
-        userGrowth: 12.5,
-        knowledgeGrowth: 8.3,
-      });
-
-      // 模拟热门内容
-      setPopularContent([
-        {
-          id: 1,
-          title: 'React 18 新特性详解',
-          author: '张三',
-          views: 1234,
-          likes: 234,
-          comments: 45,
-          createdAt: '2024-01-15',
-        },
-        {
-          id: 2,
-          title: 'TypeScript 高级类型应用',
-          author: '李四',
-          views: 987,
-          likes: 156,
-          comments: 32,
-          createdAt: '2024-01-14',
-        },
-        {
-          id: 3,
-          title: 'Vue 3 Composition API 实践',
-          author: '王五',
-          views: 876,
-          likes: 123,
-          comments: 28,
-          createdAt: '2024-01-13',
-        },
+      // 并行加载所有数据
+      const [
+        statsResponse,
+        popularContentResponse,
+        activeUsersResponse,
+        systemAlertsResponse,
+        systemMetricsResponse,
+      ] = await Promise.all([
+        adminService.getDashboardStats(),
+        adminService.getPopularContent(5),
+        adminService.getActiveUsers(5),
+        adminService.getSystemAlerts(false), // 只获取未处理的告警
+        adminService.getSystemMetrics(),
       ]);
 
-      // 模拟活跃用户
-      setActiveUsers([
-        {
-          id: 1,
-          username: 'zhangsan',
-          fullName: '张三',
-          avatarUrl: undefined,
-          level: 5,
-          contributionScore: 1234,
-          lastActiveAt: '2024-01-15 14:30:00',
-        },
-        {
-          id: 2,
-          username: 'lisi',
-          fullName: '李四',
-          avatarUrl: undefined,
-          level: 4,
-          contributionScore: 987,
-          lastActiveAt: '2024-01-15 13:45:00',
-        },
-        {
-          id: 3,
-          username: 'wangwu',
-          fullName: '王五',
-          avatarUrl: undefined,
-          level: 3,
-          contributionScore: 756,
-          lastActiveAt: '2024-01-15 12:20:00',
-        },
-      ]);
+      if (statsResponse.success) {
+        setStats(statsResponse.data);
+      }
 
-      // 模拟系统告警
-      setSystemAlerts([
-        {
-          id: 1,
-          type: 'warning',
-          title: '存储空间不足',
-          message: '系统存储空间使用率已达到85%，请及时清理',
-          createdAt: '2024-01-15 10:30:00',
-          resolved: false,
-        },
-        {
-          id: 2,
-          type: 'info',
-          title: '系统维护通知',
-          message: '系统将于今晚23:00-01:00进行维护',
-          createdAt: '2024-01-15 09:00:00',
-          resolved: false,
-        },
-      ]);
+      if (popularContentResponse.success) {
+        setPopularContent(popularContentResponse.data);
+      }
+
+      if (activeUsersResponse.success) {
+        setActiveUsers(activeUsersResponse.data);
+      }
+
+      if (systemAlertsResponse.success) {
+        setSystemAlerts(systemAlertsResponse.data);
+      }
+
+      if (systemMetricsResponse.success) {
+        setSystemMetrics(systemMetricsResponse.data);
+      }
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      console.error('加载仪表盘数据失败:', error);
+      message.error('加载仪表盘数据失败');
     } finally {
       setLoading(false);
     }
@@ -237,8 +134,13 @@ const AdminDashboard: React.FC = () => {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
-      render: (title: string) => (
-        <Text strong className="content-title hover-scale">
+      render: (title: string, record: PopularContent) => (
+        <Text
+          strong
+          className="content-title hover-scale"
+          onClick={() => navigate(`/knowledge/${record.id}`)}
+          style={{ cursor: 'pointer' }}
+        >
           {title}
         </Text>
       ),
@@ -247,6 +149,21 @@ const AdminDashboard: React.FC = () => {
       title: '作者',
       dataIndex: 'author',
       key: 'author',
+      render: (author: string, record: PopularContent) => (
+        <Text
+          className="hover-scale"
+          onClick={() => navigate(`/users/${record.authorId}`)}
+          style={{ cursor: 'pointer', color: 'var(--primary-600)' }}
+        >
+          {author}
+        </Text>
+      ),
+    },
+    {
+      title: '分类',
+      dataIndex: 'category',
+      key: 'category',
+      render: (category: string) => <Tag color="blue">{category}</Tag>,
     },
     {
       title: '浏览量',
@@ -265,7 +182,7 @@ const AdminDashboard: React.FC = () => {
       key: 'likes',
       render: (likes: number) => (
         <Space>
-          <LikeOutlined />
+          <HeartOutlined />
           {likes.toLocaleString()}
         </Space>
       ),
@@ -321,6 +238,44 @@ const AdminDashboard: React.FC = () => {
     setDateRange([startDate, now]);
   };
 
+  // 处理告警解决
+  const handleResolveAlert = async (alertId: number) => {
+    try {
+      const response = await adminService.resolveAlert(alertId);
+      if (response.success) {
+        setSystemAlerts(prev =>
+          prev.map(alert =>
+            alert.id === alertId ? { ...alert, resolved: true } : alert
+          )
+        );
+        message.success('告警已标记为已处理');
+      }
+    } catch (error) {
+      console.error('处理告警失败:', error);
+      message.error('处理告警失败');
+    }
+  };
+
+  // 获取告警图标
+  const getAlertIcon = (type: string) => {
+    switch (type) {
+      case 'error':
+        return (
+          <ExclamationCircleOutlined style={{ color: 'var(--accent-error)' }} />
+        );
+      case 'warning':
+        return <WarningOutlined style={{ color: 'var(--accent-warning)' }} />;
+      case 'info':
+        return <InfoCircleOutlined style={{ color: 'var(--accent-info)' }} />;
+      case 'success':
+        return (
+          <CheckCircleOutlined style={{ color: 'var(--accent-success)' }} />
+        );
+      default:
+        return <InfoCircleOutlined />;
+    }
+  };
+
   return (
     <div className="admin-dashboard-page animate-fade-in">
       <div className="dashboard-content container">
@@ -328,11 +283,11 @@ const AdminDashboard: React.FC = () => {
         <header className="dashboard-header glass-light animate-fade-in-up">
           <div className="header-content">
             <div className="title-section">
-              <h1 className="page-title gradient-text">
+              <Title level={2} className="page-title gradient-text">
                 <TrophyOutlined />
                 管理仪表盘
-              </h1>
-              <p className="page-subtitle">系统概览与数据统计</p>
+              </Title>
+              <Text className="page-subtitle">系统概览与数据统计</Text>
             </div>
             <div className="header-actions">
               <Space>
@@ -374,15 +329,18 @@ const AdminDashboard: React.FC = () => {
             <div className="stat-card glass-card hover-lift">
               <Statistic
                 title="总用户数"
-                value={stats.totalUsers}
+                value={stats?.totalUsers || 0}
                 prefix={<UserOutlined />}
                 valueStyle={{ color: 'var(--accent-success)' }}
+                loading={loading}
               />
               <div className="stat-footer">
-                <Text type="secondary">今日新增: {stats.newUsersToday}</Text>
+                <Text type="secondary">
+                  今日新增: {stats?.newUsersToday || 0}
+                </Text>
                 <span className="growth-indicator positive">
                   <ArrowUpOutlined />
-                  {stats.userGrowth}%
+                  {stats?.userGrowth?.toFixed(1) || 0}%
                 </span>
               </div>
             </div>
@@ -391,17 +349,18 @@ const AdminDashboard: React.FC = () => {
             <div className="stat-card glass-card hover-lift">
               <Statistic
                 title="总内容数"
-                value={stats.totalKnowledge}
+                value={stats?.totalKnowledge || 0}
                 prefix={<FileTextOutlined />}
                 valueStyle={{ color: 'var(--accent-primary)' }}
+                loading={loading}
               />
               <div className="stat-footer">
                 <Text type="secondary">
-                  今日新增: {stats.newKnowledgeToday}
+                  今日新增: {stats?.newKnowledgeToday || 0}
                 </Text>
                 <span className="growth-indicator positive">
                   <ArrowUpOutlined />
-                  {stats.knowledgeGrowth}%
+                  {stats?.knowledgeGrowth?.toFixed(1) || 0}%
                 </span>
               </div>
             </div>
@@ -410,13 +369,14 @@ const AdminDashboard: React.FC = () => {
             <div className="stat-card glass-card hover-lift">
               <Statistic
                 title="总浏览量"
-                value={stats.totalViews}
+                value={stats?.totalViews || 0}
                 prefix={<EyeOutlined />}
                 valueStyle={{ color: 'var(--primary-600)' }}
+                loading={loading}
               />
               <div className="stat-footer">
                 <Text type="secondary">
-                  总点赞: {stats.totalLikes.toLocaleString()}
+                  总点赞: {stats?.totalLikes?.toLocaleString() || 0}
                 </Text>
               </div>
             </div>
@@ -425,13 +385,14 @@ const AdminDashboard: React.FC = () => {
             <div className="stat-card glass-card hover-lift">
               <Statistic
                 title="活跃用户"
-                value={stats.activeUsers}
+                value={stats?.activeUsers || 0}
                 prefix={<TrophyOutlined />}
                 valueStyle={{ color: 'var(--primary-500)' }}
+                loading={loading}
               />
               <div className="stat-footer">
                 <Text type="secondary">
-                  总评论: {stats.totalComments.toLocaleString()}
+                  总评论: {stats?.totalComments?.toLocaleString() || 0}
                 </Text>
               </div>
             </div>
@@ -455,7 +416,7 @@ const AdminDashboard: React.FC = () => {
               extra={
                 <Button
                   type="link"
-                  onClick={() => navigate('/admin/content')}
+                  onClick={() => navigate(ROUTES.ADMIN.KNOWLEDGE)}
                   className="hover-scale"
                 >
                   查看更多 →
@@ -487,7 +448,7 @@ const AdminDashboard: React.FC = () => {
               extra={
                 <Button
                   type="link"
-                  onClick={() => navigate('/admin/users')}
+                  onClick={() => navigate(ROUTES.ADMIN.USERS)}
                   className="hover-scale"
                 >
                   查看更多 →
@@ -513,7 +474,13 @@ const AdminDashboard: React.FC = () => {
                             icon={!user.avatarUrl && <UserOutlined />}
                             size="small"
                           />
-                          <span className="user-name">{user.fullName}</span>
+                          <span
+                            className="user-name hover-scale"
+                            onClick={() => navigate(`/users/${user.id}`)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            {user.fullName}
+                          </span>
                           <Tag color="blue">Lv.{user.level}</Tag>
                         </Space>
                       }
@@ -523,7 +490,7 @@ const AdminDashboard: React.FC = () => {
                             贡献分: {user.contributionScore.toLocaleString()}
                           </div>
                           <Text type="secondary" className="user-time">
-                            最后活跃: {user.lastActiveAt}
+                            今日活动: {user.todayActions} 次
                           </Text>
                         </div>
                       }
@@ -545,7 +512,7 @@ const AdminDashboard: React.FC = () => {
               <div className="status-content">
                 <Progress
                   type="circle"
-                  percent={65}
+                  percent={systemMetrics?.cpu.usage || 0}
                   strokeColor="var(--accent-success)"
                   className="status-progress"
                 />
@@ -557,7 +524,7 @@ const AdminDashboard: React.FC = () => {
               <div className="status-content">
                 <Progress
                   type="circle"
-                  percent={78}
+                  percent={systemMetrics?.memory.usage || 0}
                   strokeColor="var(--primary-600)"
                   className="status-progress"
                 />
@@ -569,7 +536,7 @@ const AdminDashboard: React.FC = () => {
               <div className="status-content">
                 <Progress
                   type="circle"
-                  percent={85}
+                  percent={systemMetrics?.storage.usage || 0}
                   strokeColor="var(--accent-warning)"
                   className="status-progress"
                 />
@@ -592,7 +559,11 @@ const AdminDashboard: React.FC = () => {
                 </Space>
               }
               extra={
-                <Button type="link" className="hover-scale">
+                <Button
+                  type="link"
+                  className="hover-scale"
+                  onClick={() => navigate(ROUTES.ADMIN.LOGS)}
+                >
                   查看全部 →
                 </Button>
               }
@@ -611,23 +582,42 @@ const AdminDashboard: React.FC = () => {
                         size="small"
                         disabled={alert.resolved}
                         className="hover-scale"
+                        onClick={() => handleResolveAlert(alert.id)}
                       >
                         {alert.resolved ? '已处理' : '标记已处理'}
                       </Button>,
                     ]}
                   >
                     <List.Item.Meta
-                      avatar={
-                        <WarningOutlined
-                          className={`alert-icon ${alert.type}`}
-                        />
+                      avatar={getAlertIcon(alert.type)}
+                      title={
+                        <Space>
+                          <span className="alert-title">{alert.title}</span>
+                          <Tag
+                            color={
+                              alert.priority === 'high'
+                                ? 'red'
+                                : alert.priority === 'medium'
+                                  ? 'orange'
+                                  : 'blue'
+                            }
+                          >
+                            {alert.priority === 'high'
+                              ? '高'
+                              : alert.priority === 'medium'
+                                ? '中'
+                                : '低'}
+                          </Tag>
+                          {alert.resolved && <Tag color="green">已处理</Tag>}
+                        </Space>
                       }
-                      title={<span className="alert-title">{alert.title}</span>}
                       description={
                         <div>
                           <div className="alert-message">{alert.message}</div>
                           <Text type="secondary" className="alert-time">
-                            {alert.createdAt}
+                            {dayjs(alert.createdAt).format(
+                              'YYYY-MM-DD HH:mm:ss'
+                            )}
                           </Text>
                         </div>
                       }

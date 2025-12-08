@@ -4,6 +4,7 @@ import { Layout as AntLayout } from 'antd';
 import Header from './Header';
 import Footer from './Footer';
 import ScrollToTop from '../common/ScrollToTop';
+import EnvironmentIndicator from '../common/EnvironmentIndicator';
 
 const { Content } = AntLayout;
 
@@ -11,6 +12,7 @@ const Layout: React.FC = () => {
   return (
     <AntLayout className="main-layout">
       <ScrollToTop />
+      <EnvironmentIndicator />
       <Header />
       <Content className="main-content">
         <Outlet />

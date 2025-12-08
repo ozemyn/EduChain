@@ -129,7 +129,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
           {item.title}
         </Link>
         <Space size="small" className={styles.tags}>
-          <Tag color={getTypeColor(item.type)}>{item.type}</Tag>
+          <Tag color={getTypeColor(item.type || 'TEXT')}>{item.type}</Tag>
           {item.tags &&
             item.tags
               .split(',')

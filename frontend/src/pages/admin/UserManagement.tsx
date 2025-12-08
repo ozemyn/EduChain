@@ -41,27 +41,13 @@ import {
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
+import { adminService } from '@/services/admin';
+import type { User } from '@/types/api';
 import './UserManagement.css';
 
 const { Search } = Input;
 const { Option } = Select;
 const { Title, Text } = Typography;
-
-// 用户类型
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  fullName: string;
-  avatarUrl?: string;
-  school?: string;
-  level: number;
-  bio?: string;
-  role: 'LEARNER' | 'ADMIN';
-  status: number;
-  createdAt: string;
-  updatedAt: string;
-}
 
 // 用户统计类型
 interface UserStats {
@@ -72,6 +58,7 @@ interface UserStats {
   followingCount: number;
   followerCount: number;
   viewCount: number;
+  commentCount: number;
 }
 
 /**
@@ -94,28 +81,21 @@ const UserManagement: React.FC = () => {
   const [form] = Form.useForm();
 
   // 加载用户列表
-  const loadUsers = async () => {
+  const loadUsers = React.useCallback(async () => {
     setLoading(true);
     try {
-      // 构建查询参数
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        size: pageSize.toString(),
-      });
+      const params = {
+        page: currentPage - 1, // 后端从0开始
+        size: pageSize,
+        search: searchKeyword || undefined,
+        role: roleFilter || undefined,
+        status: statusFilter ? Number(statusFilter) : undefined,
+      };
 
-      if (searchKeyword) params.append('keyword', searchKeyword);
-      if (statusFilter) params.append('status', statusFilter);
-      if (roleFilter) params.append('role', roleFilter);
-
-      const response = await fetch(`/api/users?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch users');
-      }
-
-      const result = await response.json();
-      if (result.success && result.data) {
-        setUsers(result.data.content || []);
-        setTotal(result.data.totalElements || 0);
+      const response = await adminService.getAdminUsers(params);
+      if (response.success && response.data) {
+        setUsers(response.data.content || []);
+        setTotal(response.data.totalElements || 0);
       }
     } catch (error) {
       console.error('Failed to load users:', error);
@@ -123,12 +103,19 @@ const UserManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, pageSize, searchKeyword, statusFilter, roleFilter]);
 
   // 初始化加载
   useEffect(() => {
     loadUsers();
-  }, [currentPage, pageSize, searchKeyword, statusFilter, roleFilter]);
+  }, [
+    currentPage,
+    pageSize,
+    searchKeyword,
+    statusFilter,
+    roleFilter,
+    loadUsers,
+  ]);
 
   // 查看用户详情
   const handleViewUser = async (user: User) => {
@@ -136,12 +123,12 @@ const UserManagement: React.FC = () => {
     setUserDetailVisible(true);
 
     try {
-      const response = await fetch(`/api/users/${user.id}/stats`);
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && result.data) {
-          setUserStats(result.data);
-        }
+      const response = await adminService.getUserDetail(user.id);
+      if (response.success && response.data) {
+        setUserStats({
+          userId: user.id,
+          ...response.data.stats,
+        });
       }
     } catch (error) {
       console.error('Failed to load user stats:', error);
@@ -168,44 +155,38 @@ const UserManagement: React.FC = () => {
     try {
       const values = await form.validateFields();
 
-      const url = selectedUser ? `/api/users/${selectedUser.id}` : '/api/users';
-      const method = selectedUser ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save user');
+      let response;
+      if (selectedUser) {
+        // 更新用户
+        response = await adminService.updateUser(selectedUser.id, values);
+      } else {
+        // 创建用户 - 需要添加默认密码
+        const userData = {
+          ...values,
+          password: '123456', // 默认密码，实际应用中应该生成随机密码
+        };
+        response = await adminService.createUser(userData);
       }
 
-      const result = await response.json();
-      if (result.success) {
+      if (response.success) {
         message.success(selectedUser ? '用户信息更新成功' : '用户创建成功');
         setEditModalVisible(false);
         loadUsers();
-      } else {
-        throw new Error(result.message || '保存失败');
       }
     } catch (error) {
       console.error('Failed to save user:', error);
-      message.error(error instanceof Error ? error.message : '保存失败');
+      message.error('保存失败');
     }
   };
 
   // 删除用户
   const handleDeleteUser = async (userId: number) => {
     try {
-      console.log('Deleting user:', userId);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      message.success('用户删除成功');
-      loadUsers();
+      const response = await adminService.deleteUser(userId);
+      if (response.success) {
+        message.success('用户删除成功');
+        loadUsers();
+      }
     } catch (error) {
       console.error('Failed to delete user:', error);
       message.error('删除失败');
@@ -216,12 +197,14 @@ const UserManagement: React.FC = () => {
   const handleToggleUserStatus = async (user: User) => {
     try {
       const newStatus = user.status === 1 ? 0 : 1;
-      console.log(`Toggle user ${user.id} status to ${newStatus}`);
+      const response = await adminService.updateUser(user.id, {
+        status: newStatus,
+      });
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      message.success(`用户已${newStatus === 1 ? '启用' : '禁用'}`);
-      loadUsers();
+      if (response.success) {
+        message.success(`用户已${newStatus === 1 ? '启用' : '禁用'}`);
+        loadUsers();
+      }
     } catch (error) {
       console.error('Failed to toggle user status:', error);
       message.error('操作失败');
@@ -243,12 +226,14 @@ const UserManagement: React.FC = () => {
       okButtonProps: { danger: true },
       onOk: async () => {
         try {
-          console.log('Batch deleting users:', selectedRowKeys);
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          const userIds = selectedRowKeys.map(key => Number(key));
+          const response = await adminService.batchDeleteUsers(userIds);
 
-          message.success('批量删除成功');
-          setSelectedRowKeys([]);
-          loadUsers();
+          if (response.success) {
+            message.success('批量删除成功');
+            setSelectedRowKeys([]);
+            loadUsers();
+          }
         } catch (error) {
           console.error('Failed to batch delete:', error);
           message.error('批量删除失败');

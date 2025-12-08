@@ -8,6 +8,7 @@
 
 export { default as AdminDashboard } from './AdminDashboard';
 export { default as UserManagement } from './UserManagement';
+export { default as AdminCategoryManagement } from './CategoryManagement';
 export { default as ContentManagement } from './ContentManagement';
 export { default as AdminLogin } from './AdminLogin';
 export { default as SystemMonitoring } from './SystemMonitoring';

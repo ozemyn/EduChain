@@ -1,0 +1,387 @@
+/* ===================================
+   管理员侧边栏样式 - Admin Sidebar Styles
+   ===================================
+   
+   参考用户导航栏样式设计
+   使用全局样式系统
+   完整的响应式设计
+   玻璃态效果
+   
+   ================================== */
+
+/* ===================================
+   1. 侧边栏容器
+   ================================== */
+
+.admin-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-md);
+  transition: all var(--transition-base) var(--ease-ios);
+  z-index: var(--z-sticky);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 深色模式 */
+[data-theme='dark'] .admin-sidebar {
+  background: var(--glass-bg-strong);
+  border-right-color: var(--border-color);
+  box-shadow: var(--glass-shadow-md);
+}
+
+/* 收缩状态 */
+.admin-sidebar.collapsed {
+  width: 64px !important;
+}
+
+/* ===================================
+   2. Logo/标题区域
+   ================================== */
+
+.admin-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+  transition: all var(--transition-fast) var(--ease-ios);
+  min-height: 72px;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-header {
+  justify-content: center;
+  padding: var(--spacing-lg) var(--spacing-sm);
+}
+
+.admin-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all var(--transition-fast) var(--ease-ios);
+  cursor: pointer;
+}
+
+.admin-sidebar-logo:hover {
+  transform: scale(1.05);
+}
+
+.admin-sidebar-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 1.25rem;
+  color: var(--text-accent);
+  transition: all var(--transition-fast) var(--ease-spring-ios);
+}
+
+.admin-sidebar-logo:hover .admin-sidebar-logo-icon {
+  transform: rotate(5deg) scale(1.1);
+}
+
+.admin-sidebar-logo-text {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.admin-sidebar.collapsed .admin-sidebar-logo-text {
+  display: none;
+}
+
+/* ===================================
+   3. 侧边栏内容区域
+   ================================== */
+
+.admin-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-md) 0;
+}
+
+/* 自定义滚动条 */
+.admin-sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+.admin-sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* ===================================
+   4. 导航菜单
+   ================================== */
+
+.admin-sidebar-nav {
+  flex: 1;
+  padding: 0 var(--spacing-sm);
+}
+
+.admin-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.admin-menu-item {
+  margin: 0;
+  padding: 0;
+}
+
+.admin-menu-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  background: transparent;
+  border-radius: var(--liquid-border-radius);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast) var(--ease-ios);
+  text-align: left;
+  position: relative;
+}
+
+.admin-menu-button:hover {
+  background: var(--glass-bg-medium);
+  color: var(--text-accent);
+  transform: translateX(4px);
+}
+
+.admin-menu-button.active {
+  background: var(--glass-bg-medium);
+  color: var(--text-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.admin-menu-button.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 24px;
+  background: var(--text-accent);
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+  animation: scaleIn var(--duration-fast) var(--ease-spring-ios);
+}
+
+.admin-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  min-width: 20px;
+  flex-shrink: 0;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+.admin-menu-button.active .admin-menu-icon {
+  color: var(--text-accent);
+  transform: scale(1.1);
+}
+
+.admin-menu-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all var(--transition-fast) var(--ease-ios);
+}
+
+/* 收缩状态 */
+.admin-menu-button.collapsed {
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.admin-menu-button.collapsed .admin-menu-label {
+  display: none;
+}
+
+/* ===================================
+   5. 底部区域
+   ================================== */
+
+.admin-sidebar-footer {
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-top: 1px solid var(--glass-border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.admin-sidebar.collapsed .admin-sidebar-footer {
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-sm);
+}
+
+/* 主题切换按钮区域 */
+.admin-sidebar-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--spacing-sm);
+  transition: all var(--transition-fast) var(--ease-ios);
+  width: 100%;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-theme-toggle {
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
+/* 确保主题切换按钮在收缩状态下居中 */
+.admin-sidebar.collapsed .admin-sidebar-theme-toggle .theme-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ===================================
+   6. 移动端抽屉
+   ================================== */
+
+.admin-sidebar-drawer .ant-drawer-body {
+  padding: 0;
+}
+
+.admin-sidebar-drawer .ant-drawer-content-wrapper {
+  box-shadow: var(--glass-shadow-lg);
+}
+
+/* ===================================
+   7. 响应式设计
+   ================================== */
+
+/* 平板设备 */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    width: 240px;
+  }
+}
+
+/* 移动端 */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    display: none;
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 480px) {
+  .admin-sidebar-header {
+    padding: var(--spacing-md);
+    min-height: 64px;
+  }
+
+  .admin-sidebar-logo-text {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===================================
+   8. 动画效果
+   ================================== */
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1);
+  }
+}
+
+/* ===================================
+   9. 性能优化
+   ================================== */
+
+.admin-sidebar,
+.admin-menu-button,
+.admin-sidebar-logo {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar,
+  .admin-menu-button,
+  .admin-sidebar-logo,
+  .admin-sidebar-logo-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===================================
+   10. 高对比度模式
+   ================================== */
+
+@media (prefers-contrast: high) {
+  .admin-sidebar {
+    border-right-width: 2px;
+  }
+
+  .admin-sidebar-header {
+    border-bottom-width: 2px;
+  }
+
+  .admin-sidebar-footer {
+    border-top-width: 2px;
+  }
+
+  .admin-menu-button {
+    border: 1px solid var(--border-strong);
+  }
+}
+
+/* ===================================
+   完成 - AdminSidebar.css
+   ================================== */

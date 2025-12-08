@@ -79,7 +79,8 @@ export interface KnowledgeItem {
   id: number;
   title: string;
   content: string;
-  type: 'TEXT' | 'IMAGE' | 'VIDEO' | 'PDF' | 'LINK';
+  summary?: string; // 内容摘要
+  type?: 'TEXT' | 'IMAGE' | 'VIDEO' | 'PDF' | 'LINK';
   mediaUrls?: string[];
   linkUrl?: string;
   uploaderId: number;
@@ -126,6 +127,12 @@ export interface Category {
   createdAt: string;
   children?: Category[];
   knowledgeCount?: number;
+}
+
+// 分类详情类型（包含统计信息）
+export interface CategoryDetail extends Category {
+  totalKnowledgeCount?: number;
+  children?: CategoryDetail[];
 }
 
 // 评论相关类型

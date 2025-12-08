@@ -820,6 +820,650 @@ export const setupMockServer = () => {
       const { mockCommunityStats } = await import('./data/community');
       return HttpResponse.json(createSuccessResponse(mockCommunityStats));
     }),
+
+    // ==================== 管理员仪表盘相关 ====================
+    http.get(`${API_BASE}/admin/dashboard/stats`, async () => {
+      await delay();
+
+      // 从现有Mock数据计算统计信息
+      const { mockUsers } = await import('./data/users');
+      const { mockKnowledgeItems, mockKnowledgeStats } = await import(
+        './data/knowledge'
+      );
+      const { mockComments } = await import('./data/comments');
+
+      // 计算统计数据
+      const totalUsers = mockUsers.length;
+      const totalKnowledge = mockKnowledgeItems.length;
+
+      let totalViews = 0;
+      let totalLikes = 0;
+      Object.values(mockKnowledgeStats).forEach(stats => {
+        totalViews += stats.viewCount || 0;
+        totalLikes += stats.likeCount || 0;
+      });
+
+      const totalComments = mockComments.length;
+      const activeUsers = mockUsers.filter(user => user.level >= 3).length;
+      const newUsersToday = Math.floor(Math.random() * 10) + 15;
+      const newKnowledgeToday = Math.floor(Math.random() * 8) + 12;
+      const userGrowth = Math.random() * 20 + 5;
+      const knowledgeGrowth = Math.random() * 15 + 3;
+
+      const stats = {
+        totalUsers,
+        totalKnowledge,
+        totalViews,
+        totalLikes,
+        totalComments,
+        activeUsers,
+        newUsersToday,
+        newKnowledgeToday,
+        userGrowth,
+        knowledgeGrowth,
+      };
+
+      return HttpResponse.json(createSuccessResponse(stats));
+    }),
+
+    http.get(
+      `${API_BASE}/admin/dashboard/popular-content`,
+      async ({ request }) => {
+        await delay();
+        const url = new URL(request.url);
+        const limit = Number(url.searchParams.get('limit')) || 10;
+
+        const { mockKnowledgeItems, mockKnowledgeStats } = await import(
+          './data/knowledge'
+        );
+        const { mockUsers } = await import('./data/users');
+        const { mockCategories } = await import('./data/categories');
+
+        // 按浏览量排序获取热门内容
+        const popularItems = mockKnowledgeItems
+          .map(item => {
+            const stats = mockKnowledgeStats[item.id];
+            const author = mockUsers.find(user => user.id === item.uploaderId);
+            const category = mockCategories.find(
+              cat => cat.id === item.categoryId
+            );
+
+            return {
+              id: item.id,
+              title: item.title,
+              author: author?.fullName || '未知用户',
+              authorId: item.uploaderId,
+              views: stats?.viewCount || 0,
+              likes: stats?.likeCount || 0,
+              comments: stats?.commentCount || 0,
+              createdAt: item.createdAt.split('T')[0],
+              category: category?.name || '未分类',
+            };
+          })
+          .sort((a, b) => b.views - a.views)
+          .slice(0, limit);
+
+        return HttpResponse.json(createSuccessResponse(popularItems));
+      }
+    ),
+
+    http.get(
+      `${API_BASE}/admin/dashboard/active-users`,
+      async ({ request }) => {
+        await delay();
+        const url = new URL(request.url);
+        const limit = Number(url.searchParams.get('limit')) || 10;
+
+        const { mockUsers, mockUserStats } = await import('./data/users');
+
+        // 按贡献度排序获取活跃用户
+        const activeUsersList = mockUsers
+          .filter(user => user.role === 'LEARNER') // 排除管理员
+          .map(user => {
+            const stats = mockUserStats[user.id];
+            const contributionScore =
+              (stats?.knowledgeCount || 0) * 10 +
+              (stats?.likeCount || 0) * 2 +
+              (stats?.followerCount || 0) * 5;
+
+            return {
+              id: user.id,
+              username: user.username,
+              fullName: user.fullName,
+              avatarUrl: user.avatarUrl,
+              level: user.level,
+              contributionScore,
+              lastActiveAt: user.updatedAt,
+              todayActions: Math.floor(Math.random() * 20) + 5,
+            };
+          })
+          .sort((a, b) => b.contributionScore - a.contributionScore)
+          .slice(0, limit);
+
+        return HttpResponse.json(createSuccessResponse(activeUsersList));
+      }
+    ),
+
+    http.get(
+      `${API_BASE}/admin/dashboard/system-alerts`,
+      async ({ request }) => {
+        await delay();
+        const url = new URL(request.url);
+        const resolved = url.searchParams.get('resolved');
+
+        // 生成系统告警数据
+        const alerts = [
+          {
+            id: 1,
+            type: 'warning' as const,
+            title: '存储空间告警',
+            message: '系统存储空间使用率已达到85%，建议及时清理日志文件',
+            createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            resolved: false,
+            priority: 'high' as const,
+          },
+          {
+            id: 2,
+            type: 'info' as const,
+            title: '系统维护通知',
+            message:
+              '系统将于今晚23:00-01:00进行例行维护，期间可能影响部分功能',
+            createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+            resolved: false,
+            priority: 'medium' as const,
+          },
+          {
+            id: 3,
+            type: 'success' as const,
+            title: '备份任务完成',
+            message: '今日凌晨的数据备份任务已成功完成，备份文件大小: 2.3GB',
+            createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+            resolved: true,
+            priority: 'low' as const,
+          },
+          {
+            id: 4,
+            type: 'error' as const,
+            title: '数据库连接异常',
+            message: '检测到数据库连接池出现异常，已自动重连，请关注系统稳定性',
+            createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            resolved: true,
+            priority: 'high' as const,
+          },
+        ];
+
+        let filteredAlerts = alerts;
+        if (resolved !== null) {
+          const resolvedBool = resolved === 'true';
+          filteredAlerts = alerts.filter(
+            alert => alert.resolved === resolvedBool
+          );
+        }
+
+        return HttpResponse.json(createSuccessResponse(filteredAlerts));
+      }
+    ),
+
+    http.get(`${API_BASE}/admin/dashboard/system-metrics`, async () => {
+      await delay();
+
+      const metrics = {
+        cpu: {
+          usage: 65,
+          trend: 'stable' as const,
+        },
+        memory: {
+          usage: 78,
+          total: 16,
+          trend: 'up' as const,
+        },
+        storage: {
+          usage: 85,
+          total: 500,
+          trend: 'up' as const,
+        },
+        network: {
+          inbound: 125.6,
+          outbound: 89.3,
+        },
+      };
+
+      return HttpResponse.json(createSuccessResponse(metrics));
+    }),
+
+    http.put(
+      `${API_BASE}/admin/dashboard/alerts/:id/resolve`,
+      async ({ params }) => {
+        await delay();
+        const { id } = params;
+        console.log(`Resolving alert ${id}`);
+        return HttpResponse.json(createSuccessResponse({ success: true }));
+      }
+    ),
+
+    // ==================== 管理员用户管理相关 ====================
+    http.get(`${API_BASE}/admin/users`, async ({ request }) => {
+      await delay();
+      const url = new URL(request.url);
+      const page = Number(url.searchParams.get('page')) || 0;
+      const size = Number(url.searchParams.get('size')) || 10;
+      const search = url.searchParams.get('search') || '';
+      const role = url.searchParams.get('role') || '';
+      const status = url.searchParams.get('status');
+
+      const { mockUsers } = await import('./data/users');
+
+      let filteredUsers = [...mockUsers];
+
+      // 搜索过滤
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredUsers = filteredUsers.filter(
+          user =>
+            user.username.toLowerCase().includes(searchLower) ||
+            user.email.toLowerCase().includes(searchLower) ||
+            user.fullName.toLowerCase().includes(searchLower)
+        );
+      }
+
+      // 角色过滤
+      if (role) {
+        filteredUsers = filteredUsers.filter(user => user.role === role);
+      }
+
+      // 状态过滤
+      if (status !== null && status !== '') {
+        filteredUsers = filteredUsers.filter(
+          user => user.status === Number(status)
+        );
+      }
+
+      const pageData = createPageResponse(filteredUsers, page, size);
+      return HttpResponse.json(createSuccessResponse(pageData));
+    }),
+
+    http.post(`${API_BASE}/admin/users`, async ({ request }) => {
+      await delay();
+      const userData = (await request.json()) as {
+        username: string;
+        email: string;
+        fullName: string;
+        school?: string;
+        role: 'LEARNER' | 'ADMIN';
+        status: number;
+        bio?: string;
+        password: string;
+      };
+      const { mockUsers } = await import('./data/users');
+
+      const newUser = {
+        id: Math.max(...mockUsers.map(u => u.id)) + 1,
+        ...userData,
+        level: 1, // 默认等级
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      mockUsers.push(newUser);
+      return HttpResponse.json(createSuccessResponse(newUser), { status: 201 });
+    }),
+
+    http.put(`${API_BASE}/admin/users/:id`, async ({ params, request }) => {
+      await delay();
+      const { id } = params;
+      const userData = (await request.json()) as {
+        username?: string;
+        email?: string;
+        fullName?: string;
+        school?: string;
+        role?: 'LEARNER' | 'ADMIN';
+        status?: number;
+        bio?: string;
+      };
+      const { mockUsers } = await import('./data/users');
+
+      const userIndex = mockUsers.findIndex(u => u.id === Number(id));
+      if (userIndex === -1) {
+        return HttpResponse.json(
+          { success: false, message: '用户不存在', data: null },
+          { status: 404 }
+        );
+      }
+
+      mockUsers[userIndex] = {
+        ...mockUsers[userIndex],
+        ...userData,
+        updatedAt: new Date().toISOString(),
+      };
+
+      return HttpResponse.json(createSuccessResponse(mockUsers[userIndex]));
+    }),
+
+    http.delete(`${API_BASE}/admin/users/:id`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      const { mockUsers } = await import('./data/users');
+
+      const userIndex = mockUsers.findIndex(u => u.id === Number(id));
+      if (userIndex === -1) {
+        return HttpResponse.json(
+          { success: false, message: '用户不存在', data: null },
+          { status: 404 }
+        );
+      }
+
+      mockUsers.splice(userIndex, 1);
+      return HttpResponse.json(createSuccessResponse(null));
+    }),
+
+    http.post(`${API_BASE}/admin/users/batch-delete`, async ({ request }) => {
+      await delay();
+      const { userIds } = (await request.json()) as { userIds: number[] };
+      const { mockUsers } = await import('./data/users');
+
+      // 从数组中移除指定的用户
+      for (let i = mockUsers.length - 1; i >= 0; i--) {
+        if (userIds.includes(mockUsers[i].id)) {
+          mockUsers.splice(i, 1);
+        }
+      }
+
+      return HttpResponse.json(createSuccessResponse(null));
+    }),
+
+    http.get(`${API_BASE}/admin/users/:id/detail`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      const { mockUsers, mockUserStats } = await import('./data/users');
+
+      const user = mockUsers.find(u => u.id === Number(id));
+      if (!user) {
+        return HttpResponse.json(
+          { success: false, message: '用户不存在', data: null },
+          { status: 404 }
+        );
+      }
+
+      const stats = mockUserStats[user.id] || {
+        userId: user.id,
+        knowledgeCount: 0,
+        likeCount: 0,
+        favoriteCount: 0,
+        followingCount: 0,
+        followerCount: 0,
+        viewCount: 0,
+      };
+
+      return HttpResponse.json(createSuccessResponse({ ...user, stats }));
+    }),
+
+    // ==================== 管理员分类管理相关 ====================
+    http.get(`${API_BASE}/admin/categories`, async ({ request }) => {
+      await delay();
+      const url = new URL(request.url);
+      const page = Number(url.searchParams.get('page')) || 0;
+      const size = Number(url.searchParams.get('size')) || 10;
+      const search = url.searchParams.get('search') || '';
+      const parentId = url.searchParams.get('parentId');
+
+      const { mockCategories } = await import('./data/categories');
+
+      let filteredCategories = [...mockCategories];
+
+      // 搜索过滤
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredCategories = filteredCategories.filter(
+          category =>
+            category.name.toLowerCase().includes(searchLower) ||
+            (category.description &&
+              category.description.toLowerCase().includes(searchLower))
+        );
+      }
+
+      // 父分类过滤
+      if (parentId !== null && parentId !== '') {
+        if (parentId === '0') {
+          // 查询根分类
+          filteredCategories = filteredCategories.filter(
+            category => !category.parentId
+          );
+        } else {
+          filteredCategories = filteredCategories.filter(
+            category => category.parentId === Number(parentId)
+          );
+        }
+      }
+
+      const pageData = createPageResponse(filteredCategories, page, size);
+      return HttpResponse.json(createSuccessResponse(pageData));
+    }),
+
+    http.get(`${API_BASE}/admin/categories/tree`, async () => {
+      await delay();
+      const { mockCategoryTree } = await import('./data/categories');
+      return HttpResponse.json(createSuccessResponse(mockCategoryTree));
+    }),
+
+    http.post(`${API_BASE}/admin/categories`, async ({ request }) => {
+      await delay();
+      const categoryData = (await request.json()) as {
+        name: string;
+        description?: string;
+        parentId?: number;
+        sortOrder?: number;
+      };
+      const { mockCategories } = await import('./data/categories');
+
+      const newCategory = {
+        id: Math.max(...mockCategories.map(c => c.id)) + 1,
+        ...categoryData,
+        sortOrder: categoryData.sortOrder || mockCategories.length + 1,
+        createdAt: new Date().toISOString(),
+        knowledgeCount: 0,
+      };
+
+      mockCategories.push(newCategory);
+      return HttpResponse.json(createSuccessResponse(newCategory), {
+        status: 201,
+      });
+    }),
+
+    http.put(
+      `${API_BASE}/admin/categories/:id`,
+      async ({ params, request }) => {
+        await delay();
+        const { id } = params;
+        const categoryData = (await request.json()) as {
+          name?: string;
+          description?: string;
+          parentId?: number;
+          sortOrder?: number;
+        };
+        const { mockCategories } = await import('./data/categories');
+
+        const categoryIndex = mockCategories.findIndex(
+          c => c.id === Number(id)
+        );
+        if (categoryIndex === -1) {
+          return HttpResponse.json(
+            { success: false, message: '分类不存在', data: null },
+            { status: 404 }
+          );
+        }
+
+        mockCategories[categoryIndex] = {
+          ...mockCategories[categoryIndex],
+          ...categoryData,
+        };
+
+        return HttpResponse.json(
+          createSuccessResponse(mockCategories[categoryIndex])
+        );
+      }
+    ),
+
+    http.delete(`${API_BASE}/admin/categories/:id`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      const { mockCategories } = await import('./data/categories');
+
+      const categoryIndex = mockCategories.findIndex(c => c.id === Number(id));
+      if (categoryIndex === -1) {
+        return HttpResponse.json(
+          { success: false, message: '分类不存在', data: null },
+          { status: 404 }
+        );
+      }
+
+      // 检查是否有子分类
+      const hasChildren = mockCategories.some(c => c.parentId === Number(id));
+      if (hasChildren) {
+        return HttpResponse.json(
+          {
+            success: false,
+            message: '该分类下还有子分类，无法删除',
+            data: null,
+          },
+          { status: 400 }
+        );
+      }
+
+      mockCategories.splice(categoryIndex, 1);
+      return HttpResponse.json(createSuccessResponse(null));
+    }),
+
+    http.post(
+      `${API_BASE}/admin/categories/batch-delete`,
+      async ({ request }) => {
+        await delay();
+        const { categoryIds } = (await request.json()) as {
+          categoryIds: number[];
+        };
+        const { mockCategories } = await import('./data/categories');
+
+        // 检查是否有子分类
+        for (const categoryId of categoryIds) {
+          const hasChildren = mockCategories.some(
+            c => c.parentId === categoryId
+          );
+          if (hasChildren) {
+            return HttpResponse.json(
+              {
+                success: false,
+                message: '选中的分类中包含有子分类的项目，无法删除',
+                data: null,
+              },
+              { status: 400 }
+            );
+          }
+        }
+
+        // 从数组中移除指定的分类
+        for (let i = mockCategories.length - 1; i >= 0; i--) {
+          if (categoryIds.includes(mockCategories[i].id)) {
+            mockCategories.splice(i, 1);
+          }
+        }
+
+        return HttpResponse.json(createSuccessResponse(null));
+      }
+    ),
+
+    http.put(
+      `${API_BASE}/admin/categories/:id/move`,
+      async ({ params, request }) => {
+        await delay();
+        const { id } = params;
+        const { parentId, sortOrder } = (await request.json()) as {
+          parentId?: number;
+          sortOrder?: number;
+        };
+        const { mockCategories } = await import('./data/categories');
+
+        const categoryIndex = mockCategories.findIndex(
+          c => c.id === Number(id)
+        );
+        if (categoryIndex === -1) {
+          return HttpResponse.json(
+            { success: false, message: '分类不存在', data: null },
+            { status: 404 }
+          );
+        }
+
+        // 检查是否会形成循环引用
+        if (parentId) {
+          let checkParent = mockCategories.find(c => c.id === parentId);
+          while (checkParent) {
+            if (checkParent.id === Number(id)) {
+              return HttpResponse.json(
+                {
+                  success: false,
+                  message: '不能将分类移动到自己的子分类下',
+                  data: null,
+                },
+                { status: 400 }
+              );
+            }
+            checkParent = mockCategories.find(
+              c => c.id === checkParent!.parentId
+            );
+          }
+        }
+
+        mockCategories[categoryIndex] = {
+          ...mockCategories[categoryIndex],
+          parentId: parentId || undefined,
+          sortOrder: sortOrder || mockCategories[categoryIndex].sortOrder,
+        };
+
+        return HttpResponse.json(
+          createSuccessResponse(mockCategories[categoryIndex])
+        );
+      }
+    ),
+
+    http.get(`${API_BASE}/admin/categories/:id/detail`, async ({ params }) => {
+      await delay();
+      const { id } = params;
+      const { mockCategories } = await import('./data/categories');
+
+      const category = mockCategories.find(c => c.id === Number(id));
+      if (!category) {
+        return HttpResponse.json(
+          { success: false, message: '分类不存在', data: null },
+          { status: 404 }
+        );
+      }
+
+      // 获取子分类
+      const children = mockCategories.filter(c => c.parentId === category.id);
+
+      // 计算总的知识数量（包含子分类）
+      const getTotalKnowledgeCount = (categoryId: number): number => {
+        const cat = mockCategories.find(c => c.id === categoryId);
+        if (!cat) return 0;
+
+        let total = cat.knowledgeCount || 0;
+        const childCategories = mockCategories.filter(
+          c => c.parentId === categoryId
+        );
+        for (const child of childCategories) {
+          total += getTotalKnowledgeCount(child.id);
+        }
+        return total;
+      };
+
+      const totalKnowledgeCount = getTotalKnowledgeCount(category.id);
+
+      return HttpResponse.json(
+        createSuccessResponse({
+          ...category,
+          children,
+          totalKnowledgeCount,
+        })
+      );
+    }),
   ];
 
   const worker = setupWorker(...handlers);

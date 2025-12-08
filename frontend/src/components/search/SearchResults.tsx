@@ -124,7 +124,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                   {highlightKeyword(item.title, keyword)}
                 </Link>
                 <div className="cnki-result-badges">
-                  <Tag color={getTypeColor(item.type)}>{item.type}</Tag>
+                  <Tag color={getTypeColor(item.type || 'TEXT')}>
+                    {item.type}
+                  </Tag>
                 </div>
               </div>
 

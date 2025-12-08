@@ -1,0 +1,365 @@
+/* ===================================
+   分类管理样式 - Category Management Styles
+   ===================================
+   
+   使用全局样式系统，完整响应式设计
+   
+   ================================== */
+
+.category-management-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-xl);
+}
+
+.management-content {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   页面头部
+   ================================== */
+
+.management-header {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.title-section {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ===================================
+   主要内容
+   ================================== */
+
+.management-main {
+  padding: var(--spacing-xl);
+  border-radius: var(--liquid-border-radius-lg);
+}
+
+.filter-section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-input {
+  border-radius: var(--radius-lg) !important;
+}
+
+.action-section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ===================================
+   表格样式
+   ================================== */
+
+.category-table .ant-table {
+  background: transparent;
+}
+
+.category-table .ant-table-thead > tr > th {
+  background: var(--bg-secondary);
+  font-weight: var(--font-weight-semibold);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.category-table .ant-table-tbody > tr:hover > td {
+  background: var(--bg-secondary);
+}
+
+.category-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+/* ===================================
+   树形视图样式
+   ================================== */
+
+.tree-section {
+  margin-top: var(--spacing-lg);
+}
+
+.tree-card {
+  border-radius: var(--liquid-border-radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.category-tree,
+.category-tree-preview {
+  font-size: var(--font-size-base);
+}
+
+.category-tree .ant-tree-node-content-wrapper,
+.category-tree-preview .ant-tree-node-content-wrapper {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.category-tree .ant-tree-node-content-wrapper:hover,
+.category-tree-preview .ant-tree-node-content-wrapper:hover {
+  background: var(--bg-secondary);
+}
+
+.category-tree .ant-tree-node-selected .ant-tree-node-content-wrapper,
+.category-tree-preview .ant-tree-node-selected .ant-tree-node-content-wrapper {
+  background: var(--primary-100);
+  color: var(--primary-700);
+}
+
+/* ===================================
+   分类详情抽屉
+   ================================== */
+
+.category-detail-drawer .ant-drawer-body {
+  padding: var(--spacing-xl);
+}
+
+.category-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.category-descriptions {
+  border-radius: var(--radius-lg);
+}
+
+.category-descriptions .ant-descriptions-item-label {
+  font-weight: var(--font-weight-semibold);
+  background: var(--bg-secondary);
+}
+
+.category-stats {
+  margin-top: var(--spacing-xl);
+}
+
+.stat-item {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.subcategories {
+  margin-top: var(--spacing-xl);
+}
+
+.subcategory-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.subcategory-tag {
+  margin: 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.subcategory-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===================================
+   模态框样式
+   ================================== */
+
+.edit-category-modal .ant-modal-body,
+.tree-preview-modal .ant-modal-body {
+  padding: var(--spacing-xl);
+}
+
+.edit-category-modal .ant-form-item {
+  margin-bottom: var(--spacing-lg);
+}
+
+.tree-preview-modal {
+  top: 20px;
+}
+
+.tree-preview-modal .category-tree-preview {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+}
+
+/* ===================================
+   响应式设计
+   ================================== */
+
+@media (max-width: 1024px) {
+  .category-management-page {
+    padding: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-section .ant-row {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .filter-section .ant-col {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-management-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .management-header,
+  .management-main {
+    padding: var(--spacing-lg);
+  }
+
+  .action-section .ant-space {
+    width: 100%;
+  }
+
+  .action-section .ant-btn {
+    flex: 1;
+  }
+
+  .category-detail-drawer {
+    width: 100% !important;
+  }
+
+  .edit-category-modal,
+  .tree-preview-modal {
+    width: 100% !important;
+    margin: 0;
+    top: 0;
+    height: 100vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .filter-section .ant-space {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .filter-section .ant-input,
+  .filter-section .ant-select {
+    width: 100% !important;
+  }
+
+  .subcategory-list {
+    flex-direction: column;
+  }
+
+  .subcategory-tag {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ===================================
+   性能优化
+   ================================== */
+
+.stat-item,
+.subcategory-tag,
+.category-tree .ant-tree-node-content-wrapper,
+.category-tree-preview .ant-tree-node-content-wrapper {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .management-header,
+  .management-main,
+  .tree-card,
+  .stat-item {
+    border: 2px solid var(--border-strong);
+  }
+}
+
+/* ===================================
+   深色模式适配
+   ================================== */
+
+[data-theme='dark']
+  .category-tree
+  .ant-tree-node-selected
+  .ant-tree-node-content-wrapper,
+[data-theme='dark']
+  .category-tree-preview
+  .ant-tree-node-selected
+  .ant-tree-node-content-wrapper {
+  background: var(--primary-900);
+  color: var(--primary-100);
+}
+
+[data-theme='dark'] .category-descriptions .ant-descriptions-item-label {
+  background: var(--bg-tertiary);
+}

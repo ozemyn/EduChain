@@ -12,10 +12,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ticketCategories, 
-  ticketPriorities, 
-  createTicket
+import {
+  ticketCategories,
+  ticketPriorities,
+  createTicket,
 } from '@/mock/data/tickets';
 import {
   Card,
@@ -54,15 +54,15 @@ const { Option } = Select;
 const { Dragger } = Upload;
 
 interface TicketForm {
-  category: string;
-  priority: string;
-  title: string;
-  description: string;
-  steps: string;
-  email: string;
-  phone: string;
-  expectedResponse: string;
-  attachments: any[];
+  category?: string;
+  priority?: string;
+  title?: string;
+  description?: string;
+  steps?: string;
+  email?: string;
+  phone?: string;
+  expectedResponse?: string;
+  attachments?: File[];
 }
 
 const TicketSubmit: React.FC = () => {
@@ -70,7 +70,14 @@ const TicketSubmit: React.FC = () => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<TicketForm>>({});
-  const [recommendedFAQ, setRecommendedFAQ] = useState<any[]>([]);
+  const [recommendedFAQ, setRecommendedFAQ] = useState<
+    Array<{
+      question: string;
+      answer: string;
+      category: string;
+      tags: string[];
+    }>
+  >([]);
   const [loading, setLoading] = useState(false);
 
   // 使用mock数据中的配置
@@ -79,26 +86,29 @@ const TicketSubmit: React.FC = () => {
   const priorities = ticketPriorities;
 
   // 相关FAQ数据（简化版）
-  const faqData = [
-    {
-      category: 'account',
-      question: '如何重置密码？',
-      answer: '在登录页面点击"忘记密码"，输入邮箱地址...',
-      tags: ['密码', '重置', '登录'],
-    },
-    {
-      category: 'content',
-      question: '支持哪些文件格式？',
-      answer: '支持图片、视频、文档等多种格式...',
-      tags: ['格式', '上传', '文件'],
-    },
-    {
-      category: 'blockchain',
-      question: '区块链存证需要多长时间？',
-      answer: '通常需要1-3分钟完成存证...',
-      tags: ['时间', '存证', '区块链'],
-    },
-  ];
+  const faqData = React.useMemo(
+    () => [
+      {
+        category: 'account',
+        question: '如何重置密码？',
+        answer: '在登录页面点击"忘记密码"，输入邮箱地址...',
+        tags: ['密码', '重置', '登录'],
+      },
+      {
+        category: 'content',
+        question: '支持哪些文件格式？',
+        answer: '支持图片、视频、文档等多种格式...',
+        tags: ['格式', '上传', '文件'],
+      },
+      {
+        category: 'blockchain',
+        question: '区块链存证需要多长时间？',
+        answer: '通常需要1-3分钟完成存证...',
+        tags: ['时间', '存证', '区块链'],
+      },
+    ],
+    []
+  );
 
   // 步骤配置
   const steps = [
@@ -138,10 +148,13 @@ const TicketSubmit: React.FC = () => {
 
       setRecommendedFAQ(related);
     }
-  }, [formData]);
+  }, [formData, faqData]);
 
   // 表单值变化处理
-  const handleFormChange = (changedValues: any, allValues: any) => {
+  const handleFormChange = (
+    changedValues: Partial<TicketForm>,
+    allValues: TicketForm
+  ) => {
     setFormData({ ...formData, ...changedValues });
 
     // 自动保存草稿
@@ -174,9 +187,9 @@ const TicketSubmit: React.FC = () => {
       }
       return false; // 阻止自动上传
     },
-    onChange: (info: any) => {
+    onChange: (info: { fileList: unknown[] }) => {
       const { fileList } = info;
-      setFormData({ ...formData, attachments: fileList });
+      setFormData({ ...formData, attachments: fileList as File[] });
     },
   };
 
@@ -221,8 +234,9 @@ const TicketSubmit: React.FC = () => {
         email: values.email,
         phone: values.phone,
         expectedResponse: values.expectedResponse || 'normal',
-        attachments: values.attachments?.map((file: any) => file.name) || [],
-        userId: 2 // 模拟当前用户ID
+        attachments:
+          values.attachments?.map((file: { name: string }) => file.name) || [],
+        userId: 2, // 模拟当前用户ID
       };
 
       // 使用mock数据创建工单
@@ -243,6 +257,7 @@ const TicketSubmit: React.FC = () => {
         navigate('/tickets');
       }, 2000);
     } catch (error) {
+      console.error('Failed to submit ticket:', error);
       message.error('提交失败，请重试');
     } finally {
       setLoading(false);

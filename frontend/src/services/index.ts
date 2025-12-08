@@ -9,3 +9,4 @@ export * from './notification';
 export * from './user';
 export * from './blockchain';
 export * from './community';
+export * from './admin';

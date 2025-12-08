@@ -627,5 +627,38 @@
 }
 
 /* ===================================
+   Mock模式快速登录样式
+   ================================== */
+
+.mock-login-card {
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.mock-login-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15);
+}
+
+.mock-login-card .ant-card-body {
+  padding: var(--spacing-md) !important;
+}
+
+/* Mock模式按钮悬停效果 */
+.mock-login-card .ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式下的Mock登录卡片 */
+[data-theme='dark'] .mock-login-card {
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.1) 0%,
+    rgba(14, 165, 233, 0.05) 100%
+  ) !important;
+  border-color: rgba(14, 165, 233, 0.3) !important;
+}
+
+/* ===================================
    完成 - Login.css
    ================================== */

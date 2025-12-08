@@ -2,376 +2,640 @@
    管理员登录页面样式 - Admin Login Page Styles
    ===================================
    
-   使用全局样式系统，完整响应式设计
+   说明：
+   - 基于用户登录页面样式
+   - 使用管理员专用配色方案
+   - 完整的响应式设计
+   - iOS 风格的现代化设计
+   - 浅色模式接近白色背景
+   - 高性能优化
+   - 移动端友好
    
+   文件结构：
+   1. 页面容器
+   2. 左侧品牌区
+   3. 右侧表单区
+   4. 响应式优化
+   
+   ================================== */
+
+/* ===================================
+   1. 页面容器 - Page Container
    ================================== */
 
 .admin-login-page {
   min-height: 100vh;
-  background: var(--bg-primary);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 50%, #f5f5f5 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* 背景装饰渐变 */
-.admin-login-page::before {
-  content: '';
+/* 深色模式背景 */
+[data-theme='dark'] .admin-login-page {
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 50%,
+    var(--bg-primary) 100%
+  );
+}
+
+/* ===================================
+   2. 左侧品牌区 - Brand Section
+   ================================== */
+
+.admin-login-brand-section {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.05) 0%,
+    rgba(220, 38, 38, 0.08) 100%
+  );
+}
+
+/* 深色模式品牌区 */
+[data-theme='dark'] .admin-login-brand-section {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.03) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
+}
+
+/* 背景装饰 */
+.admin-brand-background {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background:
-    radial-gradient(circle at 30% 30%, var(--primary-100) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, var(--secondary-50) 0%, transparent 50%);
-  opacity: 0.3;
-  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
-/* 深色模式背景 */
-[data-theme='dark'] .admin-login-page::before {
-  background:
-    radial-gradient(
-      circle at 30% 30%,
-      rgba(255, 255, 255, 0.02) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 70% 70%,
-      rgba(255, 255, 255, 0.01) 0%,
-      transparent 50%
-    );
-  opacity: 1;
+.admin-brand-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite;
 }
 
-/* ===================================
-   登录容器
-   ================================== */
+.admin-brand-blob-1 {
+  top: 10%;
+  left: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.2), transparent);
+  animation-delay: 0s;
+}
 
-.login-container {
-  width: 100%;
-  max-width: 450px;
+.admin-brand-blob-2 {
+  bottom: 20%;
+  right: 15%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.15), transparent);
+  animation-delay: 2s;
+}
+
+.admin-brand-blob-3 {
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.1), transparent);
+  animation-delay: 4s;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.1);
+  }
+}
+
+.admin-brand-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+/* 品牌内容 */
+.admin-brand-content {
   position: relative;
   z-index: 1;
-}
-
-.login-card {
-  padding: var(--spacing-2xl);
-  border-radius: var(--liquid-border-radius-lg);
-  box-shadow: var(--shadow-xl);
-  transition: all var(--transition-base) var(--ease-ios);
-}
-
-.login-card:hover {
-  box-shadow: var(--shadow-2xl);
-  transform: translateY(-2px);
-}
-
-/* ===================================
-   登录头部
-   ================================== */
-
-.login-header {
+  max-width: 500px;
   text-align: center;
+}
+
+.admin-brand-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
   margin-bottom: var(--spacing-2xl);
 }
 
-.login-icon {
+.admin-logo-icon {
   width: 80px;
   height: 80px;
-  margin: 0 auto var(--spacing-lg);
   border-radius: var(--radius-2xl);
-  background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  color: var(--text-inverse);
+  color: #dc2626;
   box-shadow: var(--shadow-lg);
-  transition: all var(--transition-base) var(--ease-spring-ios);
 }
 
-/* 深色模式图标 */
-[data-theme='dark'] .login-icon {
-  background: linear-gradient(135deg, #404040, #262626);
-  color: var(--text-primary);
+.admin-logo-text {
+  font-size: 3.5rem;
+  font-weight: var(--font-weight-extrabold);
+  margin: 0;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.login-card:hover .login-icon {
-  transform: scale(1.05) rotate(5deg);
-}
-
-.login-title {
+.admin-brand-title {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -0.01em;
 }
 
-.login-subtitle {
+.admin-brand-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* 特性列表 */
+.admin-brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-3xl);
+}
+
+.admin-feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  border-radius: var(--liquid-border-radius);
+  text-align: left;
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.admin-feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .admin-feature-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(220, 38, 38, 0.2),
+    rgba(220, 38, 38, 0.1)
+  );
+}
+
+.admin-feature-text h4 {
   font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.admin-feature-text p {
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin: 0;
 }
 
+/* 底部文字 */
+.admin-brand-footer {
+  margin-top: var(--spacing-3xl);
+}
+
+.admin-footer-text {
+  font-size: var(--font-size-base);
+  color: var(--text-tertiary);
+  line-height: var(--line-height-relaxed);
+  font-style: italic;
+}
+
 /* ===================================
-   登录表单
+   3. 右侧表单区 - Form Section
    ================================== */
 
-.login-form {
+.admin-login-form-section {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-theme='dark'] .admin-login-form-section {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.admin-form-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+/* 表单卡片 */
+.admin-form-card {
+  padding: var(--spacing-3xl);
+  border-radius: var(--liquid-border-radius-lg);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+[data-theme='dark'] .admin-form-card {
+  background: var(--bg-secondary);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+.admin-form-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.admin-form-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: #dc2626;
+  margin-bottom: var(--spacing-sm) !important;
+  letter-spacing: -0.01em;
+}
+
+.admin-form-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  display: block;
+}
+
+/* 表单样式 */
+.admin-login-form {
   margin-top: var(--spacing-xl);
 }
 
-.login-form .ant-form-item {
-  margin-bottom: var(--spacing-lg);
-}
-
-.login-form .ant-form-item-label > label {
-  font-weight: var(--font-weight-medium);
-  color: var(--text-primary);
-}
-
-.login-form .ant-input,
-.login-form .ant-input-password {
-  padding: var(--spacing-md);
-  font-size: var(--font-size-base);
+.admin-form-input {
+  height: 50px !important;
   border-radius: var(--radius-lg) !important;
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  transition: all var(--transition-fast) var(--ease-ios);
+  border: 2px solid var(--border-color) !important;
+  font-size: var(--font-size-base) !important;
+  transition: all var(--transition-fast) var(--ease-ios) !important;
+  background: var(--bg-primary) !important;
 }
 
-.login-form .ant-input:hover,
-.login-form .ant-input-password:hover {
-  border-color: var(--border-strong);
-  background: var(--bg-elevated);
+.admin-form-input:hover {
+  border-color: #f87171 !important;
 }
 
-.login-form .ant-input:focus,
-.login-form .ant-input-password:focus,
-.login-form .ant-input-affix-wrapper-focused {
-  border-color: var(--primary-500);
-  background: var(--bg-elevated);
-  box-shadow: 0 0 0 3px var(--primary-100);
+.admin-form-input:focus,
+.admin-form-input-focused {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1) !important;
 }
 
-/* 深色模式焦点 */
-[data-theme='dark'] .login-form .ant-input:focus,
-[data-theme='dark'] .login-form .ant-input-password:focus,
-[data-theme='dark'] .login-form .ant-input-affix-wrapper-focused {
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+[data-theme='dark'] .admin-form-input:focus,
+[data-theme='dark'] .admin-form-input-focused {
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1) !important;
 }
 
-.login-form .ant-input-prefix {
+.admin-input-icon {
   color: var(--text-tertiary);
   font-size: 1.125rem;
-  margin-right: var(--spacing-sm);
 }
 
-.login-form .ant-input-suffix {
-  color: var(--text-tertiary);
-}
-
-/* 登录按钮 */
-.login-button {
-  width: 100%;
-  height: auto !important;
-  padding: var(--spacing-md) !important;
+/* 提交按钮 */
+.admin-submit-button {
+  height: 50px !important;
   font-size: var(--font-size-lg) !important;
   font-weight: var(--font-weight-semibold) !important;
   border-radius: var(--radius-lg) !important;
-  margin-top: var(--spacing-md);
-  transition: all var(--transition-fast) var(--ease-ios);
+  margin-top: var(--spacing-md) !important;
+  background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+  border-color: #dc2626 !important;
 }
 
-.login-button:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+.admin-submit-button:hover {
+  background: linear-gradient(135deg, #b91c1c, #dc2626) !important;
+  border-color: #b91c1c !important;
 }
 
-.login-button:active {
-  transform: translateY(0);
-}
-
-/* ===================================
-   登录选项
-   ================================== */
-
-.login-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--border-color);
-}
-
-.login-remember {
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-}
-
-.login-forgot {
-  color: var(--primary-600);
-  font-size: var(--font-size-sm);
-  transition: color var(--transition-fast) var(--ease-ios);
-}
-
-.login-forgot:hover {
-  color: var(--primary-700);
-  text-decoration: underline;
-}
-
-/* 深色模式链接 */
-[data-theme='dark'] .login-forgot {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .login-forgot:hover {
-  color: var(--text-secondary);
-}
-
-/* ===================================
-   登录页脚
-   ================================== */
-
-.login-footer {
+/* 分隔线 */
+.admin-form-divider {
+  margin: var(--spacing-xl) 0;
   text-align: center;
-  margin-top: var(--spacing-2xl);
-  padding-top: var(--spacing-xl);
-  border-top: 1px solid var(--border-color);
+  position: relative;
 }
 
-.login-footer-text {
+.admin-form-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.admin-divider-text {
+  position: relative;
+  display: inline-block;
+  padding: 0 var(--spacing-md);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+[data-theme='dark'] .admin-divider-text {
+  background: var(--bg-secondary);
+}
+
+/* 底部链接 */
+.admin-form-footer {
+  text-align: center;
+}
+
+.admin-link-button {
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-medium) !important;
+  color: #dc2626 !important;
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.admin-link-button:hover {
+  color: #b91c1c !important;
+}
+
+/* 底部提示文字 */
+.admin-form-bottom-text {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+}
+
+.admin-bottom-text {
   font-size: var(--font-size-sm);
   color: var(--text-tertiary);
-  margin-bottom: var(--spacing-sm);
-}
-
-.login-footer-link {
-  color: var(--primary-600);
-  font-weight: var(--font-weight-medium);
-  transition: color var(--transition-fast) var(--ease-ios);
-}
-
-.login-footer-link:hover {
-  color: var(--primary-700);
-}
-
-/* 深色模式页脚链接 */
-[data-theme='dark'] .login-footer-link {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .login-footer-link:hover {
-  color: var(--text-secondary);
-}
-
-/* ===================================
-   安全提示
-   ================================== */
-
-.security-notice {
-  margin-top: var(--spacing-xl);
-  padding: var(--spacing-md);
-  background: var(--info-bg);
-  border: 1px solid var(--info-border);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-}
-
-.security-notice-icon {
-  color: var(--info-text);
-  font-size: 1.25rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.security-notice-text {
-  font-size: var(--font-size-sm);
-  color: var(--info-text);
   line-height: var(--line-height-relaxed);
 }
 
 /* ===================================
-   响应式设计
+   Mock模式管理员快速登录样式
    ================================== */
 
-@media (max-width: 768px) {
+.mock-admin-login-card {
+  transition: all var(--transition-base) var(--ease-ios);
+}
+
+.mock-admin-login-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.2);
+}
+
+.mock-admin-login-card .ant-card-body {
+  padding: var(--spacing-md) !important;
+}
+
+/* Mock模式管理员按钮悬停效果 */
+.mock-admin-login-card .ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+/* 深色模式下的Mock管理员登录卡片 */
+[data-theme='dark'] .mock-admin-login-card {
+  background: linear-gradient(
+    135deg,
+    rgba(217, 119, 6, 0.15) 0%,
+    rgba(217, 119, 6, 0.08) 100%
+  ) !important;
+  border-color: rgba(217, 119, 6, 0.4) !important;
+}
+
+/* ===================================
+   4. 响应式设计 - Responsive Design
+   ================================== */
+
+/* 平板设备 (768px - 1024px) */
+@media (max-width: 1024px) {
   .admin-login-page {
-    padding: var(--spacing-lg);
+    flex-direction: column;
   }
 
-  .login-container {
-    max-width: 100%;
+  .admin-login-brand-section {
+    min-height: 40vh;
+    padding: var(--spacing-2xl) var(--spacing-xl);
   }
 
-  .login-card {
-    padding: var(--spacing-xl);
+  .admin-brand-logo {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
   }
 
-  .login-icon {
-    width: 70px;
-    height: 70px;
+  .admin-logo-icon {
+    width: 64px;
+    height: 64px;
     font-size: 2rem;
   }
 
-  .login-title {
+  .admin-logo-text {
+    font-size: 2.5rem;
+  }
+
+  .admin-brand-title {
     font-size: var(--font-size-2xl);
   }
 
-  .login-options {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    align-items: flex-start;
+  .admin-brand-description {
+    font-size: var(--font-size-base);
   }
-}
 
-@media (max-width: 480px) {
-  .admin-login-page {
+  .admin-brand-features {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .admin-feature-item {
     padding: var(--spacing-md);
   }
 
-  .login-card {
-    padding: var(--spacing-lg);
+  .admin-login-form-section {
+    min-height: 60vh;
+    padding: var(--spacing-xl);
   }
 
-  .login-icon {
-    width: 60px;
-    height: 60px;
+  .admin-brand-blob {
+    opacity: 0.3;
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 768px) {
+  .admin-login-brand-section {
+    min-height: 35vh;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .admin-brand-logo {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .admin-logo-icon {
+    width: 56px;
+    height: 56px;
     font-size: 1.75rem;
   }
 
-  .login-title {
-    font-size: var(--font-size-xl);
+  .admin-logo-text {
+    font-size: 2rem;
   }
 
-  .login-subtitle {
+  .admin-brand-title {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .admin-brand-description {
     font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .admin-brand-features {
+    display: none;
+  }
+
+  .admin-brand-footer {
+    margin-top: var(--spacing-xl);
+  }
+
+  .admin-footer-text {
+    font-size: var(--font-size-sm);
+  }
+
+  .admin-login-form-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .admin-form-card {
+    padding: var(--spacing-xl);
+  }
+
+  .admin-form-title {
+    font-size: var(--font-size-2xl) !important;
+  }
+
+  .admin-form-subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .admin-form-input {
+    height: 46px !important;
+  }
+
+  .admin-submit-button {
+    height: 46px !important;
+    font-size: var(--font-size-base) !important;
+  }
+
+  .admin-brand-blob {
+    display: none;
+  }
+}
+
+/* 小屏手机 (< 480px) */
+@media (max-width: 480px) {
+  .admin-login-brand-section {
+    min-height: 30vh;
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .admin-logo-text {
+    font-size: 1.75rem;
+  }
+
+  .admin-brand-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .admin-brand-description {
+    font-size: var(--font-size-xs);
+  }
+
+  .admin-form-card {
+    padding: var(--spacing-lg);
+  }
+
+  .admin-form-title {
+    font-size: var(--font-size-xl) !important;
   }
 }
 
 /* ===================================
-   性能优化
+   5. 性能优化 - Performance
    ================================== */
 
-.login-card,
-.login-icon,
-.login-button {
+.admin-brand-blob,
+.admin-feature-item,
+.admin-form-card {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
+/* 减少动画偏好 */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  .admin-login-page,
+  .admin-brand-content,
+  .admin-feature-item,
+  .admin-form-card,
+  .admin-brand-blob {
     animation: none !important;
     transition: none !important;
   }
@@ -379,12 +643,21 @@
 
 /* 高对比度模式 */
 @media (prefers-contrast: high) {
-  .login-card {
-    border: 2px solid var(--border-strong);
+  .admin-form-input {
+    border-width: 3px !important;
   }
 
-  .login-icon {
-    border: 2px solid currentColor;
+  .admin-feature-item {
+    border: 2px solid var(--border-strong);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .admin-form-input,
+  .admin-submit-button,
+  .admin-link-button {
+    min-height: 44px;
   }
 }
 

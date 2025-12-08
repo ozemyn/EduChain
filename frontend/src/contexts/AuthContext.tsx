@@ -85,7 +85,11 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 
 // Context类型定义
 interface AuthContextType extends AuthState {
-  login: (username: string, password: string) => Promise<void>;
+  login: (
+    username: string,
+    password: string,
+    requiredRole?: 'ADMIN' | 'LEARNER'
+  ) => Promise<User>;
   logout: () => void;
   register: (data: RegisterData) => Promise<void>;
   updateUser: (user: User) => void;
@@ -199,13 +203,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // 登录
-  const login = async (username: string, password: string): Promise<void> => {
+  const login = async (
+    username: string,
+    password: string,
+    requiredRole?: 'ADMIN' | 'LEARNER'
+  ): Promise<User> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       const response = await authService.login({
         usernameOrEmail: username,
         password,
       });
+
+      const user = response.data.user;
+
+      // 如果指定了角色要求，进行验证
+      if (requiredRole && user.role !== requiredRole) {
+        const roleNames = {
+          ADMIN: '管理员',
+          LEARNER: '普通用户',
+        };
+        throw new Error(`此账号不是${roleNames[requiredRole]}账号`);
+      }
 
       // 存储到localStorage
       Storage.setLocal(STORAGE_KEYS.TOKEN, response.data.accessToken);
@@ -221,7 +240,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           expiresIn: response.data.expiresIn,
         },
       });
+
       message.success('登录成功');
+      return user;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : '登录失败';
       message.error(errorMessage);

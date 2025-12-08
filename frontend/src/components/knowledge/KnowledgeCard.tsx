@@ -163,7 +163,7 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
           {/* 标签区域 */}
           <div className="card-tags">
             <Tag
-              color={getTypeColor(knowledge.type)}
+              color={getTypeColor(knowledge.type || 'TEXT')}
               className="type-tag glass-badge"
             >
               {knowledge.type}

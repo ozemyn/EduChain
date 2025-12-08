@@ -1,308 +1,364 @@
 /* ===================================
-   管理员登录页面 - Admin Login Page
+   管理员登录页面组件 - Admin Login Page Component
    ===================================
    
    特性：
    - 使用全局样式系统
+   - 左侧固定品牌展示区
+   - 右侧登录表单区
    - 完整的响应式设计
-   - 现代化的 iOS 风格
-   - 玻璃态设计
-   - 完整的后端集成
+   - 浅色模式接近白色背景
+   - 表单验证
+   - 高性能优化
+   - 管理员专用样式
    
    ================================== */
 
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Checkbox, Alert } from 'antd';
+import { Form, Input, Button, Typography, Card, Divider, Alert } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
   SafetyOutlined,
-  InfoCircleOutlined,
+  SecurityScanOutlined,
+  CrownOutlined,
+  ExperimentOutlined,
+  SettingOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { message } from 'antd';
-import { authService } from '@/services/auth';
 import { useAuth } from '@/contexts/AuthContext';
+import type { LoginRequest } from '@/types/api';
+import { USE_MOCK } from '@/mock';
+import EnvironmentIndicator from '@/components/common/EnvironmentIndicator';
 import './AdminLogin.css';
 
-interface LoginFormValues {
-  usernameOrEmail: string;
-  password: string;
-  remember?: boolean;
+const { Title, Text } = Typography;
+
+interface LocationState {
+  from?: string;
 }
 
+/**
+ * 管理员登录页面组件
+ */
 const AdminLogin: React.FC = () => {
+  const [form] = Form.useForm();
+  const { login, loading, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const state = location.state as LocationState;
+  const from = state?.from || '/admin';
 
   // 如果已经登录且是管理员，直接跳转到仪表盘
   useEffect(() => {
     if (user && user.role === 'ADMIN') {
-      navigate('/admin/dashboard', { replace: true });
+      navigate('/admin', { replace: true });
     }
   }, [user, navigate]);
 
-  const onFinish = async (values: LoginFormValues) => {
-    setLoading(true);
-    setErrorMessage('');
-
+  const onFinish = async (values: LoginRequest) => {
     try {
-      // 先调用登录接口验证身份
-      const response = await authService.login({
-        usernameOrEmail: values.usernameOrEmail,
-        password: values.password,
-      });
-
-      // 检查返回的数据
-      if (!response.data) {
-        throw new Error('登录响应数据为空');
-      }
-
-      const { user: userData } = response.data;
-
-      // 验证是否为管理员
-      if (userData.role !== 'ADMIN') {
-        // 清除已保存的登录信息
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-
-        setErrorMessage('您没有管理员权限，请使用管理员账号登录');
-        message.error('您没有管理员权限');
-        return;
-      }
-
-      // 验证账号状态
-      if (userData.status !== 1) {
-        // 清除已保存的登录信息
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-
-        setErrorMessage('您的账号已被禁用，请联系系统管理员');
-        message.error('账号已被禁用');
-        return;
-      }
-
-      // 保存"记住我"选项
-      if (values.remember) {
-        localStorage.setItem('adminRememberMe', 'true');
-        localStorage.setItem('adminUsername', values.usernameOrEmail);
-      } else {
-        localStorage.removeItem('adminRememberMe');
-        localStorage.removeItem('adminUsername');
-      }
-
-      // 显示成功消息
-      message.success(`欢迎回来，${userData.fullName || userData.username}！`);
-
-      // 等待一小段时间让 AuthContext 更新状态
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // 跳转到目标页面或仪表盘
-      const from =
-        (location.state as { from?: { pathname: string } })?.from?.pathname ||
-        '/admin/dashboard';
+      setErrorMessage('');
+      // 管理员登录页面只允许管理员登录
+      await login(values.usernameOrEmail, values.password, 'ADMIN');
       navigate(from, { replace: true });
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('Admin login failed:', error);
-
-      // 处理不同类型的错误
-      let errorMsg = '登录失败，请稍后重试';
-
-      if (error && typeof error === 'object' && 'response' in error) {
-        const err = error as {
-          response?: { status?: number; data?: { message?: string } };
-          request?: unknown;
-          message?: string;
-        };
-
-        if (err.response) {
-          // 服务器返回错误
-          const { status, data } = err.response;
-
-          if (status === 401) {
-            errorMsg = '用户名或密码错误';
-          } else if (status === 403) {
-            errorMsg = '您没有管理员权限';
-          } else if (status === 429) {
-            errorMsg = '登录请求过于频繁，请稍后再试';
-          } else if (data?.message) {
-            errorMsg = data.message;
-          }
-        } else if (err.request) {
-          // 请求发送但没有收到响应
-          errorMsg = '网络连接失败，请检查网络设置';
-        } else if (err.message) {
-          errorMsg = err.message;
-        }
-      } else if (error instanceof Error) {
-        errorMsg = error.message;
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('登录失败，请检查用户名和密码');
       }
-
-      setErrorMessage(errorMsg);
-      message.error(errorMsg);
-    } finally {
-      setLoading(false);
     }
   };
 
-  // 加载记住的用户名
-  useEffect(() => {
-    const rememberMe = localStorage.getItem('adminRememberMe') === 'true';
-    const savedUsername = localStorage.getItem('adminUsername');
-
-    if (rememberMe && savedUsername) {
-      form.setFieldsValue({
-        usernameOrEmail: savedUsername,
-        remember: true,
-      });
+  // Mock模式下的快速管理员登录
+  const handleQuickAdminLogin = async () => {
+    try {
+      setErrorMessage('');
+      // 管理员快速登录，指定角色验证
+      await login('admin', 'password', 'ADMIN');
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error('Quick admin login failed:', error);
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Mock模式管理员登录失败');
+      }
     }
-  }, [form]);
+  };
 
   return (
     <div className="admin-login-page animate-fade-in">
-      <div className="login-container">
-        <div className="login-card glass-card animate-scale-in">
-          {/* 登录头部 */}
-          <div className="login-header">
-            <div className="login-icon gpu-accelerated">
+      <EnvironmentIndicator />
+      {/* 左侧品牌展示区 - 固定 */}
+      <div className="admin-login-brand-section">
+        {/* 背景装饰 */}
+        <div className="admin-brand-background">
+          <div className="admin-brand-blob admin-brand-blob-1" />
+          <div className="admin-brand-blob admin-brand-blob-2" />
+          <div className="admin-brand-blob admin-brand-blob-3" />
+          <div className="admin-brand-grid" />
+        </div>
+
+        {/* 品牌内容 */}
+        <div className="admin-brand-content animate-fade-in-up">
+          <div className="admin-brand-logo">
+            <div className="admin-logo-icon glass-light">
               <SafetyOutlined />
             </div>
-            <h1 className="login-title">管理员登录</h1>
-            <p className="login-subtitle">请使用管理员账号登录系统</p>
+            <h1 className="admin-logo-text gradient-text">EduChain Admin</h1>
           </div>
 
-          {/* 错误提示 */}
-          {errorMessage && (
-            <Alert
-              message={errorMessage}
-              type="error"
-              showIcon
-              closable
-              onClose={() => setErrorMessage('')}
-              style={{ marginBottom: 'var(--spacing-lg)' }}
-            />
-          )}
+          <h2 className="admin-brand-title">管理员控制中心</h2>
+          <p className="admin-brand-description">
+            安全登录，管理平台，维护秩序
+          </p>
 
-          {/* 登录表单 */}
-          <Form
-            form={form}
-            className="login-form"
-            onFinish={onFinish}
-            autoComplete="off"
-            layout="vertical"
-          >
-            <Form.Item
-              label="用户名或邮箱"
-              name="usernameOrEmail"
-              rules={[
-                { required: true, message: '请输入用户名或邮箱' },
-                { min: 3, message: '用户名至少3个字符' },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined />}
-                placeholder="请输入管理员用户名或邮箱"
-                size="large"
-                autoComplete="username"
-                disabled={loading}
-              />
-            </Form.Item>
+          {/* 特性列表 */}
+          <div className="admin-brand-features">
+            <div className="admin-feature-item glass-light animate-fade-in-up delay-100">
+              <div className="admin-feature-icon">
+                <SecurityScanOutlined />
+              </div>
+              <div className="admin-feature-text">
+                <h4>安全防护</h4>
+                <p>多重安全验证</p>
+              </div>
+            </div>
 
-            <Form.Item
-              label="密码"
-              name="password"
-              rules={[
-                { required: true, message: '请输入密码' },
-                { min: 6, message: '密码至少6个字符' },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="请输入管理员密码"
-                size="large"
-                autoComplete="current-password"
-                disabled={loading}
-              />
-            </Form.Item>
+            <div className="admin-feature-item glass-light animate-fade-in-up delay-200">
+              <div className="admin-feature-icon">
+                <DashboardOutlined />
+              </div>
+              <div className="admin-feature-text">
+                <h4>数据监控</h4>
+                <p>实时系统状态</p>
+              </div>
+            </div>
 
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading}
-                disabled={loading}
-                className="login-button glass-button glass-strong hover-lift active-scale"
-                icon={<SafetyOutlined />}
-              >
-                {loading ? '登录中...' : '安全登录'}
-              </Button>
-            </Form.Item>
-          </Form>
-
-          {/* 登录选项 */}
-          <div className="login-options">
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox className="login-remember" disabled={loading}>
-                记住我
-              </Checkbox>
-            </Form.Item>
-            <a
-              href="#"
-              className="login-forgot"
-              onClick={e => {
-                e.preventDefault();
-                message.info('请联系系统管理员重置密码');
-              }}
-            >
-              忘记密码？
-            </a>
-          </div>
-
-          {/* 安全提示 */}
-          <div className="security-notice">
-            <InfoCircleOutlined className="security-notice-icon" />
-            <div className="security-notice-text">
-              为了您的账户安全，请不要在公共设备上保存登录信息。管理员账号具有系统最高权限，请妥善保管您的登录凭证。
+            <div className="admin-feature-item glass-light animate-fade-in-up delay-300">
+              <div className="admin-feature-icon">
+                <SettingOutlined />
+              </div>
+              <div className="admin-feature-text">
+                <h4>系统管理</h4>
+                <p>全面控制权限</p>
+              </div>
             </div>
           </div>
 
-          {/* 登录页脚 */}
-          <div className="login-footer">
-            <p className="login-footer-text">
-              需要帮助？
-              <a
-                href="#"
-                className="login-footer-link"
-                onClick={e => {
-                  e.preventDefault();
-                  message.info('请联系技术支持：support@educhain.com');
-                }}
-              >
-                {' '}
-                联系技术支持
-              </a>
+          {/* 底部装饰文字 */}
+          <div className="admin-brand-footer">
+            <p className="admin-footer-text">
+              守护平台安全
+              <br />
+              维护用户体验
             </p>
-            <p
-              className="login-footer-text"
-              style={{ marginTop: 'var(--spacing-sm)' }}
+          </div>
+        </div>
+      </div>
+
+      {/* 右侧登录表单区 */}
+      <div className="admin-login-form-section">
+        <div className="admin-form-container">
+          {/* 表单卡片 */}
+          <div className="admin-form-card glass-card animate-scale-in delay-100">
+            <div className="admin-form-header">
+              <Title level={2} className="admin-form-title">
+                管理员登录
+              </Title>
+              <Text className="admin-form-subtitle">
+                请使用管理员账号安全登录
+              </Text>
+            </div>
+
+            {/* 错误提示 */}
+            {errorMessage && (
+              <Alert
+                message={errorMessage}
+                type="error"
+                showIcon
+                closable
+                onClose={() => setErrorMessage('')}
+                style={{ marginBottom: 'var(--spacing-lg)' }}
+              />
+            )}
+
+            <Form
+              form={form}
+              name="adminLogin"
+              onFinish={onFinish}
+              size="large"
+              autoComplete="off"
+              className="admin-login-form"
             >
-              <a
-                href="/"
-                className="login-footer-link"
-                onClick={e => {
-                  e.preventDefault();
-                  navigate('/');
-                }}
+              <Form.Item
+                name="usernameOrEmail"
+                rules={[
+                  { required: true, message: '请输入管理员用户名或邮箱！' },
+                  { min: 3, message: '用户名至少需要3个字符！' },
+                ]}
+              >
+                <Input
+                  prefix={<UserOutlined className="admin-input-icon" />}
+                  placeholder="管理员用户名或邮箱"
+                  autoComplete="username"
+                  className="admin-form-input"
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="password"
+                rules={[
+                  { required: true, message: '请输入管理员密码！' },
+                  { min: 6, message: '密码至少需要6个字符！' },
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined className="admin-input-icon" />}
+                  placeholder="管理员密码"
+                  autoComplete="current-password"
+                  className="admin-form-input"
+                  iconRender={visible =>
+                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                  }
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  block
+                  className="admin-submit-button glass-button glass-strong hover-lift active-scale"
+                >
+                  {loading ? '验证中...' : '安全登录'}
+                </Button>
+              </Form.Item>
+            </Form>
+
+            {/* Mock模式下的快速管理员登录 */}
+            {USE_MOCK && (
+              <>
+                <Divider>
+                  <span
+                    style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}
+                  >
+                    <ExperimentOutlined /> Mock 模式快速登录
+                  </span>
+                </Divider>
+
+                <Card
+                  size="small"
+                  className="mock-admin-login-card"
+                  style={{
+                    marginBottom: 'var(--spacing-lg)',
+                    background:
+                      'linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%)',
+                    border: '1px solid #d97706',
+                    borderRadius: 'var(--radius-lg)',
+                  }}
+                >
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      marginBottom: 'var(--spacing-sm)',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: '13px',
+                        color: '#92400e',
+                        fontWeight: 600,
+                      }}
+                    >
+                      🔧 开发测试模式 - 管理员快速登录
+                    </Text>
+                  </div>
+
+                  <Button
+                    type="default"
+                    icon={<CrownOutlined />}
+                    onClick={handleQuickAdminLogin}
+                    loading={loading}
+                    block
+                    style={{
+                      height: '42px',
+                      borderColor: '#dc2626',
+                      color: '#dc2626',
+                      background:
+                        'linear-gradient(135deg, #fef2f2 0%, #fecaca 100%)',
+                      fontWeight: 500,
+                    }}
+                  >
+                    一键管理员登录 (admin)
+                  </Button>
+
+                  <Divider style={{ margin: '12px 0 8px 0' }}>
+                    <span style={{ fontSize: '11px', color: '#92400e' }}>
+                      切换登录页面
+                    </span>
+                  </Divider>
+
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={() => navigate('/login')}
+                    block
+                    style={{
+                      fontSize: '12px',
+                      color: '#6366f1',
+                      padding: '4px 0',
+                    }}
+                  >
+                    前往普通用户登录页面 →
+                  </Button>
+
+                  <div
+                    style={{
+                      marginTop: 'var(--spacing-xs)',
+                      textAlign: 'center',
+                      fontSize: '11px',
+                      color: '#92400e',
+                    }}
+                  >
+                    仅在Mock模式下可用，拥有完整管理权限
+                  </div>
+                </Card>
+              </>
+            )}
+
+            {/* 分隔线 */}
+            <div className="admin-form-divider">
+              <span className="admin-divider-text">需要帮助？</span>
+            </div>
+
+            {/* 帮助链接 */}
+            <div className="admin-form-footer">
+              <Button
+                type="link"
+                className="admin-link-button hover-scale"
+                block
+                onClick={() => navigate('/')}
               >
                 返回首页
-              </a>
-            </p>
+              </Button>
+            </div>
+          </div>
+
+          {/* 底部提示 */}
+          <div className="admin-form-bottom-text animate-fade-in-up delay-400">
+            <Text className="admin-bottom-text">
+              管理员账号具有系统最高权限，请妥善保管登录凭证
+            </Text>
           </div>
         </div>
       </div>
