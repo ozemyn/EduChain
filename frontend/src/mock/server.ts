@@ -66,19 +66,19 @@ const createPageResponse = <T>(
       sort: {
         sorted: false,
         unsorted: true,
-        empty: true
+        empty: true,
       },
       pageNumber: page,
       pageSize: size,
       offset: start,
       paged: true,
-      unpaged: false
+      unpaged: false,
     },
     sort: {
       sorted: false,
       unsorted: true,
-      empty: true
-    }
+      empty: true,
+    },
   };
 };
 
@@ -114,10 +114,9 @@ export const setupMockServer = () => {
         );
       }
 
-      return HttpResponse.json(
-        createErrorResponse('INVALID_CREDENTIALS'),
-        { status: 401 }
-      );
+      return HttpResponse.json(createErrorResponse('INVALID_CREDENTIALS'), {
+        status: 401,
+      });
     }),
 
     http.post(`${API_BASE}/auth/register`, async ({ request }) => {
@@ -131,30 +130,48 @@ export const setupMockServer = () => {
       };
 
       // 参数验证
-      const { validateRequired, validateEmail, validateUsername, validateStringLength, validate } = await import('./validation');
-      
+      const {
+        validateRequired,
+        validateEmail,
+        validateUsername,
+        validateStringLength,
+        validate,
+      } = await import('./validation');
+
       const validationError = validate(
-        () => validateRequired(userData, ['username', 'email', 'password', 'fullName']),
+        () =>
+          validateRequired(userData, [
+            'username',
+            'email',
+            'password',
+            'fullName',
+          ]),
         () => validateUsername(userData.username),
         () => validateEmail(userData.email),
         () => validateStringLength(userData.password, '密码', 6, 50),
         () => validateStringLength(userData.fullName, '姓名', 1, 50)
       );
-      
+
       if (validationError) {
         return HttpResponse.json(validationError, { status: 400 });
       }
 
       // 检查用户名和邮箱是否已存在
-      const existingUser = mockUsers.find(u => 
-        u.username === userData.username || u.email === userData.email
+      const existingUser = mockUsers.find(
+        u => u.username === userData.username || u.email === userData.email
       );
-      
+
       if (existingUser) {
         if (existingUser.username === userData.username) {
-          return HttpResponse.json(createErrorResponse('DUPLICATE_ENTRY', '用户名已存在'), { status: 400 });
+          return HttpResponse.json(
+            createErrorResponse('DUPLICATE_ENTRY', '用户名已存在'),
+            { status: 400 }
+          );
         } else {
-          return HttpResponse.json(createErrorResponse('DUPLICATE_ENTRY', '邮箱已存在'), { status: 400 });
+          return HttpResponse.json(
+            createErrorResponse('DUPLICATE_ENTRY', '邮箱已存在'),
+            { status: 400 }
+          );
         }
       }
       const newUser = {
@@ -404,13 +421,16 @@ export const setupMockServer = () => {
       const unreadOnly = url.searchParams.get('unreadOnly') === 'true';
 
       let notifications = [...mockNotifications];
-      
+
       if (unreadOnly) {
         notifications = notifications.filter(n => !n.isRead);
       }
 
       // 按时间倒序排列，取最近的
-      notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      notifications.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
       const recentNotifications = notifications.slice(0, limit);
 
       return HttpResponse.json(createSuccessResponse(recentNotifications));
@@ -422,18 +442,21 @@ export const setupMockServer = () => {
       const totalNotifications = mockNotifications.length;
       const unreadCount = mockNotifications.filter(n => !n.isRead).length;
       const readCount = totalNotifications - unreadCount;
-      
+
       // 按类型统计
-      const typeStats = mockNotifications.reduce((acc, notification) => {
-        acc[notification.type] = (acc[notification.type] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const typeStats = mockNotifications.reduce(
+        (acc, notification) => {
+          acc[notification.type] = (acc[notification.type] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       const stats = {
         totalNotifications,
         unreadCount,
         readCount,
-        typeStats
+        typeStats,
       };
 
       return HttpResponse.json(createSuccessResponse(stats));
@@ -505,8 +528,8 @@ export const setupMockServer = () => {
       // 模拟用户互动状态（基于ID生成一致的随机状态）
       const numId = Number(id);
       const status = {
-        hasLiked: (numId % 3) === 0,
-        hasFavorited: (numId % 5) === 0
+        hasLiked: numId % 3 === 0,
+        hasFavorited: numId % 5 === 0,
       };
       return HttpResponse.json(createSuccessResponse(status));
     }),
@@ -581,14 +604,19 @@ export const setupMockServer = () => {
       const { keyword, page = 0, size = 10 } = body;
 
       // 参数验证
-      const { validateRequired, validatePagination, validateSearchKeyword, validate } = await import('./validation');
-      
+      const {
+        validateRequired,
+        validatePagination,
+        validateSearchKeyword,
+        validate,
+      } = await import('./validation');
+
       const validationError = validate(
         () => validateRequired(body, ['keyword']),
         () => validateSearchKeyword(keyword),
         () => validatePagination(page, size)
       );
-      
+
       if (validationError) {
         return HttpResponse.json(validationError, { status: 400 });
       }
@@ -642,13 +670,14 @@ export const setupMockServer = () => {
       const size = Number(url.searchParams.get('size')) || 20;
 
       // 参数验证
-      const { validateSearchKeyword, validatePagination, validate } = await import('./validation');
-      
+      const { validateSearchKeyword, validatePagination, validate } =
+        await import('./validation');
+
       const validationError = validate(
         () => validateSearchKeyword(keyword),
         () => validatePagination(page, size)
       );
-      
+
       if (validationError) {
         return HttpResponse.json(validationError, { status: 400 });
       }
@@ -680,7 +709,14 @@ export const setupMockServer = () => {
         page?: number;
         size?: number;
       };
-      const { keyword = '', categoryId, type, sortBy = 'RELEVANCE', page = 0, size = 20 } = body;
+      const {
+        keyword = '',
+        categoryId,
+        type,
+        sortBy = 'RELEVANCE',
+        page = 0,
+        size = 20,
+      } = body;
 
       let items = [...mockKnowledgeItems];
 
@@ -712,9 +748,14 @@ export const setupMockServer = () => {
 
       // 排序
       if (sortBy === 'TIME') {
-        items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        items.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       } else if (sortBy === 'POPULARITY') {
-        items.sort((a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0));
+        items.sort(
+          (a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0)
+        );
       }
 
       const pageData = createPageResponse(items, page, size);
@@ -726,16 +767,14 @@ export const setupMockServer = () => {
       await delay();
       const url = new URL(request.url);
       const limit = Number(url.searchParams.get('limit')) || 15;
-      
+
       // 模拟趋势关键词（带趋势标识）
-      const trendingKeywords = mockHotKeywords
-        .slice(0, limit)
-        .map(keyword => ({
-          ...keyword,
-          trend: Math.random() > 0.5 ? 'up' : 'stable',
-          changeRate: Math.floor(Math.random() * 50) + 10
-        }));
-      
+      const trendingKeywords = mockHotKeywords.slice(0, limit).map(keyword => ({
+        ...keyword,
+        trend: Math.random() > 0.5 ? 'up' : 'stable',
+        changeRate: Math.floor(Math.random() * 50) + 10,
+      }));
+
       return HttpResponse.json(createSuccessResponse(trendingKeywords));
     }),
 
@@ -833,6 +872,41 @@ export const setupMockServer = () => {
       mockCertificates.push(newCert);
       return HttpResponse.json(createSuccessResponse(newCert), { status: 201 });
     }),
+
+    // 下载证书
+    http.get(
+      `${API_BASE}/blockchain/certificates/:id/download`,
+      async ({ params }) => {
+        await delay();
+        const { id } = params;
+        const cert = mockCertificates.find(c => c.certificate_id === id);
+
+        if (!cert) {
+          return HttpResponse.json(
+            { success: false, message: '证书不存在', data: null },
+            { status: 404 }
+          );
+        }
+
+        // 模拟PDF文件内容
+        const pdfContent = `证书ID: ${cert.certificate_id}
+知识ID: ${cert.knowledge_id}
+区块索引: ${cert.block_index}
+存证时间: ${cert.timestamp}
+内容哈希: ${cert.content_hash}
+区块哈希: ${cert.block_hash}
+
+此证书由EduChain区块链平台生成，具有法律效力。`;
+
+        // 返回PDF文件流
+        return new Response(pdfContent, {
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename="certificate_${id}.pdf"`,
+          },
+        });
+      }
+    ),
 
     // 区块链搜索
     http.get(`${API_BASE}/blockchain/search`, async ({ request }) => {

@@ -171,7 +171,11 @@ const Footer: React.FC = () => {
 
   const socialLinks = useMemo(
     () => [
-      { icon: <GithubOutlined />, label: 'GitHub', url: 'https://github.com/ozemyn/EduChain' },
+      {
+        icon: <GithubOutlined />,
+        label: 'GitHub',
+        url: 'https://github.com/ozemyn/EduChain',
+      },
       {
         icon: <TwitterOutlined />,
         label: 'Twitter',

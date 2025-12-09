@@ -377,18 +377,52 @@ export const mockCertificates: CertificateInfo[] = [
   },
   {
     certificate_id: 'cert_016',
-    knowledge_id: 20,
+    knowledge_id: 16,
     block_index: 20,
     block_hash: mockBlocks[20].hash,
-    content_hash: 'hash_blockchain_smart_contract',
-    timestamp: '2024-11-20T11:15:00Z',
+    content_hash: 'hash_graphql_api_design',
+    timestamp: '2024-11-16T16:00:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_016.pdf',
     qr_code_url: '/qrcodes/cert_016.png',
     verification_url: 'https://educhain.com/verify/cert_016',
-    created_at: '2024-11-20T11:15:00Z',
+    created_at: '2024-11-16T16:00:00Z',
   },
 ];
+
+// 为了确保所有知识库条目都有证书，我们动态生成缺失的证书
+const ensureAllCertificates = () => {
+  const maxKnowledgeId = 15; // 假设有15个知识库条目
+  const existingIds = new Set(mockCertificates.map(cert => cert.knowledge_id));
+
+  for (let i = 1; i <= maxKnowledgeId; i++) {
+    if (!existingIds.has(i)) {
+      const certId = `cert_${String(mockCertificates.length + 1).padStart(3, '0')}`;
+      const blockIndex = Math.min(i + 4, mockBlocks.length - 1); // 确保不超过区块数量
+
+      mockCertificates.push({
+        certificate_id: certId,
+        knowledge_id: i,
+        block_index: blockIndex,
+        block_hash: mockBlocks[blockIndex].hash,
+        content_hash: `hash_knowledge_${i}`,
+        timestamp: new Date(
+          Date.now() - (maxKnowledgeId - i) * 24 * 60 * 60 * 1000
+        ).toISOString(),
+        has_certificate: true,
+        pdf_url: `/certificates/${certId}.pdf`,
+        qr_code_url: `/qrcodes/${certId}.png`,
+        verification_url: `https://educhain.com/verify/${certId}`,
+        created_at: new Date(
+          Date.now() - (maxKnowledgeId - i) * 24 * 60 * 60 * 1000
+        ).toISOString(),
+      });
+    }
+  }
+};
+
+// 确保所有证书都存在
+ensureAllCertificates();
 
 // 根据知识ID获取证书
 export const getCertificateByKnowledgeId = (knowledgeId: number) => {

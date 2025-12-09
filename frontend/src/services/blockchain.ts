@@ -72,7 +72,27 @@ export const blockchainService = {
     return response.data;
   },
 
-  // 生成证书
+  // 根据知识ID获取证书信息
+  getCertificateByKnowledge: async (
+    knowledgeId: number
+  ): Promise<ApiResponse<CertificateInfo | null>> => {
+    const response = await api.get<ApiResponse<CertificateInfo | null>>(
+      `/blockchain/certificates/knowledge/${knowledgeId}`
+    );
+    return response.data;
+  },
+
+  // 验证证书
+  verifyCertificate: async (
+    certificateId: string
+  ): Promise<ApiResponse<CertificateVerifyResult>> => {
+    const response = await api.get<ApiResponse<CertificateVerifyResult>>(
+      `/blockchain/certificates/${certificateId}/verify`
+    );
+    return response.data;
+  },
+
+  // 创建证书
   createCertificate: async (data: {
     knowledge_id: number;
     knowledge_title: string;
@@ -90,40 +110,19 @@ export const blockchainService = {
   downloadCertificate: async (certificateId: string): Promise<void> => {
     const response = await api.get(
       `/blockchain/certificates/${certificateId}/download`,
-      {
-        responseType: 'blob',
-      }
+      { responseType: 'blob' }
     );
 
     // 创建下载链接
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `${certificateId}.pdf`);
+    link.download = `certificate_${certificateId}.pdf`;
     document.body.appendChild(link);
     link.click();
-    link.remove();
+    document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
-  },
-
-  // 验证证书
-  verifyCertificate: async (
-    certificateId: string
-  ): Promise<ApiResponse<CertificateVerifyResult>> => {
-    const response = await api.get<ApiResponse<CertificateVerifyResult>>(
-      `/blockchain/certificates/${certificateId}/verify`
-    );
-    return response.data;
-  },
-
-  // 根据知识ID获取证书信息
-  getCertificateByKnowledge: async (
-    knowledgeId: number
-  ): Promise<ApiResponse<unknown>> => {
-    const response = await api.get<ApiResponse<unknown>>(
-      `/blockchain/certificates/knowledge/${knowledgeId}`
-    );
-    return response.data;
   },
 
   // 验证内容
