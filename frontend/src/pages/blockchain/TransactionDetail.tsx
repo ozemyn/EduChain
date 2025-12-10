@@ -1,3 +1,16 @@
+/* ===================================
+   交易详情页面组件 - Transaction Detail Page Component
+   ===================================
+   
+   特性：
+   - 使用全局样式系统
+   - 完整的响应式设计
+   - 深色/浅色模式支持
+   - 单列布局显示
+   - 玻璃态效果
+   
+   ================================== */
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
@@ -15,14 +28,15 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   FileTextOutlined,
-  UserOutlined,
   SafetyOutlined,
-  BlockOutlined,
 } from '@ant-design/icons';
 import { blockchainService } from '@/services/blockchain';
 import type { Transaction } from '@/types/blockchain';
 import './TransactionDetail.css';
 
+/**
+ * 交易详情页面组件
+ */
 const TransactionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -70,42 +84,74 @@ const TransactionDetail: React.FC = () => {
     return typeMap[type] || type;
   };
 
+  // 加载状态
   if (loading) {
     return (
-      <div className="transaction-detail-loading">
-        <Spin size="large" tip="加载交易详情..." />
+      <div className="transaction-detail-page animate-fade-in">
+        {/* 背景装饰 */}
+        <div className="detail-background">
+          <div className="detail-blob detail-blob-1" />
+          <div className="detail-blob detail-blob-2" />
+        </div>
+
+        <div className="detail-content container">
+          <div className="detail-loading glass-card">
+            <Spin size="large" />
+            <p>加载交易详情中...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
+  // 交易不存在
   if (!transaction) {
     return (
-      <div className="transaction-detail-empty">
-        <Alert
-          message="交易不存在"
-          description="未找到该交易记录，请检查交易ID是否正确"
-          type="warning"
-          showIcon
-        />
-        <Button
-          type="primary"
-          onClick={() => navigate('/blockchain')}
-          style={{ marginTop: 16 }}
-        >
-          返回区块链浏览器
-        </Button>
+      <div className="transaction-detail-page animate-fade-in">
+        {/* 背景装饰 */}
+        <div className="detail-background">
+          <div className="detail-blob detail-blob-1" />
+          <div className="detail-blob detail-blob-2" />
+        </div>
+
+        <div className="detail-content container">
+          <div className="detail-error glass-card">
+            <Alert
+              message="交易不存在"
+              description="未找到该交易记录，请检查交易ID是否正确"
+              type="warning"
+              showIcon
+              className="glass-alert"
+            />
+            <Button
+              type="primary"
+              onClick={() => navigate('/blockchain')}
+              className="glass-button glass-strong hover-lift active-scale"
+              size="large"
+            >
+              返回区块链浏览器
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="transaction-detail-page animate-fade-in">
-      <div className="transaction-detail-content container">
+      {/* 背景装饰 */}
+      <div className="detail-background">
+        <div className="detail-blob detail-blob-1" />
+        <div className="detail-blob detail-blob-2" />
+      </div>
+
+      <div className="detail-content container">
+        {/* 返回按钮 */}
         <Button
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate(-1)}
-          className="back-button glass-button"
-          style={{ marginBottom: 16 }}
+          className="back-button glass-button hover-scale active-scale animate-fade-in-up"
+          size="large"
         >
           返回
         </Button>
@@ -118,58 +164,40 @@ const TransactionDetail: React.FC = () => {
             type="success"
             icon={<CheckCircleOutlined />}
             showIcon
-            style={{ marginBottom: 16 }}
+            className="status-alert glass-alert animate-fade-in-up delay-100"
           />
         )}
 
         {/* 交易基本信息 */}
         <Card
-          className="transaction-info-card glass-card"
+          className="transaction-info-card glass-card animate-fade-in-up delay-200"
           title={
             <Space>
               <SafetyOutlined />
               <span>交易信息</span>
             </Space>
           }
-          style={{ marginBottom: 16 }}
         >
-          <Descriptions column={{ xs: 1, sm: 2 }} bordered>
-            <Descriptions.Item
-              label={
-                <Space>
-                  <FileTextOutlined />
-                  <span>交易ID</span>
-                </Space>
-              }
-              span={2}
-            >
+          <Descriptions
+            column={1}
+            bordered
+            className="transaction-descriptions"
+          >
+            <Descriptions.Item label="交易ID">
               <code className="hash-code">{transaction.id}</code>
             </Descriptions.Item>
 
-            <Descriptions.Item
-              label={
-                <Space>
-                  <SafetyOutlined />
-                  <span>交易类型</span>
-                </Space>
-              }
-            >
+            <Descriptions.Item label="交易类型">
               <Tag
                 color={getTypeColor(transaction.type)}
                 icon={<SafetyOutlined />}
+                className="type-tag"
               >
                 {getTypeText(transaction.type)}
               </Tag>
             </Descriptions.Item>
 
-            <Descriptions.Item
-              label={
-                <Space>
-                  <CheckCircleOutlined />
-                  <span>状态</span>
-                </Space>
-              }
-            >
+            <Descriptions.Item label="状态">
               <Tag
                 color={
                   transaction.status === 'confirmed' ? 'success' : 'warning'
@@ -181,20 +209,13 @@ const TransactionDetail: React.FC = () => {
                     <ClockCircleOutlined />
                   )
                 }
+                className="status-tag"
               >
                 {transaction.status === 'confirmed' ? '已确认' : '待确认'}
               </Tag>
             </Descriptions.Item>
 
-            <Descriptions.Item
-              label={
-                <Space>
-                  <ClockCircleOutlined />
-                  <span>时间戳</span>
-                </Space>
-              }
-              span={2}
-            >
+            <Descriptions.Item label="时间戳">
               {new Date(transaction.timestamp).toLocaleString('zh-CN', {
                 year: 'numeric',
                 month: '2-digit',
@@ -206,19 +227,17 @@ const TransactionDetail: React.FC = () => {
             </Descriptions.Item>
 
             {transaction.blockIndex !== undefined && (
-              <Descriptions.Item
-                label={
-                  <Space>
-                    <BlockOutlined />
-                    <span>所在区块</span>
-                  </Space>
-                }
-                span={2}
-              >
+              <Descriptions.Item label="所在区块">
                 <Space>
-                  <Tag color="blue">#{transaction.blockIndex}</Tag>
+                  <Tag color="blue" className="block-tag">
+                    #{transaction.blockIndex}
+                  </Tag>
                   <Link to={`/blockchain/block/${transaction.blockIndex}`}>
-                    <Button type="link" size="small">
+                    <Button
+                      type="link"
+                      size="small"
+                      className="link-button hover-scale"
+                    >
                       查看区块详情
                     </Button>
                   </Link>
@@ -227,16 +246,13 @@ const TransactionDetail: React.FC = () => {
             )}
 
             {transaction.knowledgeId && (
-              <Descriptions.Item
-                label={
-                  <Space>
-                    <FileTextOutlined />
-                    <span>关联知识</span>
-                  </Space>
-                }
-              >
+              <Descriptions.Item label="关联知识">
                 <Link to={`/knowledge/${transaction.knowledgeId}`}>
-                  <Button type="link" size="small">
+                  <Button
+                    type="link"
+                    size="small"
+                    className="link-button hover-scale"
+                  >
                     知识ID: {transaction.knowledgeId}
                   </Button>
                 </Link>
@@ -244,54 +260,23 @@ const TransactionDetail: React.FC = () => {
             )}
 
             {transaction.userId && (
-              <Descriptions.Item
-                label={
-                  <Space>
-                    <UserOutlined />
-                    <span>用户ID</span>
-                  </Space>
-                }
-              >
+              <Descriptions.Item label="用户ID">
                 {transaction.userId}
               </Descriptions.Item>
             )}
 
-            <Descriptions.Item
-              label={
-                <Space>
-                  <SafetyOutlined />
-                  <span>内容哈希</span>
-                </Space>
-              }
-              span={2}
-            >
+            <Descriptions.Item label="内容哈希">
               <code className="hash-code">{transaction.contentHash}</code>
             </Descriptions.Item>
 
             {transaction.signature && (
-              <Descriptions.Item
-                label={
-                  <Space>
-                    <SafetyOutlined />
-                    <span>数字签名</span>
-                  </Space>
-                }
-                span={2}
-              >
+              <Descriptions.Item label="数字签名">
                 <code className="hash-code">{transaction.signature}</code>
               </Descriptions.Item>
             )}
 
             {transaction.publicKey && (
-              <Descriptions.Item
-                label={
-                  <Space>
-                    <SafetyOutlined />
-                    <span>公钥</span>
-                  </Space>
-                }
-                span={2}
-              >
+              <Descriptions.Item label="公钥">
                 <code className="hash-code">{transaction.publicKey}</code>
               </Descriptions.Item>
             )}
@@ -302,7 +287,7 @@ const TransactionDetail: React.FC = () => {
         {transaction.metadata &&
           Object.keys(transaction.metadata).length > 0 && (
             <Card
-              className="metadata-card glass-card"
+              className="metadata-card glass-card animate-fade-in-up delay-300"
               title={
                 <Space>
                   <FileTextOutlined />
@@ -310,14 +295,42 @@ const TransactionDetail: React.FC = () => {
                 </Space>
               }
             >
-              <Descriptions column={1} bordered>
-                {Object.entries(transaction.metadata).map(([key, value]) => (
-                  <Descriptions.Item key={key} label={key}>
-                    {typeof value === 'object'
-                      ? JSON.stringify(value, null, 2)
-                      : String(value)}
-                  </Descriptions.Item>
-                ))}
+              <Descriptions
+                column={1}
+                bordered
+                className="metadata-descriptions"
+              >
+                {Object.entries(transaction.metadata).map(([key, value]) => {
+                  // 字段名中英文映射
+                  const fieldNameMap: Record<string, string> = {
+                    title: '标题',
+                    author: '作者',
+                    authorId: '作者ID',
+                    category: '分类',
+                    tags: '标签',
+                    contentType: '内容类型',
+                    contentLength: '内容长度',
+                    version: '版本',
+                    language: '语言',
+                    certificationTime: '存证时间',
+                    certificationReason: '存证原因',
+                    ipfsHash: 'IPFS哈希',
+                    fileSize: '文件大小',
+                    mimeType: 'MIME类型',
+                  };
+
+                  const chineseLabel = fieldNameMap[key] || key;
+
+                  return (
+                    <Descriptions.Item key={key} label={chineseLabel}>
+                      <span className="metadata-value">
+                        {typeof value === 'object'
+                          ? JSON.stringify(value, null, 2)
+                          : String(value)}
+                      </span>
+                    </Descriptions.Item>
+                  );
+                })}
               </Descriptions>
             </Card>
           )}

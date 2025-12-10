@@ -1,155 +1,368 @@
+/* ===================================
+   交易详情页面样式 - Transaction Detail Page Styles
+   ===================================
+   
+   使用全局样式系统：
+   - globals.css - 基础样式和变量
+   - theme-variables.css - 主题变量
+   - glass-effects.css - 玻璃态效果
+   - animations.css - 动画效果
+   - performance.css - 性能优化
+   - theme-antd.css - Ant Design 主题
+   
+   ================================== */
+
+/* 页面容器 */
 .transaction-detail-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: var(--spacing-lg) 0;
+  padding: var(--spacing-xl) 0;
   position: relative;
+  background: var(--bg-primary);
 }
 
-.transaction-detail-page::before {
-  content: '';
+/* 背景装饰 */
+.detail-background {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background:
-    radial-gradient(
-      circle at 20% 50%,
-      rgba(120, 119, 198, 0.3),
-      transparent 50%
-    ),
-    radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.3), transparent 50%);
   pointer-events: none;
+  z-index: 0;
 }
 
-.transaction-detail-content {
-  max-width: var(--container-xl);
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+.detail-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.1;
+  animation: float 20s ease-in-out infinite;
+}
+
+.detail-blob-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--primary-color);
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.detail-blob-2 {
+  width: 300px;
+  height: 300px;
+  background: var(--secondary-color);
+  bottom: 20%;
+  right: 15%;
+  animation-delay: 10s;
+}
+
+/* 内容容器 */
+.detail-content {
   position: relative;
   z-index: 1;
+  max-width: var(--container-lg);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
 }
 
+/* 返回按钮 */
 .back-button {
-  margin-bottom: var(--spacing-lg);
+  align-self: flex-start;
 }
 
-.transaction-detail-loading,
-.transaction-detail-empty {
+/* 加载和错误状态 */
+.detail-loading,
+.detail-error {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 400px;
   gap: var(--spacing-lg);
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
   padding: var(--spacing-xl);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
+.detail-loading p {
+  margin-top: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* 状态提示 */
+.status-alert {
+  border-radius: var(--border-radius-lg);
+}
+
+/* 卡片样式 */
 .transaction-info-card,
 .metadata-card {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
 }
 
 .transaction-info-card .ant-card-head,
 .metadata-card .ant-card-head {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
-  border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
 }
 
-.hash-code {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-family: 'Courier New', monospace;
+.transaction-info-card .ant-card-head-title,
+.metadata-card .ant-card-head-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+/* 描述列表样式 */
+.transaction-descriptions,
+.metadata-descriptions {
+  background: transparent;
+}
+
+.transaction-descriptions .ant-descriptions-item,
+.metadata-descriptions .ant-descriptions-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.transaction-descriptions .ant-descriptions-item:last-child,
+.metadata-descriptions .ant-descriptions-item:last-child {
+  border-bottom: none;
+}
+
+/* 标签样式 - 确保不换行 */
+.transaction-descriptions .ant-descriptions-item-label,
+.metadata-descriptions .ant-descriptions-item-label {
+  background: var(--bg-secondary);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary) !important;
+  white-space: nowrap !important;
+  min-width: 200px;
+  width: 200px;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.transaction-descriptions .ant-descriptions-item-content,
+.metadata-descriptions .ant-descriptions-item-content {
+  color: var(--text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
   word-break: break-all;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.metadata-value {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 哈希代码样式 */
+.hash-code {
+  background: var(--bg-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  word-break: break-all;
   display: inline-block;
   max-width: 100%;
-  color: #4a5568;
-  font-weight: 500;
+  line-height: 1.4;
 }
 
-.metadata-code {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: var(--spacing-md);
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-family: 'Courier New', monospace;
-  overflow-x: auto;
-  margin: 0;
-  border: 1px solid rgba(102, 126, 234, 0.2);
-  color: #4a5568;
+/* 标签样式 */
+.type-tag,
+.status-tag,
+.block-tag {
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
-/* 描述列表样式优化 */
-.transaction-info-card .ant-descriptions-item-label,
-.metadata-card .ant-descriptions-item-label {
-  background: rgba(102, 126, 234, 0.05);
-  font-weight: 600;
-  color: #4a5568;
+/* 链接按钮 */
+.link-button {
+  padding: 0;
+  height: auto;
+  font-size: var(--font-size-sm);
+  color: var(--primary-color);
 }
 
-.transaction-info-card .ant-descriptions-item-content,
-.metadata-card .ant-descriptions-item-content {
-  color: #2d3748;
+.link-button:hover {
+  color: var(--primary-color-hover);
 }
 
-/* Tag 样式优化 */
-.transaction-info-card .ant-tag {
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-weight: 500;
-}
-
-/* Alert 样式优化 */
-.transaction-detail-page .ant-alert {
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* 按钮样式优化 */
-.glass-button {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.glass-button:hover {
-  background: rgba(255, 255, 255, 1) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .detail-content {
+    max-width: var(--container-md);
+  }
 }
 
 @media (max-width: 768px) {
-  .transaction-detail-content {
+  .transaction-detail-page {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .detail-content {
     padding: 0 var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+
+  .detail-blob-1,
+  .detail-blob-2 {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* 移动端标签样式调整 */
+  .transaction-descriptions .ant-descriptions-item-label,
+  .metadata-descriptions .ant-descriptions-item-label {
+    min-width: 180px;
+    width: 180px;
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .transaction-descriptions .ant-descriptions-item-content,
+  .metadata-descriptions .ant-descriptions-item-content {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
   }
 
   .hash-code {
-    font-size: 0.75rem;
-    padding: 6px 10px;
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-content {
+    padding: 0 var(--spacing-sm);
   }
 
-  .metadata-code {
-    font-size: 0.75rem;
+  .transaction-descriptions .ant-descriptions-item-label,
+  .metadata-descriptions .ant-descriptions-item-label {
+    min-width: 160px;
+    width: 160px;
+    font-size: var(--font-size-xs);
+  }
+
+  .hash-code {
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .type-tag,
+  .status-tag,
+  .block-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px var(--spacing-xs);
+  }
+}
+
+/* 深色模式适配 */
+[data-theme='dark'] .transaction-detail-page {
+  background: #0f0f23;
+}
+
+[data-theme='dark'] .detail-blob-1 {
+  background: #1890ff;
+  opacity: 0.05;
+}
+
+[data-theme='dark'] .detail-blob-2 {
+  background: #722ed1;
+  opacity: 0.05;
+}
+
+[data-theme='dark'] .hash-code {
+  background: #1f1f1f;
+  border-color: #434343;
+  color: #e6e6e6;
+}
+
+[data-theme='dark'] .transaction-descriptions .ant-descriptions-item-label,
+[data-theme='dark'] .metadata-descriptions .ant-descriptions-item-label {
+  background: #262626 !important;
+  color: #d9d9d9 !important;
+  border-right: 1px solid #434343;
+}
+
+[data-theme='dark'] .transaction-descriptions .ant-descriptions-item-content,
+[data-theme='dark'] .metadata-descriptions .ant-descriptions-item-content {
+  background: #141414 !important;
+  color: #d9d9d9 !important;
+}
+
+[data-theme='dark'] .transaction-descriptions .ant-descriptions-item,
+[data-theme='dark'] .metadata-descriptions .ant-descriptions-item {
+  border-bottom-color: #434343 !important;
+}
+
+[data-theme='dark'] .metadata-value {
+  color: #d9d9d9;
+}
+
+[data-theme='dark'] .transaction-info-card,
+[data-theme='dark'] .metadata-card {
+  background: #1f1f1f !important;
+  border-color: #434343;
+}
+
+[data-theme='dark'] .transaction-info-card .ant-card-head,
+[data-theme='dark'] .metadata-card .ant-card-head {
+  background: #262626 !important;
+  border-bottom-color: #434343;
+}
+
+[data-theme='dark'] .transaction-info-card .ant-card-head-title,
+[data-theme='dark'] .metadata-card .ant-card-head-title {
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .link-button {
+  color: #1890ff !important;
+}
+
+[data-theme='dark'] .link-button:hover {
+  color: #40a9ff !important;
+}
+
+/* 性能优化 */
+.transaction-detail-page {
+  contain: layout style paint;
+}
+
+.hash-code {
+  contain: layout style;
+}
+
+/* 打印样式 */
+@media print {
+  .transaction-detail-page {
+    background: white;
+    padding: 0;
+  }
+
+  .detail-background {
+    display: none;
+  }
+
+  .back-button {
+    display: none;
+  }
+
+  .hash-code {
+    background: #f5f5f5;
+    border: 1px solid #d9d9d9;
   }
 }

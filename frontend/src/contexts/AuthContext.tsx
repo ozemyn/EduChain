@@ -114,11 +114,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const refreshToken = Storage.getLocal<string>(STORAGE_KEYS.REFRESH_TOKEN);
       const userInfo = Storage.getLocal<User>(STORAGE_KEYS.USER_INFO);
 
-      console.log('AuthContext初始化:', {
-        hasToken: !!token,
-        hasRefreshToken: !!refreshToken,
-        hasUserInfo: !!userInfo,
-      });
+      // 只在开发环境打印调试信息
+      if (import.meta.env.DEV) {
+        console.log('AuthContext初始化:', {
+          hasToken: !!token,
+          hasRefreshToken: !!refreshToken,
+          hasUserInfo: !!userInfo,
+        });
+      }
 
       if (token && refreshToken) {
         try {
@@ -128,16 +131,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const decodedToken = JSON.parse(atob(tokenPayload));
             const currentTime = Date.now() / 1000;
 
-            console.log('Token信息:', {
-              exp: decodedToken.exp,
-              current: currentTime,
-              expired: decodedToken.exp < currentTime,
-              tokenLength: token.length,
-              tokenParts: token.split('.').length,
-            });
+            // 只在开发环境打印Token调试信息
+            if (import.meta.env.DEV) {
+              console.log('Token状态:', {
+                expired: decodedToken.exp < currentTime,
+                hasValidFormat: token.split('.').length === 3,
+              });
+            }
 
             if (decodedToken.exp < currentTime) {
-              console.log('Token已过期，清除存储');
+              if (import.meta.env.DEV) {
+                console.log('Token已过期，清除存储');
+              }
               Storage.removeLocal(STORAGE_KEYS.TOKEN);
               Storage.removeLocal(STORAGE_KEYS.REFRESH_TOKEN);
               Storage.removeLocal(STORAGE_KEYS.USER_INFO);
@@ -155,7 +160,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           // 如果有缓存的用户信息，先使用缓存
           if (userInfo) {
-            console.log('使用缓存的用户信息');
+            if (import.meta.env.DEV) {
+              console.log('使用缓存的用户信息');
+            }
             dispatch({
               type: 'LOGIN_SUCCESS',
               payload: {
@@ -169,9 +176,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
 
           // 验证token有效性，获取用户信息
-          console.log('验证token并获取用户信息');
+          if (import.meta.env.DEV) {
+            console.log('验证token并获取用户信息');
+          }
           const response = await authService.getCurrentUser();
-          console.log('获取用户信息成功:', response.data);
+          if (import.meta.env.DEV) {
+            console.log('获取用户信息成功');
+          }
 
           // 更新缓存
           Storage.setLocal(STORAGE_KEYS.USER_INFO, response.data);
@@ -194,7 +205,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           dispatch({ type: 'LOGOUT' });
         }
       } else {
-        console.log('没有token，设置为未登录状态');
+        if (import.meta.env.DEV) {
+          console.log('没有token，设置为未登录状态');
+        }
         dispatch({ type: 'SET_LOADING', payload: false });
       }
     };

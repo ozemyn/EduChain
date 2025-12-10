@@ -375,7 +375,6 @@ export const mockCertificates: CertificateInfo[] = [
     verification_url: 'https://educhain.com/verify/cert_015',
     created_at: '2024-11-15T15:45:00Z',
   },
-
 ];
 
 // 为了确保所有知识库条目都有证书，我们动态生成缺失的证书

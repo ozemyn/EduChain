@@ -108,21 +108,26 @@ export const blockchainService = {
 
   // 下载证书
   downloadCertificate: async (certificateId: string): Promise<void> => {
-    const response = await api.get(
-      `/blockchain/certificates/${certificateId}/download`,
-      { responseType: 'blob' }
-    );
+    try {
+      const response = await api.get(
+        `/blockchain/certificates/${certificateId}/download`,
+        { responseType: 'blob' }
+      );
 
-    // 创建下载链接
-    const blob = new Blob([response.data], { type: 'application/pdf' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `certificate_${certificateId}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+      // 创建下载链接
+      const blob = new Blob([response.data], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `EduChain_Certificate_${certificateId}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download error:', error);
+      throw error;
+    }
   },
 
   // 验证内容

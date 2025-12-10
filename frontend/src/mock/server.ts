@@ -888,21 +888,90 @@ export const setupMockServer = () => {
           );
         }
 
-        // 模拟PDF文件内容
-        const pdfContent = `证书ID: ${cert.certificate_id}
-知识ID: ${cert.knowledge_id}
-区块索引: ${cert.block_index}
-存证时间: ${cert.timestamp}
-内容哈希: ${cert.content_hash}
-区块哈希: ${cert.block_hash}
+        // 获取对应的知识信息
+        const knowledge = mockKnowledgeItems.find(
+          k => k.id === cert.knowledge_id
+        );
 
-此证书由EduChain区块链平台生成，具有法律效力。`;
+        // 获取对应的区块信息
+        const block = mockBlocks.find(b => b.index === cert.block_index);
+
+        // 获取对应的交易信息
+        const transaction = block?.transactions.find(
+          tx => tx.knowledgeId === cert.knowledge_id
+        );
+
+        // 生成包含真实数据的PDF内容
+        const pdfContent = `
+═══════════════════════════════════════════════════════════════
+                    EduChain 区块链存证证书
+═══════════════════════════════════════════════════════════════
+
+证书编号: ${cert.certificate_id}
+生成时间: ${cert.created_at ? new Date(cert.created_at).toLocaleString('zh-CN') : '未知'}
+
+───────────────────────────────────────────────────────────────
+                        知识内容信息
+───────────────────────────────────────────────────────────────
+
+知识标题: ${knowledge?.title || '未知标题'}
+知识ID: ${cert.knowledge_id}
+内容类型: ${knowledge?.type || 'TEXT'}
+上传者: ${knowledge?.uploaderName || '未知用户'}
+分类: ${knowledge?.categoryName || '未分类'}
+标签: ${knowledge?.tags || '无'}
+创建时间: ${knowledge?.createdAt ? new Date(knowledge.createdAt).toLocaleString('zh-CN') : '未知'}
+
+───────────────────────────────────────────────────────────────
+                        区块链存证信息
+───────────────────────────────────────────────────────────────
+
+存证时间: ${cert.timestamp ? new Date(cert.timestamp).toLocaleString('zh-CN') : '未知'}
+区块索引: #${cert.block_index}
+区块哈希: ${cert.block_hash}
+内容哈希: ${cert.content_hash}
+
+交易信息:
+  交易ID: ${transaction?.id || '未知'}
+  交易类型: ${transaction?.type || 'KNOWLEDGE_CERTIFICATION'}
+  用户ID: ${transaction?.userId || '未知'}
+  签名: ${transaction?.signature || '未知'}
+
+───────────────────────────────────────────────────────────────
+                        验证信息
+───────────────────────────────────────────────────────────────
+
+验证地址: ${cert.verification_url}
+IPFS哈希: ${transaction?.metadata?.ipfsHash || '未知'}
+文件大小: ${transaction?.metadata?.fileSize || '未知'}
+MIME类型: ${transaction?.metadata?.mimeType || 'text/markdown'}
+
+───────────────────────────────────────────────────────────────
+                        法律声明
+───────────────────────────────────────────────────────────────
+
+本证书由EduChain区块链平台生成，记录了知识内容在区块链上的存证信息。
+该存证具有以下特性：
+
+1. 不可篡改性：内容哈希已永久记录在区块链上
+2. 时间戳证明：存证时间由区块链网络共识确认
+3. 公开验证：任何人都可以通过区块链浏览器验证
+4. 法律效力：符合《电子签名法》等相关法律法规
+
+证书生成平台: EduChain (https://educhain.com)
+技术支持: 区块链存证技术
+版本: v1.0
+
+═══════════════════════════════════════════════════════════════
+                    此证书具有法律效力
+═══════════════════════════════════════════════════════════════
+`;
 
         // 返回PDF文件流
         return new Response(pdfContent, {
           headers: {
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment; filename="certificate_${id}.pdf"`,
+            'Content-Type': 'application/octet-stream',
+            'Content-Disposition': `attachment; filename="EduChain_Certificate_${cert.certificate_id}.txt"`,
           },
         });
       }

@@ -230,7 +230,15 @@ api.interceptors.response.use(
     const duration = response.config.metadata?.startTime
       ? endTime.getTime() - response.config.metadata.startTime.getTime()
       : 0;
-    console.log(`API ${response.config.url} took ${duration}ms`);
+    // 只在开发环境打印API日志
+    if (import.meta.env.DEV) {
+      console.log(`API ${response.config.url} took ${duration}ms`);
+    }
+
+    // 如果是blob响应（文件下载），直接返回
+    if (response.config.responseType === 'blob') {
+      return response;
+    }
 
     const { data } = response;
 

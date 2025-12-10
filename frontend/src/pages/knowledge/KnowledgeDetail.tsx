@@ -258,7 +258,7 @@ const KnowledgeDetail: React.FC = () => {
                 <div className="article-meta">
                   <div className="meta-author">
                     <Avatar
-                      src={knowledge.uploaderAvatar}
+                      src={knowledge.uploaderAvatar || undefined}
                       icon={<UserOutlined />}
                       size={40}
                       className="author-avatar"
@@ -410,7 +410,7 @@ const KnowledgeDetail: React.FC = () => {
               <h3 className="sidebar-title">作者信息</h3>
               <div className="author-card glass-light">
                 <Avatar
-                  src={knowledge.uploaderAvatar}
+                  src={knowledge.uploaderAvatar || undefined}
                   icon={<UserOutlined />}
                   size={64}
                   className="author-avatar-large"
