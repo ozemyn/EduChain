@@ -63,7 +63,7 @@ const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
       const response =
         await blockchainService.getCertificateByKnowledge(knowledgeId);
 
-      if (response.code === '200' && response.data) {
+      if (response.success && response.data) {
         setCertInfo(response.data as CertificateInfo);
       }
     } catch (error) {
@@ -87,7 +87,7 @@ const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
         user_name: userName,
       });
 
-      if (response.code === '200' && response.data) {
+      if (response.success && response.data) {
         message.success('证书生成成功');
         // 重新加载证书信息
         await loadCertificateInfo();
@@ -118,7 +118,7 @@ const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
         user_name: userName,
       });
 
-      if (response.code === '200' && response.data) {
+      if (response.success && response.data) {
         // 下载证书
         await blockchainService.downloadCertificate(
           response.data.certificate_id
@@ -160,7 +160,7 @@ const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
         content_hash: contentHash,
       });
 
-      if (response.code === '200' && response.data) {
+      if (response.success && response.data) {
         const { is_valid } = response.data as VerifyResponse;
 
         Modal.success({

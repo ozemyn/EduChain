@@ -49,4 +49,5 @@ export const reactHooksKnowledge = {
   status: 1,
   createdAt: '2024-11-01T18:00:00Z',
   updatedAt: '2024-11-15T22:30:00Z',
+  contentHash: 'hash_react_hooks_guide',
 };

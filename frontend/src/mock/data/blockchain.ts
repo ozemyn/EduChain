@@ -95,7 +95,7 @@ for (let i = 0; i < 25; i++) {
   const txCount = Math.floor(Math.random() * 3) + 1; // 每个区块1-3个交易
 
   for (let j = 0; j < txCount; j++) {
-    const knowledgeId = i * 3 + j + 1; // 确保知识ID唯一
+    const knowledgeId = ((i * 3 + j) % 15) + 1; // 确保知识ID在1-15范围内
     const userId = (knowledgeId % 10) + 1;
     const titleIndex = knowledgeId % knowledgeTitles.length;
     const authorIndex = userId % authors.length;
@@ -263,7 +263,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 7,
     block_index: 11,
     block_hash: mockBlocks[11].hash,
-    content_hash: 'hash_flutter_development',
+    content_hash: 'hash_redis_cache_patterns',
     timestamp: '2024-11-07T10:30:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_007.pdf',
@@ -276,7 +276,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 8,
     block_index: 12,
     block_hash: mockBlocks[12].hash,
-    content_hash: 'hash_redis_cache_patterns',
+    content_hash: 'hash_python_ml_intro',
     timestamp: '2024-11-08T12:45:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_008.pdf',
@@ -289,7 +289,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 9,
     block_index: 13,
     block_hash: mockBlocks[13].hash,
-    content_hash: 'hash_typescript_advanced',
+    content_hash: 'hash_git_workflow_guide',
     timestamp: '2024-11-09T14:15:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_009.pdf',
@@ -302,7 +302,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 10,
     block_index: 14,
     block_hash: mockBlocks[14].hash,
-    content_hash: 'hash_kubernetes_guide',
+    content_hash: 'hash_algorithm_basics_guide',
     timestamp: '2024-11-10T09:15:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_010.pdf',
@@ -315,7 +315,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 11,
     block_index: 15,
     block_hash: mockBlocks[15].hash,
-    content_hash: 'hash_nodejs_async',
+    content_hash: 'hash_css_flexbox_guide',
     timestamp: '2024-11-11T10:45:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_011.pdf',
@@ -328,7 +328,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 12,
     block_index: 16,
     block_hash: mockBlocks[16].hash,
-    content_hash: 'hash_deep_learning_intro',
+    content_hash: 'hash_nodejs_async',
     timestamp: '2024-11-12T12:00:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_012.pdf',
@@ -341,7 +341,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 13,
     block_index: 17,
     block_hash: mockBlocks[17].hash,
-    content_hash: 'hash_mongodb_modeling',
+    content_hash: 'hash_webpack_config_guide',
     timestamp: '2024-11-13T13:15:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_013.pdf',
@@ -354,7 +354,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 14,
     block_index: 18,
     block_hash: mockBlocks[18].hash,
-    content_hash: 'hash_react_native_dev',
+    content_hash: 'hash_restful_api_design',
     timestamp: '2024-11-14T14:30:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_014.pdf',
@@ -367,7 +367,7 @@ export const mockCertificates: CertificateInfo[] = [
     knowledge_id: 15,
     block_index: 19,
     block_hash: mockBlocks[19].hash,
-    content_hash: 'hash_go_concurrency',
+    content_hash: 'hash_mongodb_modeling',
     timestamp: '2024-11-15T15:45:00Z',
     has_certificate: true,
     pdf_url: '/certificates/cert_015.pdf',
@@ -375,19 +375,7 @@ export const mockCertificates: CertificateInfo[] = [
     verification_url: 'https://educhain.com/verify/cert_015',
     created_at: '2024-11-15T15:45:00Z',
   },
-  {
-    certificate_id: 'cert_016',
-    knowledge_id: 16,
-    block_index: 20,
-    block_hash: mockBlocks[20].hash,
-    content_hash: 'hash_graphql_api_design',
-    timestamp: '2024-11-16T16:00:00Z',
-    has_certificate: true,
-    pdf_url: '/certificates/cert_016.pdf',
-    qr_code_url: '/qrcodes/cert_016.png',
-    verification_url: 'https://educhain.com/verify/cert_016',
-    created_at: '2024-11-16T16:00:00Z',
-  },
+
 ];
 
 // 为了确保所有知识库条目都有证书，我们动态生成缺失的证书

@@ -60,4 +60,5 @@ Options API 按选项组织代码（data、methods、computed等），而 Compos
   status: 1,
   createdAt: '2024-11-03T14:15:00Z',
   updatedAt: '2024-11-17T09:45:00Z',
+  contentHash: 'hash_vue3_composition_api',
 };

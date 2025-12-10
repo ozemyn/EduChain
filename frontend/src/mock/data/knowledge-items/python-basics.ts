@@ -78,4 +78,5 @@ Web 开发：
   status: 1,
   createdAt: '2024-11-09T08:30:00Z',
   updatedAt: '2024-11-22T14:15:00Z',
+  contentHash: 'hash_python_ml_intro',
 };

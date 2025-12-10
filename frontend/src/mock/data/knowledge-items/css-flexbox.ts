@@ -108,4 +108,5 @@ flex: 1
   status: 1,
   createdAt: '2024-11-12T09:15:00Z',
   updatedAt: '2024-11-25T16:20:00Z',
+  contentHash: 'hash_css_flexbox_guide',
 };

@@ -123,4 +123,5 @@ MongoDB 中的基本数据单元，类似于 JSON 对象。
   status: 1,
   createdAt: '2024-11-16T13:20:00Z',
   updatedAt: '2024-11-29T09:15:00Z',
+  contentHash: 'hash_mongodb_modeling',
 };

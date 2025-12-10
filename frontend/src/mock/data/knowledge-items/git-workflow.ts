@@ -83,4 +83,5 @@ type(scope): subject
   status: 1,
   createdAt: '2024-11-10T10:00:00Z',
   updatedAt: '2024-11-23T09:30:00Z',
+  contentHash: 'hash_git_workflow_guide',
 };

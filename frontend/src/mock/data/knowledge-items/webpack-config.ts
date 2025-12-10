@@ -115,4 +115,5 @@ export const webpackConfigKnowledge = {
   status: 1,
   createdAt: '2024-11-14T11:00:00Z',
   updatedAt: '2024-11-27T15:30:00Z',
+  contentHash: 'hash_webpack_config_guide',
 };

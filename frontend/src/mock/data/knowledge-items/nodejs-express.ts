@@ -105,4 +105,5 @@ RESTful API 设计：
   status: 1,
   createdAt: '2024-11-13T14:30:00Z',
   updatedAt: '2024-11-26T10:00:00Z',
+  contentHash: 'hash_nodejs_async',
 };

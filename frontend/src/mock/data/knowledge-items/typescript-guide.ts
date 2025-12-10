@@ -59,4 +59,5 @@ export const typescriptGuideKnowledge = {
   status: 1,
   createdAt: '2024-11-02T10:30:00Z',
   updatedAt: '2024-11-16T14:20:00Z',
+  contentHash: 'hash_typescript_advanced',
 };

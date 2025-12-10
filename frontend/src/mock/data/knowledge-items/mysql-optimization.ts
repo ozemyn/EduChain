@@ -68,4 +68,5 @@ export const mysqlOptimizationKnowledge = {
   status: 1,
   createdAt: '2024-11-07T11:30:00Z',
   updatedAt: '2024-11-20T16:00:00Z',
+  contentHash: 'hash_mysql_optimization',
 };

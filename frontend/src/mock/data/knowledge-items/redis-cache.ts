@@ -83,4 +83,5 @@ export const redisCacheKnowledge = {
   status: 1,
   createdAt: '2024-11-08T13:45:00Z',
   updatedAt: '2024-11-21T10:20:00Z',
+  contentHash: 'hash_redis_cache_patterns',
 };

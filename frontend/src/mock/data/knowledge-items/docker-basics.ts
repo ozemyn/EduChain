@@ -62,4 +62,5 @@ Dockerfile 是用来构建镜像的文本文件，包含了一系列指令。
   status: 1,
   createdAt: '2024-11-05T16:20:00Z',
   updatedAt: '2024-11-18T11:10:00Z',
+  contentHash: 'hash_docker_deployment',
 };

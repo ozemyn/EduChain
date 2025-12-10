@@ -128,4 +128,5 @@ Accept: application/vnd.api+json; version=1
   status: 1,
   createdAt: '2024-11-15T16:45:00Z',
   updatedAt: '2024-11-28T12:00:00Z',
+  contentHash: 'hash_restful_api_design',
 };

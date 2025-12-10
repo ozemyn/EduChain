@@ -87,4 +87,5 @@ Web 开发：
   status: 1,
   createdAt: '2024-11-06T09:00:00Z',
   updatedAt: '2024-11-19T15:30:00Z',
+  contentHash: 'hash_spring_boot_microservices',
 };

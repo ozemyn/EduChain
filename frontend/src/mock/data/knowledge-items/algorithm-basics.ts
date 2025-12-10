@@ -82,4 +82,5 @@ export const algorithmBasicsKnowledge = {
   status: 1,
   createdAt: '2024-11-11T15:20:00Z',
   updatedAt: '2024-11-24T11:45:00Z',
+  contentHash: 'hash_algorithm_basics_guide',
 };
