@@ -214,10 +214,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
         value={searchValue}
         options={getDropdownOptions()}
         onSelect={handleKeywordClick}
-        onSearch={setSearchValue}
+        onChange={setSearchValue}
         open={showDropdown}
-        onDropdownVisibleChange={setShowDropdown}
-        dropdownClassName={styles.dropdown}
+        onOpenChange={setShowDropdown}
+        popupClassName={styles.dropdown}
         style={{ width: '100%' }}
       >
         <Search
@@ -225,9 +225,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
           placeholder={placeholder}
           size={size}
           loading={loading}
-          onSearch={handleSearch}
-          onFocus={() => setShowDropdown(true)}
-          style={{ width: '100%' }}
           enterButton={
             <Space>
               <SearchOutlined />
@@ -241,6 +238,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
               )}
             </Space>
           }
+          onSearch={handleSearch}
+          onFocus={() => setShowDropdown(true)}
+          style={{ width: '100%' }}
         />
       </AutoComplete>
     </div>

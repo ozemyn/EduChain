@@ -243,7 +243,6 @@ const Search: React.FC = () => {
               {/* 错误提示 */}
               {error && (
                 <Alert
-                  message="搜索出错"
                   description={error}
                   type="error"
                   showIcon

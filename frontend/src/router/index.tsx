@@ -20,6 +20,7 @@ const CreateKnowledgePage = React.lazy(
   () => import('../pages/knowledge/CreateKnowledge')
 );
 const SearchPage = React.lazy(() => import('../pages/search/Search'));
+const AdvancedSearchPage = React.lazy(() => import('../pages/search/AdvancedSearch'));
 const RecommendationsPage = React.lazy(
   () => import('../pages/recommendation/Recommendations')
 );
@@ -152,11 +153,24 @@ export const router = createBrowserRouter([
       },
       {
         path: 'search',
-        element: (
-          <LoadingWrapper>
-            <SearchPage />
-          </LoadingWrapper>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <LoadingWrapper>
+                <SearchPage />
+              </LoadingWrapper>
+            ),
+          },
+          {
+            path: 'advanced',
+            element: (
+              <LoadingWrapper>
+                <AdvancedSearchPage />
+              </LoadingWrapper>
+            ),
+          },
+        ],
       },
       {
         path: 'recommendations',
