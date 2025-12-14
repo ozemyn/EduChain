@@ -2,8 +2,11 @@
  * MySQL 性能优化实战
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const mysqlOptimizationKnowledge = {
   id: 6,
+  shareCode: generateMockShareCode(6),
   title: 'MySQL 性能优化实战',
   content: `MySQL 是最流行的关系型数据库之一，掌握性能优化技巧对于构建高性能应用至关重要。
 

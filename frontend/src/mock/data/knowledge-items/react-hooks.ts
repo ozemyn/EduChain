@@ -2,8 +2,11 @@
  * React Hooks 完全指南
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const reactHooksKnowledge = {
   id: 1,
+  shareCode: generateMockShareCode(1),
   title: 'React Hooks 完全指南 - 从入门到精通',
   content: `React Hooks 是 React 16.8 引入的革命性特性，它让你在不编写 class 的情况下使用 state 以及其他的 React 特性。
 

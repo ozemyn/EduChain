@@ -2,8 +2,11 @@
  * Node.js + Express 后端开发
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const nodejsExpressKnowledge = {
   id: 12,
+  shareCode: generateMockShareCode(12),
   title: 'Node.js + Express 后端开发',
   content: `Node.js 是基于 Chrome V8 引擎的 JavaScript 运行时，Express 是最流行的 Node.js Web 框架。
 

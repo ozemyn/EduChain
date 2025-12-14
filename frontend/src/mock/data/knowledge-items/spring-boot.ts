@@ -2,8 +2,11 @@
  * Spring Boot 微服务开发实战
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const springBootKnowledge = {
   id: 5,
+  shareCode: generateMockShareCode(5),
   title: 'Spring Boot 微服务开发实战',
   content: `Spring Boot 是基于 Spring 框架的快速开发脚手架，简化了 Spring 应用的初始搭建和开发过程。
 

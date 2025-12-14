@@ -4,11 +4,13 @@
  */
 
 import type { KnowledgeItem, KnowledgeStats } from '@/types/api';
+import { generateMockShareCode } from '../utils/shareCodeGenerator';
 
 // 详细的知识条目数据
 export const mockKnowledgeDetailed: KnowledgeItem[] = [
   {
     id: 1,
+    shareCode: generateMockShareCode(1),
     title: 'React 18 新特性详解与实践指南',
     type: 'TEXT' as const,
     content: `# React 18 新特性详解与实践指南
@@ -152,6 +154,7 @@ React 18 带来了许多激动人心的新特性，特别是并发渲染功能�
   },
   {
     id: 2,
+    shareCode: generateMockShareCode(2),
     title: 'TypeScript 高级类型系统深度解析',
     type: 'TEXT' as const,
     content: `# TypeScript 高级类型系统深度解析
@@ -363,6 +366,7 @@ TypeScript 的高级类型系统提供了强大的工具来构建类型安全的
   },
   {
     id: 3,
+    shareCode: generateMockShareCode(3),
     title: 'Vue 3 Composition API 最佳实践',
     type: 'TEXT' as const,
     content: `# Vue 3 Composition API 最佳实践
@@ -689,6 +693,7 @@ Composition API 提供了更灵活的代码组织方式，特别适合复杂组�
   },
   {
     id: 4,
+    shareCode: generateMockShareCode(4),
     title: 'Node.js 性能优化实战经验分享',
     type: 'TEXT' as const,
     content: `# Node.js 性能优化实战经验分享
@@ -1106,6 +1111,7 @@ Node.js 性能优化是一个系统性工程，需要从多个维度进行考虑
   },
   {
     id: 5,
+    shareCode: generateMockShareCode(5),
     title: 'Docker 容器化部署完整指南',
     type: 'TEXT' as const,
     content: `# Docker 容器化部署完整指南

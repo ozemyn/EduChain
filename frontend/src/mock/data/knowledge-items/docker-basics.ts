@@ -2,8 +2,11 @@
  * Docker 集装箱化部署完整教程
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const dockerBasicsKnowledge = {
   id: 4,
+  shareCode: generateMockShareCode(4),
   title: 'Docker 集装箱化部署完整教程',
   content: `Docker 是一个开源的应用容器引擎，让开发者可以打包应用及依赖到一个可移植的容器中，然后发布到任何流行的 Linux 或 Windows 机器上。
 

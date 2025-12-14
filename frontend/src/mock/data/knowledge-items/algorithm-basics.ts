@@ -2,8 +2,11 @@
  * 算法与数据结构入门
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const algorithmBasicsKnowledge = {
   id: 10,
+  shareCode: generateMockShareCode(10),
   title: '算法与数据结构入门',
   content: `算法和数据结构是计算机科学的基础，掌握它们对于成为优秀的程序员至关重要。
 

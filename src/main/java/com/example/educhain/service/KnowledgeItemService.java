@@ -34,6 +34,12 @@ public interface KnowledgeItemService {
   /** 恢复已删除的知识内容 */
   void restore(Long id, Long operatorId);
 
+  /** 根据分享码获取知识内容详情 */
+  KnowledgeItemDTO findByShareCode(String shareCode);
+
+  /** 根据分享码获取知识内容详情（包含用户互动状态） */
+  KnowledgeItemDTO findByShareCodeWithUserStatus(String shareCode, Long userId);
+
   /** 根据ID获取知识内容详情 */
   KnowledgeItemDTO findById(Long id);
 
@@ -76,6 +82,9 @@ public interface KnowledgeItemService {
 
   /** 增加浏览量 */
   void incrementViewCount(Long id, String ipAddress);
+
+  /** 通过分享码增加浏览量 */
+  void incrementViewCountByShareCode(String shareCode, String ipAddress);
 
   /** 获取知识内容的版本历史 */
   Page<KnowledgeVersion> getVersionHistory(Long knowledgeId, Pageable pageable);

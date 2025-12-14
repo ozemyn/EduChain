@@ -2,8 +2,11 @@
  * RESTful API 设计规范
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const restfulApiKnowledge = {
   id: 14,
+  shareCode: generateMockShareCode(14),
   title: 'RESTful API 设计规范',
   content: `REST（Representational State Transfer）是一种软件架构风格，用于设计网络应用程序的接口。
 

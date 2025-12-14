@@ -16,6 +16,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface KnowledgeItemRepository extends JpaRepository<KnowledgeItem, Long> {
 
+  /** 根据分享码查找知识内容 */
+  Optional<KnowledgeItem> findByShareCode(String shareCode);
+
+  /** 根据分享码和状态查找知识内容 */
+  Optional<KnowledgeItem> findByShareCodeAndStatus(String shareCode, Integer status);
+
   /** 根据状态查找知识内容 */
   List<KnowledgeItem> findByStatus(Integer status);
 

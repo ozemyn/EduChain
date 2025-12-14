@@ -112,21 +112,18 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     <div className={styles.searchResults}>
       <List
         dataSource={results}
-        renderItem={(item) => (
+        renderItem={item => (
           <Card key={item.id} className={styles.resultCard}>
             <div className={styles.cardHeader}>
               <div className={styles.titleSection}>
-                <Link
-                  to={`/knowledge/${item.id}`}
-                  className={styles.title}
-                >
+                <Link to={`/knowledge/${item.id}`} className={styles.title}>
                   {highlightKeyword(item.title, keyword)}
                 </Link>
                 <div className={styles.tags}>
                   <Tag color={getTypeColor(item.type || 'TEXT')}>
                     {item.type}
                   </Tag>
-                  {item.tags && 
+                  {item.tags &&
                     item.tags
                       .split(',')
                       .slice(0, 3)
@@ -134,8 +131,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                         <Tag key={tag.trim()}>
                           {highlightKeyword(tag.trim(), keyword)}
                         </Tag>
-                      ))
-                  }
+                      ))}
                 </div>
               </div>
             </div>
@@ -147,14 +143,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({
             <div className={styles.cardFooter}>
               <div className={styles.authorInfo}>
                 <UserOutlined />
-                <Link 
+                <Link
                   to={`/user/${item.uploaderId}`}
                   className={styles.authorName}
                 >
                   {item.uploaderName || `用户 ${item.uploaderId}`}
                 </Link>
                 {item.category && (
-                  <Link 
+                  <Link
                     to={`/category/${item.category.id}`}
                     className={styles.category}
                   >

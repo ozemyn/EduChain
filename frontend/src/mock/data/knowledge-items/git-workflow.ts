@@ -2,8 +2,11 @@
  * Git 版本控制最佳实践
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const gitWorkflowKnowledge = {
   id: 9,
+  shareCode: generateMockShareCode(9),
   title: 'Git 版本控制最佳实践',
   content: `Git 是目前最流行的分布式版本控制系统，掌握 Git 是每个开发者的必备技能。
 

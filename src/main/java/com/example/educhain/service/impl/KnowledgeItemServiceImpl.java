@@ -48,6 +48,8 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
 
   @Autowired private PermissionChecker permissionChecker;
 
+  @Autowired private com.example.educhain.service.ShareCodeService shareCodeService;
+
   @Autowired private jakarta.persistence.EntityManager entityManager;
 
   @Autowired(required = false)
@@ -67,6 +69,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
 
     // 创建知识内容实体
     KnowledgeItem knowledgeItem = new KnowledgeItem();
+    knowledgeItem.setShareCode(shareCodeService.generateShareCode()); // 生成分享码
     knowledgeItem.setTitle(request.getTitle());
     knowledgeItem.setContent(request.getContent());
     knowledgeItem.setType(request.getType());
@@ -346,6 +349,48 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
     processTagAssociation(knowledgeItem, null, knowledgeItem.getTags());
 
     logger.info("Knowledge item restored: {} by user {}", id, operatorId);
+  }
+
+  /**
+   * 根据分享码查找知识内容
+   *
+   * @param shareCode 分享码
+   * @return 知识内容DTO
+   * @throws BusinessException 内容不存在时抛出
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public KnowledgeItemDTO findByShareCode(String shareCode) {
+    if (!shareCodeService.isValidShareCode(shareCode)) {
+      throw new BusinessException("INVALID_SHARE_CODE", "无效的分享码");
+    }
+
+    KnowledgeItem knowledgeItem =
+        knowledgeItemRepository
+            .findByShareCodeAndStatus(shareCode, 1)
+            .orElseThrow(() -> new BusinessException("KNOWLEDGE_NOT_FOUND", "知识内容不存在"));
+
+    return convertToDTO(knowledgeItem);
+  }
+
+  /**
+   * 根据分享码查找知识内容并包含用户状态
+   *
+   * @param shareCode 分享码
+   * @param userId 用户ID
+   * @return 包含用户状态的知识内容DTO
+   * @throws BusinessException 内容不存在时抛出
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public KnowledgeItemDTO findByShareCodeWithUserStatus(String shareCode, Long userId) {
+    KnowledgeItemDTO dto = findByShareCode(shareCode);
+
+    if (userId != null) {
+      enrichWithUserInteractionStatus(dto, userId);
+    }
+
+    return dto;
   }
 
   /**
@@ -672,6 +717,29 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
     logger.debug("Incremented view count for knowledge item: {}", id);
   }
 
+  /**
+   * 通过分享码增加浏览量
+   *
+   * @param shareCode 分享码
+   * @param ipAddress IP地址
+   */
+  @Override
+  @Transactional
+  public void incrementViewCountByShareCode(String shareCode, String ipAddress) {
+    if (!shareCodeService.isValidShareCode(shareCode)) {
+      logger.warn("Invalid share code for view count increment: {}", shareCode);
+      return;
+    }
+
+    KnowledgeItem knowledgeItem = knowledgeItemRepository
+        .findByShareCodeAndStatus(shareCode, 1)
+        .orElse(null);
+
+    if (knowledgeItem != null) {
+      incrementViewCount(knowledgeItem.getId(), ipAddress);
+    }
+  }
+
   // 私有辅助方法
   private void validateCreateRequest(CreateKnowledgeRequest request, Long uploaderId) {
     if (request == null) {
@@ -862,6 +930,7 @@ public class KnowledgeItemServiceImpl implements KnowledgeItemService {
   private KnowledgeItemDTO convertToDTO(KnowledgeItem knowledgeItem) {
     KnowledgeItemDTO dto = new KnowledgeItemDTO();
     dto.setId(knowledgeItem.getId());
+    dto.setShareCode(knowledgeItem.getShareCode());
     dto.setTitle(knowledgeItem.getTitle());
     dto.setContent(knowledgeItem.getContent());
     dto.setType(knowledgeItem.getType());

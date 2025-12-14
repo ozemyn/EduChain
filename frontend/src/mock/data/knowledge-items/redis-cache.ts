@@ -2,8 +2,11 @@
  * Redis 缓存设计与实践
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const redisCacheKnowledge = {
   id: 7,
+  shareCode: generateMockShareCode(7),
   title: 'Redis 缓存设计与实践',
   content: `Redis 是一个开源的内存数据结构存储系统，可以用作数据库、缓存和消息中间件。
 

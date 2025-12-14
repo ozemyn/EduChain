@@ -119,7 +119,7 @@ const KnowledgeList: React.FC = () => {
 
   // 处理编辑
   const handleEdit = (knowledge: KnowledgeItem) => {
-    navigate(`/knowledge/edit/${knowledge.id}`);
+    navigate(`/knowledge/edit/${knowledge.shareCode}`);
   };
 
   // 处理删除

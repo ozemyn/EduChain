@@ -2,8 +2,11 @@
  * MongoDB 文档数据库入门
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const mongodbGuideKnowledge = {
   id: 15,
+  shareCode: generateMockShareCode(15),
   title: 'MongoDB 文档数据库入门',
   content: `MongoDB 是一个基于分布式文件存储的 NoSQL 数据库，使用 JSON 格式存储数据。
 

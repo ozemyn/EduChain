@@ -2,8 +2,11 @@
  * Webpack 构建工具配置指南
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const webpackConfigKnowledge = {
   id: 13,
+  shareCode: generateMockShareCode(13),
   title: 'Webpack 构建工具配置指南',
   content: `Webpack 是现代前端项目的核心构建工具，用于打包 JavaScript 应用程序。
 

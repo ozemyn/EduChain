@@ -85,7 +85,7 @@ const CreateKnowledge: React.FC = () => {
     CertificationStatus.PENDING
   );
   const [certError, setCertError] = useState<string>();
-  const [createdKnowledgeId, setCreatedKnowledgeId] = useState<number>();
+  const [createdKnowledge, setCreatedKnowledge] = useState<KnowledgeItem>();
 
   // 使用草稿管理器 - 禁用自动保存
   const { saveDraft, clearDraft, startAutoSave, stopAutoSave } =
@@ -235,24 +235,28 @@ const CreateKnowledge: React.FC = () => {
         tags: values.tags,
       };
 
-      let knowledgeId: number;
+      let knowledgeData: KnowledgeItem;
 
       if (isEditing && knowledge) {
         await knowledgeService.updateKnowledge(knowledge.id, submitData);
-        knowledgeId = knowledge.id;
+        knowledgeData = knowledge;
         message.success('更新成功');
       } else {
         const response = await knowledgeService.createKnowledge(submitData);
         if (response.success && response.data) {
-          knowledgeId = response.data.id;
-          setCreatedKnowledgeId(knowledgeId);
+          knowledgeData = response.data;
+          setCreatedKnowledge(knowledgeData);
         } else {
           throw new Error('创建失败');
         }
       }
 
       // 开始存证流程
-      await performCertification(knowledgeId, values.title, values.content);
+      await performCertification(
+        knowledgeData.id,
+        values.title,
+        values.content
+      );
 
       clearDraft();
     } catch (error) {
@@ -327,7 +331,7 @@ const CreateKnowledge: React.FC = () => {
 
   // 重试存证
   const handleRetryCertification = async () => {
-    if (!createdKnowledgeId) return;
+    if (!createdKnowledge) return;
 
     const values = form.getFieldsValue();
     setCertStatus(CertificationStatus.IN_PROGRESS);
@@ -335,7 +339,7 @@ const CreateKnowledge: React.FC = () => {
 
     try {
       await performCertification(
-        createdKnowledgeId,
+        createdKnowledge.id,
         values.title,
         values.content
       );
@@ -346,11 +350,11 @@ const CreateKnowledge: React.FC = () => {
 
   // 下载证书
   const handleDownloadCertificate = async () => {
-    if (!createdKnowledgeId) return;
+    if (!createdKnowledge) return;
 
     try {
       const response = await blockchainService.createCertificate({
-        knowledge_id: createdKnowledgeId,
+        knowledge_id: createdKnowledge.id,
         knowledge_title: form.getFieldValue('title'),
         user_id: user!.id,
         user_name: user!.username || user!.email,
@@ -368,8 +372,8 @@ const CreateKnowledge: React.FC = () => {
 
   // 查看详情
   const handleViewDetail = () => {
-    if (createdKnowledgeId) {
-      navigate(`/knowledge/${createdKnowledgeId}`);
+    if (createdKnowledge?.shareCode) {
+      navigate(`/knowledge/${createdKnowledge.shareCode}`);
     }
   };
 

@@ -262,6 +262,39 @@ export const setupMockServer = () => {
       return HttpResponse.json(createSuccessResponse(pageData));
     }),
 
+    // 通过分享码获取知识详情
+    http.get(`${API_BASE}/knowledge/share/:shareCode`, async ({ params }) => {
+      await delay();
+      const { shareCode } = params;
+
+      // 验证分享码格式
+      const { isValidMockShareCode } = await import(
+        './utils/shareCodeGenerator'
+      );
+      if (!isValidMockShareCode(shareCode as string)) {
+        return HttpResponse.json(
+          { success: false, message: '无效的分享码格式', data: null },
+          { status: 400 }
+        );
+      }
+
+      const knowledge = mockKnowledgeItems.find(k => k.shareCode === shareCode);
+
+      if (knowledge) {
+        return HttpResponse.json(
+          createSuccessResponse({
+            ...knowledge,
+            stats: mockKnowledgeStats[knowledge.id],
+          })
+        );
+      }
+
+      return HttpResponse.json(
+        { success: false, message: '内容不存在', data: null },
+        { status: 404 }
+      );
+    }),
+
     http.get(`${API_BASE}/knowledge/:id`, async ({ params }) => {
       await delay();
       const { id } = params;

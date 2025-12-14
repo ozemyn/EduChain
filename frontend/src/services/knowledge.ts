@@ -57,7 +57,11 @@ export const knowledgeService = {
     params: PageRequest & { categoryId?: number; type?: string }
   ) => request.get<PageResponse<KnowledgeItem>>('/knowledge', { params }),
 
-  // 获取知识详情
+  // 获取知识详情（通过分享码）
+  getKnowledgeByShareCode: (shareCode: string) =>
+    request.get<KnowledgeItem>(`/knowledge/share/${shareCode}`),
+
+  // 获取知识详情（通过ID，兼容旧版本）
   getKnowledgeById: (id: number) =>
     request.get<KnowledgeItem>(`/knowledge/${id}`),
 

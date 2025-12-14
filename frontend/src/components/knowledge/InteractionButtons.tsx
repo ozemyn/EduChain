@@ -15,6 +15,7 @@ import styles from './InteractionButtons.module.css';
 
 interface InteractionButtonsProps {
   knowledgeId: number;
+  shareCode?: string; // 添加分享码属性
   initialStats?: InteractionStats;
   size?: 'small' | 'middle' | 'large';
   showLabels?: boolean;
@@ -24,6 +25,7 @@ interface InteractionButtonsProps {
 
 const InteractionButtons: React.FC<InteractionButtonsProps> = ({
   knowledgeId,
+  shareCode,
   initialStats,
   size = 'middle',
   showLabels = true,
@@ -160,14 +162,19 @@ const InteractionButtons: React.FC<InteractionButtonsProps> = ({
   // 处理分享
   const handleShare = async () => {
     try {
+      // 生成分享链接
+      const shareUrl = shareCode
+        ? `${window.location.origin}/knowledge/${shareCode}`
+        : window.location.href;
+
       if (navigator.share) {
         await navigator.share({
           title: '分享知识内容',
-          url: window.location.href,
+          url: shareUrl,
         });
       } else {
         // 复制链接到剪贴板
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(shareUrl);
         message.success('链接已复制到剪贴板');
       }
     } catch {

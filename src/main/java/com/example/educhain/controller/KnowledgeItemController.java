@@ -112,8 +112,24 @@ public class KnowledgeItemController {
     return ResponseEntity.ok(Result.success());
   }
 
+  @GetMapping("/share/{shareCode}")
+  @Operation(summary = "通过分享码获取知识内容", description = "根据分享码获取知识内容的详细信息")
+  public ResponseEntity<Result<KnowledgeItemDTO>> findByShareCode(
+      @PathVariable String shareCode, Authentication authentication, HttpServletRequest request) {
+
+    Long userId = getUserId(authentication);
+    KnowledgeItemDTO result =
+        (userId != null)
+            ? knowledgeItemService.findByShareCodeWithUserStatus(shareCode, userId)
+            : knowledgeItemService.findByShareCode(shareCode);
+
+    // 增加浏览量
+    knowledgeItemService.incrementViewCountByShareCode(shareCode, getClientIpAddress(request));
+    return ResponseEntity.ok(Result.success(result));
+  }
+
   @GetMapping("/{id}")
-  @Operation(summary = "获取知识内容详情", description = "根据ID获取知识内容的详细信息")
+  @Operation(summary = "获取知识内容详情", description = "根据ID获取知识内容的详细信息（兼容旧版本）")
   public ResponseEntity<Result<KnowledgeItemDTO>> findById(
       @PathVariable Long id, Authentication authentication, HttpServletRequest request) {
 

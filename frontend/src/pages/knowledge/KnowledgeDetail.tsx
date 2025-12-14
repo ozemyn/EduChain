@@ -54,7 +54,7 @@ const { confirm } = Modal;
  * 知识详情页面组件
  */
 const KnowledgeDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { shareCode } = useParams<{ shareCode: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -65,14 +65,31 @@ const KnowledgeDetail: React.FC = () => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
+  // Base58解码工具（前端验证用）
+  const isValidShareCode = (code: string): boolean => {
+    if (!code || !code.startsWith('EK')) return false;
+    const alphabet =
+      '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    const encoded = code.substring(2);
+    return encoded.split('').every(char => alphabet.includes(char));
+  };
+
   // 加载知识详情
   useEffect(() => {
     const loadDetail = async () => {
-      if (!id) return;
+      if (!shareCode) return;
+
+      // 验证分享码格式
+      if (!isValidShareCode(shareCode)) {
+        message.error('无效的分享码格式');
+        navigate('/404');
+        return;
+      }
 
       try {
         setLoading(true);
-        const response = await knowledgeService.getKnowledgeById(Number(id));
+        const response =
+          await knowledgeService.getKnowledgeByShareCode(shareCode);
 
         if (response.success && response.data) {
           setKnowledge(response.data);
@@ -91,7 +108,7 @@ const KnowledgeDetail: React.FC = () => {
     };
 
     loadDetail();
-  }, [id, navigate]);
+  }, [shareCode, navigate]);
 
   // 处理点赞
   const handleLike = async () => {
@@ -141,9 +158,13 @@ const KnowledgeDetail: React.FC = () => {
 
   // 处理分享
   const handleShare = () => {
-    const url = window.location.href;
+    if (!knowledge) return;
+
+    // 使用分享码生成分享链接
+    const shareUrl = `${window.location.origin}/knowledge/${knowledge.shareCode}`;
+
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
+      navigator.clipboard.writeText(shareUrl);
       message.success('链接已复制到剪贴板');
     } else {
       message.info('请手动复制链接');
@@ -153,7 +174,7 @@ const KnowledgeDetail: React.FC = () => {
   // 处理编辑
   const handleEdit = () => {
     if (knowledge) {
-      navigate(`/knowledge/edit/${knowledge.id}`);
+      navigate(`/knowledge/edit/${knowledge.shareCode}`);
     }
   };
 

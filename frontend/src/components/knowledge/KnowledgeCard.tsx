@@ -145,7 +145,10 @@ const KnowledgeCard: React.FC<KnowledgeCardProps> = ({
 
           {/* 标题 */}
           <div className="card-title">
-            <Link to={`/knowledge/${knowledge.id}`} className="title-link">
+            <Link
+              to={`/knowledge/${knowledge.shareCode}`}
+              className="title-link"
+            >
               <h3 className="knowledge-title">{knowledge.title}</h3>
             </Link>
           </div>

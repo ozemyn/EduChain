@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(
     name = "knowledge_items",
     indexes = {
+      @Index(name = "idx_share_code", columnList = "share_code"),
       @Index(name = "idx_title", columnList = "title"),
       @Index(name = "idx_uploader_id", columnList = "uploader_id"),
       @Index(name = "idx_category_id", columnList = "category_id"),
@@ -33,6 +34,10 @@ public class KnowledgeItem {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Column(name = "share_code", nullable = false, unique = true, length = 32)
+  @NotBlank(message = "分享码不能为空")
+  private String shareCode;
 
   @Column(nullable = false, length = 200)
   @NotBlank(message = "标题不能为空")
@@ -108,7 +113,8 @@ public class KnowledgeItem {
 
   // 构造函数
   public KnowledgeItem(
-      String title, String content, ContentType type, Long uploaderId, Long categoryId) {
+      String shareCode, String title, String content, ContentType type, Long uploaderId, Long categoryId) {
+    this.shareCode = shareCode;
     this.title = title;
     this.content = content;
     this.type = type;
@@ -155,6 +161,14 @@ public class KnowledgeItem {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getShareCode() {
+    return shareCode;
+  }
+
+  public void setShareCode(String shareCode) {
+    this.shareCode = shareCode;
   }
 
   public String getTitle() {

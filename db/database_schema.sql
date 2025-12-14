@@ -55,6 +55,7 @@ CREATE TABLE categories (
 -- ========================================
 CREATE TABLE knowledge_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    share_code VARCHAR(32) NOT NULL UNIQUE COMMENT '分享码(Base58编码)',
     title VARCHAR(200) NOT NULL COMMENT '标题',
     content LONGTEXT COMMENT '内容',
     type ENUM('TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT', 'LINK', 'MIXED') NOT NULL DEFAULT 'TEXT' COMMENT '内容类型',
@@ -68,6 +69,7 @@ CREATE TABLE knowledge_items (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     FOREIGN KEY (uploader_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    INDEX idx_share_code (share_code),
     INDEX idx_title (title),
     INDEX idx_uploader_id (uploader_id),
     INDEX idx_category_id (category_id),

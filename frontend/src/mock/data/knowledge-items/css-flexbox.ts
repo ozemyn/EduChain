@@ -2,8 +2,11 @@
  * CSS Flexbox 布局完全指南
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const cssFlexboxKnowledge = {
   id: 11,
+  shareCode: generateMockShareCode(11),
   title: 'CSS Flexbox 布局完全指南',
   content: `Flexbox 是 CSS3 引入的强大布局模式，使得创建灵活的响应式布局变得简单。
 

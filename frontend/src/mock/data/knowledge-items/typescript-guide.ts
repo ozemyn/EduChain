@@ -2,8 +2,11 @@
  * TypeScript 类型系统深度解析
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const typescriptGuideKnowledge = {
   id: 2,
+  shareCode: generateMockShareCode(2),
   title: 'TypeScript 类型系统深度解析',
   content: `TypeScript 是 JavaScript 的超集，为 JavaScript 添加了静态类型系统。它能在编译时发现错误，提高代码质量和开发效率。
 

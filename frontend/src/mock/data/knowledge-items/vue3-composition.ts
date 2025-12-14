@@ -2,8 +2,11 @@
  * Vue 3 Composition API 实战指南
  */
 
+import { generateMockShareCode } from '../../utils/shareCodeGenerator';
+
 export const vue3CompositionKnowledge = {
   id: 3,
+  shareCode: generateMockShareCode(3),
   title: 'Vue 3 Composition API 实战指南',
   content: `Vue 3 引入了全新的 Composition API，提供了更灵活的代码组织方式和更好的逻辑复用能力。
 

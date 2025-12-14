@@ -95,6 +95,7 @@ export interface LoginResponse {
 // 知识内容相关类型
 export interface KnowledgeItem {
   id: number;
+  shareCode: string;
   title: string;
   content: string;
   summary?: string; // 内容摘要

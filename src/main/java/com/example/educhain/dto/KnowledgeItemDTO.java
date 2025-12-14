@@ -9,6 +9,7 @@ import java.util.List;
 public class KnowledgeItemDTO {
 
   private Long id;
+  private String shareCode;
   private String title;
   private String content;
   private KnowledgeItem.ContentType type;
@@ -49,6 +50,7 @@ public class KnowledgeItemDTO {
   // 构造函数
   public KnowledgeItemDTO(
       Long id,
+      String shareCode,
       String title,
       String content,
       KnowledgeItem.ContentType type,
@@ -61,6 +63,7 @@ public class KnowledgeItemDTO {
       LocalDateTime createdAt,
       LocalDateTime updatedAt) {
     this.id = id;
+    this.shareCode = shareCode;
     this.title = title;
     this.content = content;
     this.type = type;
@@ -81,6 +84,14 @@ public class KnowledgeItemDTO {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getShareCode() {
+    return shareCode;
+  }
+
+  public void setShareCode(String shareCode) {
+    this.shareCode = shareCode;
   }
 
   public String getTitle() {
