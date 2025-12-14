@@ -125,7 +125,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
       )}
 
       <div className={styles.header}>
-        <Link to={`/knowledge/${item.id}`} className={styles.title}>
+        <Link to={`/knowledge/${item.shareCode}`} className={styles.title}>
           {item.title}
         </Link>
         <Space size="small" className={styles.tags}>

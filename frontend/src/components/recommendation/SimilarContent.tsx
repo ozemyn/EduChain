@@ -75,7 +75,7 @@ const SimilarContent: React.FC<SimilarContentProps> = ({
         renderItem={item => (
           <List.Item className={styles.listItem}>
             <div className={styles.itemContent}>
-              <Link to={`/knowledge/${item.id}`} className={styles.title}>
+              <Link to={`/knowledge/${item.shareCode}`} className={styles.title}>
                 {item.title}
               </Link>
 
