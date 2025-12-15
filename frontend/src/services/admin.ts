@@ -30,6 +30,7 @@ export interface DashboardStats {
 // 热门内容类型
 export interface PopularContent {
   id: number;
+  shareCode: string;
   title: string;
   author: string;
   authorId: number;

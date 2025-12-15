@@ -134,12 +134,15 @@ const AdminDashboard: React.FC = () => {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
+      width: 240,
+      ellipsis: true,
       render: (title: string, record: PopularContent) => (
         <Text
           strong
           className="content-title hover-scale"
-          onClick={() => navigate(`/knowledge/${record.id}`)}
+          onClick={() => navigate(`/knowledge/${record.shareCode}`)}
           style={{ cursor: 'pointer' }}
+          title={title}
         >
           {title}
         </Text>
@@ -149,6 +152,7 @@ const AdminDashboard: React.FC = () => {
       title: '作者',
       dataIndex: 'author',
       key: 'author',
+      width: 100,
       render: (author: string, record: PopularContent) => (
         <Text
           className="hover-scale"
@@ -163,16 +167,18 @@ const AdminDashboard: React.FC = () => {
       title: '分类',
       dataIndex: 'category',
       key: 'category',
+      width: 80,
       render: (category: string) => <Tag color="blue">{category}</Tag>,
     },
     {
       title: '浏览量',
       dataIndex: 'views',
       key: 'views',
+      width: 90,
       render: (views: number) => (
-        <Space>
+        <Space size="small">
           <EyeOutlined />
-          {views.toLocaleString()}
+          <span>{views.toLocaleString()}</span>
         </Space>
       ),
     },
@@ -180,10 +186,11 @@ const AdminDashboard: React.FC = () => {
       title: '点赞数',
       dataIndex: 'likes',
       key: 'likes',
+      width: 80,
       render: (likes: number) => (
-        <Space>
+        <Space size="small">
           <HeartOutlined />
-          {likes.toLocaleString()}
+          <span>{likes.toLocaleString()}</span>
         </Space>
       ),
     },
@@ -191,10 +198,11 @@ const AdminDashboard: React.FC = () => {
       title: '评论数',
       dataIndex: 'comments',
       key: 'comments',
+      width: 80,
       render: (comments: number) => (
-        <Space>
+        <Space size="small">
           <CommentOutlined />
-          {comments.toLocaleString()}
+          <span>{comments.toLocaleString()}</span>
         </Space>
       ),
     },
@@ -202,6 +210,12 @@ const AdminDashboard: React.FC = () => {
       title: '发布时间',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      width: 90,
+      render: (createdAt: string) => (
+        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+          {dayjs(createdAt).format('MM-DD')}
+        </span>
+      ),
     },
   ];
 
@@ -327,85 +341,116 @@ const AdminDashboard: React.FC = () => {
         >
           <Col xs={24} sm={12} lg={6}>
             <div className="stat-card glass-card hover-lift">
-              <Statistic
-                title="总用户数"
-                value={stats?.totalUsers || 0}
-                prefix={<UserOutlined />}
-                valueStyle={{ color: 'var(--accent-success)' }}
-                loading={loading}
-              />
+              <div className="stat-content">
+                <Statistic
+                  title="总用户数"
+                  value={stats?.totalUsers || 0}
+                  prefix={<UserOutlined />}
+                  valueStyle={{ color: 'var(--accent-success)' }}
+                  loading={loading}
+                />
+              </div>
               <div className="stat-footer">
-                <Text type="secondary">
-                  今日新增: {stats?.newUsersToday || 0}
-                </Text>
-                <span className="growth-indicator positive">
-                  <ArrowUpOutlined />
-                  {stats?.userGrowth?.toFixed(1) || 0}%
-                </span>
+                <div className="stat-footer-row">
+                  <Text type="secondary">
+                    今日新增: {stats?.newUsersToday || 0}
+                  </Text>
+                </div>
+                <div className="stat-footer-row">
+                  <span className="growth-indicator positive">
+                    <ArrowUpOutlined />
+                    {stats?.userGrowth?.toFixed(1) || 0}%
+                  </span>
+                </div>
               </div>
             </div>
           </Col>
           <Col xs={24} sm={12} lg={6}>
             <div className="stat-card glass-card hover-lift">
-              <Statistic
-                title="总内容数"
-                value={stats?.totalKnowledge || 0}
-                prefix={<FileTextOutlined />}
-                valueStyle={{ color: 'var(--accent-primary)' }}
-                loading={loading}
-              />
+              <div className="stat-content">
+                <Statistic
+                  title="总内容数"
+                  value={stats?.totalKnowledge || 0}
+                  prefix={<FileTextOutlined />}
+                  valueStyle={{ color: 'var(--accent-primary)' }}
+                  loading={loading}
+                />
+              </div>
               <div className="stat-footer">
-                <Text type="secondary">
-                  今日新增: {stats?.newKnowledgeToday || 0}
-                </Text>
-                <span className="growth-indicator positive">
-                  <ArrowUpOutlined />
-                  {stats?.knowledgeGrowth?.toFixed(1) || 0}%
-                </span>
+                <div className="stat-footer-row">
+                  <Text type="secondary">
+                    今日新增: {stats?.newKnowledgeToday || 0}
+                  </Text>
+                </div>
+                <div className="stat-footer-row">
+                  <span className="growth-indicator positive">
+                    <ArrowUpOutlined />
+                    {stats?.knowledgeGrowth?.toFixed(1) || 0}%
+                  </span>
+                </div>
               </div>
             </div>
           </Col>
           <Col xs={24} sm={12} lg={6}>
             <div className="stat-card glass-card hover-lift">
-              <Statistic
-                title="总浏览量"
-                value={stats?.totalViews || 0}
-                prefix={<EyeOutlined />}
-                valueStyle={{ color: 'var(--primary-600)' }}
-                loading={loading}
-              />
+              <div className="stat-content">
+                <Statistic
+                  title="总浏览量"
+                  value={stats?.totalViews || 0}
+                  prefix={<EyeOutlined />}
+                  valueStyle={{ color: 'var(--primary-600)' }}
+                  loading={loading}
+                />
+              </div>
               <div className="stat-footer">
-                <Text type="secondary">
-                  总点赞: {stats?.totalLikes?.toLocaleString() || 0}
-                </Text>
+                <div className="stat-footer-row">
+                  <Text type="secondary">
+                    总点赞: {stats?.totalLikes?.toLocaleString() || 0}
+                  </Text>
+                </div>
+                <div className="stat-footer-row">
+                  <span className="growth-indicator neutral">
+                    <EyeOutlined />
+                    浏览量统计
+                  </span>
+                </div>
               </div>
             </div>
           </Col>
           <Col xs={24} sm={12} lg={6}>
             <div className="stat-card glass-card hover-lift">
-              <Statistic
-                title="活跃用户"
-                value={stats?.activeUsers || 0}
-                prefix={<TrophyOutlined />}
-                valueStyle={{ color: 'var(--primary-500)' }}
-                loading={loading}
-              />
+              <div className="stat-content">
+                <Statistic
+                  title="活跃用户"
+                  value={stats?.activeUsers || 0}
+                  prefix={<TrophyOutlined />}
+                  valueStyle={{ color: 'var(--primary-500)' }}
+                  loading={loading}
+                />
+              </div>
               <div className="stat-footer">
-                <Text type="secondary">
-                  总评论: {stats?.totalComments?.toLocaleString() || 0}
-                </Text>
+                <div className="stat-footer-row">
+                  <Text type="secondary">
+                    总评论: {stats?.totalComments?.toLocaleString() || 0}
+                  </Text>
+                </div>
+                <div className="stat-footer-row">
+                  <span className="growth-indicator neutral">
+                    <CommentOutlined />
+                    评论统计
+                  </span>
+                </div>
               </div>
             </div>
           </Col>
         </Row>
 
-        {/* 主要内容区域 */}
+        {/* 热门内容 */}
         <Row
           gutter={[16, 16]}
           className="main-content animate-fade-in-up delay-200"
         >
-          {/* 热门内容 */}
-          <Col xs={24} lg={16}>
+          <Col span={24}>
             <Card
               title={
                 <Space>
@@ -432,12 +477,19 @@ const AdminDashboard: React.FC = () => {
                 loading={loading}
                 size="small"
                 className="content-table"
+                scroll={{ x: 760 }}
+                tableLayout="fixed"
               />
             </Card>
           </Col>
+        </Row>
 
-          {/* 活跃用户 */}
-          <Col xs={24} lg={8}>
+        {/* 活跃用户 */}
+        <Row
+          gutter={[16, 16]}
+          className="users-content animate-fade-in-up delay-300"
+        >
+          <Col span={24}>
             <Card
               title={
                 <Space>
@@ -505,7 +557,7 @@ const AdminDashboard: React.FC = () => {
         {/* 系统状态 */}
         <Row
           gutter={[16, 16]}
-          className="system-status animate-fade-in-up delay-300"
+          className="system-status animate-fade-in-up delay-400"
         >
           <Col xs={24} md={8}>
             <Card title="CPU 使用率" className="status-card glass-card">
@@ -548,7 +600,7 @@ const AdminDashboard: React.FC = () => {
         {/* 系统告警 */}
         <Row
           gutter={[16, 16]}
-          className="alerts-section animate-fade-in-up delay-400"
+          className="alerts-section animate-fade-in-up delay-500"
         >
           <Col span={24}>
             <Card

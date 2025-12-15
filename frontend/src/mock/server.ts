@@ -1302,6 +1302,7 @@ MIME类型: ${transaction?.metadata?.mimeType || 'text/markdown'}
 
             return {
               id: item.id,
+              shareCode: item.shareCode,
               title: item.title,
               author: author?.fullName || '未知用户',
               authorId: item.uploaderId,
