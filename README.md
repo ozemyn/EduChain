@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
 </p>
 
-# 🎓 EduChain - 基于区块链的教育知识共享平台
+# 🎓 EduChain - 基于区块链存证的教育知识共享与智能检索系统
 
 <p align="center">
   <b>🌐 在线演示：<a href="https://educhain.cc" target="_blank">https://educhain.cc</a></b>
