@@ -39,7 +39,7 @@ const TermsOfService: React.FC = () => {
             <Title level={2}>欢迎使用 EduChain</Title>
             <Paragraph>
               感谢您选择 EduChain
-              教育知识共享平台。在使用我们的服务之前，请仔细阅读以下服务条款。
+              基于区块链存证的教育知识共享与智能检索系统。在使用我们的服务之前，请仔细阅读以下服务条款。
               使用本平台即表示您同意遵守这些条款。
             </Paragraph>
 
@@ -48,7 +48,7 @@ const TermsOfService: React.FC = () => {
             <Title level={3}>1. 服务说明</Title>
             <Paragraph>
               EduChain
-              是一个基于区块链技术的教育知识共享平台，致力于为用户提供：
+              是基于区块链存证的教育知识共享与智能检索系统，致力于为用户提供：
             </Paragraph>
             <Paragraph>
               <ul>

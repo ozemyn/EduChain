@@ -47,7 +47,7 @@ const Disclaimer: React.FC = () => {
             <Title level={2}>EduChain 免责声明</Title>
             <Paragraph>
               本免责声明适用于 EduChain
-              教育知识共享平台（以下简称"本平台"）提供的所有服务和内容。
+              基于区块链存证的教育知识共享与智能检索系统（以下简称"本平台"）提供的所有服务和内容。
               请您在使用本平台前仔细阅读本声明。
             </Paragraph>
 
@@ -57,7 +57,7 @@ const Disclaimer: React.FC = () => {
             <Paragraph>
               <strong>1.1 信息平台</strong>
               <br />
-              本平台是一个教育知识共享平台，主要提供信息存储、展示和交流服务。
+              本平台是基于区块链存证的教育知识共享与智能检索系统，主要提供信息存储、展示和交流服务。
               我们不对平台上的内容进行实质性审查或背书。
             </Paragraph>
             <Paragraph>

@@ -1,8 +1,26 @@
 {
-  "name": "frontend",
+  "name": "educhain-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "EduChain - 基于区块链存证的教育知识共享与智能检索系统前端应用",
+  "keywords": [
+    "educhain",
+    "education",
+    "blockchain",
+    "knowledge-sharing",
+    "react",
+    "typescript",
+    "online-learning",
+    "educational-platform"
+  ],
+  "homepage": "https://educhain.cc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ozemyn/EduChain.git"
+  },
+  "author": "EduChain Team",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "dev:mock": "vite --mode mock",

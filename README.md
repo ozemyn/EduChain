@@ -1,19 +1,37 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen" alt="Spring Boot">
-  <img src="https://img.shields.io/badge/Java-21-orange" alt="Java">
-  <img src="https://img.shields.io/badge/React-19-blue" alt="React">
-  <img src="https://img.shields.io/badge/Python-3.9+-yellow" alt="Python">
-  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+  <a href="https://educhain.cc"><img src="https://img.shields.io/badge/Website-educhain.cc-blue?style=flat-square" alt="Website"></a>
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen?style=flat-square" alt="Spring Boot">
+  <img src="https://img.shields.io/badge/Java-21-orange?style=flat-square" alt="Java">
+  <img src="https://img.shields.io/badge/React-19-blue?style=flat-square" alt="React">
+  <img src="https://img.shields.io/badge/Python-3.9+-yellow?style=flat-square" alt="Python">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
+  <br/>
+  <img src="https://img.shields.io/github/stars/ozemyn/EduChain?style=social" alt="GitHub stars">
+  <img src="https://img.shields.io/github/forks/ozemyn/EduChain?style=social" alt="GitHub forks">
+  <img src="https://img.shields.io/github/issues/ozemyn/EduChain?style=flat-square" alt="GitHub issues">
+  <img src="https://img.shields.io/github/last-commit/ozemyn/EduChain?style=flat-square" alt="Last commit">
+  <img src="https://img.shields.io/github/languages/top/ozemyn/EduChain?style=flat-square" alt="Top Language">
+  <img src="https://img.shields.io/github/repo-size/ozemyn/EduChain?style=flat-square" alt="Repo Size">
 </p>
 
 <h1 align="center">🎓 EduChain</h1>
-<h3 align="center">基于区块链存证的教育知识共享与智能检索系统</h3>
+<h3 align="center">基于区块链存证的教育知识共享与智能检索系统 | Educational Blockchain Platform</h3>
 
 <p align="center">
   <b>🌐 在线演示：<a href="https://educhain.cc" target="_blank">https://educhain.cc</a></b>
 </p>
 
-EduChain 是一个创新的教育知识共享平台，结合区块链技术实现知识内容的防篡改存证，为用户提供安全、可信的知识分享环境。
+<p align="center">
+  <b>关键词：</b> educhain | 教育区块链 | 知识分享平台 | 在线学习 | 区块链存证 | 教育科技 | 知识管理系统 | 智能检索系统 | 教育创新 | 知识产权保护
+</p>
+
+---
+
+**EduChain** 是**基于区块链存证的教育知识共享与智能检索系统**，结合**区块链技术**实现知识内容的防篡改存证，为用户提供安全、可信的知识分享环境。通过 educhain.cc 平台，教育工作者和学习者可以安全地分享、管理和验证教育内容，打造去中心化的教育生态系统。
+
+> 🎯 **使命**: 利用区块链技术革新教育知识分享，保护原创内容，激励优质贡献
+> 
+> 🔗 **官网**: [educhain.cc](https://educhain.cc) | **GitHub**: [EduChain Repository](https://github.com/ozemyn/EduChain)
 
 ## ✨ 核心特性
 

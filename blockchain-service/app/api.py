@@ -18,7 +18,7 @@ from .qr_code import qr_generator
 # 初始化FastAPI应用
 app = FastAPI(
     title="EduChain Blockchain Service",
-    description="教育知识共享平台区块链服务",
+    description="基于区块链存证的教育知识共享与智能检索系统区块链服务",
     version="1.0.0"
 )
 

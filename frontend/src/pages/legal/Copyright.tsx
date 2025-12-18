@@ -39,7 +39,7 @@ const Copyright: React.FC = () => {
             <Title level={2}>EduChain 版权声明</Title>
             <Paragraph>
               本声明适用于 EduChain
-              教育知识共享平台（以下简称"本平台"）的所有内容和服务。
+              基于区块链存证的教育知识共享与智能检索系统（以下简称"本平台"）的所有内容和服务。
               请仔细阅读以下版权声明，以了解您在使用本平台时的权利和义务。
             </Paragraph>
 

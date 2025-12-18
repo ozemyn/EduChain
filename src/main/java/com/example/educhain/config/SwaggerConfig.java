@@ -22,7 +22,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
         .info(
             new Info()
                 .title("EduChain API 文档")
-                .description("教育知识共享平台 REST API 接口文档")
+                .description("基于区块链存证的教育知识共享与智能检索系统 REST API 接口文档")
                 .version("1.0.0")
                 .contact(new Contact().name("EduChain 开发团队").email("ozemyn@icloud.com")))
         .servers(List.of(new Server().url("http://localhost:8080/api").description("本地开发环境")))

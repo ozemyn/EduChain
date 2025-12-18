@@ -90,7 +90,7 @@ const DeveloperDocs: React.FC = () => {
             <Title level={2}>EduChain 开发者文档</Title>
             <Paragraph>
               欢迎使用 EduChain 开发者文档！EduChain
-              是一个基于区块链技术的教育知识共享平台， 为开发者提供了丰富的 API
+              是基于区块链存证的教育知识共享与智能检索系统， 为开发者提供了丰富的 API
               和 SDK，帮助您快速构建教育相关的应用程序。
             </Paragraph>
 

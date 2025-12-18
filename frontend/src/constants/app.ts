@@ -1,6 +1,6 @@
 // 应用相关常量
 export const APP_NAME = 'EduChain';
-export const APP_DESCRIPTION = '教育知识共享平台';
+export const APP_DESCRIPTION = '基于区块链存证的教育知识共享与智能检索系统';
 export const APP_VERSION = '1.0.0';
 
 // 分页配置

@@ -213,7 +213,7 @@ const CertificateVerify: React.FC = () => {
                 <strong>此证书证明该内容已存证于EduChain区块链</strong>
               </p>
               <p>
-                本证书由EduChain教育知识共享平台区块链存证系统自动生成，
+                本证书由EduChain基于区块链存证的教育知识共享与智能检索系统自动生成，
                 证明相关内容的哈希值和时间戳已被永久记录在区块链上，具有不可篡改性。
               </p>
               <p>
