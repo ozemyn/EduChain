@@ -868,7 +868,7 @@ const HelpCenter: React.FC = () => {
 
             <Space size="small" style={{ flexDirection: 'column' }}>
               <Text type="secondary">其他联系方式：</Text>
-              <Text>邮箱：support@educhain.com</Text>
+              <Text>邮箱：ozemyn@icloud.com</Text>
               <Text>电话：400-123-4567</Text>
               <Text>工作时间：周一至周五 9:00-18:00</Text>
             </Space>

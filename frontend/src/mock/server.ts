@@ -899,7 +899,7 @@ export const setupMockServer = () => {
         has_certificate: true,
         pdf_url: `/certificates/cert_${mockCertificates.length + 1}.pdf`,
         qr_code_url: `/qrcodes/cert_${mockCertificates.length + 1}.png`,
-        verification_url: `https://educhain.com/verify/cert_${mockCertificates.length + 1}`,
+        verification_url: `https://educhain.cc/verify/cert_${mockCertificates.length + 1}`,
         created_at: new Date().toISOString(),
       };
       mockCertificates.push(newCert);
@@ -991,7 +991,7 @@ MIME类型: ${transaction?.metadata?.mimeType || 'text/markdown'}
 3. 公开验证：任何人都可以通过区块链浏览器验证
 4. 法律效力：符合《电子签名法》等相关法律法规
 
-证书生成平台: EduChain (https://educhain.com)
+证书生成平台: EduChain (https://educhain.cc)
 技术支持: 区块链存证技术
 版本: v1.0
 

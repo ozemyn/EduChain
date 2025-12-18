@@ -680,7 +680,7 @@ const TicketSubmit: React.FC = () => {
                   </Text>
                   <br />
                   <Text style={{ color: 'var(--text-tertiary)' }}>
-                    support@educhain.com
+                    ozemyn@icloud.com
                   </Text>
                 </div>
 

@@ -31,7 +31,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/react-hooks-diagram-abc123.png',
     filePath: '/uploads/2024/11/react-hooks-diagram-abc123.png',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/react-hooks-diagram-abc123.png',
+      'https://cdn.educhain.cc/uploads/2024/11/react-hooks-diagram-abc123.png',
     fileSize: 245678,
     fileType: 'IMAGE',
     mimeType: 'image/png',
@@ -52,7 +52,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/spring-boot-architecture-def456.pdf',
     filePath: '/uploads/2024/11/spring-boot-architecture-def456.pdf',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/spring-boot-architecture-def456.pdf',
+      'https://cdn.educhain.cc/uploads/2024/11/spring-boot-architecture-def456.pdf',
     fileSize: 1234567,
     fileType: 'DOCUMENT',
     mimeType: 'application/pdf',
@@ -73,7 +73,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
     filePath: '/uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
+      'https://cdn.educhain.cc/uploads/2024/11/mysql-optimization-guide-ghi789.pdf',
     fileSize: 987654,
     fileType: 'DOCUMENT',
     mimeType: 'application/pdf',
@@ -94,7 +94,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/vue3-demo-video-jkl012.mp4',
     filePath: '/uploads/2024/11/vue3-demo-video-jkl012.mp4',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/vue3-demo-video-jkl012.mp4',
+      'https://cdn.educhain.cc/uploads/2024/11/vue3-demo-video-jkl012.mp4',
     fileSize: 15678900,
     fileType: 'VIDEO',
     mimeType: 'video/mp4',
@@ -115,7 +115,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/docker-compose-example-mno345.yml',
     filePath: '/uploads/2024/11/docker-compose-example-mno345.yml',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/docker-compose-example-mno345.yml',
+      'https://cdn.educhain.cc/uploads/2024/11/docker-compose-example-mno345.yml',
     fileSize: 2345,
     fileType: 'DOCUMENT',
     mimeType: 'text/yaml',
@@ -136,7 +136,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/python-ml-notebook-pqr678.ipynb',
     filePath: '/uploads/2024/11/python-ml-notebook-pqr678.ipynb',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/python-ml-notebook-pqr678.ipynb',
+      'https://cdn.educhain.cc/uploads/2024/11/python-ml-notebook-pqr678.ipynb',
     fileSize: 456789,
     fileType: 'DOCUMENT',
     mimeType: 'application/x-ipynb+json',
@@ -157,7 +157,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/flutter-app-screenshot-stu901.png',
     filePath: '/uploads/2024/11/flutter-app-screenshot-stu901.png',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/flutter-app-screenshot-stu901.png',
+      'https://cdn.educhain.cc/uploads/2024/11/flutter-app-screenshot-stu901.png',
     fileSize: 345678,
     fileType: 'IMAGE',
     mimeType: 'image/png',
@@ -178,7 +178,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/redis-config-vwx234.conf',
     filePath: '/uploads/2024/11/redis-config-vwx234.conf',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/redis-config-vwx234.conf',
+      'https://cdn.educhain.cc/uploads/2024/11/redis-config-vwx234.conf',
     fileSize: 3456,
     fileType: 'DOCUMENT',
     mimeType: 'text/plain',
@@ -199,7 +199,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/typescript-types-yza567.d.ts',
     filePath: '/uploads/2024/11/typescript-types-yza567.d.ts',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/typescript-types-yza567.d.ts',
+      'https://cdn.educhain.cc/uploads/2024/11/typescript-types-yza567.d.ts',
     fileSize: 12345,
     fileType: 'DOCUMENT',
     mimeType: 'text/plain',
@@ -220,7 +220,7 @@ export const mockFileUploads: FileUpload[] = [
     storedName: 'uploads/2024/11/k8s-deployment-bcd890.yaml',
     filePath: '/uploads/2024/11/k8s-deployment-bcd890.yaml',
     fileUrl:
-      'https://cdn.educhain.com/uploads/2024/11/k8s-deployment-bcd890.yaml',
+      'https://cdn.educhain.cc/uploads/2024/11/k8s-deployment-bcd890.yaml',
     fileSize: 4567,
     fileType: 'DOCUMENT',
     mimeType: 'text/yaml',

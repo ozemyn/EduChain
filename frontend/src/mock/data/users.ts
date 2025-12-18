@@ -9,7 +9,7 @@ export const mockUsers: User[] = [
   {
     id: 1,
     username: 'admin',
-    email: 'admin@educhain.com',
+    email: 'ozemyn@icloud.com',
     fullName: '系统管理员',
     avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
     school: 'EduChain 平台',

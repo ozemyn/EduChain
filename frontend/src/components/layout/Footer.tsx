@@ -185,7 +185,7 @@ const Footer: React.FC = () => {
       {
         icon: <MailOutlined />,
         label: '邮箱',
-        url: 'mailto:contact@educhain.com',
+        url: 'mailto:ozemyn@icloud.com',
       },
     ],
     []

@@ -492,7 +492,7 @@ Content-Type: application/json
     "block_index": 5,
     "pdf_url": "http://localhost:8000/api/blockchain/certificates/CERT-2025-123456/download",
     "qr_code_url": "http://localhost:8000/qrcodes/cert_CERT-2025-123456.png",
-    "verification_url": "https://educhain.com/blockchain/certificates/CERT-2025-123456/verify",
+    "verification_url": "https://educhain.cc/blockchain/certificates/CERT-2025-123456/verify",
     "created_at": "2025-01-15T10:35:00.000000"
 }
 ```

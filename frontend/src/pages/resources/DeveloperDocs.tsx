@@ -252,7 +252,7 @@ console.log('发布成功:', content);`}</pre>
               <code>/api/v1/auth/token</code>
             </div>
             <div className="code-block">
-              <pre>{`curl -X POST https://api.educhain.com/v1/auth/token \\
+              <pre>{`curl -X POST https://api.educhain.cc/v1/auth/token \\
   -H "Content-Type: application/json" \\
   -d '{
     "grant_type": "client_credentials",
@@ -383,7 +383,7 @@ npm install @educhain/js-sdk
 yarn add @educhain/js-sdk
 
 # 使用 CDN
-<script src="https://cdn.educhain.com/sdk/js/latest/educhain.min.js"></script>`}</pre>
+<script src="https://cdn.educhain.cc/sdk/js/latest/educhain.min.js"></script>`}</pre>
             </div>
 
             <Title level={3}>快速开始</Title>
@@ -394,7 +394,7 @@ yarn add @educhain/js-sdk
 const client = new EduChain({
   apiKey: 'your_api_key',
   apiSecret: 'your_api_secret',
-  baseURL: 'https://api.educhain.com/v1'
+  baseURL: 'https://api.educhain.cc/v1'
 });
 
 // 用户认证
@@ -466,7 +466,7 @@ pip install -e .`}</pre>
 client = EduChainClient(
     api_key='your_api_key',
     api_secret='your_api_secret',
-    base_url='https://api.educhain.com/v1'
+    base_url='https://api.educhain.cc/v1'
 )
 
 # 用户认证
@@ -537,7 +537,7 @@ import com.educhain.sdk.model.User;
 EduChainClient client = EduChainClient.builder()
     .apiKey("your_api_key")
     .apiSecret("your_api_secret")
-    .baseUrl("https://api.educhain.com/v1")
+    .baseUrl("https://api.educhain.cc/v1")
     .build();
 
 // 用户认证
@@ -936,7 +936,7 @@ asyncio.run(batch_process_content())`}</pre>
             <Space size="small" style={{ flexDirection: 'column' }}>
               <Text type="secondary">开发者社区：</Text>
               <Text>GitHub: github.com/educhain/sdk</Text>
-              <Text>技术支持：dev-support@educhain.com</Text>
+              <Text>技术支持：ozemyn@icloud.com</Text>
               <Text>文档更新：每周三发布</Text>
             </Space>
           </div>

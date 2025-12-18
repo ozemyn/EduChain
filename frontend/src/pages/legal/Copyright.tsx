@@ -193,7 +193,7 @@ const Copyright: React.FC = () => {
             </Paragraph>
             <Paragraph>
               <ul>
-                <li>版权投诉邮箱：copyright@educhain.com</li>
+                <li>版权投诉邮箱：ozemyn@icloud.com</li>
                 <li>客服电话：400-123-4567</li>
                 <li>通信地址：北京市海淀区中关村大街1号</li>
               </ul>

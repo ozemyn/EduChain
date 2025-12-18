@@ -32,7 +32,7 @@ class CertificateData:
 class CertificateGenerator:
     """证书生成器"""
     
-    def __init__(self, base_url: str = "https://educhain.com"):
+    def __init__(self, base_url: str = "https://educhain.cc"):
         """
         初始化证书生成器
         

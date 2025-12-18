@@ -189,7 +189,7 @@ const NotFound: React.FC = () => {
         <div className="error-footer animate-fade-in-up delay-500">
           <p className="footer-text">
             如果您认为这是一个错误，请
-            <a href="mailto:support@educhain.com" className="footer-link">
+            <a href="mailto:ozemyn@icloud.com" className="footer-link">
               联系我们
             </a>
           </p>

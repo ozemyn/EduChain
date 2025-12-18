@@ -205,7 +205,7 @@ const Disclaimer: React.FC = () => {
             </Paragraph>
             <Paragraph>
               <ul>
-                <li>邮箱：legal@educhain.com</li>
+                <li>邮箱：ozemyn@icloud.com</li>
                 <li>电话：400-123-4567</li>
                 <li>地址：北京市海淀区中关村大街1号</li>
               </ul>

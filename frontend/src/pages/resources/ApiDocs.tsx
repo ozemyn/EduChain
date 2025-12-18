@@ -431,8 +431,8 @@ const ApiDocs: React.FC = () => {
     "network": "ethereum_mainnet",
     "gas_used": 21000,
     "gas_price": "20000000000",
-    "certificate_url": "https://educhain.com/certificates/cert_abc123456",
-    "qr_code": "https://educhain.com/qr/cert_abc123456.png",
+    "certificate_url": "https://educhain.cc/certificates/cert_abc123456",
+    "qr_code": "https://educhain.cc/qr/cert_abc123456.png",
     "status": "pending",
     "estimated_confirmation_time": 180,
     "created_at": "2025-12-07T10:00:00Z"
@@ -482,9 +482,9 @@ const ApiDocs: React.FC = () => {
       "timestamp": "2025-12-07T10:00:00Z"
     },
     "certificate_type": "premium",
-    "certificate_url": "https://educhain.com/certificates/cert_abc123456",
-    "pdf_certificate": "https://educhain.com/certificates/cert_abc123456.pdf",
-    "qr_code": "https://educhain.com/qr/cert_abc123456.png",
+    "certificate_url": "https://educhain.cc/certificates/cert_abc123456",
+    "pdf_certificate": "https://educhain.cc/certificates/cert_abc123456.pdf",
+    "qr_code": "https://educhain.cc/qr/cert_abc123456.png",
     "verification": {
       "is_valid": true,
       "verified_at": "2025-12-07T16:30:00Z",
@@ -565,7 +565,7 @@ const ApiDocs: React.FC = () => {
       "author": "张三教授",
       "certified_at": "2025-12-07T10:00:00Z"
     },
-    "verification_report_url": "https://educhain.com/verification/verify_xyz789.pdf",
+    "verification_report_url": "https://educhain.cc/verification/verify_xyz789.pdf",
     "verified_at": "2025-12-07T16:30:00Z"
   }
 }`,
@@ -1209,7 +1209,7 @@ const ApiDocs: React.FC = () => {
     "title": "Vue.js 3.0 新特性详解",
     "slug": "vuejs-3-new-features",
     "status": "published",
-    "url": "https://educhain.com/content/1002",
+    "url": "https://educhain.cc/content/1002",
     "cover_image": "https://example.com/vue3-cover.jpg",
     "reading_time": 15,
     "blockchain_certified": false,
@@ -1560,7 +1560,7 @@ const ApiDocs: React.FC = () => {
                 <strong>API 基础信息</strong>
                 <div style={{ marginTop: 8 }}>
                   <p>
-                    <strong>Base URL:</strong> https://api.educhain.com/v1
+                    <strong>Base URL:</strong> https://api.educhain.cc/v1
                   </p>
                   <p>
                     <strong>认证方式:</strong> Bearer Token (JWT)

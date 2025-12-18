@@ -190,7 +190,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_001.pdf',
     qr_code_url: '/qrcodes/cert_001.png',
-    verification_url: 'https://educhain.com/verify/cert_001',
+    verification_url: 'https://educhain.cc/verify/cert_001',
     created_at: '2024-11-01T10:30:00Z',
   },
   {
@@ -203,7 +203,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_002.pdf',
     qr_code_url: '/qrcodes/cert_002.png',
-    verification_url: 'https://educhain.com/verify/cert_002',
+    verification_url: 'https://educhain.cc/verify/cert_002',
     created_at: '2024-11-02T09:45:00Z',
   },
   {
@@ -216,7 +216,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_003.pdf',
     qr_code_url: '/qrcodes/cert_003.png',
-    verification_url: 'https://educhain.com/verify/cert_003',
+    verification_url: 'https://educhain.cc/verify/cert_003',
     created_at: '2024-11-03T11:15:00Z',
   },
   {
@@ -229,7 +229,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_004.pdf',
     qr_code_url: '/qrcodes/cert_004.png',
-    verification_url: 'https://educhain.com/verify/cert_004',
+    verification_url: 'https://educhain.cc/verify/cert_004',
     created_at: '2024-11-04T13:30:00Z',
   },
   {
@@ -242,7 +242,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_005.pdf',
     qr_code_url: '/qrcodes/cert_005.png',
-    verification_url: 'https://educhain.com/verify/cert_005',
+    verification_url: 'https://educhain.cc/verify/cert_005',
     created_at: '2024-11-05T15:10:00Z',
   },
   {
@@ -255,7 +255,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_006.pdf',
     qr_code_url: '/qrcodes/cert_006.png',
-    verification_url: 'https://educhain.com/verify/cert_006',
+    verification_url: 'https://educhain.cc/verify/cert_006',
     created_at: '2024-11-06T09:00:00Z',
   },
   {
@@ -268,7 +268,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_007.pdf',
     qr_code_url: '/qrcodes/cert_007.png',
-    verification_url: 'https://educhain.com/verify/cert_007',
+    verification_url: 'https://educhain.cc/verify/cert_007',
     created_at: '2024-11-07T10:30:00Z',
   },
   {
@@ -281,7 +281,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_008.pdf',
     qr_code_url: '/qrcodes/cert_008.png',
-    verification_url: 'https://educhain.com/verify/cert_008',
+    verification_url: 'https://educhain.cc/verify/cert_008',
     created_at: '2024-11-08T12:45:00Z',
   },
   {
@@ -294,7 +294,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_009.pdf',
     qr_code_url: '/qrcodes/cert_009.png',
-    verification_url: 'https://educhain.com/verify/cert_009',
+    verification_url: 'https://educhain.cc/verify/cert_009',
     created_at: '2024-11-09T14:15:00Z',
   },
   {
@@ -307,7 +307,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_010.pdf',
     qr_code_url: '/qrcodes/cert_010.png',
-    verification_url: 'https://educhain.com/verify/cert_010',
+    verification_url: 'https://educhain.cc/verify/cert_010',
     created_at: '2024-11-10T09:15:00Z',
   },
   {
@@ -320,7 +320,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_011.pdf',
     qr_code_url: '/qrcodes/cert_011.png',
-    verification_url: 'https://educhain.com/verify/cert_011',
+    verification_url: 'https://educhain.cc/verify/cert_011',
     created_at: '2024-11-11T10:45:00Z',
   },
   {
@@ -333,7 +333,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_012.pdf',
     qr_code_url: '/qrcodes/cert_012.png',
-    verification_url: 'https://educhain.com/verify/cert_012',
+    verification_url: 'https://educhain.cc/verify/cert_012',
     created_at: '2024-11-12T12:00:00Z',
   },
   {
@@ -346,7 +346,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_013.pdf',
     qr_code_url: '/qrcodes/cert_013.png',
-    verification_url: 'https://educhain.com/verify/cert_013',
+    verification_url: 'https://educhain.cc/verify/cert_013',
     created_at: '2024-11-13T13:15:00Z',
   },
   {
@@ -359,7 +359,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_014.pdf',
     qr_code_url: '/qrcodes/cert_014.png',
-    verification_url: 'https://educhain.com/verify/cert_014',
+    verification_url: 'https://educhain.cc/verify/cert_014',
     created_at: '2024-11-14T14:30:00Z',
   },
   {
@@ -372,7 +372,7 @@ export const mockCertificates: CertificateInfo[] = [
     has_certificate: true,
     pdf_url: '/certificates/cert_015.pdf',
     qr_code_url: '/qrcodes/cert_015.png',
-    verification_url: 'https://educhain.com/verify/cert_015',
+    verification_url: 'https://educhain.cc/verify/cert_015',
     created_at: '2024-11-15T15:45:00Z',
   },
 ];
@@ -399,7 +399,7 @@ const ensureAllCertificates = () => {
         has_certificate: true,
         pdf_url: `/certificates/${certId}.pdf`,
         qr_code_url: `/qrcodes/${certId}.png`,
-        verification_url: `https://educhain.com/verify/${certId}`,
+        verification_url: `https://educhain.cc/verify/${certId}`,
         created_at: new Date(
           Date.now() - (maxKnowledgeId - i) * 24 * 60 * 60 * 1000
         ).toISOString(),
