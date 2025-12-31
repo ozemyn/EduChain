@@ -177,8 +177,7 @@ export const mockFileUploads: FileUpload[] = [
     originalName: 'redis-config.conf',
     storedName: 'uploads/2024/11/redis-config-vwx234.conf',
     filePath: '/uploads/2024/11/redis-config-vwx234.conf',
-    fileUrl:
-      'https://cdn.educhain.cc/uploads/2024/11/redis-config-vwx234.conf',
+    fileUrl: 'https://cdn.educhain.cc/uploads/2024/11/redis-config-vwx234.conf',
     fileSize: 3456,
     fileType: 'DOCUMENT',
     mimeType: 'text/plain',

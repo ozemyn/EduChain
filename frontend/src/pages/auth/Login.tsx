@@ -110,7 +110,9 @@ const Login: React.FC = () => {
             <h1 className="logo-text gradient-text">EduChain</h1>
           </div>
 
-          <h2 className="brand-title">基于区块链存证的教育知识共享与智能检索系统</h2>
+          <h2 className="brand-title">
+            基于区块链存证的教育知识共享与智能检索系统
+          </h2>
           <p className="brand-description">
             连接学习者与教育者，构建知识分享的桥梁
           </p>
