@@ -1,6 +1,10 @@
 # Cloudflare Pages 重定向配置
 # 用于 SPA 路由支持
 
+# 静态 HTML 页面 - 直接访问，不走 SPA 路由
+/ljc    /ljc/index.html   200
+/ljc/*  /ljc/:splat       200
+
 # SPA 路由重定向 - 所有非文件请求都重定向到 index.html
 /*    /index.html   200
 
