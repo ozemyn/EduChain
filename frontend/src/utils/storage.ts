@@ -20,7 +20,15 @@ export class Storage {
   static getLocal<T = unknown>(key: string): T | null {
     try {
       const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
+      if (!item) return null;
+      
+      // 尝试解析JSON，如果失败则返回原始字符串
+      try {
+        return JSON.parse(item);
+      } catch {
+        // 如果不是有效的JSON，返回原始字符串
+        return item as T;
+      }
     } catch (error) {
       console.error('Error getting localStorage:', error);
       return null;
@@ -67,7 +75,15 @@ export class Storage {
   static getSession<T = unknown>(key: string): T | null {
     try {
       const item = sessionStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
+      if (!item) return null;
+      
+      // 尝试解析JSON，如果失败则返回原始字符串
+      try {
+        return JSON.parse(item);
+      } catch {
+        // 如果不是有效的JSON，返回原始字符串
+        return item as T;
+      }
     } catch (error) {
       console.error('Error getting sessionStorage:', error);
       return null;
