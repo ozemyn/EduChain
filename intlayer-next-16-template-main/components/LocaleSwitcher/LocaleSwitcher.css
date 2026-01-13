@@ -1,0 +1,221 @@
+/* ===================================
+   语言选择器样式
+   ================================== */
+
+.locale-switcher {
+  position: relative;
+}
+
+.locale-switcher-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
+  color: rgb(var(--color-text-primary));
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.dark .locale-switcher-button {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.locale-switcher-button:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark .locale-switcher-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.locale-switcher-button:active {
+  transform: translateY(0);
+}
+
+.locale-switcher-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: transform var(--transition-fast) ease;
+  color: rgb(var(--color-text-secondary));
+}
+
+.locale-switcher-button[aria-expanded="true"] .locale-switcher-icon {
+  transform: rotate(180deg);
+}
+
+/* 下拉菜单 */
+.locale-dropdown {
+  position: absolute;
+  top: calc(100% + var(--spacing-xs));
+  right: 0;
+  min-width: 240px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(var(--blur-lg));
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: var(--z-dropdown);
+  overflow: hidden;
+  animation: slideInFromTop var(--transition-base) ease-out;
+}
+
+.dark .locale-dropdown {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* 搜索框 */
+.locale-search-wrapper {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .locale-search-wrapper {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.locale-search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  color: rgb(var(--color-text-primary));
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast) ease;
+}
+
+.dark .locale-search-input {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.locale-search-input:focus {
+  outline: none;
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgb(var(--color-accent));
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+}
+
+.dark .locale-search-input:focus {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.locale-search-input::placeholder {
+  color: rgb(var(--color-text-tertiary));
+}
+
+/* 语言列表 */
+.locale-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: var(--spacing-xs);
+}
+
+.locale-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.locale-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.locale-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.dark .locale-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.locale-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark .locale-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 语言项 */
+.locale-item {
+  list-style: none;
+}
+
+.locale-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  color: rgb(var(--color-text-primary));
+  text-decoration: none;
+  transition: all var(--transition-fast) ease;
+  cursor: pointer;
+}
+
+.locale-link:hover {
+  background: rgba(236, 72, 153, 0.1);
+}
+
+.locale-link.active {
+  background: rgba(236, 72, 153, 0.15);
+  font-weight: 600;
+}
+
+.locale-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.locale-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgb(var(--color-text-primary));
+}
+
+.locale-native-name {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-secondary));
+}
+
+.locale-code {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-tertiary));
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .locale-dropdown {
+    min-width: 200px;
+  }
+}
+
+/* 性能优化 */
+.locale-switcher-button,
+.locale-dropdown,
+.locale-link {
+  will-change: transform;
+  transform: translateZ(0);
+}

@@ -13,7 +13,7 @@ export const mockCategories: Category[] = [
     description: '前端相关技术',
     parentId: undefined,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 156,
   },
   {
@@ -22,7 +22,7 @@ export const mockCategories: Category[] = [
     description: '后端相关技术',
     parentId: undefined,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 189,
   },
   {
@@ -31,7 +31,7 @@ export const mockCategories: Category[] = [
     description: '数据库相关技术',
     parentId: undefined,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 98,
   },
   {
@@ -40,7 +40,7 @@ export const mockCategories: Category[] = [
     description: '移动应用开发',
     parentId: undefined,
     sortOrder: 4,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 87,
   },
   {
@@ -49,7 +49,7 @@ export const mockCategories: Category[] = [
     description: 'AI 和机器学习',
     parentId: undefined,
     sortOrder: 5,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 134,
   },
   {
@@ -58,7 +58,7 @@ export const mockCategories: Category[] = [
     description: '云服务和容器技术',
     parentId: undefined,
     sortOrder: 6,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 76,
   },
   {
@@ -67,7 +67,7 @@ export const mockCategories: Category[] = [
     description: '信息安全和网络安全',
     parentId: undefined,
     sortOrder: 7,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 65,
   },
   {
@@ -76,7 +76,7 @@ export const mockCategories: Category[] = [
     description: '区块链技术和应用',
     parentId: undefined,
     sortOrder: 8,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 43,
   },
 
@@ -87,7 +87,7 @@ export const mockCategories: Category[] = [
     description: 'React 框架',
     parentId: 1,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 58,
   },
   {
@@ -96,7 +96,7 @@ export const mockCategories: Category[] = [
     description: 'Vue 框架',
     parentId: 1,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 52,
   },
   {
@@ -105,7 +105,7 @@ export const mockCategories: Category[] = [
     description: 'Angular 框架',
     parentId: 1,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 28,
   },
   {
@@ -114,7 +114,7 @@ export const mockCategories: Category[] = [
     description: 'TypeScript 语言',
     parentId: 1,
     sortOrder: 4,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 18,
   },
 
@@ -125,7 +125,7 @@ export const mockCategories: Category[] = [
     description: 'Spring Boot 框架',
     parentId: 2,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 67,
   },
   {
@@ -134,7 +134,7 @@ export const mockCategories: Category[] = [
     description: 'Node.js 运行时',
     parentId: 2,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 54,
   },
   {
@@ -143,7 +143,7 @@ export const mockCategories: Category[] = [
     description: 'Django 框架',
     parentId: 2,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 38,
   },
   {
@@ -152,7 +152,7 @@ export const mockCategories: Category[] = [
     description: 'Go 语言',
     parentId: 2,
     sortOrder: 4,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 30,
   },
 
@@ -163,7 +163,7 @@ export const mockCategories: Category[] = [
     description: 'MySQL 数据库',
     parentId: 3,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 42,
   },
   {
@@ -172,7 +172,7 @@ export const mockCategories: Category[] = [
     description: 'Redis 缓存',
     parentId: 3,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 35,
   },
   {
@@ -181,7 +181,7 @@ export const mockCategories: Category[] = [
     description: 'MongoDB 文档数据库',
     parentId: 3,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 21,
   },
 
@@ -192,7 +192,7 @@ export const mockCategories: Category[] = [
     description: 'React Native 框架',
     parentId: 4,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 32,
   },
   {
@@ -201,7 +201,7 @@ export const mockCategories: Category[] = [
     description: 'Flutter 框架',
     parentId: 4,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 38,
   },
   {
@@ -210,7 +210,7 @@ export const mockCategories: Category[] = [
     description: 'iOS 原生开发',
     parentId: 4,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 17,
   },
 
@@ -221,7 +221,7 @@ export const mockCategories: Category[] = [
     description: '机器学习算法和应用',
     parentId: 5,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 56,
   },
   {
@@ -230,7 +230,7 @@ export const mockCategories: Category[] = [
     description: '深度学习和神经网络',
     parentId: 5,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 48,
   },
   {
@@ -239,7 +239,7 @@ export const mockCategories: Category[] = [
     description: 'NLP 技术',
     parentId: 5,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 30,
   },
 
@@ -250,7 +250,7 @@ export const mockCategories: Category[] = [
     description: 'Docker 容器技术',
     parentId: 6,
     sortOrder: 1,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 38,
   },
   {
@@ -259,7 +259,7 @@ export const mockCategories: Category[] = [
     description: 'Kubernetes 容器编排',
     parentId: 6,
     sortOrder: 2,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 28,
   },
   {
@@ -268,7 +268,7 @@ export const mockCategories: Category[] = [
     description: 'Amazon Web Services',
     parentId: 6,
     sortOrder: 3,
-    createdAt: '2024-01-01T00:00:00Z',
+    createdAt: '2025-12-01T00:00:00Z',
     knowledgeCount: 10,
   },
 ];

@@ -75,7 +75,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-11-01T10:30:00Z',
+    createdAt: '2025-12-01T10:30:00Z',
   },
   {
     id: 2,
@@ -92,7 +92,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-11-15T14:00:00Z',
+    createdAt: '2025-12-15T14:00:00Z',
   },
   {
     id: 3,
@@ -107,7 +107,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-11-20T09:30:00Z',
+    createdAt: '2025-12-20T09:30:00Z',
   },
   {
     id: 4,
@@ -122,7 +122,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-11-25T11:00:00Z',
+    createdAt: '2025-12-25T11:00:00Z',
   },
   {
     id: 5,
@@ -135,7 +135,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-12-01T02:00:00Z',
+    createdAt: '2026-01-01T02:00:00Z',
   },
   {
     id: 6,
@@ -150,7 +150,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-12-02T15:30:00Z',
+    createdAt: '2026-01-02T15:30:00Z',
   },
   {
     id: 7,
@@ -163,7 +163,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-12-03T10:00:00Z',
+    createdAt: '2026-01-03T10:00:00Z',
   },
   {
     id: 8,
@@ -178,7 +178,7 @@ export const mockAdminLogs: AdminLog[] = [
     ipAddress: '192.168.1.100',
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     result: 'SUCCESS',
-    createdAt: '2024-12-04T14:20:00Z',
+    createdAt: '2026-01-04T14:20:00Z',
   },
 ];
 
@@ -198,7 +198,7 @@ export const mockSystemLogs: SystemLog[] = [
     requestMethod: 'POST',
     responseStatus: 200,
     executionTime: 245,
-    createdAt: '2024-12-05T09:00:00Z',
+    createdAt: '2026-01-05T09:00:00Z',
   },
   {
     id: 2,
@@ -214,7 +214,7 @@ export const mockSystemLogs: SystemLog[] = [
     requestMethod: 'POST',
     responseStatus: 201,
     executionTime: 567,
-    createdAt: '2024-12-05T09:15:00Z',
+    createdAt: '2026-01-05T09:15:00Z',
   },
   {
     id: 3,
@@ -231,7 +231,7 @@ export const mockSystemLogs: SystemLog[] = [
     responseStatus: 413,
     executionTime: 123,
     exception: 'FileSizeLimitExceededException: Maximum upload size exceeded',
-    createdAt: '2024-12-05T09:30:00Z',
+    createdAt: '2026-01-05T09:30:00Z',
   },
   {
     id: 4,
@@ -247,7 +247,7 @@ export const mockSystemLogs: SystemLog[] = [
     requestMethod: 'POST',
     responseStatus: 401,
     executionTime: 189,
-    createdAt: '2024-12-05T09:45:00Z',
+    createdAt: '2026-01-05T09:45:00Z',
   },
   {
     id: 5,
@@ -259,7 +259,7 @@ export const mockSystemLogs: SystemLog[] = [
     requestMethod: 'GET',
     responseStatus: 200,
     executionTime: 3456,
-    createdAt: '2024-12-05T10:00:00Z',
+    createdAt: '2026-01-05T10:00:00Z',
   },
   {
     id: 6,
@@ -267,7 +267,7 @@ export const mockSystemLogs: SystemLog[] = [
     level: 'INFO',
     operation: '系统启动',
     description: '应用服务器启动成功',
-    createdAt: '2024-12-05T00:00:00Z',
+    createdAt: '2026-01-05T00:00:00Z',
   },
   {
     id: 7,
@@ -283,7 +283,7 @@ export const mockSystemLogs: SystemLog[] = [
     requestMethod: 'POST',
     responseStatus: 200,
     executionTime: 234,
-    createdAt: '2024-12-05T10:15:00Z',
+    createdAt: '2026-01-05T10:15:00Z',
   },
   {
     id: 8,
@@ -292,7 +292,7 @@ export const mockSystemLogs: SystemLog[] = [
     operation: '数据库连接失败',
     description: '无法连接到数据库服务器',
     exception: 'SQLException: Connection timeout',
-    createdAt: '2024-12-05T10:30:00Z',
+    createdAt: '2026-01-05T10:30:00Z',
   },
   {
     id: 9,
@@ -305,7 +305,7 @@ export const mockSystemLogs: SystemLog[] = [
     requestUrl: '/api/knowledge?id=1 OR 1=1',
     requestMethod: 'GET',
     responseStatus: 400,
-    createdAt: '2024-12-05T10:45:00Z',
+    createdAt: '2026-01-05T10:45:00Z',
   },
   {
     id: 10,
@@ -314,7 +314,7 @@ export const mockSystemLogs: SystemLog[] = [
     operation: '缓存命中',
     description: 'Redis 缓存命中率: 95.6%',
     executionTime: 12,
-    createdAt: '2024-12-05T11:00:00Z',
+    createdAt: '2026-01-05T11:00:00Z',
   },
 ];
 

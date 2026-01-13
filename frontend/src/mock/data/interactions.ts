@@ -25,6 +25,10 @@ export interface InteractionStats {
 export const mockInteractions: UserInteraction[] = [];
 let interactionId = 1;
 
+// 使用固定的基准时间：2025-12-01 到 2026-02-05
+const baseTimestamp = new Date('2025-12-01T00:00:00Z').getTime();
+const timeRange = 66 * 24 * 60 * 60 * 1000; // 66天的毫秒数
+
 // 为每个知识条目生成随机互动数据
 for (let knowledgeId = 1; knowledgeId <= 30; knowledgeId++) {
   // 生成点赞数据
@@ -37,7 +41,7 @@ for (let knowledgeId = 1; knowledgeId <= 30; knowledgeId++) {
       interactionType: 'LIKE',
       ipAddress: `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
       createdAt: new Date(
-        Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+        baseTimestamp + Math.random() * timeRange
       ).toISOString(),
     });
   }
@@ -52,7 +56,7 @@ for (let knowledgeId = 1; knowledgeId <= 30; knowledgeId++) {
       interactionType: 'FAVORITE',
       ipAddress: `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
       createdAt: new Date(
-        Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+        baseTimestamp + Math.random() * timeRange
       ).toISOString(),
     });
   }
@@ -67,7 +71,7 @@ for (let knowledgeId = 1; knowledgeId <= 30; knowledgeId++) {
       interactionType: 'VIEW',
       ipAddress: `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
       createdAt: new Date(
-        Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+        baseTimestamp + Math.random() * timeRange
       ).toISOString(),
     });
   }

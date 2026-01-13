@@ -1,0 +1,44 @@
+{
+  "name": "intlayer-next-16",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "intlayer watch --with 'next dev'",
+    "dev:mock": "cross-env NEXT_PUBLIC_USE_MOCK=true intlayer watch --with 'next dev'",
+    "dev:webpack": "next dev --webpack",
+    "start:editor": "intlayer-editor start --with 'next dev'",
+    "editor": "intlayer-editor start",
+    "build": "next build",
+    "build:webpack": "next build --webpack",
+    "start": "next start",
+    "start:all": "concurrently \"npm run start\" \"npm run start:editor\"",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "fuse.js": "7.1.0",
+    "intlayer": "latest",
+    "next": "^16.1.1",
+    "next-intlayer": "latest",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@intlayer/swc": "latest",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.10",
+    "intlayer-editor": "latest",
+    "msw": "^2.12.7",
+    "tailwindcss": "^4",
+    "typescript": "^5.9.3"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

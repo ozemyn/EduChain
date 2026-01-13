@@ -14,7 +14,7 @@ export const mockNotifications: Notification[] = [
     content: '李四 赞了你的文章《React Hooks 完全指南》',
     relatedId: 1,
     isRead: false,
-    createdAt: '2024-12-05T09:30:00Z',
+    createdAt: '2026-02-05T09:30:00Z',
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ export const mockNotifications: Notification[] = [
     content: '王五 评论了你的文章《React Hooks 完全指南》',
     relatedId: 1,
     isRead: false,
-    createdAt: '2024-12-05T09:15:00Z',
+    createdAt: '2026-02-05T09:15:00Z',
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ export const mockNotifications: Notification[] = [
     content: '孙七 关注了你',
     relatedId: 6,
     isRead: false,
-    createdAt: '2024-12-05T08:45:00Z',
+    createdAt: '2026-02-05T08:45:00Z',
   },
   {
     id: 4,
@@ -44,7 +44,7 @@ export const mockNotifications: Notification[] = [
     content: '你的文章《React Hooks 完全指南》已通过审核',
     relatedId: 1,
     isRead: true,
-    createdAt: '2024-12-04T18:00:00Z',
+    createdAt: '2026-02-04T18:00:00Z',
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ export const mockNotifications: Notification[] = [
     content: '张三 赞了你的文章《MySQL 性能优化技巧》',
     relatedId: 3,
     isRead: false,
-    createdAt: '2024-12-05T08:30:00Z',
+    createdAt: '2026-02-05T08:30:00Z',
   },
   {
     id: 6,
@@ -64,7 +64,7 @@ export const mockNotifications: Notification[] = [
     content: '李四二 评论了你的文章《MySQL 性能优化技巧》',
     relatedId: 3,
     isRead: false,
-    createdAt: '2024-12-05T07:50:00Z',
+    createdAt: '2026-02-05T07:50:00Z',
   },
   {
     id: 7,
@@ -74,7 +74,7 @@ export const mockNotifications: Notification[] = [
     content: '赵六 赞了你的文章《Vue 3 Composition API 深入理解》',
     relatedId: 4,
     isRead: true,
-    createdAt: '2024-12-04T20:00:00Z',
+    createdAt: '2026-02-04T20:00:00Z',
   },
   {
     id: 8,
@@ -84,7 +84,7 @@ export const mockNotifications: Notification[] = [
     content: '周八 关注了你',
     relatedId: 7,
     isRead: true,
-    createdAt: '2024-12-04T19:30:00Z',
+    createdAt: '2026-02-04T19:30:00Z',
   },
   {
     id: 9,
@@ -94,7 +94,7 @@ export const mockNotifications: Notification[] = [
     content: '陈一 评论了你的文章《Spring Boot 微服务架构实践》',
     relatedId: 2,
     isRead: false,
-    createdAt: '2024-12-05T07:00:00Z',
+    createdAt: '2026-02-05T07:00:00Z',
   },
   {
     id: 10,
@@ -104,7 +104,7 @@ export const mockNotifications: Notification[] = [
     content: '吴九 赞了你的文章《Spring Boot 微服务架构实践》',
     relatedId: 2,
     isRead: false,
-    createdAt: '2024-12-05T06:30:00Z',
+    createdAt: '2026-02-05T06:30:00Z',
   },
   {
     id: 11,
@@ -113,7 +113,7 @@ export const mockNotifications: Notification[] = [
     title: '系统通知',
     content: '你的账号已升级到 6 级，解锁更多功能',
     isRead: true,
-    createdAt: '2024-12-04T15:00:00Z',
+    createdAt: '2026-02-04T15:00:00Z',
   },
   {
     id: 12,
@@ -123,7 +123,7 @@ export const mockNotifications: Notification[] = [
     content: '高六 回复了你的评论',
     relatedId: 12,
     isRead: false,
-    createdAt: '2024-12-05T06:00:00Z',
+    createdAt: '2026-02-05T06:00:00Z',
   },
   {
     id: 13,
@@ -133,7 +133,7 @@ export const mockNotifications: Notification[] = [
     content: '郑十 赞了你的评论',
     relatedId: 6,
     isRead: false,
-    createdAt: '2024-12-05T05:30:00Z',
+    createdAt: '2026-02-05T05:30:00Z',
   },
   {
     id: 14,
@@ -143,7 +143,7 @@ export const mockNotifications: Notification[] = [
     content: '王五 关注了你',
     relatedId: 4,
     isRead: true,
-    createdAt: '2024-12-04T14:00:00Z',
+    createdAt: '2026-02-04T14:00:00Z',
   },
   {
     id: 15,
@@ -153,7 +153,7 @@ export const mockNotifications: Notification[] = [
     content: '吴六 评论了你的文章《Docker 容器化部署完整教程》',
     relatedId: 5,
     isRead: false,
-    createdAt: '2024-12-05T05:00:00Z',
+    createdAt: '2026-02-05T05:00:00Z',
   },
   {
     id: 16,
@@ -163,7 +163,7 @@ export const mockNotifications: Notification[] = [
     content: '陈一 赞了你的文章《Kubernetes 集群管理指南》',
     relatedId: 10,
     isRead: false,
-    createdAt: '2024-12-05T04:30:00Z',
+    createdAt: '2026-02-05T04:30:00Z',
   },
   {
     id: 17,
@@ -172,7 +172,7 @@ export const mockNotifications: Notification[] = [
     title: '系统通知',
     content: '平台将于明天凌晨 2:00-4:00 进行系统维护',
     isRead: true,
-    createdAt: '2024-12-04T12:00:00Z',
+    createdAt: '2026-02-04T12:00:00Z',
   },
   {
     id: 18,
@@ -182,7 +182,7 @@ export const mockNotifications: Notification[] = [
     content: '褚一 评论了你的文章《Python 机器学习入门》',
     relatedId: 6,
     isRead: false,
-    createdAt: '2024-12-05T04:00:00Z',
+    createdAt: '2026-02-05T04:00:00Z',
   },
   {
     id: 19,
@@ -192,7 +192,7 @@ export const mockNotifications: Notification[] = [
     content: '陈十 赞了你的文章《深度学习神经网络入门》',
     relatedId: 12,
     isRead: false,
-    createdAt: '2024-12-05T03:30:00Z',
+    createdAt: '2026-02-05T03:30:00Z',
   },
   {
     id: 20,
@@ -202,7 +202,7 @@ export const mockNotifications: Notification[] = [
     content: '冯九 关注了你',
     relatedId: 28,
     isRead: true,
-    createdAt: '2024-12-04T10:00:00Z',
+    createdAt: '2026-02-04T10:00:00Z',
   },
   {
     id: 21,
@@ -212,7 +212,7 @@ export const mockNotifications: Notification[] = [
     content: '郭七 赞了你的文章《React Hooks 完全指南》',
     relatedId: 1,
     isRead: true,
-    createdAt: '2024-12-03T22:00:00Z',
+    createdAt: '2026-02-03T22:00:00Z',
   },
   {
     id: 22,
@@ -222,7 +222,7 @@ export const mockNotifications: Notification[] = [
     content: '谭八 评论了你的文章《MySQL 性能优化技巧》',
     relatedId: 3,
     isRead: true,
-    createdAt: '2024-12-03T20:00:00Z',
+    createdAt: '2026-02-03T20:00:00Z',
   },
   {
     id: 23,
@@ -231,7 +231,7 @@ export const mockNotifications: Notification[] = [
     title: '成就解锁',
     content: '恭喜你解锁成就：知识分享者（发布 10 篇文章）',
     isRead: true,
-    createdAt: '2024-12-03T18:00:00Z',
+    createdAt: '2026-02-03T18:00:00Z',
   },
   {
     id: 24,
@@ -241,7 +241,7 @@ export const mockNotifications: Notification[] = [
     content: '曹九 关注了你',
     relatedId: 18,
     isRead: true,
-    createdAt: '2024-12-03T16:00:00Z',
+    createdAt: '2026-02-03T16:00:00Z',
   },
   {
     id: 25,
@@ -251,7 +251,7 @@ export const mockNotifications: Notification[] = [
     content: '严十 赞了你的评论',
     relatedId: 22,
     isRead: true,
-    createdAt: '2024-12-03T14:00:00Z',
+    createdAt: '2026-02-03T14:00:00Z',
   },
   {
     id: 26,
@@ -261,7 +261,7 @@ export const mockNotifications: Notification[] = [
     content: '陆一 评论了你的文章《Django REST Framework 实战》',
     relatedId: 17,
     isRead: true,
-    createdAt: '2024-12-03T12:00:00Z',
+    createdAt: '2026-02-03T12:00:00Z',
   },
   {
     id: 27,
@@ -270,7 +270,7 @@ export const mockNotifications: Notification[] = [
     title: '系统通知',
     content: '你的文章《算法竞赛入门》获得了本周热门推荐',
     isRead: true,
-    createdAt: '2024-12-03T10:00:00Z',
+    createdAt: '2026-02-03T10:00:00Z',
   },
   {
     id: 28,
@@ -280,7 +280,7 @@ export const mockNotifications: Notification[] = [
     content: '钱二 赞了你的文章《Flutter 跨平台开发实战》',
     relatedId: 7,
     isRead: true,
-    createdAt: '2024-12-03T08:00:00Z',
+    createdAt: '2026-02-03T08:00:00Z',
   },
   {
     id: 29,
@@ -290,7 +290,7 @@ export const mockNotifications: Notification[] = [
     content: '孙三 关注了你',
     relatedId: 22,
     isRead: true,
-    createdAt: '2024-12-02T22:00:00Z',
+    createdAt: '2026-02-02T22:00:00Z',
   },
   {
     id: 30,
@@ -300,7 +300,7 @@ export const mockNotifications: Notification[] = [
     content: '李四二 评论了你的文章《网络安全渗透测试基础》',
     relatedId: 22,
     isRead: true,
-    createdAt: '2024-12-02T20:00:00Z',
+    createdAt: '2026-02-02T20:00:00Z',
   },
   {
     id: 31,
@@ -310,7 +310,7 @@ export const mockNotifications: Notification[] = [
     content: '王八 赞了你的文章《区块链智能合约开发》',
     relatedId: 20,
     isRead: false,
-    createdAt: '2024-12-05T03:00:00Z',
+    createdAt: '2026-02-05T03:00:00Z',
   },
   {
     id: 32,
@@ -320,7 +320,7 @@ export const mockNotifications: Notification[] = [
     content: '冯九 评论了你的文章《Unity 游戏开发基础》',
     relatedId: 28,
     isRead: false,
-    createdAt: '2024-12-05T02:30:00Z',
+    createdAt: '2026-02-05T02:30:00Z',
   },
   {
     id: 33,
@@ -330,7 +330,7 @@ export const mockNotifications: Notification[] = [
     content: '你的文章《Redis 缓存设计模式》已被收录到精选专栏',
     relatedId: 8,
     isRead: false,
-    createdAt: '2024-12-05T02:00:00Z',
+    createdAt: '2026-02-05T02:00:00Z',
   },
   {
     id: 34,
@@ -340,7 +340,7 @@ export const mockNotifications: Notification[] = [
     content: '周五 关注了你',
     relatedId: 24,
     isRead: false,
-    createdAt: '2024-12-05T01:30:00Z',
+    createdAt: '2026-02-05T01:30:00Z',
   },
   {
     id: 35,
@@ -350,6 +350,6 @@ export const mockNotifications: Notification[] = [
     content: '高六 赞了你的文章《自然语言处理 NLP 基础》',
     relatedId: 19,
     isRead: false,
-    createdAt: '2024-12-05T01:00:00Z',
+    createdAt: '2026-02-05T01:00:00Z',
   },
 ];

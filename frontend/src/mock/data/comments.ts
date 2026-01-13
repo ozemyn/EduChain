@@ -15,7 +15,7 @@ export const mockComments: Comment[] = [
     content:
       '这篇 React Hooks 教程写得太好了！特别是 useEffect 的部分，解释得很清楚。',
     status: 1,
-    createdAt: '2024-11-01T11:30:00Z',
+    createdAt: '2025-12-01T11:30:00Z',
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[3],
     content: '能否补充一下自定义 Hooks 的内容？我觉得这部分也很重要。',
     status: 1,
-    createdAt: '2024-11-01T14:20:00Z',
+    createdAt: '2025-12-01T14:20:00Z',
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ export const mockComments: Comment[] = [
     parentId: 2,
     content: '好的，我会在下一版本中补充自定义 Hooks 的内容，感谢建议！',
     status: 1,
-    createdAt: '2024-11-01T15:00:00Z',
+    createdAt: '2025-12-01T15:00:00Z',
   },
   {
     id: 4,
@@ -44,7 +44,7 @@ export const mockComments: Comment[] = [
     content:
       '微服务架构确实是现在的趋势，但是对于小团队来说，维护成本会不会太高？',
     status: 1,
-    createdAt: '2024-11-02T10:15:00Z',
+    createdAt: '2025-12-02T10:15:00Z',
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ export const mockComments: Comment[] = [
     parentId: 4,
     content: '确实，小团队建议先从单体应用开始，等业务复杂度上来再考虑微服务。',
     status: 1,
-    createdAt: '2024-11-02T11:00:00Z',
+    createdAt: '2025-12-02T11:00:00Z',
   },
   {
     id: 6,
@@ -64,7 +64,7 @@ export const mockComments: Comment[] = [
     content:
       'MySQL 索引优化这块讲得很实用，已经在项目中应用了，查询速度提升明显！',
     status: 1,
-    createdAt: '2024-11-03T12:00:00Z',
+    createdAt: '2025-12-03T12:00:00Z',
   },
   {
     id: 7,
@@ -73,7 +73,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[22],
     content: '建议补充一下联合索引的最左前缀原则，这个很多人容易搞混。',
     status: 1,
-    createdAt: '2024-11-03T13:30:00Z',
+    createdAt: '2025-12-03T13:30:00Z',
   },
   {
     id: 8,
@@ -83,7 +83,7 @@ export const mockComments: Comment[] = [
     content:
       'Vue 3 的 Composition API 确实比 Options API 更灵活，代码复用性更好。',
     status: 1,
-    createdAt: '2024-11-04T14:00:00Z',
+    createdAt: '2025-12-04T14:00:00Z',
   },
   {
     id: 9,
@@ -92,7 +92,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[11],
     content: '从 Vue 2 迁移到 Vue 3 需要注意哪些问题？',
     status: 1,
-    createdAt: '2024-11-04T15:20:00Z',
+    createdAt: '2025-12-04T15:20:00Z',
   },
   {
     id: 10,
@@ -101,7 +101,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[24],
     content: 'Docker 真的是开发利器，再也不用担心"在我机器上能跑"的问题了。',
     status: 1,
-    createdAt: '2024-11-05T16:00:00Z',
+    createdAt: '2025-12-05T16:00:00Z',
   },
   {
     id: 11,
@@ -111,7 +111,7 @@ export const mockComments: Comment[] = [
     parentId: 10,
     content: '是的，Docker 解决了环境一致性的问题，配合 CI/CD 使用效果更好。',
     status: 1,
-    createdAt: '2024-11-05T16:30:00Z',
+    createdAt: '2025-12-05T16:30:00Z',
   },
   {
     id: 12,
@@ -120,7 +120,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[6],
     content: 'Python 机器学习入门推荐先学哪个库？',
     status: 1,
-    createdAt: '2024-11-06T09:30:00Z',
+    createdAt: '2025-12-06T09:30:00Z',
   },
   {
     id: 13,
@@ -131,7 +131,7 @@ export const mockComments: Comment[] = [
     content:
       '建议先学 NumPy 和 Pandas，打好数据处理的基础，然后再学 Scikit-learn。',
     status: 1,
-    createdAt: '2024-11-06T10:00:00Z',
+    createdAt: '2025-12-06T10:00:00Z',
   },
   {
     id: 14,
@@ -140,7 +140,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[26],
     content: 'Flutter 的热重载功能真的太方便了，开发效率提升很多。',
     status: 1,
-    createdAt: '2024-11-07T11:00:00Z',
+    createdAt: '2025-12-07T11:00:00Z',
   },
   {
     id: 15,
@@ -150,7 +150,7 @@ export const mockComments: Comment[] = [
     parentId: 14,
     content: '是的，而且 Flutter 的性能也很不错，接近原生应用。',
     status: 1,
-    createdAt: '2024-11-07T11:30:00Z',
+    createdAt: '2025-12-07T11:30:00Z',
   },
   {
     id: 16,
@@ -159,7 +159,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[4],
     content: 'Redis 缓存穿透、击穿、雪崩这三个问题能详细讲讲吗？',
     status: 1,
-    createdAt: '2024-11-08T13:00:00Z',
+    createdAt: '2025-12-08T13:00:00Z',
   },
   {
     id: 17,
@@ -169,7 +169,7 @@ export const mockComments: Comment[] = [
     parentId: 16,
     content: '好问题！我会单独写一篇文章详细讲解这三个问题的解决方案。',
     status: 1,
-    createdAt: '2024-11-08T14:00:00Z',
+    createdAt: '2025-12-08T14:00:00Z',
   },
   {
     id: 18,
@@ -178,7 +178,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[1],
     content: 'TypeScript 的类型系统真的很强大，写大型项目必备。',
     status: 1,
-    createdAt: '2024-11-09T15:00:00Z',
+    createdAt: '2025-12-09T15:00:00Z',
   },
   {
     id: 19,
@@ -187,7 +187,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[23],
     content: '泛型约束这部分能再举几个实际应用的例子吗？',
     status: 1,
-    createdAt: '2024-11-09T16:00:00Z',
+    createdAt: '2025-12-09T16:00:00Z',
   },
   {
     id: 20,
@@ -196,7 +196,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[24],
     content: 'Kubernetes 学习曲线确实有点陡，但是掌握之后真的很强大。',
     status: 1,
-    createdAt: '2024-11-10T10:00:00Z',
+    createdAt: '2025-12-10T10:00:00Z',
   },
   {
     id: 21,
@@ -206,7 +206,7 @@ export const mockComments: Comment[] = [
     parentId: 20,
     content: '建议先从 Docker 开始学，再学 Kubernetes 会容易很多。',
     status: 1,
-    createdAt: '2024-11-10T10:30:00Z',
+    createdAt: '2025-12-10T10:30:00Z',
   },
   {
     id: 22,
@@ -215,7 +215,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[5],
     content: 'Node.js 的异步编程确实需要好好理解，不然容易出现回调地狱。',
     status: 1,
-    createdAt: '2024-11-11T11:00:00Z',
+    createdAt: '2025-12-11T11:00:00Z',
   },
   {
     id: 23,
@@ -224,7 +224,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[28],
     content: 'TensorFlow 和 PyTorch 哪个更适合初学者？',
     status: 1,
-    createdAt: '2024-11-12T12:00:00Z',
+    createdAt: '2025-12-12T12:00:00Z',
   },
   {
     id: 24,
@@ -234,7 +234,7 @@ export const mockComments: Comment[] = [
     parentId: 23,
     content: 'PyTorch 更适合初学者，API 更直观，调试也更方便。',
     status: 1,
-    createdAt: '2024-11-12T12:30:00Z',
+    createdAt: '2025-12-12T12:30:00Z',
   },
   {
     id: 25,
@@ -243,7 +243,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[2],
     content: 'MongoDB 的文档模型确实很灵活，但是要注意数据一致性问题。',
     status: 1,
-    createdAt: '2024-11-13T13:30:00Z',
+    createdAt: '2025-12-13T13:30:00Z',
   },
   {
     id: 26,
@@ -252,7 +252,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[26],
     content: 'React Native 的性能优化有什么好的建议吗？',
     status: 1,
-    createdAt: '2024-11-14T14:30:00Z',
+    createdAt: '2025-12-14T14:30:00Z',
   },
   {
     id: 27,
@@ -261,7 +261,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[4],
     content: 'Go 的并发模型真的很优雅，goroutine 比线程轻量太多了。',
     status: 1,
-    createdAt: '2024-11-15T16:00:00Z',
+    createdAt: '2025-12-15T16:00:00Z',
   },
   {
     id: 28,
@@ -270,7 +270,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[3],
     content: 'Angular 的依赖注入系统确实很强大，但是学习成本也不低。',
     status: 1,
-    createdAt: '2024-11-16T17:00:00Z',
+    createdAt: '2025-12-16T17:00:00Z',
   },
   {
     id: 29,
@@ -279,7 +279,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[2],
     content: 'Django REST Framework 真的很好用，开发 API 效率很高。',
     status: 1,
-    createdAt: '2024-11-17T09:00:00Z',
+    createdAt: '2025-12-17T09:00:00Z',
   },
   {
     id: 30,
@@ -288,7 +288,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[8],
     content: 'SwiftUI 比 UIKit 简洁太多了，苹果终于做对了一件事。',
     status: 1,
-    createdAt: '2024-11-18T10:00:00Z',
+    createdAt: '2025-12-18T10:00:00Z',
   },
   {
     id: 31,
@@ -297,7 +297,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[14],
     content: 'NLP 领域最近 Transformer 模型很火，建议也学习一下。',
     status: 1,
-    createdAt: '2024-11-19T11:00:00Z',
+    createdAt: '2025-12-19T11:00:00Z',
   },
   {
     id: 32,
@@ -306,7 +306,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[7],
     content: '智能合约的安全性很重要，一定要做好审计。',
     status: 1,
-    createdAt: '2024-11-20T12:00:00Z',
+    createdAt: '2025-12-20T12:00:00Z',
   },
   {
     id: 33,
@@ -315,7 +315,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[24],
     content: 'AWS 的服务太多了，新手容易迷失，建议先学核心服务。',
     status: 1,
-    createdAt: '2024-11-21T13:00:00Z',
+    createdAt: '2025-12-21T13:00:00Z',
   },
   {
     id: 34,
@@ -325,7 +325,7 @@ export const mockComments: Comment[] = [
     parentId: 33,
     content: '同意，先掌握 EC2、S3、RDS 这些基础服务就够用了。',
     status: 1,
-    createdAt: '2024-11-21T13:30:00Z',
+    createdAt: '2025-12-21T13:30:00Z',
   },
   {
     id: 35,
@@ -334,7 +334,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[5],
     content: 'Git 的 rebase 和 merge 什么时候用哪个？',
     status: 1,
-    createdAt: '2024-11-23T14:30:00Z',
+    createdAt: '2025-12-23T14:30:00Z',
   },
   {
     id: 36,
@@ -344,7 +344,7 @@ export const mockComments: Comment[] = [
     content:
       'GraphQL 相比 REST API 的优势确实明显，特别是减少了过度获取数据的问题。',
     status: 1,
-    createdAt: '2024-11-24T15:30:00Z',
+    createdAt: '2025-12-24T15:30:00Z',
   },
   {
     id: 37,
@@ -353,7 +353,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[3],
     content: 'Webpack 5 的模块联邦功能很强大，适合微前端架构。',
     status: 1,
-    createdAt: '2024-11-25T16:30:00Z',
+    createdAt: '2025-12-25T16:30:00Z',
   },
   {
     id: 38,
@@ -362,7 +362,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[2],
     content: 'PostgreSQL 的 JSON 支持真的很好用，比 MySQL 强太多。',
     status: 1,
-    createdAt: '2024-11-26T09:00:00Z',
+    createdAt: '2025-12-26T09:00:00Z',
   },
   {
     id: 39,
@@ -371,7 +371,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[24],
     content: 'Rust 的学习曲线确实陡，但是掌握之后写出的代码质量很高。',
     status: 1,
-    createdAt: '2024-11-27T10:00:00Z',
+    createdAt: '2025-12-27T10:00:00Z',
   },
   {
     id: 40,
@@ -381,7 +381,7 @@ export const mockComments: Comment[] = [
     parentId: 39,
     content: 'Rust 的所有权系统一开始确实难理解，但是它保证了内存安全。',
     status: 1,
-    createdAt: '2024-11-27T10:30:00Z',
+    createdAt: '2025-12-27T10:30:00Z',
   },
   {
     id: 41,
@@ -390,7 +390,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[16],
     content: 'Elasticsearch 的分布式搜索能力很强，适合大规模数据。',
     status: 1,
-    createdAt: '2024-11-29T11:30:00Z',
+    createdAt: '2025-12-29T11:30:00Z',
   },
   {
     id: 42,
@@ -399,7 +399,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[9],
     content: 'Jenkins Pipeline 确实比传统的 Freestyle Job 灵活很多。',
     status: 1,
-    createdAt: '2024-11-30T13:00:00Z',
+    createdAt: '2025-12-30T13:00:00Z',
   },
   {
     id: 43,
@@ -408,7 +408,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[7],
     content: 'useCallback 和 useMemo 的使用场景能详细说明一下吗？',
     status: 1,
-    createdAt: '2024-12-01T10:00:00Z',
+    createdAt: '2026-01-01T10:00:00Z',
   },
   {
     id: 44,
@@ -417,7 +417,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[20],
     content: '服务网格（Service Mesh）在微服务架构中的作用是什么？',
     status: 1,
-    createdAt: '2024-12-02T11:00:00Z',
+    createdAt: '2026-01-02T11:00:00Z',
   },
   {
     id: 45,
@@ -426,7 +426,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[22],
     content: 'MySQL 8.0 的新特性有哪些值得关注的？',
     status: 1,
-    createdAt: '2024-12-03T12:00:00Z',
+    createdAt: '2026-01-03T12:00:00Z',
   },
   {
     id: 46,
@@ -435,7 +435,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[11],
     content: 'Pinia 和 Vuex 相比有什么优势？',
     status: 1,
-    createdAt: '2024-12-04T13:00:00Z',
+    createdAt: '2026-01-04T13:00:00Z',
   },
   {
     id: 47,
@@ -444,7 +444,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[21],
     content: 'Docker Swarm 和 Kubernetes 该选哪个？',
     status: 1,
-    createdAt: '2024-12-05T09:00:00Z',
+    createdAt: '2026-01-05T09:00:00Z',
   },
   {
     id: 48,
@@ -453,7 +453,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[28],
     content: '机器学习模型的过拟合问题如何解决？',
     status: 1,
-    createdAt: '2024-12-05T10:00:00Z',
+    createdAt: '2026-01-05T10:00:00Z',
   },
   {
     id: 49,
@@ -462,7 +462,7 @@ export const mockComments: Comment[] = [
     user: mockUsers[26],
     content: 'Flutter Web 的性能怎么样？适合生产环境吗？',
     status: 1,
-    createdAt: '2024-12-05T11:00:00Z',
+    createdAt: '2026-01-05T11:00:00Z',
   },
   {
     id: 50,
@@ -471,6 +471,6 @@ export const mockComments: Comment[] = [
     user: mockUsers[2],
     content: 'Redis 集群模式和哨兵模式的区别是什么？',
     status: 1,
-    createdAt: '2024-12-05T12:00:00Z',
+    createdAt: '2026-01-05T12:00:00Z',
   },
 ];
