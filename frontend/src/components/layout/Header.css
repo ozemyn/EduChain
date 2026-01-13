@@ -38,6 +38,7 @@
   padding: var(--spacing-md) 0;
   gap: var(--spacing-lg);
   height: 72px;
+  position: relative;
 }
 
 /* ===================================
@@ -51,6 +52,7 @@
   text-decoration: none;
   flex-shrink: 0;
   transition: all var(--transition-fast) var(--ease-ios);
+  z-index: 1;
 }
 
 .logo-icon {
@@ -124,7 +126,9 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   min-width: 0;
 }
 
@@ -176,6 +180,8 @@
   align-items: center;
   gap: var(--spacing-sm);
   flex-shrink: 0;
+  margin-left: auto;
+  z-index: 1;
 }
 
 .action-button {

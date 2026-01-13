@@ -49,7 +49,8 @@ const refreshTokenIfNeeded = async (): Promise<string | null> => {
   const refreshToken = TokenManager.getStoredRefreshToken();
 
   if (!refreshToken) {
-    throw new Error('No refresh token available');
+    // 没有refresh token时，返回null而不是抛出错误
+    return null;
   }
 
   if (isRefreshing) {
@@ -97,15 +98,16 @@ api.interceptors.request.use(
       // 检查token是否即将过期，如果是则尝试刷新
       if (TokenManager.isTokenExpiringSoon(token)) {
         try {
-          await refreshTokenIfNeeded();
-          // 获取新的token
-          const newToken = TokenManager.getStoredToken();
+          const newToken = await refreshTokenIfNeeded();
+          // 如果成功刷新，使用新token
           if (newToken) {
             config.headers.Authorization = `Bearer ${newToken}`;
+          } else {
+            // 没有refresh token，使用原token
+            config.headers.Authorization = `Bearer ${token}`;
           }
         } catch (error) {
-          console.error('Failed to refresh token:', error);
-          // 如果刷新失败，仍然使用原token，让后端处理
+          // 刷新失败，仍然使用原token，让后端处理
           config.headers.Authorization = `Bearer ${token}`;
         }
       } else {

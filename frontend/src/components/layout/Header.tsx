@@ -20,7 +20,6 @@ import {
   BookOutlined,
   SearchOutlined,
   UserOutlined,
-  LoginOutlined,
   LogoutOutlined,
   PlusOutlined,
   ThunderboltOutlined,
@@ -202,9 +201,6 @@ const Header: React.FC = () => {
             to="/"
             className="logo-section hover-scale active-press gpu-accelerated"
           >
-            <div className="logo-icon glass-badge">
-              <BookOutlined />
-            </div>
             <span className="logo-text gradient-text">EduChain</span>
           </Link>
 
@@ -218,7 +214,6 @@ const Header: React.FC = () => {
                   isActive(link.path) ? 'active' : ''
                 }`}
               >
-                <span className="nav-icon">{link.icon}</span>
                 <span className="nav-label">{link.label}</span>
               </Link>
             ))}
@@ -280,7 +275,6 @@ const Header: React.FC = () => {
                 </Button>
                 <Button
                   className="register-button glass-button glass-strong hover-lift active-scale"
-                  icon={<LoginOutlined />}
                   onClick={() => navigate('/register')}
                 >
                   <span className="desktop-only">注册</span>
@@ -325,7 +319,6 @@ const Header: React.FC = () => {
               }`}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <span className="nav-icon">{link.icon}</span>
               <span className="nav-label">{link.label}</span>
               {isActive(link.path) && (
                 <div className="active-indicator animate-scale-in" />

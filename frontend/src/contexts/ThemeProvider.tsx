@@ -150,15 +150,18 @@ export const ThemeConditional: React.FC<{
 export const ThemeStyles: React.FC = () => {
   return (
     <style>{`
-      /* 主题切换动画 */
-      * {
+      /* 主题切换动画 - 仅针对特定元素 */
+      body,
+      .glass-card,
+      .glass-button,
+      .nav-link,
+      .feature-card,
+      .ant-card,
+      .ant-btn {
         transition: 
           background-color var(--transition-base),
           border-color var(--transition-base),
           color var(--transition-base),
-          fill var(--transition-base),
-          stroke var(--transition-base),
-          opacity var(--transition-base),
           box-shadow var(--transition-base);
       }
       
@@ -193,7 +196,14 @@ export const ThemeStyles: React.FC = () => {
       
       /* 减少动画偏好 */
       @media (prefers-reduced-motion: reduce) {
-        .theme-icon {
+        .theme-icon,
+        body,
+        .glass-card,
+        .glass-button,
+        .nav-link,
+        .feature-card,
+        .ant-card,
+        .ant-btn {
           transition: none;
           animation: none;
         }

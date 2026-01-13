@@ -52,6 +52,21 @@
     <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
+    <!-- 防止主题闪烁 - 在页面加载前设置主题 -->
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('educhain-theme') || 'light';
+          const resolvedTheme = theme === 'system' 
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : theme;
+          document.documentElement.setAttribute('data-theme', resolvedTheme);
+        } catch (e) {
+          console.error('Failed to set initial theme:', e);
+        }
+      })();
+    </script>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     

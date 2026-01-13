@@ -26,6 +26,7 @@ import {
   ArrowRightOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
+import { useThemeContext } from '@contexts/ThemeProvider';
 import { RecommendationList } from '@/components/recommendation';
 import './Home.css';
 
@@ -37,6 +38,7 @@ const { Search } = Input;
  */
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { resolvedTheme } = useThemeContext();
 
   // 状态管理
   const [searchValue, setSearchValue] = useState('');
@@ -101,36 +103,10 @@ const Home: React.FC = () => {
     []
   );
 
-  // 深色模式下更新特性图标渐变
-  useEffect(() => {
-    const updateGradients = () => {
-      const isDark =
-        document.documentElement.getAttribute('data-theme') === 'dark';
-      const iconWrappers = document.querySelectorAll('.feature-icon-wrapper');
-
-      iconWrappers.forEach((wrapper, index) => {
-        const element = wrapper as HTMLElement;
-        const darkGradient = element.getAttribute('data-theme-dark-gradient');
-        if (isDark && darkGradient) {
-          element.style.background = darkGradient;
-        } else {
-          element.style.background = features[index].gradient;
-        }
-      });
-    };
-
-    // 初始化
-    updateGradients();
-
-    // 监听主题变化
-    const observer = new MutationObserver(updateGradients);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [features]);
+  // 根据主题获取渐变色
+  const getFeatureGradient = (feature: typeof features[0]) => {
+    return resolvedTheme === 'dark' ? feature.gradientDark : feature.gradient;
+  };
 
   // 搜索处理
   const handleSearch = (value: string) => {
@@ -280,9 +256,8 @@ const Home: React.FC = () => {
                   <div
                     className="feature-icon-wrapper gpu-accelerated"
                     style={{
-                      background: feature.gradient,
+                      background: getFeatureGradient(feature),
                     }}
-                    data-theme-dark-gradient={feature.gradientDark}
                   >
                     {feature.icon}
                   </div>
