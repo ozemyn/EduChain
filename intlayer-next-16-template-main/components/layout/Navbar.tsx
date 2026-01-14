@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useIntlayer } from 'next-intlayer';
+import { useIntlayer, useLocale } from 'next-intlayer';
+import { getLocalizedUrl } from 'intlayer';
 import { LocaleSwitcher } from '../LocaleSwitcher/LocaleSwitcher';
 import './Navbar.css';
 
@@ -10,6 +11,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const content = useIntlayer('navbar');
+  const { locale } = useLocale();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +36,7 @@ export default function Navbar() {
     <>
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-container container">
-          <Link href="/" className="navbar-logo">
+          <Link href={getLocalizedUrl('/', locale)} className="navbar-logo">
             <span className="navbar-logo-text text-gradient-pink">
               EduChain
             </span>
@@ -44,7 +46,7 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.key}
-                href={link.path}
+                href={getLocalizedUrl(link.path, locale)}
                 className="navbar-link"
               >
                 {link.label}
@@ -133,7 +135,7 @@ export default function Navbar() {
                 {navLinks.map((link) => (
                   <Link
                     key={link.key}
-                    href={link.path}
+                    href={getLocalizedUrl(link.path, locale)}
                     className="mobile-nav-link"
                     onClick={() => setMobileMenuOpen(false)}
                   >

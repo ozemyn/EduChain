@@ -3,40 +3,19 @@
  * 使用原生 fetch，适配 Next.js 环境
  */
 
-import type { ApiResponse } from '../types/api';
+import type { ApiResponse } from '@/types/api';
+import { token as tokenUtil } from '@/lib';
+import { API_CONFIG } from '@/config';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
+const { baseUrl: API_BASE_URL } = API_CONFIG;
 
-// Token 管理
-const getToken = (): string | null => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('token');
-};
-
-const getRefreshToken = (): string | null => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('refreshToken');
-};
-
-const setTokens = (token: string, refreshToken: string): void => {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem('token', token);
-  localStorage.setItem('refreshToken', refreshToken);
-};
-
-const clearTokens = (): void => {
-  if (typeof window === 'undefined') return;
-  localStorage.removeItem('token');
-  localStorage.removeItem('refreshToken');
-  localStorage.removeItem('user');
-};
-
-// 刷新 Token
+// Token 刷新状态
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
 
+// 刷新 Token
 const refreshTokenIfNeeded = async (): Promise<string | null> => {
-  const refreshToken = getRefreshToken();
+  const refreshToken = tokenUtil.getRefreshToken();
   if (!refreshToken) return null;
 
   if (isRefreshing && refreshPromise) {
@@ -53,18 +32,18 @@ const refreshTokenIfNeeded = async (): Promise<string | null> => {
       });
 
       if (!response.ok) {
-        clearTokens();
+        tokenUtil.clearAuth();
         return null;
       }
 
       const data = await response.json();
       if (data.success && data.data) {
-        setTokens(data.data.accessToken, data.data.refreshToken);
+        tokenUtil.setTokens(data.data.accessToken, data.data.refreshToken);
         return data.data.accessToken;
       }
       return null;
     } catch {
-      clearTokens();
+      tokenUtil.clearAuth();
       return null;
     } finally {
       isRefreshing = false;
@@ -75,40 +54,35 @@ const refreshTokenIfNeeded = async (): Promise<string | null> => {
   return refreshPromise;
 };
 
-
 // 基础请求函数
 async function fetchWithAuth<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
   const url = `${API_BASE_URL}${endpoint}`;
-  const token = getToken();
+  const accessToken = tokenUtil.getAccessToken();
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...options.headers,
   };
 
-  if (token) {
-    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+  if (accessToken) {
+    (headers as Record<string, string>)['Authorization'] = `Bearer ${accessToken}`;
   }
 
-  const config: RequestInit = {
-    ...options,
-    headers,
-  };
+  const config: RequestInit = { ...options, headers };
 
   try {
     let response = await fetch(url, config);
 
     // 401 时尝试刷新 Token
-    if (response.status === 401 && token) {
+    if (response.status === 401 && accessToken) {
       const newToken = await refreshTokenIfNeeded();
       if (newToken) {
         (headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
         response = await fetch(url, { ...config, headers });
       } else {
-        // 刷新失败，跳转登录
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }
@@ -136,7 +110,8 @@ export const request = {
     params?: Record<string, unknown> | object
   ): Promise<ApiResponse<T>> => {
     const queryString = params
-      ? '?' + new URLSearchParams(
+      ? '?' +
+        new URLSearchParams(
           Object.entries(params)
             .filter(([, v]) => v !== undefined && v !== null)
             .map(([k, v]) => [k, String(v)])
@@ -145,45 +120,29 @@ export const request = {
     return fetchWithAuth<T>(`${endpoint}${queryString}`, { method: 'GET' });
   },
 
-  post: <T = unknown>(
-    endpoint: string,
-    data?: unknown
-  ): Promise<ApiResponse<T>> => {
-    return fetchWithAuth<T>(endpoint, {
+  post: <T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> =>
+    fetchWithAuth<T>(endpoint, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
-    });
-  },
+    }),
 
-  put: <T = unknown>(
-    endpoint: string,
-    data?: unknown
-  ): Promise<ApiResponse<T>> => {
-    return fetchWithAuth<T>(endpoint, {
+  put: <T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> =>
+    fetchWithAuth<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
-    });
-  },
+    }),
 
-  delete: <T = unknown>(
-    endpoint: string,
-    data?: unknown
-  ): Promise<ApiResponse<T>> => {
-    return fetchWithAuth<T>(endpoint, {
+  delete: <T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> =>
+    fetchWithAuth<T>(endpoint, {
       method: 'DELETE',
       body: data ? JSON.stringify(data) : undefined,
-    });
-  },
+    }),
 
-  patch: <T = unknown>(
-    endpoint: string,
-    data?: unknown
-  ): Promise<ApiResponse<T>> => {
-    return fetchWithAuth<T>(endpoint, {
+  patch: <T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> =>
+    fetchWithAuth<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
-    });
-  },
+    }),
 };
 
 // 文件上传
@@ -194,25 +153,19 @@ export const uploadFile = async (
   const formData = new FormData();
   formData.append('file', file);
 
-  const token = getToken();
-  const headers: HeadersInit = {};
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const accessToken = tokenUtil.getAccessToken();
 
-  // 使用 XMLHttpRequest 支持进度回调
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${API_BASE_URL}/files/upload`);
 
-    if (token) {
-      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    if (accessToken) {
+      xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
     }
 
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable && onProgress) {
-        const percent = Math.round((event.loaded / event.total) * 100);
-        onProgress(percent);
+        onProgress(Math.round((event.loaded / event.total) * 100));
       }
     };
 
@@ -228,6 +181,3 @@ export const uploadFile = async (
     xhr.send(formData);
   });
 };
-
-// 导出 Token 管理函数
-export { getToken, setTokens, clearTokens };

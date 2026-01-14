@@ -1,37 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { useIntlayer } from 'next-intlayer';
+import { useIntlayer, useLocale } from 'next-intlayer';
+import { getLocalizedUrl } from 'intlayer';
 import './Footer.css';
 
 export default function Footer() {
   const content = useIntlayer('footer');
+  const { locale } = useLocale();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     product: [
-      { label: content.links.knowledge.value, path: '/knowledge' },
-      { label: content.links.search.value, path: '/search' },
-      { label: content.links.recommendations.value, path: '/recommendations' },
-      { label: content.links.community.value, path: '/community' },
+      { label: content.links.knowledge.value, path: '/product/knowledge' },
+      { label: content.links.search.value, path: '/product/search' },
+      { label: content.links.recommendations.value, path: '/product/recommendation' },
+      { label: content.links.community.value, path: '/product/community' },
     ],
     company: [
-      { label: content.links.about.value, path: '/about' },
-      { label: content.links.contact.value, path: '/contact' },
-      { label: content.links.careers.value, path: '/careers' },
-      { label: content.links.partners.value, path: '/partners' },
+      { label: content.links.about.value, path: '/company/about' },
+      { label: content.links.contact.value, path: '/company/contact' },
+      { label: content.links.careers.value, path: '/company/careers' },
+      { label: content.links.partners.value, path: '/company/partners' },
     ],
     resources: [
-      { label: content.links.help.value, path: '/help' },
-      { label: content.links.docs.value, path: '/docs' },
-      { label: content.links.api.value, path: '/api' },
-      { label: content.links.changelog.value, path: '/changelog' },
+      { label: content.links.help.value, path: '/resources/help' },
+      { label: content.links.docs.value, path: '/resources/docs' },
+      { label: content.links.api.value, path: '/resources/api-docs' },
+      { label: content.links.changelog.value, path: '/resources/changelog' },
     ],
     legal: [
-      { label: content.links.terms.value, path: '/terms' },
-      { label: content.links.privacy.value, path: '/privacy' },
-      { label: content.links.copyright.value, path: '/copyright' },
-      { label: content.links.disclaimer.value, path: '/disclaimer' },
+      { label: content.links.terms.value, path: '/legal/terms' },
+      { label: content.links.privacy.value, path: '/legal/privacy' },
+      { label: content.links.copyright.value, path: '/legal/copyright' },
+      { label: content.links.disclaimer.value, path: '/legal/disclaimer' },
     ],
   };
 
@@ -109,7 +111,7 @@ export default function Footer() {
               <ul className="link-list">
                 {footerLinks.product.map((link) => (
                   <li key={link.path}>
-                    <Link href={link.path} className="footer-link">{link.label}</Link>
+                    <Link href={getLocalizedUrl(link.path, locale)} className="footer-link">{link.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -120,7 +122,7 @@ export default function Footer() {
               <ul className="link-list">
                 {footerLinks.company.map((link) => (
                   <li key={link.path}>
-                    <Link href={link.path} className="footer-link">{link.label}</Link>
+                    <Link href={getLocalizedUrl(link.path, locale)} className="footer-link">{link.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -131,7 +133,7 @@ export default function Footer() {
               <ul className="link-list">
                 {footerLinks.resources.map((link) => (
                   <li key={link.path}>
-                    <Link href={link.path} className="footer-link">{link.label}</Link>
+                    <Link href={getLocalizedUrl(link.path, locale)} className="footer-link">{link.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -142,7 +144,7 @@ export default function Footer() {
               <ul className="link-list">
                 {footerLinks.legal.map((link) => (
                   <li key={link.path}>
-                    <Link href={link.path} className="footer-link">{link.label}</Link>
+                    <Link href={getLocalizedUrl(link.path, locale)} className="footer-link">{link.label}</Link>
                   </li>
                 ))}
               </ul>

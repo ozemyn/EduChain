@@ -1,0 +1,496 @@
+/* ===================================
+   公司模块样式 - Company Module Styles
+   ================================== */
+
+/* 页面容器 */
+.company-page {
+  min-height: 100vh;
+  background: rgb(var(--color-background));
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰 */
+.company-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(251, 207, 232, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(251, 207, 232, 0.2) 0%, transparent 50%);
+  opacity: 0.4;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dark .company-page::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+  opacity: 1;
+}
+
+.company-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 80px;
+}
+
+/* 页面头部 */
+.company-header {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.company-header-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-accent)));
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.company-header h1 {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-accent)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.company-header-desc {
+  font-size: var(--text-lg);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.75;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* 内容区域 */
+.company-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg) var(--spacing-3xl);
+}
+
+/* 通用卡片 */
+.company-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-2xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.company-card h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-lg);
+}
+
+.company-card h3 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.company-card p {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.75;
+  margin-bottom: var(--spacing-md);
+}
+
+.company-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.company-card li {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.75;
+  padding-left: var(--spacing-lg);
+  position: relative;
+  margin-bottom: var(--spacing-sm);
+}
+
+.company-card li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: rgb(var(--color-accent));
+  font-weight: bold;
+}
+
+/* 网格布局 */
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.company-grid-item {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  transition: all var(--transition-fast) ease;
+}
+
+.company-grid-item:hover {
+  transform: translateY(-4px);
+}
+
+.company-grid-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgb(var(--color-primary-light)), rgb(var(--color-primary)));
+}
+
+.company-grid-item h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-sm);
+}
+
+.company-grid-item p {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 团队成员 */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.team-member {
+  text-align: center;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-fast) ease;
+}
+
+.team-member:hover {
+  transform: translateY(-4px);
+}
+
+.team-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto var(--spacing-md);
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-accent)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.team-member h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-xs);
+}
+
+.team-role {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-accent));
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+}
+
+.team-member p {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-tertiary));
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 联系表单 */
+.contact-form {
+  max-width: 600px;
+  margin: var(--spacing-xl) auto 0;
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgb(var(--color-border));
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-text-primary));
+  font-size: var(--text-base);
+  transition: all var(--transition-fast) ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: rgb(var(--color-accent));
+  box-shadow: 0 0 0 3px rgb(var(--color-accent) / 0.1);
+}
+
+.form-textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-submit {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  background: rgb(var(--color-accent));
+  color: white;
+  font-size: var(--text-base);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.form-submit:hover {
+  background: rgb(var(--color-accent-hover));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 联系信息 */
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  border-radius: var(--radius-lg);
+  background: rgb(var(--color-primary-light));
+  color: rgb(var(--color-accent));
+  flex-shrink: 0;
+}
+
+.contact-item h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-xs);
+}
+
+.contact-item p {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 职位列表 */
+.job-list {
+  margin-top: var(--spacing-xl);
+}
+
+.job-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+  transition: all var(--transition-fast) ease;
+}
+
+.job-card:hover {
+  transform: translateX(4px);
+}
+
+.job-info h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-xs);
+}
+
+.job-meta {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.job-tag {
+  font-size: var(--text-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: rgb(var(--color-primary-light));
+  color: rgb(var(--color-accent));
+  font-weight: 500;
+}
+
+.job-apply {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  background: rgb(var(--color-accent));
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+  white-space: nowrap;
+}
+
+.job-apply:hover {
+  background: rgb(var(--color-accent-hover));
+  transform: translateY(-2px);
+}
+
+/* 合作伙伴 */
+.partner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.partner-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  transition: all var(--transition-fast) ease;
+}
+
+.partner-card:hover {
+  transform: translateY(-4px);
+}
+
+.partner-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border-radius: var(--radius-xl);
+  background: rgb(var(--color-background-secondary));
+}
+
+.partner-card h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-xs);
+}
+
+.partner-card p {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-tertiary));
+  margin: 0;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .company-header {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .company-header h1 {
+    font-size: var(--text-3xl);
+  }
+
+  .company-header-desc {
+    font-size: var(--text-base);
+  }
+
+  .company-main {
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
+  }
+
+  .company-card {
+    padding: var(--spacing-lg);
+  }
+
+  .company-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .job-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

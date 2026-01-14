@@ -1,0 +1,284 @@
+/* ===================================
+   法律模块样式 - Legal Module Styles
+   ================================== */
+
+/* 页面容器 */
+.legal-page {
+  min-height: 100vh;
+  background: rgb(var(--color-background));
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰 */
+.legal-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(251, 207, 232, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(216, 180, 254, 0.2) 0%, transparent 50%);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dark .legal-page::before {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+  opacity: 1;
+}
+
+.legal-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 80px;
+}
+
+/* 页面头部 */
+.legal-header {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.legal-header-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-secondary)));
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.legal-header h1 {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  color: rgb(var(--color-text-primary));
+}
+
+.legal-header-meta {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-tertiary));
+}
+
+/* 内容区域 */
+.legal-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg) var(--spacing-3xl);
+}
+
+/* 法律文档卡片 */
+.legal-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-2xl);
+}
+
+.legal-card h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgb(var(--color-border));
+}
+
+.legal-card h3 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-card p {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.85;
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-card ul {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0;
+}
+
+.legal-card li {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.85;
+  padding-left: var(--spacing-xl);
+  position: relative;
+  margin-bottom: var(--spacing-sm);
+}
+
+.legal-card li::before {
+  content: '•';
+  position: absolute;
+  left: var(--spacing-sm);
+  color: rgb(var(--color-accent));
+  font-weight: bold;
+}
+
+.legal-card strong {
+  color: rgb(var(--color-text-primary));
+  font-weight: 600;
+}
+
+/* 分隔线 */
+.legal-divider {
+  height: 1px;
+  background: rgb(var(--color-border));
+  margin: var(--spacing-2xl) 0;
+}
+
+/* 警告框 */
+.legal-alert {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  margin: var(--spacing-xl) 0;
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+}
+
+.legal-alert.info {
+  background: rgb(var(--color-info) / 0.1);
+  border: 1px solid rgb(var(--color-info) / 0.2);
+}
+
+.legal-alert.warning {
+  background: rgb(var(--color-warning) / 0.1);
+  border: 1px solid rgb(var(--color-warning) / 0.2);
+}
+
+.legal-alert-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.legal-alert-content {
+  flex: 1;
+}
+
+.legal-alert-content p {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+/* 联系信息 */
+.legal-contact {
+  margin-top: var(--spacing-2xl);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  background: rgb(var(--color-background-secondary));
+}
+
+.legal-contact h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  margin-bottom: var(--spacing-sm);
+}
+
+.legal-contact-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 页脚声明 */
+.legal-footer {
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid rgb(var(--color-border));
+}
+
+.legal-footer p {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-tertiary));
+  margin: 0;
+}
+
+/* 目录导航 */
+.legal-toc {
+  position: sticky;
+  top: 100px;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.legal-toc h4 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgb(var(--color-text-tertiary));
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-md);
+}
+
+.legal-toc-item {
+  display: block;
+  padding: var(--spacing-xs) 0;
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  text-decoration: none;
+  transition: color var(--transition-fast) ease;
+}
+
+.legal-toc-item:hover {
+  color: rgb(var(--color-accent));
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .legal-header {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .legal-header h1 {
+    font-size: var(--text-3xl);
+  }
+
+  .legal-main {
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
+  }
+
+  .legal-card {
+    padding: var(--spacing-lg);
+  }
+
+  .legal-card h2 {
+    font-size: var(--text-xl);
+  }
+
+  .legal-card h3 {
+    font-size: var(--text-lg);
+  }
+
+  .legal-card p,
+  .legal-card li {
+    font-size: var(--text-sm);
+  }
+}
