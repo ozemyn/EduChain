@@ -95,6 +95,30 @@ const recommendationListContent = {
       'zh-CN': '推荐算法会根据您的反馈不断优化',
       en: 'Recommendations improve based on your feedback',
     }),
+    feedbackLike: t({
+      'zh-CN': '喜欢',
+      en: 'Like',
+    }),
+    feedbackDislike: t({
+      'zh-CN': '不喜欢',
+      en: 'Dislike',
+    }),
+    feedbackNotInterested: t({
+      'zh-CN': '不感兴趣',
+      en: 'Not interested',
+    }),
+    feedbackLiked: t({
+      'zh-CN': '已标记为喜欢',
+      en: 'Marked as liked',
+    }),
+    feedbackDisliked: t({
+      'zh-CN': '已标记为不喜欢',
+      en: 'Marked as disliked',
+    }),
+    feedbackRemoved: t({
+      'zh-CN': '已标记为不感兴趣',
+      en: 'Marked as not interested',
+    }),
   },
 } satisfies Dictionary;
 

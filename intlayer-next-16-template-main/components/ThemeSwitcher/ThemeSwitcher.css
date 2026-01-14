@@ -1,0 +1,290 @@
+/* ===================================
+   主题切换器样式 - 超级精美版
+   ================================== */
+
+.theme-switcher {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  
+  /* 玻璃态背景 */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  
+  /* 过渡效果 */
+  transition: all var(--transition-base) cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* 性能优化 */
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark .theme-switcher {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hover 效果 */
+.theme-switcher:hover {
+  transform: scale(1.05) translateZ(0);
+  box-shadow: 0 8px 16px rgba(244, 114, 182, 0.2);
+}
+
+.dark .theme-switcher:hover {
+  box-shadow: 0 8px 16px rgba(249, 168, 212, 0.3);
+}
+
+/* Active 效果 */
+.theme-switcher:active {
+  transform: scale(0.95) translateZ(0);
+}
+
+/* 图标容器 */
+.theme-icon-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 图标基础样式 */
+.theme-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* 性能优化 */
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.theme-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 太阳图标 */
+.theme-icon-sun {
+  color: #f59e0b;
+  opacity: 0;
+  transform: rotate(-90deg) scale(0) translateZ(0);
+  transition: all var(--transition-slow) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-icon-sun.active {
+  opacity: 1;
+  transform: rotate(0deg) scale(1) translateZ(0);
+}
+
+/* 太阳光线旋转动画 */
+.theme-icon-sun.active svg {
+  animation: sunRotate 20s linear infinite;
+}
+
+@keyframes sunRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 月亮图标 */
+.theme-icon-moon {
+  color: #8b5cf6;
+  opacity: 0;
+  transform: rotate(90deg) scale(0) translateZ(0);
+  transition: all var(--transition-slow) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-icon-moon.active {
+  opacity: 1;
+  transform: rotate(0deg) scale(1) translateZ(0);
+}
+
+/* 月亮呼吸动画 */
+.theme-icon-moon.active svg {
+  animation: moonPulse 3s ease-in-out infinite;
+}
+
+@keyframes moonPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* 背景光晕 */
+.theme-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transition: opacity var(--transition-base) ease;
+  pointer-events: none;
+  z-index: -1;
+  
+  /* 性能优化 */
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+/* 浅色模式光晕 */
+.theme-switcher:hover .theme-glow {
+  opacity: 1;
+  background: radial-gradient(
+    circle at center,
+    rgba(251, 191, 36, 0.3) 0%,
+    rgba(251, 191, 36, 0.1) 50%,
+    transparent 100%
+  );
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.dark .theme-switcher:hover .theme-glow {
+  background: radial-gradient(
+    circle at center,
+    rgba(139, 92, 246, 0.4) 0%,
+    rgba(139, 92, 246, 0.2) 50%,
+    transparent 100%
+  );
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* 点击波纹效果 */
+.theme-switcher::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  background: radial-gradient(
+    circle at center,
+    rgba(244, 114, 182, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--transition-base) cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.theme-switcher:active::before {
+  opacity: 1;
+  transform: scale(1.5);
+  transition: none;
+}
+
+/* 焦点样式 */
+.theme-switcher:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 2px;
+}
+
+/* 禁用状态 */
+.theme-switcher:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .theme-switcher {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .theme-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-switcher {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .theme-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* 减少动画（无障碍） */
+@media (prefers-reduced-motion: reduce) {
+  .theme-switcher,
+  .theme-icon,
+  .theme-glow,
+  .theme-switcher::before {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .theme-icon-sun.active,
+  .theme-icon-moon.active {
+    transition: opacity var(--transition-fast) ease;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .theme-switcher {
+    border: 2px solid currentColor;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .theme-switcher {
+    /* 增大触摸目标 */
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .theme-switcher:hover {
+    transform: none;
+  }
+  
+  .theme-switcher:active {
+    transform: scale(0.95) translateZ(0);
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .theme-switcher {
+    display: none;
+  }
+}

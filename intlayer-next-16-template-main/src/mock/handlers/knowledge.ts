@@ -218,4 +218,126 @@ export const knowledgeHandlers = [
 
     return HttpResponse.json(createSuccessResponse(items));
   }),
+
+  // 搜索知识
+  http.get(`${API_BASE}/knowledge/search`, async ({ request }) => {
+    await delay();
+    const url = new URL(request.url);
+    const keyword = url.searchParams.get('keyword') || '';
+    const page = Number(url.searchParams.get('page')) || 0;
+    const size = Number(url.searchParams.get('size')) || 10;
+    const sort = url.searchParams.get('sort') || 'TIME';
+
+    // 搜索逻辑：匹配标题、内容、标签
+    let items = mockKnowledgeItems.filter(item => {
+      const searchText = keyword.toLowerCase();
+      const titleMatch = item.title.toLowerCase().includes(searchText);
+      const contentMatch = item.content?.toLowerCase().includes(searchText);
+      const tagsMatch = item.tags?.toLowerCase().includes(searchText);
+      
+      return titleMatch || contentMatch || tagsMatch;
+    }).map(item => ({ ...item, stats: mockKnowledgeStats[item.id] }));
+
+    // 排序
+    if (sort === 'TIME') {
+      items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (sort === 'POPULARITY') {
+      items.sort((a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0));
+    } else if (sort === 'RELEVANCE') {
+      // 相关性排序：标题匹配权重最高
+      items.sort((a, b) => {
+        const searchText = keyword.toLowerCase();
+        const aScore = (a.title.toLowerCase().includes(searchText) ? 10 : 0) +
+                      (a.content?.toLowerCase().includes(searchText) ? 5 : 0) +
+                      (a.tags?.toLowerCase().includes(searchText) ? 3 : 0);
+        const bScore = (b.title.toLowerCase().includes(searchText) ? 10 : 0) +
+                      (b.content?.toLowerCase().includes(searchText) ? 5 : 0) +
+                      (b.tags?.toLowerCase().includes(searchText) ? 3 : 0);
+        return bScore - aScore;
+      });
+    }
+
+    const pageData = createPageResponse(items, page, size);
+    return HttpResponse.json(createSuccessResponse(pageData));
+  }),
+
+  // 高级搜索（支持多条件组合）
+  http.post(`${API_BASE}/knowledge/advanced-search`, async ({ request }) => {
+    await delay();
+    const body = await request.json() as {
+      keyword?: string;
+      categoryId?: number;
+      type?: string;
+      tags?: string[];
+      page?: number;
+      size?: number;
+      sort?: string;
+    };
+
+    const {
+      keyword = '',
+      categoryId,
+      type,
+      tags = [],
+      page = 0,
+      size = 10,
+      sort = 'TIME',
+    } = body;
+
+    // 多条件筛选
+    let items = mockKnowledgeItems.filter(item => {
+      // 关键词匹配（标题、内容、标签）
+      let keywordMatch = true;
+      if (keyword) {
+        const searchText = keyword.toLowerCase();
+        keywordMatch = 
+          item.title.toLowerCase().includes(searchText) ||
+          item.content?.toLowerCase().includes(searchText) ||
+          item.tags?.toLowerCase().includes(searchText);
+      }
+
+      // 分类匹配
+      let categoryMatch = true;
+      if (categoryId) {
+        categoryMatch = item.categoryId === categoryId;
+      }
+
+      // 类型匹配
+      let typeMatch = true;
+      if (type) {
+        typeMatch = item.type === type;
+      }
+
+      // 标签匹配（只要包含任一标签即可）
+      let tagsMatch = true;
+      if (tags.length > 0) {
+        const itemTags = item.tags?.toLowerCase() || '';
+        tagsMatch = tags.some(tag => itemTags.includes(tag.toLowerCase()));
+      }
+
+      return keywordMatch && categoryMatch && typeMatch && tagsMatch;
+    }).map(item => ({ ...item, stats: mockKnowledgeStats[item.id] }));
+
+    // 排序
+    if (sort === 'TIME') {
+      items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (sort === 'POPULARITY') {
+      items.sort((a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0));
+    } else if (sort === 'RELEVANCE') {
+      // 相关性排序：标题匹配权重最高
+      items.sort((a, b) => {
+        const searchText = keyword.toLowerCase();
+        const aScore = (a.title.toLowerCase().includes(searchText) ? 10 : 0) +
+                      (a.content?.toLowerCase().includes(searchText) ? 5 : 0) +
+                      (a.tags?.toLowerCase().includes(searchText) ? 3 : 0);
+        const bScore = (b.title.toLowerCase().includes(searchText) ? 10 : 0) +
+                      (b.content?.toLowerCase().includes(searchText) ? 5 : 0) +
+                      (b.tags?.toLowerCase().includes(searchText) ? 3 : 0);
+        return bScore - aScore;
+      });
+    }
+
+    const pageData = createPageResponse(items, page, size);
+    return HttpResponse.json(createSuccessResponse(pageData));
+  }),
 ];

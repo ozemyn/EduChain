@@ -1,0 +1,402 @@
+/* ===================================
+   Markdown 渲染器样式
+   ================================== */
+
+.markdown-renderer {
+  color: rgb(var(--color-text-primary));
+  line-height: var(--leading-relaxed);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ==================== 标题 ==================== */
+.markdown-renderer h1,
+.markdown-renderer h2,
+.markdown-renderer h3,
+.markdown-renderer h4,
+.markdown-renderer h5,
+.markdown-renderer h6 {
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: rgb(var(--color-text-primary));
+}
+
+.markdown-renderer h1 {
+  font-size: var(--text-4xl);
+  border-bottom: 2px solid rgb(var(--color-border));
+  padding-bottom: var(--spacing-md);
+}
+
+.markdown-renderer h2 {
+  font-size: var(--text-3xl);
+  border-bottom: 1px solid rgb(var(--color-border));
+  padding-bottom: var(--spacing-sm);
+}
+
+.markdown-renderer h3 {
+  font-size: var(--text-2xl);
+}
+
+.markdown-renderer h4 {
+  font-size: var(--text-xl);
+}
+
+.markdown-renderer h5 {
+  font-size: var(--text-lg);
+}
+
+.markdown-renderer h6 {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+}
+
+/* ==================== 段落 ==================== */
+.markdown-renderer p {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  line-height: var(--leading-relaxed);
+}
+
+.markdown-renderer p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== 链接 ==================== */
+.markdown-renderer a {
+  color: rgb(var(--color-accent));
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-fast) ease;
+}
+
+.markdown-renderer a:hover {
+  border-bottom-color: rgb(var(--color-accent));
+}
+
+.markdown-renderer a:visited {
+  color: rgba(244, 114, 182, 0.8);
+}
+
+/* ==================== 列表 ==================== */
+.markdown-renderer ul,
+.markdown-renderer ol {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xl);
+}
+
+.markdown-renderer li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.markdown-renderer li > p {
+  margin-bottom: var(--spacing-xs);
+}
+
+.markdown-renderer ul ul,
+.markdown-renderer ul ol,
+.markdown-renderer ol ul,
+.markdown-renderer ol ol {
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* 任务列表 */
+.markdown-renderer input[type="checkbox"] {
+  margin-right: var(--spacing-xs);
+  cursor: pointer;
+}
+
+/* ==================== 引用 ==================== */
+.markdown-renderer blockquote {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-left: 4px solid rgb(var(--color-accent));
+  background: rgba(244, 114, 182, 0.05);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  color: rgb(var(--color-text-secondary));
+}
+
+.dark .markdown-renderer blockquote {
+  background: rgba(249, 168, 212, 0.1);
+}
+
+.markdown-renderer blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== 代码 ==================== */
+.markdown-renderer code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-sm);
+  color: #e83e8c;
+}
+
+.dark .markdown-renderer code {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ff6b9d;
+}
+
+/* 代码块 */
+.code-block-wrapper {
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #282c34;
+  box-shadow: var(--shadow-md);
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-language {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+}
+
+.code-copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast) ease;
+}
+
+.code-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.code-copy-btn:active {
+  transform: scale(0.95);
+}
+
+.markdown-renderer pre {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  background: transparent;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.markdown-renderer pre code {
+  padding: 0;
+  background: transparent;
+  color: #abb2bf;
+  font-size: inherit;
+}
+
+/* ==================== 表格 ==================== */
+.table-wrapper {
+  margin: var(--spacing-md) 0;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.markdown-renderer table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgb(var(--color-background));
+}
+
+.markdown-renderer th,
+.markdown-renderer td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid rgb(var(--color-border));
+  text-align: left;
+}
+
+.markdown-renderer th {
+  background: rgba(244, 114, 182, 0.05);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+}
+
+.dark .markdown-renderer th {
+  background: rgba(249, 168, 212, 0.1);
+}
+
+.markdown-renderer tr:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.dark .markdown-renderer tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ==================== 水平线 ==================== */
+.markdown-renderer hr {
+  margin: var(--spacing-xl) 0;
+  border: none;
+  border-top: 2px solid rgb(var(--color-border));
+}
+
+/* ==================== 图片 ==================== */
+.markdown-renderer img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-md) 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* ==================== 删除线 ==================== */
+.markdown-renderer del {
+  text-decoration: line-through;
+  color: rgb(var(--color-text-tertiary));
+}
+
+/* ==================== 强调 ==================== */
+.markdown-renderer strong {
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+}
+
+.markdown-renderer em {
+  font-style: italic;
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+  .markdown-renderer h1 {
+    font-size: var(--text-3xl);
+  }
+
+  .markdown-renderer h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .markdown-renderer h3 {
+    font-size: var(--text-xl);
+  }
+
+  .markdown-renderer pre {
+    font-size: var(--text-xs);
+  }
+
+  .table-wrapper {
+    margin-left: calc(var(--spacing-md) * -1);
+    margin-right: calc(var(--spacing-md) * -1);
+    border-radius: 0;
+  }
+}
+
+/* ==================== 代码高亮主题 (Atom One Dark) ==================== */
+.markdown-renderer .hljs {
+  color: #abb2bf;
+  background: #282c34;
+}
+
+.markdown-renderer .hljs-comment,
+.markdown-renderer .hljs-quote {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.markdown-renderer .hljs-keyword,
+.markdown-renderer .hljs-selector-tag,
+.markdown-renderer .hljs-addition {
+  color: #c678dd;
+}
+
+.markdown-renderer .hljs-number,
+.markdown-renderer .hljs-string,
+.markdown-renderer .hljs-meta .hljs-string,
+.markdown-renderer .hljs-literal,
+.markdown-renderer .hljs-doctag,
+.markdown-renderer .hljs-regexp {
+  color: #98c379;
+}
+
+.markdown-renderer .hljs-title,
+.markdown-renderer .hljs-section,
+.markdown-renderer .hljs-name,
+.markdown-renderer .hljs-selector-id,
+.markdown-renderer .hljs-selector-class {
+  color: #e06c75;
+}
+
+.markdown-renderer .hljs-attribute,
+.markdown-renderer .hljs-attr,
+.markdown-renderer .hljs-variable,
+.markdown-renderer .hljs-template-variable,
+.markdown-renderer .hljs-class .hljs-title,
+.markdown-renderer .hljs-type {
+  color: #d19a66;
+}
+
+.markdown-renderer .hljs-symbol,
+.markdown-renderer .hljs-bullet,
+.markdown-renderer .hljs-subst,
+.markdown-renderer .hljs-meta,
+.markdown-renderer .hljs-meta .hljs-keyword,
+.markdown-renderer .hljs-selector-attr,
+.markdown-renderer .hljs-selector-pseudo,
+.markdown-renderer .hljs-link {
+  color: #61aeee;
+}
+
+.markdown-renderer .hljs-built_in,
+.markdown-renderer .hljs-deletion {
+  color: #e06c75;
+}
+
+.markdown-renderer .hljs-formula {
+  background: #3e4451;
+}
+
+.markdown-renderer .hljs-emphasis {
+  font-style: italic;
+}
+
+.markdown-renderer .hljs-strong {
+  font-weight: bold;
+}
+
+/* ==================== 性能优化 ==================== */
+.markdown-renderer {
+  contain: content;
+  will-change: contents;
+}
+
+/* ==================== 打印样式 ==================== */
+@media print {
+  .markdown-renderer {
+    color: #000;
+  }
+
+  .markdown-renderer a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .code-copy-btn {
+    display: none;
+  }
+
+  .markdown-renderer pre {
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+}

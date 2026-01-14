@@ -35,10 +35,6 @@ const navbarContent = {
       'zh-CN': '登录',
       en: 'Login',
     }),
-    register: t({
-      'zh-CN': '注册',
-      en: 'Register',
-    }),
     profile: t({
       'zh-CN': '个人中心',
       en: 'Profile',

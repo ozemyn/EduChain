@@ -163,6 +163,26 @@
     
     --color-shadow: 255 255 255;
   }
+
+  /* 主题切换过渡 - 仅针对特定元素 */
+  :root {
+    --theme-transition-duration: 0ms;
+  }
+
+  /* 只对需要过渡的元素应用 */
+  body,
+  .navbar,
+  .navbar-link,
+  .navbar-action-btn,
+  .navbar-auth-btn,
+  .glass-card,
+  .glass-button,
+  .glass-light,
+  .glass-medium {
+    transition: background-color var(--theme-transition-duration) ease,
+                border-color var(--theme-transition-duration) ease,
+                color var(--theme-transition-duration) ease;
+  }
 }
 
 @layer utilities {

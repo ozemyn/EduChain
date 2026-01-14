@@ -415,3 +415,174 @@
     transform: rotate(360deg);
   }
 }
+
+/* ==================== 卡片链接 ==================== */
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+}
+
+/* ==================== 反馈按钮 ==================== */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) 0 0;
+  border-top: 1px solid rgb(var(--color-border));
+  margin-top: var(--spacing-md);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(0, 0, 0, 0.03);
+  color: rgb(var(--color-text-secondary));
+}
+
+.action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* 喜欢按钮 */
+.action-like {
+  color: #10b981;
+}
+
+.action-like:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+/* 不喜欢按钮 */
+.action-dislike {
+  color: #f59e0b;
+}
+
+.action-dislike:hover {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+/* 移除按钮 */
+.action-remove {
+  color: #ef4444;
+}
+
+.action-remove:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.dark .action-btn {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .action-like:hover {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.dark .action-dislike:hover {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.dark .action-remove:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* ==================== 反馈状态 ==================== */
+.feedback-status {
+  padding: var(--spacing-md);
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgb(var(--color-text-secondary));
+  background: rgba(244, 114, 182, 0.05);
+  border-radius: var(--radius-lg);
+  margin-top: var(--spacing-md);
+  animation: fadeIn var(--transition-base) ease;
+}
+
+.dark .feedback-status {
+  background: rgba(249, 168, 212, 0.1);
+}
+
+/* 已反馈的卡片 */
+.recommendation-card.has-feedback {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.recommendation-card.has-feedback .card-link {
+  pointer-events: auto;
+}
+
+/* ==================== 动画 ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+  .card-actions {
+    gap: var(--spacing-xs);
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .action-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ==================== 无障碍 ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .action-btn,
+  .feedback-status {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==================== 触摸设备优化 ==================== */
+@media (hover: none) and (pointer: coarse) {
+  .action-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

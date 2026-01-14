@@ -20,7 +20,11 @@
     "next": "^16.1.1",
     "next-intlayer": "latest",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
+    "rehype-highlight": "^7.0.0",
+    "rehype-raw": "^7.0.0"
   },
   "devDependencies": {
     "@intlayer/swc": "latest",

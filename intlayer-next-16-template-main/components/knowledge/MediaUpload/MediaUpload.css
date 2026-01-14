@@ -1,0 +1,143 @@
+/**
+ * 媒体上传组件样式
+ */
+
+.media-upload {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.upload-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.upload-item {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  transition: all var(--transition-base) ease;
+}
+
+.upload-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.upload-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-file-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--color-background-secondary), 0.5);
+}
+
+.upload-file-icon svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: rgb(var(--color-text-tertiary));
+}
+
+.remove-btn {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transition: all var(--transition-fast) ease;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+}
+
+.upload-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.remove-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.upload-trigger {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-base) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgb(var(--color-accent));
+}
+
+.upload-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: rgb(var(--color-text-secondary));
+}
+
+.upload-content svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.upload-content span {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.upload-hint {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-tertiary));
+  margin: 0;
+  text-align: center;
+}
+
+/* 响应式 */
+@media (max-width: 767px) {
+  .upload-list {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-sm);
+  }
+
+  .upload-content svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .upload-content span {
+    font-size: var(--text-xs);
+  }
+}

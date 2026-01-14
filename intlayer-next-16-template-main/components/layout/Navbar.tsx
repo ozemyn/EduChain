@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { getLocalizedUrl } from 'intlayer';
 import { LocaleSwitcher } from '../LocaleSwitcher/LocaleSwitcher';
+import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -65,6 +66,10 @@ export default function Navbar() {
             )}
 
             <div className="desktop-only">
+              <ThemeSwitcher />
+            </div>
+
+            <div className="desktop-only">
               <LocaleSwitcher />
             </div>
 
@@ -81,15 +86,9 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <>
-                <button className="navbar-auth-btn navbar-login-btn desktop-only">
-                  {content.login.value}
-                </button>
-                
-                <button className="navbar-auth-btn navbar-register-btn">
-                  {content.register.value}
-                </button>
-              </>
+              <button className="navbar-auth-btn navbar-login-btn">
+                {content.login.value}
+              </button>
             )}
 
             <button
@@ -147,18 +146,16 @@ export default function Navbar() {
               <div className="mobile-actions">
                 <div className="flex items-center justify-between mobile-action-btn" style={{ background: 'rgba(255, 255, 255, 0.3)' }}>
                   <span className="font-medium">{content.theme.value}</span>
-                  <LocaleSwitcher />
+                  <div className="flex items-center gap-2">
+                    <ThemeSwitcher />
+                    <LocaleSwitcher />
+                  </div>
                 </div>
 
                 {!user && (
-                  <>
-                    <button className="mobile-action-btn navbar-login-btn">
-                      {content.login.value}
-                    </button>
-                    <button className="mobile-action-btn navbar-register-btn">
-                      {content.register.value}
-                    </button>
-                  </>
+                  <button className="mobile-action-btn navbar-login-btn">
+                    {content.login.value}
+                  </button>
                 )}
 
                 {user && (

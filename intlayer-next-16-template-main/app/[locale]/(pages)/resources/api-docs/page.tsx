@@ -26,7 +26,7 @@ export default function ApiDocsPage() {
             <section className="resources-card glass-light">
               <h2>Base URL</h2>
               <div className="code-block">
-                <pre><code>{apiDocs.baseUrl}</code></pre>
+                <pre><code>{String(apiDocs.baseUrl.value || apiDocs.baseUrl)}</code></pre>
               </div>
             </section>
 
@@ -35,7 +35,7 @@ export default function ApiDocsPage() {
               <h2>{apiDocs.authentication.title.value}</h2>
               <p>{apiDocs.authentication.description.value}</p>
               <div className="code-block">
-                <pre><code>{apiDocs.authentication.example}</code></pre>
+                <pre><code>{String(apiDocs.authentication.example.value || apiDocs.authentication.example)}</code></pre>
               </div>
             </section>
 
@@ -46,10 +46,10 @@ export default function ApiDocsPage() {
                 {apiDocs.endpoints.map((endpoint, index) => (
                   <div key={index} className="api-endpoint glass-light">
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-                      <span className={`api-method ${endpoint.method.toLowerCase()}`}>
-                        {endpoint.method}
+                      <span className={`api-method ${String(endpoint.method.value || endpoint.method).toLowerCase()}`}>
+                        {String(endpoint.method.value || endpoint.method)}
                       </span>
-                      <span className="api-path">{endpoint.path}</span>
+                      <span className="api-path">{String(endpoint.path.value || endpoint.path)}</span>
                     </div>
                     <p className="api-desc">{endpoint.description.value}</p>
                   </div>
@@ -62,14 +62,14 @@ export default function ApiDocsPage() {
               <h2>{apiDocs.exampleRequests.title.value}</h2>
               <h3>{apiDocs.exampleRequests.getContentList.value}</h3>
               <div className="code-block">
-                <pre><code>{`curl -X GET "${apiDocs.baseUrl}/content" \\
+                <pre><code>{`curl -X GET "${String(apiDocs.baseUrl.value || apiDocs.baseUrl)}/content" \\
   -H "Authorization: Bearer your-api-key" \\
   -H "Content-Type: application/json"`}</code></pre>
               </div>
 
               <h3>{apiDocs.exampleRequests.createContent.value}</h3>
               <div className="code-block">
-                <pre><code>{`curl -X POST "${apiDocs.baseUrl}/content" \\
+                <pre><code>{`curl -X POST "${String(apiDocs.baseUrl.value || apiDocs.baseUrl)}/content" \\
   -H "Authorization: Bearer your-api-key" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -81,7 +81,7 @@ export default function ApiDocsPage() {
 
               <h3>{apiDocs.exampleRequests.blockchainCertify.value}</h3>
               <div className="code-block">
-                <pre><code>{`curl -X POST "${apiDocs.baseUrl}/blockchain/certify" \\
+                <pre><code>{`curl -X POST "${String(apiDocs.baseUrl.value || apiDocs.baseUrl)}/blockchain/certify" \\
   -H "Authorization: Bearer your-api-key" \\
   -H "Content-Type: application/json" \\
   -d '{

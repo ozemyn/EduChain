@@ -23,3 +23,8 @@ export * from './providers';
 // 功能组件
 export { default as RecommendationList } from './RecommendationList/RecommendationList';
 export { LocaleSwitcher } from './LocaleSwitcher/LocaleSwitcher';
+export { ThemeSwitcher } from './ThemeSwitcher/ThemeSwitcher';
+export { default as MarkdownRenderer } from './MarkdownRenderer/MarkdownRenderer';
+
+// 知识库组件
+export * from './knowledge';

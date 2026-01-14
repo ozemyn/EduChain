@@ -1,0 +1,214 @@
+/**
+ * 通用选择器组件样式
+ * 支持单选、多选、标签输入三种模式
+ */
+
+/* ==================== 单选模式 ==================== */
+.selector-single {
+  width: 100%;
+}
+
+.selector-select {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-md) center;
+  padding-right: calc(var(--spacing-md) * 2.5);
+}
+
+.selector-select:focus {
+  outline: none;
+  border-color: rgb(var(--color-accent));
+  box-shadow: 0 0 0 3px rgba(var(--color-accent), 0.1);
+}
+
+.selector-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==================== 标签模式 ==================== */
+.selector-tags {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  min-height: 2.5rem;
+  transition: all var(--transition-fast) ease;
+}
+
+.tag-input-wrapper:focus-within {
+  border-color: rgb(var(--color-accent));
+  box-shadow: 0 0 0 3px rgba(var(--color-accent), 0.1);
+}
+
+.selected-tag {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  animation: tagSlideIn 0.2s ease;
+}
+
+.remove-tag-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast) ease;
+}
+
+.remove-tag-btn:hover {
+  opacity: 1;
+}
+
+.remove-tag-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.remove-tag-btn svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.tag-input {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-primary));
+}
+
+.tag-input::placeholder {
+  color: rgb(var(--color-text-tertiary));
+}
+
+.tag-input:disabled {
+  cursor: not-allowed;
+}
+
+/* 热门标签 */
+.popular-tags {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.popular-tags-label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: rgb(var(--color-text-secondary));
+}
+
+.popular-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.popular-tag-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.popular-tag-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(var(--color-accent), 0.1);
+  color: rgb(var(--color-accent));
+}
+
+.popular-tag-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 限制提示 */
+.tag-limit-message {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-warning-dark));
+  margin: 0;
+}
+
+/* ==================== 尺寸变体 ==================== */
+/* 小尺寸 */
+.selector-select.size-small {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--text-xs);
+}
+
+.selector-tags.size-small .tag-input-wrapper {
+  min-height: 2rem;
+  padding: var(--spacing-xs);
+}
+
+.selector-tags.size-small .selected-tag,
+.selector-tags.size-small .tag-input {
+  font-size: var(--text-xs);
+}
+
+/* 大尺寸 */
+.selector-select.size-large {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--text-base);
+}
+
+.selector-tags.size-large .tag-input-wrapper {
+  min-height: 3rem;
+  padding: var(--spacing-md);
+}
+
+.selector-tags.size-large .selected-tag,
+.selector-tags.size-large .tag-input {
+  font-size: var(--text-base);
+}
+
+/* ==================== 动画 ==================== */
+@keyframes tagSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 767px) {
+  .tag-input {
+    min-width: 80px;
+  }
+
+  .popular-tags-list {
+    justify-content: center;
+  }
+}

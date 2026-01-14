@@ -100,12 +100,22 @@ export const knowledgeService = {
 
 
   // 搜索知识
-  searchKnowledge: (keyword: string, params: PageRequest) =>
-    request.get<PageResponse<KnowledgeItem>>('/knowledge/search', { keyword, ...params }),
+  searchKnowledge: (keyword: string, params: PageRequest & { sort?: string }) =>
+    request.get<PageResponse<KnowledgeItem>>('/knowledge/search', { 
+      params: { keyword, ...params } 
+    }),
 
   // 高级搜索
-  advancedSearch: (filter: Record<string, unknown>, params: PageRequest) =>
-    request.post<PageResponse<KnowledgeItem>>('/knowledge/advanced-search', { ...filter, ...params }),
+  advancedSearch: (filter: {
+    keyword?: string;
+    categoryId?: number;
+    type?: string;
+    tags?: string[];
+  }, params: PageRequest & { sort?: string }) =>
+    request.post<PageResponse<KnowledgeItem>>('/knowledge/advanced-search', {
+      ...filter,
+      ...params,
+    }),
 
   // 获取热门内容
   getPopularKnowledge: (params: PageRequest) =>
