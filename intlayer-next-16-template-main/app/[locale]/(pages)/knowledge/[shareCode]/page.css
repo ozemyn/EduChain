@@ -325,6 +325,12 @@
   text-decoration-thickness: 3px;
 }
 
+/* ==================== 区块链存证区域 ==================== */
+.blockchain-cert-section {
+  margin: var(--spacing-2xl) 0;
+  animation: fadeIn var(--transition-slow) ease 0.45s both;
+}
+
 /* ==================== 交互区域 ==================== */
 .knowledge-interactions {
   display: flex;

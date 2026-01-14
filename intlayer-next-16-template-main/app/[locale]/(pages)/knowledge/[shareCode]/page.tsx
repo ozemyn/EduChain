@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import Navbar from '../../../../../components/layout/Navbar';
 import Footer from '../../../../../components/layout/Footer';
 import { InteractionButtons } from '../../../../../components/knowledge';
+import { BlockchainCertInfo } from '../../../../../components/blockchain';
 import { MarkdownRenderer } from '../../../../../components/MarkdownRenderer';
 import { knowledgeService } from '@/services';
 import type { KnowledgeItem } from '@/types';
@@ -142,6 +143,16 @@ export default function KnowledgeDetailPage() {
 
             {/* 内容 */}
             <MarkdownRenderer content={knowledge.content} className="knowledge-content" />
+
+            {/* 区块链存证信息 */}
+            <div className="blockchain-cert-section">
+              <BlockchainCertInfo
+                knowledgeId={knowledge.id}
+                knowledgeTitle={knowledge.title}
+                userId={knowledge.uploaderId}
+                userName={knowledge.uploaderName || `User ${knowledge.uploaderId}`}
+              />
+            </div>
 
             {/* 交互区域 */}
             <div className="knowledge-interactions">

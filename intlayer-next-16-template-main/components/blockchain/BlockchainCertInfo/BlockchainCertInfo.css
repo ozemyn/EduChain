@@ -1,0 +1,457 @@
+/**
+ * 区块链存证信息卡片样式
+ * 全宽展示版本（用于详情页）
+ */
+
+.blockchain-cert-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-2xl);
+  transition: all var(--transition-base) ease;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.blockchain-cert-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    rgb(var(--color-accent)), 
+    rgb(var(--color-primary-dark)),
+    rgb(var(--color-secondary))
+  );
+  opacity: 0.6;
+  transition: opacity var(--transition-fast) ease;
+}
+
+.blockchain-cert-card:hover::before {
+  opacity: 1;
+}
+
+.blockchain-cert-card.certified::before {
+  background: linear-gradient(90deg, 
+    rgb(var(--color-success-dark)), 
+    rgb(var(--color-success))
+  );
+}
+
+/* 卡片头部 */
+.cert-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  position: relative;
+}
+
+.cert-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: rgb(var(--color-accent));
+  flex-shrink: 0;
+  transition: all var(--transition-fast) ease;
+}
+
+.blockchain-cert-card.certified .cert-icon {
+  color: rgb(var(--color-success-dark));
+}
+
+.cert-title {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: rgb(var(--color-text-primary));
+  margin: 0;
+  flex: 1;
+}
+
+.cert-badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: linear-gradient(135deg, 
+    rgba(var(--color-success), 0.15), 
+    rgba(var(--color-success-dark), 0.15)
+  );
+  color: rgb(var(--color-success-dark));
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: fadeIn var(--transition-base) ease;
+}
+
+/* 加载状态 */
+.cert-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl) 0;
+}
+
+.loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid rgba(var(--color-accent), 0.2);
+  border-top-color: rgb(var(--color-accent));
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.cert-loading span {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+}
+
+/* 存证状态 */
+.cert-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background: rgba(var(--color-text-tertiary), 0.03);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base) ease;
+}
+
+.cert-status.not-certified {
+  background: rgba(var(--color-error), 0.05);
+  justify-content: space-between;
+}
+
+.cert-status.not-certified .cert-action-btn {
+  flex: 0 0 auto;
+  min-width: 160px;
+}
+
+.cert-status.certified {
+  background: linear-gradient(135deg, 
+    rgba(var(--color-success), 0.08), 
+    rgba(var(--color-success-dark), 0.05)
+  );
+}
+
+.status-icon-wrapper {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-base) ease;
+}
+
+.cert-status.not-certified .status-icon-wrapper {
+  background: rgba(var(--color-error), 0.1);
+}
+
+.cert-status.certified .status-icon-wrapper {
+  background: rgba(var(--color-success-dark), 0.15);
+}
+
+.status-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: all var(--transition-fast) ease;
+}
+
+.cert-status.not-certified .status-icon {
+  color: rgb(var(--color-error-dark));
+}
+
+.cert-status.certified .status-icon {
+  color: rgb(var(--color-success-dark));
+  animation: checkmark var(--transition-slow) ease;
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.status-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.status-label {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+}
+
+.status-desc {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.status-desc svg {
+  width: 1rem;
+  height: 1rem;
+  color: rgb(var(--color-text-tertiary));
+}
+
+.status-block {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(var(--color-accent), 0.1);
+  color: rgb(var(--color-accent));
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  margin-top: var(--spacing-xs);
+  width: fit-content;
+}
+
+/* 操作按钮 */
+.cert-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.cert-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-xl);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  min-width: 140px;
+}
+
+.cert-action-btn svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.cert-action-btn:not(.secondary) {
+  background: linear-gradient(135deg, 
+    rgb(var(--color-accent)), 
+    rgb(var(--color-primary-dark))
+  );
+  color: white;
+  box-shadow: 0 4px 12px rgba(var(--color-accent), 0.25);
+}
+
+.cert-action-btn.secondary {
+  background: rgba(var(--color-text-tertiary), 0.08);
+  color: rgb(var(--color-text-primary));
+}
+
+.cert-action-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--color-accent), 0.35);
+}
+
+.cert-action-btn.secondary:hover:not(:disabled) {
+  background: rgba(var(--color-text-tertiary), 0.12);
+  box-shadow: var(--shadow-md);
+}
+
+.cert-action-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.cert-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: var(--radius-full);
+  animation: spin 0.6s linear infinite;
+}
+
+/* 提示信息 */
+.cert-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: rgba(var(--color-info), 0.08);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid rgb(var(--color-info-dark));
+}
+
+.cert-notice svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: rgb(var(--color-info-dark));
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.cert-notice span {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-secondary));
+  line-height: var(--leading-relaxed);
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .blockchain-cert-card {
+    padding: var(--spacing-xl);
+  }
+
+  .cert-status {
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .blockchain-cert-card {
+    padding: var(--spacing-lg);
+    gap: var(--spacing-md);
+  }
+
+  .cert-title {
+    font-size: var(--text-sm);
+  }
+
+  .cert-badge {
+    font-size: 0.625rem;
+    padding: 2px var(--spacing-xs);
+  }
+
+  .cert-status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .status-icon-wrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .status-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .status-label {
+    font-size: var(--text-sm);
+  }
+
+  .status-desc {
+    font-size: var(--text-xs);
+  }
+
+  .cert-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cert-action-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--text-xs);
+    width: 100%;
+    min-width: auto;
+  }
+
+  .cert-action-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .cert-notice {
+    padding: var(--spacing-sm);
+  }
+
+  .cert-notice svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* 深色模式优化 */
+.dark .cert-status.not-certified {
+  background: rgba(var(--color-error), 0.08);
+}
+
+.dark .cert-status.certified {
+  background: linear-gradient(135deg, 
+    rgba(var(--color-success), 0.1), 
+    rgba(var(--color-success-dark), 0.08)
+  );
+}
+
+.dark .cert-action-btn.secondary {
+  background: rgba(var(--color-text-tertiary), 0.12);
+}
+
+.dark .cert-action-btn.secondary:hover:not(:disabled) {
+  background: rgba(var(--color-text-tertiary), 0.18);
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 无障碍 */
+@media (prefers-reduced-motion: reduce) {
+  .blockchain-cert-card,
+  .cert-icon,
+  .cert-badge,
+  .loading-spinner,
+  .status-icon,
+  .cert-action-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .cert-action-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}
