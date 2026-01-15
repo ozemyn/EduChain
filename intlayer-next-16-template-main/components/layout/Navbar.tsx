@@ -1,23 +1,32 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { getLocalizedUrl } from 'intlayer';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { LocaleSwitcher } from '../LocaleSwitcher/LocaleSwitcher';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { useAuth } from '../../src/contexts/auth-context';
+import { useDebounce } from '../../src/hooks';
+import { searchService, type SearchSuggestion } from '../../src/services/search';
 import './Navbar.css';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const content = useIntlayer('navbar');
   const { locale } = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
   const { user, logout, isAuthenticated } = useAuth();
+  const debouncedQuery = useDebounce(searchQuery, 300);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +35,61 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // 搜索建议
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (!debouncedQuery.trim()) {
+        setSuggestions([]);
+        return;
+      }
+      setIsSearching(true);
+      try {
+        const result = await searchService.getSuggestions(debouncedQuery);
+        setSuggestions(result.data || []);
+      } catch {
+        setSuggestions([]);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+    fetchSuggestions();
+  }, [debouncedQuery]);
+
+  // 点击外部关闭搜索
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    if (searchOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [searchOpen]);
+
+  // 搜索处理
+  const handleSearch = useCallback((query: string) => {
+    if (!query.trim()) return;
+    router.push(`/${locale}/search?q=${encodeURIComponent(query)}`);
+    setSearchOpen(false);
+    setSearchQuery('');
+  }, [router, locale]);
+
+  const handleSuggestionClick = useCallback((suggestion: SearchSuggestion) => {
+    router.push(`/${locale}/search?q=${encodeURIComponent(suggestion.keyword)}`);
+    setSearchOpen(false);
+    setSearchQuery('');
+  }, [router, locale]);
+
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch(searchQuery);
+    } else if (e.key === 'Escape') {
+      setSearchOpen(false);
+    }
+  }, [searchQuery, handleSearch]);
 
   // 点击外部关闭用户菜单
   useEffect(() => {
@@ -48,11 +112,11 @@ export default function Navbar() {
     router.push(getLocalizedUrl('/', locale));
   };
 
+  // 移除搜索链接，因为已经有搜索框了
   const navLinks = [
     { key: 'home', label: content.home.value, path: '/' },
     { key: 'knowledge', label: content.knowledge.value, path: '/knowledge' },
     { key: 'blockchain', label: content.blockchain.value, path: '/blockchain' },
-    { key: 'search', label: content.search.value, path: '/search' },
     { key: 'recommendations', label: content.recommendations.value, path: '/recommendations' },
     { key: 'community', label: content.community.value, path: '/community' },
   ];
@@ -60,14 +124,79 @@ export default function Navbar() {
   return (
     <>
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="navbar-container container">
-          <Link href={getLocalizedUrl('/', locale)} className="navbar-logo">
-            <span className="navbar-logo-text">
-              <span className="logo-edu">Edu</span>
-              <span className="logo-chain">Chain</span>
-            </span>
-          </Link>
+        <div className="navbar-container">
+          {/* 左侧区域：Logo + 搜索 */}
+          <div className="navbar-left">
+            <Link href={getLocalizedUrl('/', locale)} className="navbar-logo">
+              <span className="navbar-logo-text">
+                <span className="logo-edu">Edu</span>
+                <span className="logo-chain">Chain</span>
+              </span>
+            </Link>
 
+            {/* 导航栏搜索框 */}
+            <div className="navbar-search desktop-only" ref={searchRef}>
+              <div className={`navbar-search-wrapper ${searchOpen ? 'focused' : ''}`}>
+                <svg className="navbar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setSearchOpen(true)}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder={String(content.searchPlaceholder?.value || '搜索...')}
+                  className="navbar-search-input"
+                />
+                {isSearching && (
+                  <div className="navbar-search-loading">
+                    <div className="navbar-search-spinner" />
+                  </div>
+                )}
+                {searchQuery && !isSearching && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="navbar-search-clear"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              
+              {/* 搜索建议下拉 */}
+              {searchOpen && (searchQuery || suggestions.length > 0) && (
+                <div className="navbar-search-dropdown">
+                  {suggestions.length > 0 ? (
+                    suggestions.slice(0, 5).map((suggestion, index) => (
+                      <button
+                        key={`${suggestion.keyword}-${index}`}
+                        type="button"
+                        className="navbar-search-suggestion"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        <span className="suggestion-icon">🔍</span>
+                        <span className="suggestion-text">{suggestion.keyword}</span>
+                        {suggestion.count > 0 && (
+                          <span className="suggestion-count">{suggestion.count}</span>
+                        )}
+                      </button>
+                    ))
+                  ) : searchQuery && !isSearching ? (
+                    <div className="navbar-search-empty">
+                      按 Enter 搜索 "{searchQuery}"
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 中间导航链接 - 绝对居中 */}
           <div className="navbar-nav desktop-only">
             {navLinks.map((link) => (
               <Link
@@ -99,55 +228,53 @@ export default function Navbar() {
             </div>
 
             {isAuthenticated && user ? (
-              <>
-                <Link 
-                  href={getLocalizedUrl('/knowledge/create', locale)} 
-                  className="navbar-auth-btn navbar-publish-btn desktop-only"
+              <div className="user-menu-container desktop-only">
+                <button 
+                  className="navbar-user-btn"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
                 >
-                  {content.publish.value}
-                </Link>
-                
-                <div className="user-menu-container desktop-only">
-                  <button 
-                    className="navbar-user-btn"
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  >
-                    {user.avatarUrl ? (
-                      <img src={user.avatarUrl} alt={user.fullName || user.username} className="user-avatar" />
-                    ) : (
-                      <div className="user-avatar-placeholder">
-                        {(user.fullName || user.username).charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                    <span className="user-name">{user.fullName || user.username}</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  
-                  {userMenuOpen && (
-                    <div className="user-dropdown">
-                      <Link 
-                        href={getLocalizedUrl('/profile', locale)} 
-                        className="dropdown-item"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        {content.profile.value}
-                      </Link>
-                      <div className="dropdown-divider"></div>
-                      <button className="dropdown-item logout-item" onClick={handleLogout}>
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        {content.logout.value}
-                      </button>
+                  {user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt={user.fullName || user.username} className="user-avatar" />
+                  ) : (
+                    <div className="user-avatar-placeholder">
+                      {(user.fullName || user.username).charAt(0).toUpperCase()}
                     </div>
                   )}
-                </div>
-              </>
+                  <span className="user-name">{user.fullName || user.username}</span>
+                </button>
+                
+                {userMenuOpen && (
+                  <div className="user-dropdown">
+                    <Link 
+                      href={getLocalizedUrl('/knowledge/create', locale)} 
+                      className="dropdown-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      {content.publish.value}
+                    </Link>
+                    <Link 
+                      href={getLocalizedUrl('/profile', locale)} 
+                      className="dropdown-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      {content.profile.value}
+                    </Link>
+                    <div className="dropdown-divider"></div>
+                    <button className="dropdown-item logout-item" onClick={handleLogout}>
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      {content.logout.value}
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <Link href={getLocalizedUrl('/login', locale)} className="navbar-auth-btn navbar-login-btn">
                 {content.login.value}

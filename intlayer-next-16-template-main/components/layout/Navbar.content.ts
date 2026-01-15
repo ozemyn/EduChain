@@ -19,6 +19,10 @@ const navbarContent = {
       'zh-CN': '搜索',
       en: 'Search',
     }),
+    searchPlaceholder: t({
+      'zh-CN': '搜索知识、用户...',
+      en: 'Search...',
+    }),
     recommendations: t({
       'zh-CN': '推荐',
       en: 'Picks',
