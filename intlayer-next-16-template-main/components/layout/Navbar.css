@@ -1,6 +1,13 @@
 /* ===================================
    导航栏样式 - 浮动胶囊设计
+   Apple/Google Design System Compliant
    ================================== */
+
+/* 导航栏专用变量 */
+:root {
+  --color-pink-500: 219, 39, 119;
+  --color-pink-300: 249, 168, 212;
+}
 
 /* 主导航栏 - 浮动胶囊风格 */
 .navbar {
@@ -17,6 +24,7 @@
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.2s ease, background 0.2s ease;
+  will-change: box-shadow, background;
 }
 
 .dark .navbar {
@@ -392,7 +400,7 @@
 
 .navbar-login-btn {
   background: rgba(244, 114, 182, 0.1);
-  color: #DB2777;
+  color: rgb(var(--color-pink-500));
   border: none;
 }
 
@@ -402,7 +410,7 @@
 
 .dark .navbar-login-btn {
   background: rgba(244, 114, 182, 0.15);
-  color: #F9A8D4;
+  color: rgb(var(--color-pink-300));
 }
 
 .dark .navbar-login-btn:hover {
@@ -411,7 +419,7 @@
 
 .navbar-publish-btn {
   background: rgba(244, 114, 182, 0.1);
-  color: #DB2777;
+  color: rgb(var(--color-pink-500));
   border: none;
 }
 
@@ -526,7 +534,7 @@
 }
 
 .mobile-only {
-  display: none !important;
+  display: none;
 }
 
 @media (max-width: 1200px) {
@@ -536,22 +544,22 @@
 }
 
 @media (max-width: 1100px) {
-  .navbar-search {
-    display: none !important;
+  .navbar .navbar-search {
+    display: none;
   }
 
-  .navbar-nav {
+  .navbar .navbar-nav {
     gap: 2px;
   }
 
-  .navbar-link {
+  .navbar .navbar-link {
     padding: 6px 10px;
     font-size: 13px;
   }
 
   /* 隐藏通知按钮 */
-  .navbar-actions .navbar-action-btn {
-    display: none !important;
+  .navbar .navbar-actions .navbar-action-btn {
+    display: none;
   }
 }
 
@@ -560,29 +568,29 @@
     width: calc(100% - 24px);
   }
 
-  .navbar-search {
-    display: none !important;
+  .navbar .navbar-search {
+    display: none;
   }
 
-  .desktop-only {
-    display: none !important;
+  .navbar .desktop-only {
+    display: none;
   }
 
-  .mobile-only {
-    display: flex !important;
+  .navbar .mobile-only {
+    display: flex;
   }
 
-  .navbar-nav {
-    display: none !important;
+  .navbar .navbar-nav {
+    display: none;
   }
 
-  .navbar-container {
+  .navbar .navbar-container {
     padding: 0 16px;
     height: 52px;
   }
 
-  .navbar-mobile-btn {
-    display: flex !important;
+  .navbar .navbar-mobile-btn {
+    display: flex;
   }
 }
 
@@ -598,13 +606,25 @@
   }
 }
 
-/* 性能优化 */
+/* 性能优化与无障碍 */
 @media (prefers-reduced-motion: reduce) {
   .navbar,
   .navbar-link,
-  .navbar-action-btn {
-    transition: none !important;
+  .navbar-action-btn,
+  .mobile-nav-link {
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
   }
+}
+
+/* 键盘焦点可见性 */
+.navbar-link:focus-visible,
+.navbar-action-btn:focus-visible,
+.navbar-auth-btn:focus-visible,
+.navbar-search-input:focus-visible,
+.dropdown-item:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 2px;
 }
 
 
@@ -762,11 +782,11 @@
 }
 
 .mobile-logout-btn {
-  background: rgba(var(--color-error-dark), 0.1) !important;
-  color: rgb(var(--color-error-dark)) !important;
-  border: 1px solid rgba(var(--color-error-dark), 0.3) !important;
+  background: rgba(var(--color-error-dark), 0.1);
+  color: rgb(var(--color-error-dark));
+  border: 1px solid rgba(var(--color-error-dark), 0.3);
 }
 
 .mobile-logout-btn:hover {
-  background: rgba(var(--color-error-dark), 0.2) !important;
+  background: rgba(var(--color-error-dark), 0.2);
 }
