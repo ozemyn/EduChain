@@ -21,11 +21,11 @@ const navbarContent = {
     }),
     recommendations: t({
       'zh-CN': '推荐',
-      en: 'Recommendations',
+      en: 'Picks',
     }),
     community: t({
       'zh-CN': '社区',
-      en: 'Community',
+      en: 'Hub',
     }),
     publish: t({
       'zh-CN': '发布',

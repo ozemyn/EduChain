@@ -18,6 +18,10 @@ export const token = {
 
   /** 检查是否过期 */
   isExpired(jwt: string): boolean {
+    // Mock token 格式: mock_access_token_xxx，不是真正的 JWT
+    if (jwt.startsWith('mock_')) {
+      return false; // Mock token 永不过期
+    }
     const payload = this.parse(jwt);
     if (!payload?.exp) return true;
     return (payload.exp as number) < Date.now() / 1000;

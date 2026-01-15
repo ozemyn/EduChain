@@ -3,6 +3,7 @@ import type { NextLayoutIntlayer } from "next-intlayer";
 import { IntlayerClientProvider } from "next-intlayer";
 import { ErrorBoundary, MockIndicator } from "../../components/common";
 import { MockProvider } from "../../components/providers";
+import { AuthProvider } from "../../src/contexts/auth-context";
 
 export { generateStaticParams } from "next-intlayer";
 
@@ -13,6 +14,7 @@ const LocaleLayout: NextLayoutIntlayer = async ({ children, params }) => {
       <html lang={locale} dir={getHTMLTextDir(locale)} suppressHydrationWarning>
         <head>
           <script
+            suppressHydrationWarning
             dangerouslySetInnerHTML={{
               __html: `
                 (function() {
@@ -30,12 +32,14 @@ const LocaleLayout: NextLayoutIntlayer = async ({ children, params }) => {
           />
         </head>
         <body suppressHydrationWarning>
-          <MockProvider>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
-            <MockIndicator />
-          </MockProvider>
+          <AuthProvider>
+            <MockProvider>
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
+              <MockIndicator />
+            </MockProvider>
+          </AuthProvider>
         </body>
       </html>
     </IntlayerClientProvider>
