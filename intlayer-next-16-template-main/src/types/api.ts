@@ -60,6 +60,9 @@ export interface User {
   status: number;
   createdAt: string;
   updatedAt: string;
+  knowledgeCount?: number;
+  followerCount?: number;
+  followingCount?: number;
 }
 
 export interface UserStats {
@@ -179,6 +182,8 @@ export interface Notification {
   relatedId?: number;
   isRead: boolean;
   createdAt: string;
+  senderName?: string;
+  senderAvatar?: string;
 }
 
 // 用户互动相关类型
@@ -220,6 +225,9 @@ export interface UserFollow {
   createdAt: string;
   follower?: User;
   following?: User;
+  user: User;
+  isFollowing: boolean;
+  isMutual: boolean;
 }
 
 export interface FollowStats {
@@ -227,6 +235,18 @@ export interface FollowStats {
   followingCount: number;
   followerCount: number;
   isFollowing?: boolean;
+}
+
+// 活动动态相关类型
+export interface Activity {
+  id: number;
+  type: 'publish' | 'like' | 'comment' | 'follow';
+  userId: number;
+  user?: User;
+  content: string;
+  targetId?: number;
+  targetTitle?: string;
+  createdAt: string;
 }
 
 // 搜索相关类型

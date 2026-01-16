@@ -43,6 +43,14 @@ const navbarContent = {
       'zh-CN': '个人中心',
       en: 'Profile',
     }),
+    activity: t({
+      'zh-CN': '动态',
+      en: 'Activity',
+    }),
+    follow: t({
+      'zh-CN': '关注',
+      en: 'Follow',
+    }),
     logout: t({
       'zh-CN': '退出登录',
       en: 'Logout',

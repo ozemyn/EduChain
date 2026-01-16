@@ -9,6 +9,7 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  /* 不设置 z-index，让 SearchSuggestion 的 z-index 直接参与页面层叠 */
 }
 
 /* ==================== 输入框包装器 ==================== */

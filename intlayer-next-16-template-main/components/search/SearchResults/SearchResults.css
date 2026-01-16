@@ -197,10 +197,13 @@
 /* ==================== 网格视图 ==================== */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-2xl);
+  row-gap: var(--spacing-3xl);
+  margin-bottom: var(--spacing-3xl);
   animation: fadeIn var(--transition-base) ease;
+  /* 确保每行卡片顶部对齐 */
+  align-items: start;
 }
 
 @keyframes fadeIn {
@@ -413,8 +416,9 @@
 /* ==================== 响应式设计 ==================== */
 @media (max-width: 1200px) {
   .results-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
+    row-gap: var(--spacing-2xl);
   }
 }
 
@@ -447,9 +451,10 @@
   }
 
   .results-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-xl);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    row-gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl);
   }
 
   .results-list {

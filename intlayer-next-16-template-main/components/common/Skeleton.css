@@ -1,0 +1,189 @@
+/* ===================================
+   骨架屏样式
+   ================================== */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-background-tertiary, 245 245 245)) 25%,
+    rgb(var(--color-background-secondary, 250 250 250)) 50%,
+    rgb(var(--color-background-tertiary, 245 245 245)) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  border-radius: var(--radius-sm, 0.25rem);
+}
+
+.skeleton-circular {
+  border-radius: var(--radius-full, 9999px);
+  flex-shrink: 0;
+}
+
+.skeleton-rectangular {
+  border-radius: var(--radius-lg, 0.5rem);
+}
+
+/* 用户卡片骨架屏 */
+.skeleton-user-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg, 1.5rem);
+  padding: var(--spacing-lg, 1.5rem);
+  border-radius: var(--radius-xl, 0.75rem);
+}
+
+.skeleton-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+.skeleton-user-stats {
+  display: flex;
+  gap: var(--spacing-lg, 1.5rem);
+  margin-top: var(--spacing-xs, 0.25rem);
+}
+
+.skeleton-btn {
+  border-radius: var(--radius-xl, 0.75rem);
+}
+
+/* 通知骨架屏 */
+.skeleton-notification {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg, 1.5rem);
+  padding: var(--spacing-lg, 1.5rem);
+  border-radius: var(--radius-xl, 0.75rem);
+}
+
+.skeleton-notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 0.25rem);
+}
+
+/* 动态骨架屏 */
+.skeleton-activity {
+  display: flex;
+  gap: var(--spacing-md, 1rem);
+  padding: var(--spacing-md, 1rem);
+  border-radius: var(--radius-xl, 0.75rem);
+}
+
+.skeleton-activity-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 0.25rem);
+}
+
+/* 个人资料头部骨架屏 */
+.skeleton-profile-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing-2xl, 2rem);
+  align-items: center;
+  padding: var(--spacing-2xl, 2rem);
+  border-radius: var(--radius-2xl, 1rem);
+}
+
+.skeleton-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+.skeleton-badges {
+  display: flex;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+.skeleton-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 1rem);
+}
+
+/* 统计卡片骨架屏 */
+.skeleton-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md, 1rem);
+  padding: var(--spacing-xl, 1.5rem);
+  border-radius: var(--radius-xl, 0.75rem);
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .skeleton-profile-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: var(--spacing-xl, 1.5rem);
+  }
+
+  .skeleton-profile-info {
+    align-items: center;
+  }
+
+  .skeleton-badges {
+    justify-content: center;
+  }
+
+  .skeleton-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-user-card {
+    flex-wrap: wrap;
+  }
+
+  .skeleton-user-info {
+    flex: 1 1 calc(100% - 72px);
+  }
+
+  .skeleton-btn {
+    width: 100%;
+    margin-top: var(--spacing-sm, 0.5rem);
+  }
+}
+
+/* 无障碍 - 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: rgb(var(--color-background-tertiary, 245 245 245));
+  }
+
+  .dark .skeleton {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}

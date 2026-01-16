@@ -350,15 +350,25 @@
   border-radius: var(--radius-full);
   background: transparent;
   border: none;
-  color: rgb(var(--color-text-primary));
+  color: rgb(60, 60, 67); /* 浅色模式下使用深色图标 */
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
   position: relative;
   flex-shrink: 0;
 }
 
+.navbar-action-btn svg {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  color: currentColor;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
 .dark .navbar-action-btn {
-  color: rgb(var(--color-text-primary));
+  color: rgb(229, 229, 234); /* 深色模式下使用浅色图标 */
 }
 
 .navbar-action-btn:hover {
@@ -558,11 +568,6 @@
     padding: 6px 10px;
     font-size: 13px;
   }
-
-  /* 隐藏通知按钮 */
-  .navbar .navbar-actions .navbar-action-btn {
-    display: none;
-  }
 }
 
 @media (max-width: 900px) {
@@ -668,19 +673,6 @@
   .mobile-nav-links,
   .mobile-actions {
     display: none;
-  }
-}
-
-/* 系统级暗色模式自动切换 */
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) .navbar {
-    background: rgba(28, 28, 30, 0.85);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  :root:not(.light) .navbar.scrolled {
-    background: rgba(28, 28, 30, 0.95);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
 }
 

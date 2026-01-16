@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useIntlayer } from 'next-intlayer';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '../../../../components/layout/Navbar';
@@ -191,32 +191,32 @@ function SearchPageContent() {
   };
 
   // 处理建议选择
-  const handleSuggestionSelect = (text: string) => {
+  const handleSuggestionSelect = useCallback((text: string) => {
     setKeyword(text);
     setShowSuggestion(false);
     performSearch(text, 1, filters);
-  };
+  }, [performSearch, filters]);
 
   // 处理筛选变化
-  const handleFilterChange = (newFilters: SearchFilterValues) => {
+  const handleFilterChange = useCallback((newFilters: SearchFilterValues) => {
     setFilters(newFilters);
     if (keyword.trim()) {
       performSearch(keyword, 1, newFilters);
     }
-  };
+  }, [keyword, performSearch]);
 
   // 清空搜索历史
-  const handleClearHistory = () => {
+  const handleClearHistory = useCallback(() => {
     setSearchHistory([]);
     localStorage.removeItem('searchHistory');
-  };
+  }, []);
 
   // 加载更多
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (!loading && hasMore) {
       performSearch(keyword, page + 1, filters);
     }
-  };
+  }, [loading, hasMore, keyword, page, filters, performSearch]);
 
   return (
     <>
@@ -247,9 +247,10 @@ function SearchPageContent() {
               onChange={setKeyword}
               onSearch={handleSearch}
               onFocus={() => setShowSuggestion(true)}
-              onBlur={() => setTimeout(() => setShowSuggestion(false), 200)}
+              onBlur={() => setTimeout(() => setShowSuggestion(false), 300)}
               loading={loading}
             />
+            {/* 搜索建议 - 文档流布局，展开时把下面内容往下推 */}
             <SearchSuggestion
               suggestions={suggestions}
               history={searchHistory}

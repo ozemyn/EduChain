@@ -11,3 +11,5 @@ export * from './use-mounted';
 export * from './use-media-query';
 export * from './use-toast';
 export * from './use-error-handler';
+export * from './use-confirm-dialog';
+export * from './use-unsaved-changes';

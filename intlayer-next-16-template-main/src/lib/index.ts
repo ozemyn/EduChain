@@ -10,3 +10,4 @@ export * from './cache';
 export * from './draft';
 export * from './error';
 export * from './cn';
+export * from './time';

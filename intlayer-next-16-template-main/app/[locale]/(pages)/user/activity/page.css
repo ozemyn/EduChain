@@ -1,0 +1,426 @@
+/* ===================================
+   动态中心页面样式
+   企业级标准 - Apple/Google 风格
+   ================================== */
+
+/* ==================== 页面容器 ==================== */
+.activity-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    rgb(254, 252, 253) 0%, 
+    rgb(255, 255, 255) 50%, 
+    rgb(253, 249, 251) 100%
+  );
+  padding: var(--spacing-2xl) 0;
+}
+
+.dark .activity-page {
+  background: linear-gradient(135deg, 
+    rgb(var(--color-background)) 0%, 
+    rgb(var(--color-background-secondary)) 50%, 
+    rgb(var(--color-background)) 100%
+  );
+}
+
+.activity-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* ==================== 页面头部 ==================== */
+.activity-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  animation: fadeInUp var(--transition-slower) ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activity-title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, 
+    rgb(var(--color-accent)), 
+    rgb(var(--color-primary-dark))
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 var(--spacing-md) 0;
+  letter-spacing: -0.02em;
+}
+
+.activity-subtitle {
+  font-size: var(--text-lg);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+}
+
+/* ==================== 双栏布局 ==================== */
+.activity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+.activity-section {
+  animation: fadeInUp var(--transition-slower) ease;
+  animation-fill-mode: both;
+}
+
+.activity-section:nth-child(1) {
+  animation-delay: 100ms;
+}
+
+.activity-section:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.activity-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-2xl);
+  min-height: 500px;
+}
+
+/* ==================== 卡片头部 ==================== */
+.activity-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgb(var(--color-border));
+}
+
+.activity-card-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: rgb(var(--color-text-primary));
+  margin: 0;
+}
+
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid rgb(var(--color-border));
+  background: transparent;
+  color: rgb(var(--color-text-secondary));
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.refresh-btn:hover {
+  border-color: rgb(var(--color-accent));
+  color: rgb(var(--color-accent));
+}
+
+.refresh-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==================== 时间线 ==================== */
+.activity-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.timeline-item {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-fast) ease;
+}
+
+.timeline-item:hover {
+  transform: translateX(4px);
+}
+
+.timeline-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.timeline-avatar-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, 
+    rgb(var(--color-primary)), 
+    rgb(var(--color-accent))
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.timeline-avatar-placeholder svg {
+  width: 22px;
+  height: 22px;
+  color: white;
+}
+
+.timeline-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-text {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-primary));
+  margin: 0 0 var(--spacing-xs) 0;
+  line-height: var(--leading-relaxed);
+}
+
+.timeline-text strong {
+  font-weight: 600;
+  color: rgb(var(--color-accent));
+}
+
+.timeline-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.timeline-time {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-tertiary));
+}
+
+.timeline-type {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.timeline-type.publish {
+  background: rgba(var(--color-accent), 0.1);
+  color: rgb(var(--color-accent));
+}
+
+.timeline-type.like {
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(239, 68, 68);
+}
+
+.timeline-type.comment {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.timeline-type.follow {
+  background: rgba(34, 197, 94, 0.1);
+  color: rgb(34, 197, 94);
+}
+
+.timeline-type svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ==================== 加载更多 ==================== */
+.load-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  border: 2px dashed rgb(var(--color-border));
+  background: transparent;
+  color: rgb(var(--color-text-secondary));
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.load-more-btn:hover {
+  border-color: rgb(var(--color-accent));
+  color: rgb(var(--color-accent));
+  background: rgba(var(--color-accent), 0.05);
+}
+
+.load-more-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==================== 空状态 ==================== */
+.activity-empty {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--spacing-lg);
+  border-radius: var(--radius-full);
+  background: rgba(var(--color-accent), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon svg {
+  width: 32px;
+  height: 32px;
+  color: rgb(var(--color-accent));
+}
+
+.empty-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: rgb(var(--color-text-primary));
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.empty-description {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 1024px) {
+  .activity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .activity-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .activity-card {
+    padding: var(--spacing-lg);
+  }
+
+  .timeline-item {
+    padding: var(--spacing-sm);
+  }
+
+  .timeline-avatar,
+  .timeline-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ==================== 性能优化 ==================== */
+.timeline-item {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ==================== 无障碍支持 ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .activity-header,
+  .activity-section,
+  .timeline-item {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==================== 新增样式 ==================== */
+
+/* 骨架屏列表 */
+.activity-skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* 刷新按钮旋转动画 */
+.refresh-btn svg.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 加载更多按钮改进 */
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgb(var(--color-border));
+  border-top-color: rgb(var(--color-accent));
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+/* 加载状态 */
+.activity-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-3xl);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgb(var(--color-border));
+  border-top: 3px solid rgb(var(--color-accent));
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+/* 焦点可见性 */
+.refresh-btn:focus-visible,
+.load-more-btn:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 2px;
+}
+
+/* 文章语义化 */
+.timeline-item[role="article"] {
+  position: relative;
+}

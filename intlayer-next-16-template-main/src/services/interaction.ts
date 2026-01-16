@@ -10,6 +10,7 @@ import type {
   InteractionStats,
   Comment,
   CreateCommentRequest,
+  Activity,
 } from '../types/api';
 
 export interface UpdateCommentRequest {
@@ -52,6 +53,14 @@ export const interactionService = {
   // 获取用户收藏列表
   getUserFavorites: (params: PageRequest) =>
     request.get<PageResponse<UserInteraction>>('/interactions/favorites', params),
+
+  // 获取关注用户的动态
+  getFollowingActivities: (params?: PageRequest) =>
+    request.get<PageResponse<Activity>>('/activities/following', params),
+
+  // 获取指定用户的动态
+  getUserActivities: (userId: number, params?: PageRequest) =>
+    request.get<PageResponse<Activity>>(`/activities/user/${userId}`, params),
 };
 
 export const commentService = {

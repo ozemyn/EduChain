@@ -4,7 +4,7 @@
  * 错误处理 Hook
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { parseApiError, getErrorMessage } from '@/lib/error';
 import { useToast } from './use-toast';
 
@@ -51,10 +51,11 @@ export function useErrorHandler() {
     [toast]
   );
 
-  return {
+  // 使用 useMemo 确保返回的对象引用稳定
+  return useMemo(() => ({
     handleError,
     handleSuccess,
     handleWarning,
     handleInfo,
-  };
+  }), [handleError, handleSuccess, handleWarning, handleInfo]);
 }

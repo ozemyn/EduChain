@@ -5,7 +5,7 @@
  * 统一的消息提示接口
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -46,5 +46,6 @@ export function useToast() {
     showToast(message, 'info', options);
   }, []);
 
-  return { success, error, warning, info };
+  // 使用 useMemo 确保返回的对象引用稳定
+  return useMemo(() => ({ success, error, warning, info }), [success, error, warning, info]);
 }

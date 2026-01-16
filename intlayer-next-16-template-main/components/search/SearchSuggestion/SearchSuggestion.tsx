@@ -30,11 +30,11 @@ export const SearchSuggestion: React.FC<SearchSuggestionProps> = ({
 }) => {
   const content = useIntlayer('search-suggestion');
 
-  // 使用 useMemo 优化计算
   const hasHistory = useMemo(() => history.length > 0, [history.length]);
   const hasHotSearches = useMemo(() => hotSearches.length > 0, [hotSearches.length]);
   const hasSuggestions = useMemo(() => suggestions.length > 0, [suggestions.length]);
 
+  // 不显示时直接返回 null，不占用空间
   if (!visible) return null;
 
   return (
