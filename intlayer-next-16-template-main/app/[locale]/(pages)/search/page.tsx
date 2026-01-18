@@ -225,7 +225,7 @@ function SearchPageContent() {
       <div className="search-page">
         <div className="search-page-container container">
           {/* 页面头部 */}
-          <div className="search-page-header glass-card">
+          <div className="search-page-header glass-card motion-scale-in">
             <div className="header-icon">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -241,7 +241,7 @@ function SearchPageContent() {
           </div>
 
           {/* 搜索输入 */}
-          <div className="search-input-section">
+          <div className="search-input-section motion-slide-in-up motion-delay-200">
             <SearchInput
               value={keyword}
               onChange={setKeyword}
@@ -262,10 +262,10 @@ function SearchPageContent() {
           </div>
 
           {/* 筛选器切换按钮（移动端） */}
-          <div className="filter-toggle-section">
+          <div className="filter-toggle-section motion-slide-in-up motion-delay-300">
             <button
               onClick={() => setShowFilter(!showFilter)}
-              className={`filter-toggle-btn glass-button ${showFilter ? 'active' : ''}`}
+              className={`filter-toggle-btn glass-button motion-hover-scale ${showFilter ? 'active' : ''}`}
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -280,7 +280,7 @@ function SearchPageContent() {
           </div>
 
           {/* 主内容区域 */}
-          <div className={`search-content ${!showFilter ? 'no-filter' : ''}`}>
+          <div className={`search-content ${!showFilter ? 'no-filter' : ''} motion-slide-in-up motion-delay-400`}>
             {/* 筛选器侧边栏 */}
             {showFilter && (
               <div className="filter-sidebar">
@@ -292,7 +292,7 @@ function SearchPageContent() {
             <div className="results-section">
               {/* 错误提示 */}
               {error && (
-                <div className="error-message glass-card" style={{
+                <div className="error-message glass-card motion-shake" style={{
                   padding: 'var(--spacing-xl)',
                   marginBottom: 'var(--spacing-xl)',
                   background: 'rgba(239, 68, 68, 0.1)',
@@ -301,8 +301,7 @@ function SearchPageContent() {
                   color: 'rgb(239, 68, 68)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 'var(--spacing-md)',
-                  animation: 'slideInFromTop var(--transition-base) ease'
+                  gap: 'var(--spacing-md)'
                 }}>
                   <svg style={{ width: '1.5rem', height: '1.5rem', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

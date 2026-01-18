@@ -12,7 +12,7 @@ export default function SearchPage() {
   return (
     <>
       <Navbar />
-      <div className="product-page animate-fade-in">
+      <div className="product-page motion-fade-in">
         <div className="product-content">
           {/* 页面头部 */}
           <header className="product-header">
@@ -27,7 +27,7 @@ export default function SearchPage() {
               <h2>{search.coreFeatures.value}</h2>
               <div className="product-features">
                 {search.features.map((feature, index) => (
-                  <div key={index} className="product-feature glass-light hover-lift">
+                  <div key={index} className="product-feature glass-light motion-hover-lift">
                     <div className="product-feature-icon">{feature.icon}</div>
                     <h4>{feature.title.value}</h4>
                     <p>{feature.description.value}</p>
@@ -56,7 +56,7 @@ export default function SearchPage() {
             <div className="product-cta">
               <h2>{search.cta.title.value}</h2>
               <p>{search.cta.description.value}</p>
-              <a href="/search" className="product-cta-btn hover-lift">
+              <a href="/search" className="product-cta-btn motion-hover-lift">
                 {search.cta.button.value}
                 <span>→</span>
               </a>

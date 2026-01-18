@@ -1,241 +1,479 @@
 /**
- * 动画效果 - Animations
- * 淡入淡出、滑动、缩放、旋转、加载动画
- * 性能优化，流畅自然
+ * ============================================
+ * Motion Design System - 企业级动画系统
+ * ============================================
+ * 
+ * 设计规范：Apple Human Interface Guidelines + Google Material Design 3
+ * 性能标准：60fps | GPU 加速 | 零重排重绘
+ * 命名规范：BEM + 语义化
+ * 
+ * @version 2.0.0
+ * @author Design System Team
+ * ============================================
  */
 
-@layer utilities {
-  @keyframes fadeIn {
+@layer motion {
+  
+  /* ============================================
+     1. 动画关键帧定义
+     ============================================ */
+  
+  /* 1.1 淡入淡出 - Fade */
+  @keyframes motion-fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
   }
-
-  .animate-fade-in {
-    animation: fadeIn var(--transition-base) ease-out;
-  }
-
-  @keyframes fadeOut {
+  
+  @keyframes motion-fade-out {
     from { opacity: 1; }
     to { opacity: 0; }
   }
-
-  .animate-fade-out {
-    animation: fadeOut var(--transition-base) ease-in;
+  
+  /* 1.2 滑入 - Slide In (Apple 风格：8px + scale) */
+  @keyframes motion-slide-in-up {
+    from { 
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
-
-  @keyframes slideInFromTop {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+  
+  @keyframes motion-slide-in-down {
+    from { 
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
-
-  .animate-slide-in-top {
-    animation: slideInFromTop var(--transition-slow) ease-out;
+  
+  @keyframes motion-slide-in-left {
+    from { 
+      opacity: 0;
+      transform: translateX(-8px) scale(0.98);
+    }
+    to { 
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
   }
-
-  @keyframes slideInFromBottom {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+  
+  @keyframes motion-slide-in-right {
+    from { 
+      opacity: 0;
+      transform: translateX(8px) scale(0.98);
+    }
+    to { 
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
   }
-
-  .animate-slide-in-bottom {
-    animation: slideInFromBottom var(--transition-slow) ease-out;
+  
+  /* 1.3 滑出 - Slide Out */
+  @keyframes motion-slide-out-down {
+    from { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to { 
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
   }
-
-  @keyframes slideInFromLeft {
-    from { transform: translateX(-20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+  
+  @keyframes motion-slide-out-up {
+    from { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to { 
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
   }
-
-  .animate-slide-in-left {
-    animation: slideInFromLeft var(--transition-slow) ease-out;
+  
+  /* 1.4 缩放 - Scale */
+  @keyframes motion-scale-in {
+    from { 
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to { 
+      opacity: 1;
+      transform: scale(1);
+    }
   }
-
-  @keyframes slideInFromRight {
-    from { transform: translateX(20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+  
+  @keyframes motion-scale-out {
+    from { 
+      opacity: 1;
+      transform: scale(1);
+    }
+    to { 
+      opacity: 0;
+      transform: scale(0.96);
+    }
   }
-
-  .animate-slide-in-right {
-    animation: slideInFromRight var(--transition-slow) ease-out;
-  }
-
-  @keyframes scaleIn {
-    from { transform: scale(0.95); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  .animate-scale-in {
-    animation: scaleIn var(--transition-base) ease-out;
-  }
-
-  @keyframes scaleOut {
-    from { transform: scale(1); opacity: 1; }
-    to { transform: scale(0.95); opacity: 0; }
-  }
-
-  .animate-scale-out {
-    animation: scaleOut var(--transition-base) ease-in;
-  }
-
-  @keyframes spin {
+  
+  /* 1.5 旋转 - Spin */
+  @keyframes motion-spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
-
-  .animate-spin {
-    animation: spin 1s linear infinite;
-  }
-
-  .animate-spin-slow {
-    animation: spin 3s linear infinite;
-  }
-
-  @keyframes pulse {
+  
+  /* 1.6 脉冲 - Pulse */
+  @keyframes motion-pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.4; }
   }
-
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes bounce {
+  
+  /* 1.7 弹跳 - Bounce */
+  @keyframes motion-bounce {
     0%, 100% {
       transform: translateY(0);
       animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
     }
     50% {
-      transform: translateY(-25%);
+      transform: translateY(-20%);
       animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
     }
   }
-
-  .animate-bounce {
-    animation: bounce 1s infinite;
-  }
-
-  @keyframes shake {
+  
+  /* 1.8 抖动 - Shake */
+  @keyframes motion-shake {
     0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-    20%, 40%, 60%, 80% { transform: translateX(4px); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+    20%, 40%, 60%, 80% { transform: translateX(3px); }
   }
-
-  .animate-shake {
-    animation: shake 0.5s ease-in-out;
+  
+  /* 1.9 骨架屏 - Skeleton */
+  @keyframes motion-skeleton {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
-
-  @keyframes gradientFlow {
+  
+  /* 1.10 进度条 - Progress */
+  @keyframes motion-progress-indeterminate {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* 1.11 渐变流动 - Gradient Flow */
+  @keyframes motion-gradient-flow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradientFlow 3s ease infinite;
+  
+  /* 1.12 点点加载 - Dots */
+  @keyframes motion-dot-pulse {
+    0%, 80%, 100% { 
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    40% { 
+      opacity: 1;
+      transform: scale(1);
+    }
   }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+  
+  
+  /* ============================================
+     2. 入场动画类 - Entrance
+     ============================================ */
+  
+  /* 2.1 淡入 */
+  .motion-fade-in {
+    animation: motion-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: opacity;
   }
-
-  .animate-blink {
-    animation: blink 1s step-start infinite;
+  
+  /* 2.2 滑入 */
+  .motion-slide-in-up {
+    animation: motion-slide-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
   }
-
-  .hover-lift {
-    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+  
+  .motion-slide-in-down {
+    animation: motion-slide-in-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
   }
-
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+  
+  .motion-slide-in-left {
+    animation: motion-slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
   }
-
-  .hover-scale {
-    transition: transform var(--transition-base) ease;
+  
+  .motion-slide-in-right {
+    animation: motion-slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
   }
-
-  .hover-scale:hover {
-    transform: scale(1.05);
+  
+  /* 2.3 缩放入场 */
+  .motion-scale-in {
+    animation: motion-scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
   }
-
-  .hover-glow {
-    transition: box-shadow var(--transition-base) ease;
+  
+  
+  /* ============================================
+     3. 退场动画类 - Exit
+     ============================================ */
+  
+  .motion-fade-out {
+    animation: motion-fade-out 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+    will-change: opacity;
   }
-
-  .hover-glow:hover {
-    box-shadow: 0 0 20px rgb(var(--color-accent) / 0.5);
+  
+  .motion-slide-out-down {
+    animation: motion-slide-out-down 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+    will-change: transform, opacity;
   }
-
-  @keyframes dotPulse {
-    0%, 80%, 100% { opacity: 0.3; }
-    40% { opacity: 1; }
+  
+  .motion-slide-out-up {
+    animation: motion-slide-out-up 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+    will-change: transform, opacity;
   }
-
-  .loading-dots span {
-    animation: dotPulse 1.4s infinite ease-in-out;
+  
+  .motion-scale-out {
+    animation: motion-scale-out 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+    will-change: transform, opacity;
   }
-
-  .loading-dots span:nth-child(1) { animation-delay: 0s; }
-  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+  
+  
+  /* ============================================
+     4. 交互动画类 - Interaction
+     ============================================ */
+  
+  /* 4.1 悬停上浮 */
+  .motion-hover-lift {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
   }
-
-  .skeleton {
+  
+  .motion-hover-lift:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* 4.2 悬停缩放 */
+  .motion-hover-scale {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  
+  .motion-hover-scale:hover {
+    transform: scale(1.02);
+  }
+  
+  /* 4.3 悬停发光 */
+  .motion-hover-glow {
+    transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .motion-hover-glow:hover {
+    box-shadow: 0 0 24px rgba(244, 114, 182, 0.4);
+  }
+  
+  /* 4.4 Material 波纹效果 */
+  .motion-ripple {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .motion-ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .motion-ripple:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+  
+  
+  /* ============================================
+     5. 加载动画类 - Loading
+     ============================================ */
+  
+  /* 5.1 旋转加载 */
+  .motion-spin {
+    animation: motion-spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    will-change: transform;
+  }
+  
+  .motion-spin--slow {
+    animation: motion-spin 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    will-change: transform;
+  }
+  
+  /* 5.2 脉冲加载 */
+  .motion-pulse {
+    animation: motion-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: opacity;
+  }
+  
+  /* 5.3 弹跳加载 */
+  .motion-bounce {
+    animation: motion-bounce 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: transform;
+  }
+  
+  /* 5.4 点点加载 */
+  .motion-dots span {
+    display: inline-block;
+    animation: motion-dot-pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: opacity, transform;
+  }
+  
+  .motion-dots span:nth-child(1) { animation-delay: 0s; }
+  .motion-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .motion-dots span:nth-child(3) { animation-delay: 0.4s; }
+  
+  /* 5.5 骨架屏 */
+  .motion-skeleton {
     background: linear-gradient(
       90deg,
-      rgb(var(--color-background-secondary)) 0%,
-      rgb(var(--color-background-tertiary)) 50%,
-      rgb(var(--color-background-secondary)) 100%
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.08) 50%,
+      rgba(0, 0, 0, 0.04) 100%
     );
     background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
+    animation: motion-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: background-position;
   }
-
-  @keyframes progressFill {
-    from { width: 0%; }
-    to { width: 100%; }
+  
+  .dark .motion-skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
   }
-
-  .animate-progress {
-    animation: progressFill 2s ease-out;
+  
+  /* 5.6 进度条 */
+  .motion-progress-indeterminate {
+    animation: motion-progress-indeterminate 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    will-change: transform;
   }
-
-  @keyframes progressIndeterminate {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+  
+  
+  /* ============================================
+     6. 特殊效果 - Special Effects
+     ============================================ */
+  
+  /* 6.1 抖动 */
+  .motion-shake {
+    animation: motion-shake 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
-  .animate-progress-indeterminate {
-    animation: progressIndeterminate 1.5s ease-in-out infinite;
+  
+  /* 6.2 渐变流动 */
+  .motion-gradient-flow {
+    background-size: 200% 200%;
+    animation: motion-gradient-flow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    will-change: background-position;
   }
-
-  .delay-75 { animation-delay: 75ms; }
-  .delay-100 { animation-delay: 100ms; }
-  .delay-150 { animation-delay: 150ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-500 { animation-delay: 500ms; }
-
-  .duration-fast { animation-duration: var(--transition-fast); }
-  .duration-base { animation-duration: var(--transition-base); }
-  .duration-slow { animation-duration: var(--transition-slow); }
-  .duration-slower { animation-duration: var(--transition-slower); }
-
-  .will-change-transform { will-change: transform; }
-  .will-change-opacity { will-change: opacity; }
-
+  
+  
+  /* ============================================
+     7. 时序控制 - Timing Control
+     ============================================ */
+  
+  /* 7.1 延迟 - Delay (50ms 递增) */
+  .motion-delay-0 { animation-delay: 0ms; }
+  .motion-delay-50 { animation-delay: 50ms; }
+  .motion-delay-100 { animation-delay: 100ms; }
+  .motion-delay-150 { animation-delay: 150ms; }
+  .motion-delay-200 { animation-delay: 200ms; }
+  .motion-delay-250 { animation-delay: 250ms; }
+  .motion-delay-300 { animation-delay: 300ms; }
+  .motion-delay-350 { animation-delay: 350ms; }
+  .motion-delay-400 { animation-delay: 400ms; }
+  .motion-delay-450 { animation-delay: 450ms; }
+  .motion-delay-500 { animation-delay: 500ms; }
+  .motion-delay-600 { animation-delay: 600ms; }
+  .motion-delay-700 { animation-delay: 700ms; }
+  .motion-delay-800 { animation-delay: 800ms; }
+  
+  /* 7.2 时长 - Duration */
+  .motion-duration-fast { animation-duration: 0.3s; }
+  .motion-duration-base { animation-duration: 0.5s; }
+  .motion-duration-slow { animation-duration: 0.8s; }
+  .motion-duration-slower { animation-duration: 1.2s; }
+  
+  
+  /* ============================================
+     8. 性能优化 - Performance
+     ============================================ */
+  
+  /* 8.1 GPU 加速提示 */
+  .motion-will-change-transform { will-change: transform; }
+  .motion-will-change-opacity { will-change: opacity; }
+  .motion-will-change-auto { will-change: auto; }
+  
+  
+  /* ============================================
+     9. 响应式优化 - Responsive
+     ============================================ */
+  
+  /* 9.1 移动端优化 */
+  @media (max-width: 768px) {
+    .motion-slide-in-up,
+    .motion-slide-in-down,
+    .motion-slide-in-left,
+    .motion-slide-in-right,
+    .motion-fade-in,
+    .motion-scale-in {
+      animation-duration: 0.5s;
+    }
+    
+    .motion-hover-lift:hover {
+      transform: translateY(-2px) scale(1.005);
+    }
+  }
+  
+  /* 9.2 无障碍 - 减少动画 */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+    }
+    
+    .motion-hover-lift:hover,
+    .motion-hover-scale:hover {
+      transform: none;
     }
   }
+  
+  /* 9.3 高刷新率屏幕优化 */
+  @media (min-resolution: 120dpi) {
+    .motion-slide-in-up,
+    .motion-slide-in-down,
+    .motion-fade-in,
+    .motion-scale-in {
+      animation-duration: 0.7s;
+    }
+  }
+  
 }

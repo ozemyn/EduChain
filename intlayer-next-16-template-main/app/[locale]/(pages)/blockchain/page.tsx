@@ -92,19 +92,86 @@ export default function BlockchainExplorerPage() {
           <div className="blockchain-blob blockchain-blob-3" />
         </div>
 
-        <div className="blockchain-container container">
-          {/* 页面头部 */}
-          <header className="blockchain-header glass-card">
-            <div className="header-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        {/* 英雄区域 */}
+        <section className="blockchain-hero-section">
+          <div className="hero-container container">
+            {/* 徽章 */}
+            <div className="hero-badge glass-badge motion-scale-in">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd" />
               </svg>
+              <span>{content.hero.badge.value}</span>
             </div>
-            <div className="header-content">
-              <h1 className="page-title">{content.title}</h1>
-              <p className="page-subtitle">{content.subtitle}</p>
+
+            {/* 标题 */}
+            <h1 className="hero-title motion-slide-in-up motion-delay-100">
+              <span className="hero-title-main text-gradient-cyan">
+                {content.hero.title.value}
+              </span>
+              <span className="hero-title-sub">
+                {content.hero.subtitle.value}
+              </span>
+            </h1>
+
+            {/* 描述 */}
+            <p className="hero-description motion-slide-in-up motion-delay-150">
+              {content.hero.description.value}
+            </p>
+
+            {/* 行动按钮 */}
+            <div className="hero-actions motion-slide-in-up motion-delay-200">
+              <button 
+                onClick={() => {
+                  setActiveTab('blocks');
+                  window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                }}
+                className="hero-action-btn hero-action-primary motion-hover-lift"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                {content.hero.exploreButton.value}
+              </button>
+              <button 
+                onClick={() => {
+                  setActiveTab('search');
+                  window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                }}
+                className="hero-action-btn hero-action-secondary motion-hover-scale"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                {content.hero.searchButton.value}
+              </button>
             </div>
-          </header>
+
+            {/* 统计数据 */}
+            {!loading && stats && (
+              <div className="hero-stats motion-slide-in-up motion-delay-250">
+                <div className="stat-item glass-light motion-hover-lift motion-slide-in-up motion-delay-300">
+                  <div className="stat-value">{stats.totalBlocks.toLocaleString()}</div>
+                  <div className="stat-label">{content.stats.totalBlocks.value}</div>
+                </div>
+                <div className="stat-item glass-light motion-hover-lift motion-slide-in-up motion-delay-350">
+                  <div className="stat-value">{stats.totalTransactions.toLocaleString()}</div>
+                  <div className="stat-label">{content.stats.totalTransactions.value}</div>
+                </div>
+                <div className="stat-item glass-light motion-hover-lift motion-slide-in-up motion-delay-400">
+                  <div className="stat-value">{stats.totalCertificates.toLocaleString()}</div>
+                  <div className="stat-label">{content.stats.totalCertificates.value}</div>
+                </div>
+                <div className="stat-item glass-light motion-hover-lift motion-slide-in-up motion-delay-450">
+                  <div className="stat-value">{stats.averageBlockTime}s</div>
+                  <div className="stat-label">{content.stats.avgBlockTime.value}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <div className="blockchain-container container">
+          {/* 页面头部 - 移除，已被hero替代 */}
 
           {/* 标签页 */}
           <div className="blockchain-tabs glass-card">
@@ -215,7 +282,7 @@ export default function BlockchainExplorerPage() {
                       <div
                         key={block.index}
                         onClick={() => handleBlockClick(block.index)}
-                        className="block-card glass-card hover-lift"
+                        className="block-card glass-card motion-hover-lift"
                       >
                         <div className="block-header">
                           <div className="block-index">
@@ -288,7 +355,7 @@ export default function BlockchainExplorerPage() {
                       placeholder={String(content.search.placeholder.value || content.search.placeholder)}
                       className="search-input"
                     />
-                    <button onClick={handleSearch} className="search-btn glass-button hover-lift">
+                    <button onClick={handleSearch} className="search-btn glass-button motion-hover-lift">
                       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>

@@ -88,8 +88,8 @@ export default function LoginPage() {
           <div className="brand-grid"></div>
         </div>
 
-        <div className="brand-content">
-          <div className="brand-logo">
+        <div className="brand-content motion-fade-in motion-delay-100">
+          <div className="brand-logo motion-scale-in">
             <div className="logo-icon">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -98,11 +98,11 @@ export default function LoginPage() {
             <h1 className="logo-text">EduChain</h1>
           </div>
 
-          <h2 className="brand-title">{content.brandTitle}</h2>
-          <p className="brand-description">{content.brandDescription}</p>
+          <h2 className="brand-title motion-slide-in-up motion-delay-150">{content.brandTitle}</h2>
+          <p className="brand-description motion-slide-in-up motion-delay-200">{content.brandDescription}</p>
 
           <div className="brand-features">
-            <div className="feature-item glass-light">
+            <div className="feature-item glass-light motion-slide-in-left motion-delay-250">
               <div className="feature-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -114,7 +114,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="feature-item glass-light">
+            <div className="feature-item glass-light motion-slide-in-left motion-delay-300">
               <div className="feature-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -126,7 +126,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="feature-item glass-light">
+            <div className="feature-item glass-light motion-slide-in-left motion-delay-350">
               <div className="feature-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -139,7 +139,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="brand-footer">
+          <div className="brand-footer motion-fade-in motion-delay-400">
             <p className="footer-text">{content.brandFooter}</p>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
       {/* 右侧登录表单区 */}
       <div className="login-form-section">
         <div className="form-container">
-          <div className="form-card glass-card">
+          <div className="form-card glass-card motion-scale-in motion-delay-200">
             <div className="form-header">
               <h2 className="form-title">{content.title}</h2>
               <p className="form-subtitle">{content.subtitle}</p>
@@ -212,11 +212,11 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="submit-button hover-lift"
+                className="submit-button motion-hover-lift"
               >
                 {isLoading ? (
                   <>
-                    <span className="loading-spinner"></span>
+                    <span className="loading-spinner motion-spin"></span>
                     {content.loggingIn}
                   </>
                 ) : (
@@ -288,7 +288,7 @@ export default function LoginPage() {
             </div>
 
             <div className="form-footer">
-              <Link href={getLocalizedUrl('/register', locale)} className="register-link hover-scale">
+              <Link href={getLocalizedUrl('/register', locale)} className="register-link motion-hover-scale">
                 {content.registerNow} →
               </Link>
             </div>

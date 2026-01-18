@@ -24,7 +24,7 @@ export default function HelpCenterPage() {
   return (
     <>
       <Navbar />
-      <div className="resources-page animate-fade-in">
+      <div className="resources-page motion-fade-in">
         <div className="resources-content">
           {/* 页面头部 */}
           <header className="resources-header">
@@ -87,7 +87,7 @@ export default function HelpCenterPage() {
               <p>{help.contact.description.value}</p>
               <a
                 href="/contact"
-                className="form-submit hover-lift"
+                className="form-submit motion-hover-lift"
                 style={{ display: 'inline-block', marginTop: 'var(--spacing-lg)', textDecoration: 'none' }}
               >
                 {help.contact.button.value}

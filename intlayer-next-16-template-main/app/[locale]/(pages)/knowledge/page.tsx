@@ -145,21 +145,121 @@ export default function KnowledgeListPage() {
       <Navbar />
 
       <div className="knowledge-list-page">
-        <div className="page-container container">
-          {/* 页面头部 */}
-          <div className="page-header glass-card">
-            <div className="header-left">
-              <div className="header-icon">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <div className="header-content">
-                <h1 className="page-title">{content.title}</h1>
-                <p className="page-description">{content.description}</p>
+        {/* 背景装饰 */}
+        <div className="knowledge-background">
+          <div className="knowledge-blob knowledge-blob-1" />
+          <div className="knowledge-blob knowledge-blob-2" />
+          <div className="knowledge-blob knowledge-blob-3" />
+        </div>
+
+        {/* 英雄区域 */}
+        <section className="knowledge-hero-section">
+          <div className="hero-container container">
+            {/* 徽章 */}
+            <div className="hero-badge glass-badge motion-scale-in">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+              </svg>
+              <span>{content.hero.badge.value}</span>
+            </div>
+
+            {/* 标题 */}
+            <h1 className="hero-title motion-slide-in-up motion-delay-100">
+              <span className="hero-title-main text-gradient-blue">
+                {content.hero.title.value}
+              </span>
+              <span className="hero-title-sub">
+                {content.hero.subtitle.value}
+              </span>
+            </h1>
+
+            {/* 描述 */}
+            <p className="hero-description motion-slide-in-up motion-delay-150">
+              {content.hero.description.value}
+            </p>
+
+            {/* 搜索框 */}
+            <div className="hero-search-wrapper motion-slide-in-up motion-delay-200">
+              <div className="hero-search-container glass-medium">
+                <div className="hero-search-prefix">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder={content.hero.searchPlaceholder.value}
+                  className="hero-search-input"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const value = (e.target as HTMLInputElement).value;
+                      if (value.trim()) {
+                        router.push(getLocalizedUrl(`/search?q=${encodeURIComponent(value)}`, locale));
+                      }
+                    }
+                  }}
+                />
+                <button 
+                  className="hero-search-button motion-hover-lift"
+                  onClick={() => {
+                    const input = document.querySelector('.hero-search-input') as HTMLInputElement;
+                    if (input?.value.trim()) {
+                      router.push(getLocalizedUrl(`/search?q=${encodeURIComponent(input.value)}`, locale));
+                    }
+                  }}
+                >
+                  <span>{content.hero.searchButton.value}</span>
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </button>
               </div>
             </div>
-            <div className="header-actions">
+
+            {/* 行动按钮 */}
+            <div className="hero-actions motion-slide-in-up motion-delay-250">
+              <button 
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                className="hero-action-btn hero-action-primary motion-hover-lift"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                {content.hero.exploreButton.value}
+              </button>
+              <button onClick={handleCreate} className="hero-action-btn hero-action-secondary motion-hover-scale">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                {content.hero.createButton.value}
+              </button>
+            </div>
+
+            {/* 统计数据 */}
+            <div className="hero-stats motion-slide-in-up motion-delay-600">
+              <div className="stat-item glass-light motion-hover-lift">
+                <div className="stat-value">{pagination.total.toLocaleString()}</div>
+                <div className="stat-label">{content.stats.total.value}</div>
+              </div>
+              <div className="stat-item glass-light motion-hover-lift motion-delay-100">
+                <div className="stat-value">2,345</div>
+                <div className="stat-label">{content.stats.contributors.value}</div>
+              </div>
+              <div className="stat-item glass-light motion-hover-lift motion-delay-200">
+                <div className="stat-value">48</div>
+                <div className="stat-label">{content.stats.categories.value}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 内容区域 */}
+        <div className="page-container container">
+          {/* 列表头部 */}
+          <div className="list-header motion-slide-in-up motion-delay-300">
+            <h2 className="list-title">{content.listSection.title.value}</h2>
+            <div className="list-actions">
               <button 
                 onClick={() => setShowFilter(!showFilter)} 
                 className={`filter-toggle-btn glass-button ${showFilter ? 'active' : ''}`}
@@ -167,20 +267,14 @@ export default function KnowledgeListPage() {
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
-                {showFilter ? content.hideFilter : content.showFilter}
-              </button>
-              <button onClick={handleCreate} className="create-btn glass-button hover-lift">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                {content.createButton}
+                {showFilter ? content.listSection.hideFilter.value : content.listSection.showFilter.value}
               </button>
             </div>
           </div>
 
           {/* 筛选器 - 可折叠 */}
           {showFilter && (
-            <div className="filter-container">
+            <div className="filter-container motion-slide-in-up motion-delay-350">
               <KnowledgeFilter onFilter={handleFilter} loading={loading} />
             </div>
           )}
@@ -203,8 +297,14 @@ export default function KnowledgeListPage() {
             ) : (
               <>
                 <div className="knowledge-grid">
-                  {knowledgeList.map((knowledge) => (
-                    <KnowledgeCard key={knowledge.id} knowledge={knowledge} />
+                  {knowledgeList.map((knowledge, index) => (
+                    <div 
+                      key={knowledge.id} 
+                      className="motion-slide-in-up"
+                      style={{ animationDelay: `${400 + index * 50}ms` }}
+                    >
+                      <KnowledgeCard knowledge={knowledge} />
+                    </div>
                   ))}
                 </div>
 

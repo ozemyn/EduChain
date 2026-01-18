@@ -12,7 +12,7 @@ export default function DocsPage() {
   return (
     <>
       <Navbar />
-      <div className="resources-page animate-fade-in">
+      <div className="resources-page motion-fade-in">
         <div className="resources-content">
           {/* 页面头部 */}
           <header className="resources-header">
@@ -24,21 +24,21 @@ export default function DocsPage() {
           <main className="resources-main">
             {/* 快速链接 */}
             <div className="quick-links">
-              <a href="#quickstart" className="quick-link glass-light hover-lift">
+              <a href="#quickstart" className="quick-link glass-light motion-hover-lift">
                 <div className="quick-link-icon">🚀</div>
                 <div>
                   <h4>{docs.quickStart.title.value}</h4>
                   <p>{docs.quickStart.description.value}</p>
                 </div>
               </a>
-              <a href="/api-docs" className="quick-link glass-light hover-lift">
+              <a href="/api-docs" className="quick-link glass-light motion-hover-lift">
                 <div className="quick-link-icon">📡</div>
                 <div>
                   <h4>{docs.apiReference.title.value}</h4>
                   <p>{docs.apiReference.description.value}</p>
                 </div>
               </a>
-              <a href="#sdk" className="quick-link glass-light hover-lift">
+              <a href="#sdk" className="quick-link glass-light motion-hover-lift">
                 <div className="quick-link-icon">📦</div>
                 <div>
                   <h4>{docs.sdks.title.value}</h4>
@@ -83,14 +83,14 @@ export default function DocsPage() {
                   <h2>{docs.nextSteps.title.value}</h2>
                   <p>{docs.nextSteps.description.value}</p>
                   <div className="quick-links" style={{ marginTop: 'var(--spacing-lg)' }}>
-                    <a href="/api-docs" className="quick-link glass-light hover-lift">
+                    <a href="/api-docs" className="quick-link glass-light motion-hover-lift">
                       <div className="quick-link-icon">📡</div>
                       <div>
                         <h4>{docs.apiDocs.title.value}</h4>
                         <p>{docs.apiDocs.description.value}</p>
                       </div>
                     </a>
-                    <a href="/changelog" className="quick-link glass-light hover-lift">
+                    <a href="/changelog" className="quick-link glass-light motion-hover-lift">
                       <div className="quick-link-icon">📋</div>
                       <div>
                         <h4>{docs.changelogLink.title.value}</h4>

@@ -174,7 +174,7 @@ export const CertificationProgress: React.FC<CertificationProgressProps> = ({
             <div className="alert-message">{errorMessage}</div>
           </div>
           {onRetry && (
-            <button onClick={onRetry} className="alert-action glass-button hover-lift">
+            <button onClick={onRetry} className="alert-action glass-button motion-hover-lift">
               {content.retry}
             </button>
           )}
@@ -197,7 +197,7 @@ export const CertificationProgress: React.FC<CertificationProgressProps> = ({
           </div>
           <div className="success-actions">
             {onDownloadCertificate && (
-              <button onClick={onDownloadCertificate} className="success-btn glass-button hover-lift">
+              <button onClick={onDownloadCertificate} className="success-btn glass-button motion-hover-lift">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
@@ -205,7 +205,7 @@ export const CertificationProgress: React.FC<CertificationProgressProps> = ({
               </button>
             )}
             {onViewDetail && (
-              <button onClick={onViewDetail} className="success-btn glass-button hover-lift secondary">
+              <button onClick={onViewDetail} className="success-btn glass-button motion-hover-lift secondary">
                 {content.viewDetail}
               </button>
             )}

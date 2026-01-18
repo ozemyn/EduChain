@@ -12,7 +12,7 @@ export default function ChangelogPage() {
   return (
     <>
       <Navbar />
-      <div className="resources-page animate-fade-in">
+      <div className="resources-page motion-fade-in">
         <div className="resources-content">
           {/* 页面头部 */}
           <header className="resources-header">
@@ -64,7 +64,7 @@ export default function ChangelogPage() {
                   className="form-input"
                   style={{ maxWidth: '300px' }}
                 />
-                <button className="form-submit hover-lift" style={{ whiteSpace: 'nowrap' }}>
+                <button className="form-submit motion-hover-lift" style={{ whiteSpace: 'nowrap' }}>
                   {changelog.subscribe.button.value}
                 </button>
               </div>

@@ -3,6 +3,32 @@ import { t, type DeclarationContent } from 'intlayer';
 const blockchainExplorerContent = {
   key: 'blockchain-explorer-page',
   content: {
+    hero: {
+      badge: t({
+        'zh-CN': '🔗 区块链技术',
+        en: '🔗 Blockchain Technology',
+      }),
+      title: t({
+        'zh-CN': '区块链浏览器',
+        en: 'Blockchain Explorer',
+      }),
+      subtitle: t({
+        'zh-CN': '透明可信的存证系统',
+        en: 'Transparent & Trustworthy Certification',
+      }),
+      description: t({
+        'zh-CN': '探索EduChain区块链，查看所有存证记录，确保每一份证书的真实性和不可篡改性',
+        en: 'Explore EduChain blockchain, view all certification records, ensuring authenticity and immutability of every certificate',
+      }),
+      exploreButton: t({
+        'zh-CN': '浏览区块',
+        en: 'Browse Blocks',
+      }),
+      searchButton: t({
+        'zh-CN': '搜索记录',
+        en: 'Search Records',
+      }),
+    },
     title: t({
       'zh-CN': '区块链浏览器',
       en: 'Blockchain Explorer',

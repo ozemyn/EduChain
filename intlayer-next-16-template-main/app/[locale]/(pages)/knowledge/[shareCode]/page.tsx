@@ -95,9 +95,9 @@ export default function KnowledgeDetailPage() {
 
       <div className="knowledge-detail-page">
         <div className="detail-container container">
-          <div className="knowledge-content-card glass-card">
+          <div className="knowledge-content-card glass-card motion-slide-in-up">
             {/* 头部信息 */}
-            <div className="knowledge-header">
+            <div className="knowledge-header motion-fade-in motion-delay-100">
               <h1 className="knowledge-title">{knowledge.title}</h1>
 
               <div className="knowledge-meta">
@@ -142,10 +142,10 @@ export default function KnowledgeDetailPage() {
             </div>
 
             {/* 内容 */}
-            <MarkdownRenderer content={knowledge.content} className="knowledge-content" />
+            <MarkdownRenderer content={knowledge.content} className="knowledge-content motion-fade-in motion-delay-150" />
 
             {/* 区块链存证信息 */}
-            <div className="blockchain-cert-section">
+            <div className="blockchain-cert-section motion-fade-in motion-delay-200">
               <BlockchainCertInfo
                 knowledgeId={knowledge.id}
                 knowledgeTitle={knowledge.title}
@@ -155,7 +155,7 @@ export default function KnowledgeDetailPage() {
             </div>
 
             {/* 交互区域 */}
-            <div className="knowledge-interactions">
+            <div className="knowledge-interactions motion-fade-in motion-delay-250">
               <div className="stats-section">
                 <div className="stat-item">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

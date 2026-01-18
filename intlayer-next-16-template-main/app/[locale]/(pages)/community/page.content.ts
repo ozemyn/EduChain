@@ -3,14 +3,49 @@ import { t, type Dictionary } from 'intlayer';
 const communityPageContent = {
   key: 'community-page',
   content: {
-    title: t({
-      'zh-CN': '学习社区',
-      en: 'Learning Community',
-    }),
-    description: t({
-      'zh-CN': '与全球学习者互动交流，分享知识与经验，共同成长',
-      en: 'Connect with learners worldwide, share knowledge and grow together',
-    }),
+    // 英雄区域
+    hero: {
+      badge: t({
+        'zh-CN': '学习社区',
+        en: 'Learning Community',
+      }),
+      title: t({
+        'zh-CN': '学习社区',
+        en: 'Community',
+      }),
+      subtitle: t({
+        'zh-CN': '与全球学习者互动交流，共同成长',
+        en: 'Connect with Learners Worldwide',
+      }),
+      description: t({
+        'zh-CN': '加入充满活力的学习社区，与志同道合的伙伴分享知识、交流经验、解决问题。在这里，每个问题都能得到解答，每个想法都值得讨论。',
+        en: 'Join a vibrant learning community, share knowledge with like-minded partners, exchange experiences, and solve problems together. Here, every question gets answered, every idea deserves discussion.',
+      }),
+      startButton: t({
+        'zh-CN': '开始讨论',
+        en: 'Start Discussion',
+      }),
+      exploreButton: t({
+        'zh-CN': '浏览话题',
+        en: 'Explore Topics',
+      }),
+    },
+    // 统计数据
+    stats: {
+      users: t({
+        'zh-CN': '活跃用户',
+        en: 'Active Users',
+      }),
+      discussions: t({
+        'zh-CN': '讨论话题',
+        en: 'Discussions',
+      }),
+      replies: t({
+        'zh-CN': '回复总数',
+        en: 'Total Replies',
+      }),
+    },
+    // 原有内容
     statsUsers: t({
       'zh-CN': '活跃用户',
       en: 'Active Users',

@@ -144,7 +144,7 @@ export const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
           <button
             onClick={handleGenerateCertificate}
             disabled={generating}
-            className="cert-action-btn glass-button hover-lift"
+            className="cert-action-btn glass-button motion-hover-lift"
           >
             {generating ? (
               <>
@@ -199,7 +199,7 @@ export const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
       <div className="cert-actions">
         <button
           onClick={handleViewDetails}
-          className="cert-action-btn glass-button hover-lift"
+          className="cert-action-btn glass-button motion-hover-lift"
         >
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -209,7 +209,7 @@ export const BlockchainCertInfo: React.FC<BlockchainCertInfoProps> = ({
         </button>
         <button
           onClick={handleDownloadCertificate}
-          className="cert-action-btn glass-button hover-lift secondary"
+          className="cert-action-btn glass-button motion-hover-lift secondary"
         >
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

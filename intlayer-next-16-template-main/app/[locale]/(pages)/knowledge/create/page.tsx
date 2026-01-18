@@ -80,13 +80,13 @@ export default function CreateKnowledgePage() {
       <div className="knowledge-create-page">
         <div className="create-container container">
           {/* 页面头部 */}
-          <div className="create-header">
+          <div className="create-header motion-slide-in-up">
             <h1 className="create-title">{content.title}</h1>
             <p className="create-description">{content.description}</p>
           </div>
 
           {/* 表单 */}
-          <form onSubmit={handleSubmit} className="create-form glass-card">
+          <form onSubmit={handleSubmit} className="create-form glass-card motion-slide-in-up motion-delay-100">
             {/* 标题 */}
             <div className="form-section">
               <label className="form-label">
@@ -196,7 +196,7 @@ export default function CreateKnowledgePage() {
               </button>
               <button
                 type="submit"
-                className="form-btn form-btn-submit hover-lift"
+                className="form-btn form-btn-submit motion-hover-lift"
                 disabled={loading}
               >
                 {loading ? content.actions.submitting : content.actions.submit}

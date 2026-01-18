@@ -12,7 +12,7 @@ export default function CareersPage() {
   return (
     <>
       <Navbar />
-      <div className="company-page animate-fade-in">
+      <div className="company-page motion-fade-in">
         <div className="company-content">
           {/* 页面头部 */}
           <header className="company-header">
@@ -27,7 +27,7 @@ export default function CareersPage() {
               <h2>{careers.why.title.value}</h2>
               <div className="company-grid">
                 {careers.why.items.map((item, index) => (
-                  <div key={index} className="company-grid-item glass-light hover-lift">
+                  <div key={index} className="company-grid-item glass-light motion-hover-lift">
                     <div className="company-grid-icon">{item.icon}</div>
                     <h4>{item.title.value}</h4>
                     <p>{item.description.value}</p>
@@ -50,7 +50,7 @@ export default function CareersPage() {
                         <span className="job-tag">{job.type.value}</span>
                       </div>
                     </div>
-                    <button className="job-apply hover-lift">
+                    <button className="job-apply motion-hover-lift">
                       {careers.positions.apply.value}
                     </button>
                   </div>

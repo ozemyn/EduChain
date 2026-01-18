@@ -63,7 +63,7 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--text-sm);
   font-weight: 500;
-  animation: tagSlideIn 0.2s ease;
+  animation: motion-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .remove-tag-btn {
@@ -188,18 +188,6 @@
 .selector-tags.size-large .selected-tag,
 .selector-tags.size-large .tag-input {
   font-size: var(--text-base);
-}
-
-/* ==================== 动画 ==================== */
-@keyframes tagSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 /* ==================== 响应式 ==================== */

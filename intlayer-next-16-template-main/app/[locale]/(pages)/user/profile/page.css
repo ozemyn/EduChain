@@ -48,7 +48,6 @@
   border-radius: var(--radius-full);
   filter: blur(80px);
   opacity: 0.4;
-  animation: floatBlob 10s ease-in-out infinite;
 }
 
 .profile-blob-1 {
@@ -57,7 +56,6 @@
   width: 300px;
   height: 300px;
   background: radial-gradient(circle, rgba(var(--color-accent), 0.3), transparent);
-  animation-delay: 0s;
 }
 
 .profile-blob-2 {
@@ -66,7 +64,6 @@
   width: 250px;
   height: 250px;
   background: radial-gradient(circle, rgba(var(--color-primary-dark), 0.25), transparent);
-  animation-delay: 3s;
 }
 
 .profile-blob-3 {
@@ -75,16 +72,6 @@
   width: 200px;
   height: 200px;
   background: radial-gradient(circle, rgba(var(--color-secondary), 0.2), transparent);
-  animation-delay: 6s;
-}
-
-@keyframes floatBlob {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-30px) scale(1.05);
-  }
 }
 
 /* ==================== 加载状态 ==================== */
@@ -126,18 +113,6 @@
   margin-bottom: var(--spacing-2xl);
   padding: var(--spacing-2xl);
   border-radius: var(--radius-2xl);
-  animation: fadeInUp var(--transition-slower) ease;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .profile-header-grid {
@@ -358,9 +333,6 @@
 /* ==================== 统计数据卡片 ==================== */
 .profile-stats-section {
   margin-bottom: var(--spacing-2xl);
-  animation: fadeInUp var(--transition-slower) ease;
-  animation-delay: 100ms;
-  animation-fill-mode: both;
 }
 
 .stats-grid {
@@ -429,9 +401,6 @@
 /* ==================== 标签页导航 ==================== */
 .profile-tabs-section {
   margin-bottom: var(--spacing-xl);
-  animation: fadeInUp var(--transition-slower) ease;
-  animation-delay: 200ms;
-  animation-fill-mode: both;
 }
 
 .profile-tabs {
@@ -478,9 +447,6 @@
 /* ==================== 内容区域 ==================== */
 .profile-content-section {
   margin-bottom: var(--spacing-2xl);
-  animation: fadeInUp var(--transition-slower) ease;
-  animation-delay: 300ms;
-  animation-fill-mode: both;
 }
 
 .section-title {
@@ -801,12 +767,6 @@
   align-items: center;
   justify-content: center;
   z-index: var(--z-modal-backdrop);
-  animation: fadeIn var(--transition-fast) ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .modal-content {
@@ -815,18 +775,6 @@
   margin: var(--spacing-lg);
   padding: var(--spacing-2xl);
   border-radius: var(--radius-2xl);
-  animation: scaleIn var(--transition-base) ease;
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 .modal-header {
@@ -1141,7 +1089,6 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: var(--radius-full);
-  animation: spin 0.8s linear infinite;
 }
 
 .btn-secondary[aria-busy="true"]::after {
@@ -1179,9 +1126,4 @@
   border-top: 3px solid rgb(var(--color-accent));
   border-radius: var(--radius-full);
   margin: 0 auto var(--spacing-lg);
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }

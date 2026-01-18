@@ -129,51 +129,78 @@ export default function CommunityPage() {
           <div className="community-blob community-blob-3"></div>
         </div>
 
-        <div className="community-container container">
-          {/* 页面头部 */}
-          <header className="community-header glass-card">
-            <div className="header-content">
-              <div className="title-section">
-                <div className="header-icon">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <div className="title-text">
-                  <h1 className="page-title">{content.title}</h1>
-                  <p className="page-description">{content.description}</p>
-                </div>
-              </div>
+        {/* 英雄区域 */}
+        <section className="community-hero-section">
+          <div className="hero-container container">
+            {/* 徽章 */}
+            <div className="hero-badge glass-badge motion-scale-in">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+              </svg>
+              <span>{content.hero.badge.value}</span>
+            </div>
 
-              <div className="header-stats">
-                <div className="stat-item glass-light">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  <div className="stat-info">
-                    <span className="stat-value">12,345</span>
-                    <span className="stat-label">{content.statsUsers}</span>
-                  </div>
-                </div>
-                <div className="stat-item glass-light">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  <div className="stat-info">
-                    <span className="stat-value">8,976</span>
-                    <span className="stat-label">{content.statsDiscussions}</span>
-                  </div>
-                </div>
+            {/* 标题 */}
+            <h1 className="hero-title motion-slide-in-up motion-delay-100">
+              <span className="hero-title-main text-gradient-purple">
+                {content.hero.title.value}
+              </span>
+              <span className="hero-title-sub">
+                {content.hero.subtitle.value}
+              </span>
+            </h1>
+
+            {/* 描述 */}
+            <p className="hero-description motion-slide-in-up motion-delay-150">
+              {content.hero.description.value}
+            </p>
+
+            {/* 行动按钮 */}
+            <div className="hero-actions motion-slide-in-up motion-delay-200">
+              <button 
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                className="hero-action-btn hero-action-primary motion-hover-lift"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                {content.hero.startButton.value}
+              </button>
+              <button 
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                className="hero-action-btn hero-action-secondary motion-hover-scale"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                {content.hero.exploreButton.value}
+              </button>
+            </div>
+
+            {/* 统计数据 */}
+            <div className="hero-stats motion-slide-in-up motion-delay-250">
+              <div className="stat-item glass-light motion-hover-lift">
+                <div className="stat-value">12,345</div>
+                <div className="stat-label">{content.stats.users.value}</div>
+              </div>
+              <div className="stat-item glass-light motion-hover-lift motion-delay-100">
+                <div className="stat-value">8,976</div>
+                <div className="stat-label">{content.stats.discussions.value}</div>
+              </div>
+              <div className="stat-item glass-light motion-hover-lift motion-delay-200">
+                <div className="stat-value">45,892</div>
+                <div className="stat-label">{content.stats.replies.value}</div>
               </div>
             </div>
-          </header>
+          </div>
+        </section>
 
-          {/* 主要内容区域 */}
+        <div className="community-container container">
           <div className="community-main">
             {/* 左侧：讨论列表 */}
             <div className="discussions-section">
               {/* 标签页 */}
-              <div className="discussions-tabs glass-light">
+              <div className="discussions-tabs glass-light motion-slide-in-up motion-delay-300">
                 <button
                   className={`tab-item ${activeTab === 'hot' ? 'active' : ''}`}
                   onClick={() => setActiveTab('hot')}
@@ -208,8 +235,8 @@ export default function CommunityPage() {
                 {discussions.map((discussion, index) => (
                   <div
                     key={discussion.id}
-                    className="discussion-item glass-card hover-lift"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                    className="discussion-item glass-card motion-hover-lift motion-slide-in-up"
+                    style={{ animationDelay: `${350 + index * 50}ms` }}
                   >
                     <div className="discussion-header">
                       <div className="author-avatar">
@@ -272,8 +299,8 @@ export default function CommunityPage() {
               </div>
 
               {/* 加载更多 */}
-              <div className="load-more">
-                <button className="load-more-btn glass-button hover-scale">
+              <div className="load-more motion-fade-in motion-delay-550">
+                <button className="load-more-btn glass-button motion-hover-scale">
                   {content.loadMore}
                 </button>
               </div>
@@ -293,7 +320,7 @@ export default function CommunityPage() {
                 </div>
                 <div className="topics-list">
                   {hotTopics.map((topic, index) => (
-                    <div key={index} className="topic-item glass-light hover-scale">
+                    <div key={index} className="topic-item glass-light motion-hover-scale">
                       <span className="topic-name">{topic.name}</span>
                       <span className="topic-count">{topic.count}</span>
                     </div>
@@ -313,7 +340,7 @@ export default function CommunityPage() {
                 </div>
                 <div className="users-list">
                   {activeUsers.map((user, index) => (
-                    <div key={user.id} className="user-item glass-light hover-lift">
+                    <div key={user.id} className="user-item glass-light motion-hover-lift">
                       <div className="user-rank">{index + 1}</div>
                       <div className="user-avatar">
                         {user.avatar ? (
@@ -357,7 +384,7 @@ export default function CommunityPage() {
                     <Link
                       key={index}
                       href={getLocalizedUrl(link.path, locale)}
-                      className="quick-link-btn glass-light hover-lift"
+                      className="quick-link-btn glass-light motion-hover-lift"
                     >
                       <div className="link-icon">{renderIcon(link.icon)}</div>
                       <span className="link-label">{link.label}</span>

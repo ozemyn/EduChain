@@ -115,7 +115,7 @@ export default function BlockDetailPage() {
           </div>
           <div className="block-container container">
             <div className="loading-state">
-              <div className="loading-spinner"></div>
+              <div className="loading-spinner motion-spin"></div>
               <p>{content.loading}</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function BlockDetailPage() {
               </svg>
               <h3>{content.notFound}</h3>
               <p>{content.notFoundDesc}</p>
-              <button onClick={handleBack} className="back-btn glass-button hover-lift">
+              <button onClick={handleBack} className="back-btn glass-button motion-hover-lift">
                 {content.backBtn}
               </button>
             </div>
@@ -165,7 +165,7 @@ export default function BlockDetailPage() {
 
         <div className="block-container container">
           {/* 返回按钮 */}
-          <button onClick={handleBack} className="back-button glass-button hover-lift">
+          <button onClick={handleBack} className="back-button glass-button motion-hover-lift motion-slide-in-left">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -173,7 +173,7 @@ export default function BlockDetailPage() {
           </button>
 
           {/* 区块信息卡片 */}
-          <div className="block-info-card glass-card">
+          <div className="block-info-card glass-card motion-slide-in-up motion-delay-100">
             <div className="card-header">
               <div className="header-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -229,7 +229,7 @@ export default function BlockDetailPage() {
           </div>
 
           {/* 交易列表 */}
-          <div className="transactions-section">
+          <div className="transactions-section motion-slide-in-up motion-delay-200">
             <div className="section-header">
               <h2 className="section-title">
                 {content.transactions.title} ({block.transactionCount})
@@ -246,7 +246,7 @@ export default function BlockDetailPage() {
                   <div
                     key={tx.id}
                     onClick={() => handleTransactionClick(tx.id)}
-                    className="transaction-card glass-card hover-lift"
+                    className="transaction-card glass-card motion-hover-lift"
                   >
                     <div className="tx-header">
                       <div className="tx-id">

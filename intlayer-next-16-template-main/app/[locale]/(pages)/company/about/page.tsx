@@ -12,7 +12,7 @@ export default function AboutPage() {
   return (
     <>
       <Navbar />
-      <div className="company-page animate-fade-in">
+      <div className="company-page motion-fade-in">
         <div className="company-content">
           {/* 页面头部 */}
           <header className="company-header">
@@ -39,7 +39,7 @@ export default function AboutPage() {
               <h2>{about.values.title.value}</h2>
               <div className="company-grid">
                 {about.values.items.map((item, index) => (
-                  <div key={index} className="company-grid-item glass-light hover-lift">
+                  <div key={index} className="company-grid-item glass-light motion-hover-lift">
                     <div className="company-grid-icon">{item.icon}</div>
                     <h4>{item.title.value}</h4>
                     <p>{item.description.value}</p>
@@ -53,7 +53,7 @@ export default function AboutPage() {
               <h2>{about.team.title.value}</h2>
               <div className="team-grid">
                 {about.team.members.map((member, index) => (
-                  <div key={index} className="team-member glass-light hover-lift">
+                  <div key={index} className="team-member glass-light motion-hover-lift">
                     <div className="team-avatar">👤</div>
                     <h4>{member.name.value}</h4>
                     <p className="team-role">{member.role.value}</p>

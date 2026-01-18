@@ -12,7 +12,7 @@ export default function PartnersPage() {
   return (
     <>
       <Navbar />
-      <div className="company-page animate-fade-in">
+      <div className="company-page motion-fade-in">
         <div className="company-content">
           {/* 页面头部 */}
           <header className="company-header">
@@ -27,7 +27,7 @@ export default function PartnersPage() {
               <h2>{partners.types.title.value}</h2>
               <div className="company-grid">
                 {partners.types.items.map((item, index) => (
-                  <div key={index} className="company-grid-item glass-light hover-lift">
+                  <div key={index} className="company-grid-item glass-light motion-hover-lift">
                     <div className="company-grid-icon">{item.icon}</div>
                     <h4>{item.title.value}</h4>
                     <p>{item.description.value}</p>
@@ -41,7 +41,7 @@ export default function PartnersPage() {
               <h2>{partners.featured.title.value}</h2>
               <div className="partner-grid">
                 {partners.featured.partners.map((partner, index) => (
-                  <div key={index} className="partner-card glass-light hover-lift">
+                  <div key={index} className="partner-card glass-light motion-hover-lift">
                     <div className="partner-logo">🏛️</div>
                     <h4>{partner.name.value}</h4>
                     <p>{partner.type.value}</p>
@@ -56,7 +56,7 @@ export default function PartnersPage() {
               <p>{partners.cta.description.value}</p>
               <a
                 href={`mailto:${partners.cta.email}`}
-                className="form-submit hover-lift"
+                className="form-submit motion-hover-lift"
                 style={{ display: 'inline-block', marginTop: 'var(--spacing-lg)', textDecoration: 'none' }}
               >
                 {partners.cta.button.value}

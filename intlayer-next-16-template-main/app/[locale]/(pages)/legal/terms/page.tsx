@@ -12,7 +12,7 @@ export default function TermsPage() {
   return (
     <>
       <Navbar />
-      <div className="legal-page animate-fade-in">
+      <div className="legal-page motion-fade-in">
         <div className="legal-content">
           {/* 页面头部 */}
           <header className="legal-header">

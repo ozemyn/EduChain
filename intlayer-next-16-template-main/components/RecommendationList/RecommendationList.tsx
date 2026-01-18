@@ -142,7 +142,7 @@ export default function RecommendationList({
     if (loading) {
       return (
         <div className="recommendation-loading">
-          <div className="loading-spinner"></div>
+          <div className="loading-spinner motion-spin"></div>
           <p>{content.loading.value}</p>
         </div>
       );
@@ -171,7 +171,7 @@ export default function RecommendationList({
           const hasFeedback = feedbackGiven[item.id];
           
           return (
-            <div key={item.id} className={`recommendation-card glass-light hover-lift ${hasFeedback ? 'has-feedback' : ''}`}>
+            <div key={item.id} className={`recommendation-card glass-light motion-hover-lift ${hasFeedback ? 'has-feedback' : ''}`}>
               <div className="card-reason">
                 <span className="reason-badge">{getReasonText(tabKey, startIndex + index)}</span>
               </div>
@@ -301,9 +301,9 @@ export default function RecommendationList({
         <button
           onClick={handleRefresh}
           disabled={loading}
-          className="refresh-btn glass-button hover-scale"
+          className="refresh-btn glass-button motion-hover-scale"
         >
-          <svg className={loading ? 'animate-spin' : ''} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={loading ? 'motion-spin' : ''} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
           <span>{content.refresh.value}</span>

@@ -17,7 +17,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-      <div className="company-page animate-fade-in">
+      <div className="company-page motion-fade-in">
         <div className="company-content">
           {/* 页面头部 */}
           <header className="company-header">
@@ -65,7 +65,7 @@ export default function ContactPage() {
                     required
                   />
                 </div>
-                <button type="submit" className="form-submit hover-lift">
+                <button type="submit" className="form-submit motion-hover-lift">
                   {contact.form.submit.value}
                 </button>
               </form>

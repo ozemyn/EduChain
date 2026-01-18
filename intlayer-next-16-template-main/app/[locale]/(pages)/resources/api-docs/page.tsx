@@ -12,7 +12,7 @@ export default function ApiDocsPage() {
   return (
     <>
       <Navbar />
-      <div className="resources-page animate-fade-in">
+      <div className="resources-page motion-fade-in">
         <div className="resources-content">
           {/* 页面头部 */}
           <header className="resources-header">
