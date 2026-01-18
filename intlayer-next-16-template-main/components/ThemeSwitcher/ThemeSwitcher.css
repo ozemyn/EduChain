@@ -78,69 +78,39 @@
   display: block;
 }
 
-/* 太阳图标 */
+/* 太阳图标 - Apple 风格：简洁优雅 */
 .theme-icon-sun {
   color: #f59e0b;
   opacity: 0;
-  transform: rotate(-90deg) scale(0) translateZ(0);
-  transition: all var(--transition-slow) cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(0.5) translateZ(0);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .theme-icon-sun.active {
   opacity: 1;
-  transform: rotate(0deg) scale(1) translateZ(0);
+  transform: scale(1) translateZ(0);
 }
 
-/* 太阳光线旋转动画 */
-.theme-icon-sun.active svg {
-  animation: sunRotate 20s linear infinite;
-}
-
-@keyframes sunRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* 月亮图标 */
+/* 月亮图标 - Apple 风格：简洁优雅 */
 .theme-icon-moon {
   color: #8b5cf6;
   opacity: 0;
-  transform: rotate(90deg) scale(0) translateZ(0);
-  transition: all var(--transition-slow) cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(0.5) translateZ(0);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .theme-icon-moon.active {
   opacity: 1;
-  transform: rotate(0deg) scale(1) translateZ(0);
+  transform: scale(1) translateZ(0);
 }
 
-/* 月亮呼吸动画 */
-.theme-icon-moon.active svg {
-  animation: moonPulse 3s ease-in-out infinite;
-}
-
-@keyframes moonPulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-/* 背景光晕 */
+/* 背景光晕 - Apple 风格：微妙精致 */
 .theme-glow {
   position: absolute;
   inset: -2px;
   border-radius: var(--radius-full);
   opacity: 0;
-  transition: opacity var(--transition-base) ease;
+  transition: opacity 0.2s ease;
   pointer-events: none;
   z-index: -1;
   
@@ -151,37 +121,26 @@
 
 /* 浅色模式光晕 */
 .theme-switcher:hover .theme-glow {
-  opacity: 1;
+  opacity: 0.6;
   background: radial-gradient(
     circle at center,
-    rgba(251, 191, 36, 0.3) 0%,
-    rgba(251, 191, 36, 0.1) 50%,
+    rgba(251, 191, 36, 0.2) 0%,
+    rgba(251, 191, 36, 0.05) 50%,
     transparent 100%
   );
-  animation: glowPulse 2s ease-in-out infinite;
 }
 
 .dark .theme-switcher:hover .theme-glow {
+  opacity: 0.6;
   background: radial-gradient(
     circle at center,
-    rgba(139, 92, 246, 0.4) 0%,
-    rgba(139, 92, 246, 0.2) 50%,
+    rgba(139, 92, 246, 0.3) 0%,
+    rgba(139, 92, 246, 0.1) 50%,
     transparent 100%
   );
 }
 
-@keyframes glowPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-}
-
-/* 点击波纹效果 */
+/* 点击波纹效果 - Apple 风格：快速响应 */
 .theme-switcher::before {
   content: '';
   position: absolute;
@@ -189,18 +148,18 @@
   border-radius: var(--radius-full);
   background: radial-gradient(
     circle at center,
-    rgba(244, 114, 182, 0.3) 0%,
+    rgba(244, 114, 182, 0.2) 0%,
     transparent 70%
   );
   opacity: 0;
   transform: scale(0);
-  transition: all var(--transition-base) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
 .theme-switcher:active::before {
   opacity: 1;
-  transform: scale(1.5);
+  transform: scale(1.2);
   transition: none;
 }
 

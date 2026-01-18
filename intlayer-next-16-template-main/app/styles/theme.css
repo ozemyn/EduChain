@@ -164,24 +164,34 @@
     --color-shadow: 255 255 255;
   }
 
-  /* 主题切换过渡 - 仅针对特定元素 */
-  :root {
-    --theme-transition-duration: 0ms;
+  /* 主题切换过渡 - Apple 方案：统一流畅的全局过渡 */
+  *,
+  *::before,
+  *::after {
+    transition: background-color 200ms ease,
+                border-color 200ms ease,
+                color 200ms ease,
+                fill 200ms ease,
+                stroke 200ms ease;
   }
 
-  /* 只对需要过渡的元素应用 */
-  body,
-  .navbar,
-  .navbar-link,
-  .navbar-action-btn,
-  .navbar-auth-btn,
-  .glass-card,
-  .glass-button,
-  .glass-light,
-  .glass-medium {
-    transition: background-color var(--theme-transition-duration) ease,
-                border-color var(--theme-transition-duration) ease,
-                color var(--theme-transition-duration) ease;
+  /* 排除不需要过渡的元素 */
+  .motion-fade-in,
+  .motion-slide-in-up,
+  .motion-slide-in-down,
+  .motion-slide-in-left,
+  .motion-slide-in-right,
+  .motion-scale-in,
+  .motion-hover-lift,
+  .motion-hover-scale,
+  [class*="motion-delay-"] {
+    transition: none !important;
+  }
+
+  /* 排除动画元素 */
+  [class*="animate-"],
+  [style*="animation"] {
+    transition: none !important;
   }
 }
 

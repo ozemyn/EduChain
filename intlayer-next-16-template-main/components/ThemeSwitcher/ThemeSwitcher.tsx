@@ -47,53 +47,45 @@ export const ThemeSwitcher = () => {
     }
     
     // 更新 meta theme-color
-    updateMetaThemeColor(newTheme);
-  }, []);
-
-  // 带过渡的主题应用（用户切换时）
-  const applyThemeWithTransition = useCallback((newTheme: Theme) => {
-    if (isTransitioning.current) return;
-    isTransitioning.current = true;
-
-    const root = document.documentElement;
-    
-    // 使用 CSS 变量控制过渡
-    root.style.setProperty('--theme-transition-duration', '200ms');
-    
-    // 使用 requestAnimationFrame 确保在下一帧应用
-    requestAnimationFrame(() => {
-      if (newTheme === 'dark') {
-        root.classList.add('dark');
-      } else {
-        root.classList.remove('dark');
-      }
-      
-      // 更新 meta theme-color
-      updateMetaThemeColor(newTheme);
-      
-      // 过渡完成后清理
-      setTimeout(() => {
-        root.style.removeProperty('--theme-transition-duration');
-        isTransitioning.current = false;
-      }, 200);
-    });
-  }, []);
-
-  // 更新 meta theme-color
-  const updateMetaThemeColor = useCallback((newTheme: Theme) => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
       metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#000000' : '#fefcfd');
     }
   }, []);
 
-  // 切换主题
+  // 切换主题 - Apple 方案：状态锁 + 异步存储
   const toggleTheme = useCallback(() => {
+    // 1. 状态锁：过渡中直接返回，防止重复点击
+    if (isTransitioning.current) return;
+    isTransitioning.current = true;
+
+    // 2. 立即切换主题
     const newTheme: Theme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    applyThemeWithTransition(newTheme);
-  }, [theme, applyThemeWithTransition]);
+    
+    const root = document.documentElement;
+    if (newTheme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    
+    // 3. 异步保存到 localStorage（不阻塞 UI）
+    queueMicrotask(() => {
+      localStorage.setItem('theme', newTheme);
+      
+      // 更新 meta theme-color
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#000000' : '#fefcfd');
+      }
+    });
+    
+    // 4. 200ms 后解锁（与 CSS 动画时长一致）
+    setTimeout(() => {
+      isTransitioning.current = false;
+    }, 200);
+  }, [theme]);
 
   // 避免服务端渲染闪烁
   if (!mounted) {
