@@ -1,23 +1,30 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useIntlayer } from 'next-intlayer';
-import { useParams } from 'next/navigation';
+import { useIntlayer, useLocale } from 'next-intlayer';
+import { useParams, useRouter } from 'next/navigation';
+import { getLocalizedUrl } from 'intlayer';
 import Navbar from '../../../../../components/layout/Navbar';
 import Footer from '../../../../../components/layout/Footer';
 import { InteractionButtons } from '../../../../../components/knowledge';
 import { BlockchainCertInfo } from '../../../../../components/blockchain';
 import { MarkdownRenderer } from '../../../../../components/MarkdownRenderer';
+import { useAuth } from '@/contexts/auth-context';
 import { knowledgeService } from '@/services';
 import type { KnowledgeItem } from '@/types';
 import './page.css';
 
 export default function KnowledgeDetailPage() {
   const content = useIntlayer('knowledge-detail-page');
+  const { locale } = useLocale();
   const params = useParams();
+  const router = useRouter();
+  const { user } = useAuth();
   const shareCode = params.shareCode as string;
   const [loading, setLoading] = useState(true);
   const [knowledge, setKnowledge] = useState<KnowledgeItem | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (shareCode) {
@@ -38,6 +45,56 @@ export default function KnowledgeDetailPage() {
       setLoading(false);
     }
   };
+
+  // 处理编辑
+  const handleEdit = () => {
+    if (knowledge) {
+      router.push(getLocalizedUrl(`/knowledge/edit/${knowledge.shareCode}`, locale));
+    }
+  };
+
+  // 处理删除
+  const handleDelete = async () => {
+    if (!knowledge) return;
+    
+    try {
+      setDeleting(true);
+      const response = await knowledgeService.deleteKnowledge(knowledge.id);
+      if (response.success) {
+        router.push(getLocalizedUrl('/knowledge', locale));
+      }
+    } catch (error) {
+      console.error('Failed to delete knowledge:', error);
+      alert(content.deleteError || 'Failed to delete');
+    } finally {
+      setDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  // 处理分享
+  const handleShare = () => {
+    if (!knowledge) return;
+    
+    const shareUrl = `${window.location.origin}${getLocalizedUrl(`/knowledge/${knowledge.shareCode}`, locale)}`;
+    
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareUrl);
+      alert(content.shareCopied || 'Link copied to clipboard!');
+    } else {
+      // 降级方案
+      const textarea = document.createElement('textarea');
+      textarea.value = shareUrl;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert(content.shareCopied || 'Link copied to clipboard!');
+    }
+  };
+
+  // 检查是否是作者
+  const isAuthor = user && knowledge && user.id === knowledge.uploaderId;
 
   if (loading) {
     return (
@@ -166,18 +223,78 @@ export default function KnowledgeDetailPage() {
                 </div>
               </div>
 
-              <InteractionButtons
-                initialStats={{
-                  likeCount: knowledge.stats?.likeCount || 0,
-                  favoriteCount: knowledge.stats?.favoriteCount || 0,
-                  commentCount: knowledge.stats?.commentCount || 0,
-                }}
-                size="large"
-              />
+              <div className="interaction-buttons-wrapper">
+                <InteractionButtons
+                  initialStats={{
+                    likeCount: knowledge.stats?.likeCount || 0,
+                    favoriteCount: knowledge.stats?.favoriteCount || 0,
+                    commentCount: knowledge.stats?.commentCount || 0,
+                  }}
+                  size="large"
+                />
+
+                {/* 分享按钮 */}
+                <button onClick={handleShare} className="action-btn share-btn glass-button motion-hover-lift">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  <span>{content.share || 'Share'}</span>
+                </button>
+
+                {/* 作者操作按钮 */}
+                {isAuthor && (
+                  <>
+                    <button onClick={handleEdit} className="action-btn edit-btn glass-button motion-hover-lift">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      <span>{content.edit || 'Edit'}</span>
+                    </button>
+                    <button onClick={() => setShowDeleteConfirm(true)} className="action-btn delete-btn glass-button motion-hover-lift">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      <span>{content.delete || 'Delete'}</span>
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* 删除确认对话框 */}
+      {showDeleteConfirm && (
+        <>
+          <div className="modal-backdrop motion-fade-in" onClick={() => setShowDeleteConfirm(false)} />
+          <div className="confirm-dialog glass-card motion-scale-in">
+            <div className="dialog-icon delete-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="dialog-title">{content.deleteConfirmTitle || 'Delete Knowledge?'}</h3>
+            <p className="dialog-message">{content.deleteConfirmMessage || 'This action cannot be undone.'}</p>
+            <div className="dialog-actions">
+              <button 
+                onClick={() => setShowDeleteConfirm(false)} 
+                className="dialog-btn cancel-btn glass-button motion-hover-scale"
+                disabled={deleting}
+              >
+                {content.cancel || 'Cancel'}
+              </button>
+              <button 
+                onClick={handleDelete} 
+                className="dialog-btn confirm-btn delete-confirm-btn motion-hover-lift"
+                disabled={deleting}
+              >
+                {deleting ? (content.deleting || 'Deleting...') : (content.confirmDelete || 'Delete')}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       <Footer />
     </>
