@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { getLocalizedUrl } from 'intlayer';
 import Navbar from '../../../../../components/layout/Navbar';
 import Footer from '../../../../../components/layout/Footer';
-import { InteractionButtons } from '../../../../../components/knowledge';
+import { InteractionButtons, CommentList, type Comment } from '../../../../../components/knowledge';
 import { BlockchainCertInfo } from '../../../../../components/blockchain';
 import { MarkdownRenderer } from '../../../../../components/MarkdownRenderer';
 import { useAuth } from '@/contexts/auth-context';
@@ -260,6 +260,48 @@ export default function KnowledgeDetailPage() {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* 评论区域 */}
+          <div className="knowledge-comments-section motion-fade-in motion-delay-300">
+            <CommentList
+              knowledgeId={knowledge.id}
+              onLoadComments={async (knowledgeId) => {
+                // TODO: 实现加载评论的API调用
+                // const response = await commentService.getComments(knowledgeId);
+                // return response.data || [];
+                return [];
+              }}
+              onAddComment={async (knowledgeId, content, parentId) => {
+                // TODO: 实现添加评论的API调用
+                // const response = await commentService.addComment({ knowledgeId, content, parentId });
+                // return response.data;
+                
+                // Mock 数据
+                const newComment: Comment = {
+                  id: Date.now(),
+                  content,
+                  userId: user?.id || 0,
+                  userName: user?.username || 'Anonymous',
+                  userAvatar: user?.avatarUrl,
+                  createdAt: new Date().toISOString(),
+                  likeCount: 0,
+                  isLiked: false,
+                  parentId,
+                };
+                return newComment;
+              }}
+              onLikeComment={async (commentId) => {
+                // TODO: 实现点赞评论的API调用
+                // await commentService.likeComment(commentId);
+                console.log('Like comment:', commentId);
+              }}
+              onDeleteComment={async (commentId) => {
+                // TODO: 实现删除评论的API调用
+                // await commentService.deleteComment(commentId);
+                console.log('Delete comment:', commentId);
+              }}
+            />
           </div>
         </div>
       </div>

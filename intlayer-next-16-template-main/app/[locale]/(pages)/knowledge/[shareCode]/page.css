@@ -844,3 +844,17 @@
     font-size: var(--text-sm);
   }
 }
+
+/* ==================== 评论区域 ==================== */
+.knowledge-comments-section {
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-2xl);
+  border-top: 2px solid rgb(var(--color-border));
+}
+
+@media (max-width: 768px) {
+  .knowledge-comments-section {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-xl);
+  }
+}

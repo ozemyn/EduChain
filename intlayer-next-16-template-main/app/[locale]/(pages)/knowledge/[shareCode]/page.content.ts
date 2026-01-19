@@ -1,4 +1,4 @@
-import { t, type DeclarationContent } from 'intlayer';
+import { t, type Dictionary } from 'intlayer';
 
 const knowledgeDetailContent = {
   key: 'knowledge-detail-page',
@@ -60,6 +60,6 @@ const knowledgeDetailContent = {
       en: 'Link copied to clipboard!',
     }),
   },
-} satisfies DeclarationContent;
+} satisfies Dictionary;
 
 export default knowledgeDetailContent;
