@@ -91,7 +91,7 @@ export default function RecommendationPage() {
           </div>
         </section>
 
-        <div className="recommendation-page-container container">
+        <div className="page-content-wide">
           {/* 页面头部 - 移除，已被hero替代 */}
 
           {/* 推荐内容区域 */}

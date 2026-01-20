@@ -24,7 +24,7 @@ export default function CertificateVerifyPage() {
               <div className="verify-blob verify-blob-1" />
               <div className="verify-blob verify-blob-2" />
             </div>
-            <div className="verify-container container">
+            <div className="page-content-narrow">
               <div className="loading-state">
                 <div className="loading-spinner"></div>
                 <p>Verifying...</p>

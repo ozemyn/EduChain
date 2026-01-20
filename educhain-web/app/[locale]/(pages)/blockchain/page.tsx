@@ -94,7 +94,7 @@ export default function BlockchainExplorerPage() {
 
         {/* 英雄区域 */}
         <section className="blockchain-hero-section">
-          <div className="hero-container container">
+          <div className="hero-container">
             {/* 徽章 */}
             <div className="hero-badge glass-badge motion-scale-in">
               <span>{content.hero.badge.value}</span>
@@ -167,7 +167,7 @@ export default function BlockchainExplorerPage() {
           </div>
         </section>
 
-        <div className="blockchain-container container">
+        <div className="page-content-wide">
           {/* 页面头部 - 移除，已被hero替代 */}
 
           {/* 标签页 */}

@@ -155,7 +155,7 @@ export default function NotificationsPage() {
     <>
       <Navbar />
       <main className="notifications-page">
-        <div className="notifications-content">
+        <div className="page-content">
           <header className="notifications-header">
             <h1 className="notifications-title">{content.title}</h1>
             <p className="notifications-subtitle">{content.subtitle}</p>

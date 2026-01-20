@@ -24,7 +24,7 @@ export default function TransactionDetailPage() {
               <div className="tx-blob tx-blob-1" />
               <div className="tx-blob tx-blob-2" />
             </div>
-            <div className="tx-container container">
+            <div className="page-content-narrow">
               <div className="loading-state">
                 <div className="loading-spinner"></div>
                 <p>Loading...</p>

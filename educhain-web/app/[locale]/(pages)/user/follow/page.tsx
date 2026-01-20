@@ -173,7 +173,7 @@ export default function FollowPage() {
     <>
       <Navbar />
       <main className="follow-page">
-        <div className="follow-content">
+        <div className="page-content">
           <header className="follow-header">
             <h1 className="follow-title">
               {activeTab === 'following' ? content.followingTitle : content.followersTitle}

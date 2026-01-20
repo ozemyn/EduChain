@@ -223,7 +223,7 @@ function SearchPageContent() {
       <Navbar />
 
       <div className="search-page">
-        <div className="search-page-container container">
+        <div className="page-content">
           {/* 页面头部 */}
           <div className="search-page-header glass-card motion-scale-in">
             <div className="header-icon">

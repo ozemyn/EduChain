@@ -13,7 +13,7 @@ export default function CommunityPage() {
     <>
       <Navbar />
       <div className="product-page motion-fade-in">
-        <div className="product-content">
+        <div className="page-content">
           {/* 页面头部 */}
           <header className="product-header">
             <div className="product-header-icon">👥</div>

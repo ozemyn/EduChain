@@ -629,7 +629,7 @@
 
 @media (max-width: 768px) {
   .knowledge-hero-section {
-    padding: calc(var(--spacing-xl) + 64px) var(--spacing-sm) var(--spacing-xl);
+    padding: calc(var(--spacing-2xl) + 64px) var(--spacing-md) var(--spacing-2xl);
   }
 
   .hero-title {

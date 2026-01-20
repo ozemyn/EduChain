@@ -114,7 +114,7 @@ export default function TicketListPage() {
       <Navbar />
 
       <div className="ticket-list-page">
-        <div className="ticket-list-container container">
+        <div className="page-content">
           {/* 页面头部 */}
           <div className="ticket-list-header motion-fade-in">
             <div className="header-content">

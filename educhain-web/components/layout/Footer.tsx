@@ -78,7 +78,7 @@ export default function Footer() {
 
   return (
     <footer className="footer">
-      <div className="footer-container container">
+      <div className="container">
         {/* 主要内容区 */}
         <div className="footer-main">
           {/* 品牌信息 */}

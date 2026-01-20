@@ -17,7 +17,7 @@ export default function KnowledgeDetailPage() {
       <Navbar />
       <div className="knowledge-detail-page">
         <Suspense fallback={
-          <div className="detail-container">
+          <div className="page-content-narrow">
             <div className="loading-state">
               <div className="loading-spinner"></div>
               <p>Loading...</p>

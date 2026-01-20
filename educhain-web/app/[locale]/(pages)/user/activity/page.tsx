@@ -281,7 +281,7 @@ export default function ActivityPage() {
     <>
       <Navbar />
       <main className="activity-page">
-        <div className="activity-content">
+        <div className="page-content">
           <header className="activity-header">
             <h1 className="activity-title">{content.title}</h1>
             <p className="activity-subtitle">{content.subtitle}</p>

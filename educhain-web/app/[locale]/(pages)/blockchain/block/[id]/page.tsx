@@ -22,7 +22,7 @@ export default function BlockDetailPage() {
               <div className="block-blob block-blob-1" />
               <div className="block-blob block-blob-2" />
             </div>
-            <div className="block-container container">
+            <div className="page-content-narrow">
               <div className="loading-state">
                 <div className="loading-spinner motion-spin"></div>
                 <p>Loading...</p>

@@ -19,7 +19,7 @@ export default function EditKnowledgePage() {
       <Navbar />
       <div className="knowledge-edit-page">
         <Suspense fallback={
-          <div className="edit-container container">
+          <div className="page-content-narrow">
             <div className="loading-state glass-card motion-fade-in">
               <div className="loading-spinner"></div>
               <p>Loading...</p>

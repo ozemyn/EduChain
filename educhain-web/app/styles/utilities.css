@@ -315,4 +315,105 @@
   .z-modal { z-index: var(--z-modal); }
   .z-popover { z-index: var(--z-popover); }
   .z-tooltip { z-index: var(--z-tooltip); }
+
+  /* ==================== 页面容器 - 确保所有页面居中 ==================== */
+  
+  /* 页面主容器 */
+  .page-container {
+    min-height: 100vh;
+    background: rgb(var(--color-background));
+    position: relative;
+  }
+
+  /* 页面内容区域 - 自动居中 */
+  .page-content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: calc(var(--spacing-3xl) + 64px) var(--spacing-lg) var(--spacing-3xl);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 页面内容区域 - 窄版（适合文章、表单等） */
+  .page-content-narrow {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: calc(var(--spacing-3xl) + 64px) var(--spacing-lg) var(--spacing-3xl);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 页面内容区域 - 宽版（适合列表、网格等） */
+  .page-content-wide {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: calc(var(--spacing-3xl) + 64px) var(--spacing-lg) var(--spacing-3xl);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 页面内容区域 - 全宽（无最大宽度限制） */
+  .page-content-full {
+    width: 100%;
+    padding: calc(var(--spacing-3xl) + 64px) var(--spacing-lg) var(--spacing-3xl);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 页面区块容器 - 用于页面内的各个区块 */
+  .section-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .section-container-narrow {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .section-container-wide {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  /* 响应式调整 */
+  @media (max-width: 1024px) {
+    .page-content,
+    .page-content-narrow,
+    .page-content-wide,
+    .page-content-full {
+      padding: calc(var(--spacing-2xl) + 64px) var(--spacing-md) var(--spacing-2xl);
+    }
+
+    .section-container,
+    .section-container-narrow,
+    .section-container-wide {
+      padding: var(--spacing-2xl) var(--spacing-md);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-content,
+    .page-content-narrow,
+    .page-content-wide,
+    .page-content-full {
+      padding: calc(var(--spacing-xl) + 64px) var(--spacing-sm) var(--spacing-xl);
+    }
+
+    .section-container,
+    .section-container-narrow,
+    .section-container-wide {
+      padding: var(--spacing-xl) var(--spacing-sm);
+    }
+  }
 }
+

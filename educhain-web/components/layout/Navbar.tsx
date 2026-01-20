@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { getLocalizedUrl } from '@/lib/i18n-utils';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { LocaleSwitcher } from '../LocaleSwitcher/LocaleSwitcher';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import { useAuth } from '../../src/contexts/auth-context';
@@ -20,12 +20,33 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const searchRef = useRef<HTMLDivElement>(null);
   const content = useIntlayer('navbar');
   const { locale } = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
   const { user, logout, isAuthenticated } = useAuth();
   const debouncedQuery = useDebounce(searchQuery, 300);
+
+  // 检查链接是否激活
+  const isLinkActive = useCallback((path: string) => {
+    if (!pathname) return false;
+    
+    // 标准化路径，移除尾部斜杠
+    const normalizedPathname = pathname.endsWith('/') && pathname !== '/' 
+      ? pathname.slice(0, -1) 
+      : pathname;
+    
+    if (path === '/') {
+      // 首页匹配：精确匹配 / 或 /locale
+      return normalizedPathname === `/${locale}` || normalizedPathname === '/';
+    }
+    
+    // 其他页面：检查是否以该路径开头
+    return normalizedPathname === `/${locale}${path}` || 
+           normalizedPathname.startsWith(`/${locale}${path}/`);
+  }, [pathname, locale]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,15 +101,48 @@ export default function Navbar() {
     router.push(`/${locale}/search?q=${encodeURIComponent(suggestion.keyword)}`);
     setSearchOpen(false);
     setSearchQuery('');
+    setSelectedSuggestionIndex(-1);
   }, [router, locale]);
+
+  // 高亮搜索关键词
+  const highlightSearchTerm = useCallback((text: string, query: string) => {
+    if (!query.trim()) return text;
+    
+    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+    return (
+      <>
+        {parts.map((part, i) => 
+          part.toLowerCase() === query.toLowerCase() ? (
+            <mark key={i} className="suggestion-highlight">{part}</mark>
+          ) : (
+            <span key={i}>{part}</span>
+          )
+        )}
+      </>
+    );
+  }, []);
 
   const handleSearchKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleSearch(searchQuery);
+      if (selectedSuggestionIndex >= 0 && suggestions[selectedSuggestionIndex]) {
+        handleSuggestionClick(suggestions[selectedSuggestionIndex]);
+      } else {
+        handleSearch(searchQuery);
+      }
+      setSelectedSuggestionIndex(-1);
     } else if (e.key === 'Escape') {
       setSearchOpen(false);
+      setSelectedSuggestionIndex(-1);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => 
+        prev < suggestions.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => prev > -1 ? prev - 1 : -1);
     }
-  }, [searchQuery, handleSearch]);
+  }, [searchQuery, handleSearch, suggestions, selectedSuggestionIndex, handleSuggestionClick]);
 
   // 点击外部关闭用户菜单
   useEffect(() => {
@@ -126,6 +180,8 @@ export default function Navbar() {
         className={`navbar ${scrolled ? 'scrolled' : ''}`}
         role="navigation"
         aria-label={String(content.mainNavigation?.value || 'Main navigation')}
+        itemScope
+        itemType="https://schema.org/SiteNavigationElement"
       >
         <div className="navbar-container">
           {/* 左侧区域：Logo + 搜索 */}
@@ -201,13 +257,16 @@ export default function Navbar() {
                       <button
                         key={`${suggestion.keyword}-${index}`}
                         type="button"
-                        className="navbar-search-suggestion"
+                        className={`navbar-search-suggestion ${selectedSuggestionIndex === index ? 'selected' : ''}`}
                         onClick={() => handleSuggestionClick(suggestion)}
+                        onMouseEnter={() => setSelectedSuggestionIndex(index)}
                         role="option"
-                        aria-selected={false}
+                        aria-selected={selectedSuggestionIndex === index}
                       >
                         <span className="suggestion-icon" aria-hidden="true">🔍</span>
-                        <span className="suggestion-text">{suggestion.keyword}</span>
+                        <span className="suggestion-text">
+                          {highlightSearchTerm(suggestion.keyword, searchQuery)}
+                        </span>
                         {suggestion.count > 0 && (
                           <span className="suggestion-count" aria-label={`${suggestion.count} results`}>
                             {suggestion.count}
@@ -231,10 +290,12 @@ export default function Navbar() {
               <Link
                 key={link.key}
                 href={getLocalizedUrl(link.path, locale)}
-                className="navbar-link"
+                className={`navbar-link ${isLinkActive(link.path) ? 'active' : ''}`}
                 role="menuitem"
+                aria-current={isLinkActive(link.path) ? 'page' : undefined}
+                itemProp="url"
               >
-                {link.label}
+                <span itemProp="name">{link.label}</span>
               </Link>
             ))}
           </div>
@@ -249,7 +310,7 @@ export default function Navbar() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <span className="navbar-badge" aria-label="3 unread notifications">3</span>
+                <span className="navbar-badge navbar-badge-pulse" aria-label="3 unread notifications">3</span>
               </Link>
             )}
 
@@ -276,12 +337,20 @@ export default function Navbar() {
                       alt="" 
                       className="user-avatar"
                       loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        // 头像加载失败时显示占位符
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      }}
                     />
-                  ) : (
-                    <div className="user-avatar-placeholder" aria-hidden="true">
-                      {(user.fullName || user.username).charAt(0).toUpperCase()}
-                    </div>
-                  )}
+                  ) : null}
+                  <div 
+                    className={`user-avatar-placeholder ${user.avatarUrl ? 'hidden' : ''}`}
+                    aria-hidden="true"
+                  >
+                    {(user.fullName || user.username).charAt(0).toUpperCase()}
+                  </div>
                   <span className="user-name">{user.fullName || user.username}</span>
                 </button>
                 
@@ -446,8 +515,9 @@ export default function Navbar() {
                     <Link
                       key={link.key}
                       href={getLocalizedUrl(link.path, locale)}
-                      className="mobile-nav-item"
+                      className={`mobile-nav-item ${isLinkActive(link.path) ? 'active' : ''}`}
                       onClick={() => setMobileMenuOpen(false)}
+                      aria-current={isLinkActive(link.path) ? 'page' : undefined}
                     >
                       {link.label}
                     </Link>

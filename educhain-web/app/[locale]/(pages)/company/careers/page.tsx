@@ -13,7 +13,7 @@ export default function CareersPage() {
     <>
       <Navbar />
       <div className="company-page motion-fade-in">
-        <div className="company-content">
+        <div className="page-content">
           {/* 页面头部 */}
           <header className="company-header">
             <div className="company-header-icon">💼</div>

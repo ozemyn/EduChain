@@ -154,7 +154,7 @@ export default function KnowledgeListPage() {
 
         {/* 英雄区域 */}
         <section className="knowledge-hero-section">
-          <div className="hero-container container">
+          <div className="hero-container">
             {/* 徽章 */}
             <div className="hero-badge glass-badge motion-scale-in">
               <span>{content.hero.badge.value}</span>
@@ -252,7 +252,7 @@ export default function KnowledgeListPage() {
         </section>
 
         {/* 内容区域 */}
-        <div className="page-container container">
+        <div className="page-content-wide">
           {/* 列表头部 */}
           <div className="list-header motion-slide-in-up motion-delay-300">
             <h2 className="list-title">{content.listSection.title.value}</h2>

@@ -151,7 +151,7 @@ export default function TicketDetailClient() {
   }
 
   return (
-    <div className="ticket-detail-container container">
+    <div className="ticket-detail-container page-content-narrow">
       {/* 返回按钮 */}
       <button onClick={handleBack} className="back-button motion-hover-scale">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

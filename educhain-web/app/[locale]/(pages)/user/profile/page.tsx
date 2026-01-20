@@ -265,7 +265,7 @@ export default function ProfilePage() {
           <div className="profile-blob profile-blob-3" />
         </div>
 
-        <div className="profile-content">
+        <div className="page-content">
           {/* 个人资料头部 */}
           <section className="profile-header glass-card" aria-label={String(content.aria.profileAvatar)}>
             <div className="profile-header-grid">

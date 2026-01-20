@@ -131,7 +131,7 @@ export default function CommunityPage() {
 
         {/* 英雄区域 */}
         <section className="community-hero-section">
-          <div className="hero-container container">
+          <div className="hero-container">
             {/* 徽章 */}
             <div className="hero-badge glass-badge motion-scale-in">
               <span>{content.hero.badge.value}</span>
@@ -192,7 +192,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        <div className="community-container container">
+        <div className="page-content-wide">
           <div className="community-main">
             {/* 左侧：讨论列表 */}
             <div className="discussions-section">

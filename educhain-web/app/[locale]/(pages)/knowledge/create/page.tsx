@@ -78,7 +78,7 @@ export default function CreateKnowledgePage() {
       <Navbar />
 
       <div className="knowledge-create-page">
-        <div className="create-container container">
+        <div className="page-content-narrow">
           {/* 页面头部 */}
           <div className="create-header motion-slide-in-up">
             <h1 className="create-title">{content.title}</h1>

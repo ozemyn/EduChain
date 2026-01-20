@@ -114,7 +114,7 @@ export default function TicketSubmitPage() {
       <Navbar />
 
       <div className="ticket-submit-page">
-        <div className="ticket-submit-container container">
+        <div className="page-content-narrow">
           {/* 页面头部 */}
           <div className="ticket-submit-header motion-fade-in">
             <div className="header-icon glass-card">

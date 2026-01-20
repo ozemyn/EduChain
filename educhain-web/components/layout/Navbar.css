@@ -10,6 +10,11 @@
   --color-pink-300: 249, 168, 212;
 }
 
+/* 工具类 */
+.hidden {
+  display: none !important;
+}
+
 /* 主导航栏 - 浮动胶囊风格 */
 .navbar {
   position: sticky;
@@ -248,8 +253,14 @@
   transition: background 0.1s ease;
 }
 
-.navbar-search-suggestion:hover {
+.navbar-search-suggestion:hover,
+.navbar-search-suggestion.selected {
   background: rgba(var(--color-accent), 0.08);
+}
+
+.navbar-search-suggestion.selected {
+  outline: 2px solid rgba(var(--color-accent), 0.2);
+  outline-offset: -2px;
 }
 
 .suggestion-icon {
@@ -263,6 +274,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* 搜索关键词高亮 */
+.suggestion-highlight {
+  background: rgba(var(--color-accent), 0.2);
+  color: rgb(var(--color-accent));
+  font-weight: 600;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.dark .suggestion-highlight {
+  background: rgba(var(--color-accent), 0.3);
 }
 
 .suggestion-count {
@@ -299,36 +323,53 @@
 .navbar-link {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  border-radius: var(--radius-lg);
+  padding: 8px 16px;
+  border-radius: 10px;
   text-decoration: none;
-  color: rgb(var(--color-text-primary));
+  color: rgb(var(--color-text-secondary));
   font-weight: 500;
   font-size: 14px;
   white-space: nowrap;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   background: transparent;
+  position: relative;
 }
 
 .dark .navbar-link {
-  color: rgb(var(--color-text-primary));
+  color: rgb(var(--color-text-secondary));
 }
 
 .navbar-link:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(var(--color-accent), 0.08);
+  color: rgb(var(--color-text-primary));
 }
 
 .dark .navbar-link:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--color-accent), 0.12);
 }
 
+/* 选中状态 - Apple 风格：立体感 + 层次 */
 .navbar-link.active {
   color: rgb(var(--color-accent));
-  background: rgba(var(--color-accent), 0.08);
+  background: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  border: 0.5px solid rgba(0, 0, 0, 0.06);
 }
 
 .dark .navbar-link.active {
-  background: rgba(var(--color-accent), 0.15);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgb(var(--color-accent));
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
 }
 
 /* 右侧操作区 */
@@ -397,6 +438,45 @@
   align-items: center;
   justify-content: center;
   border: 2px solid rgb(var(--color-background));
+}
+
+/* 通知徽章脉冲动画 */
+.navbar-badge-pulse {
+  animation: badgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.navbar-badge-pulse::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: var(--radius-full);
+  border: 2px solid rgb(var(--color-accent));
+  animation: badgeRipple 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes badgeRipple {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
 }
 
 /* 认证按钮 */
@@ -843,7 +923,7 @@
   text-overflow: ellipsis;
 }
 
-/* 移动端导航链接 */
+/* 移动端导航链接 - Apple iOS 风格 */
 .mobile-nav-section {
   margin-bottom: 24px;
 }
@@ -851,50 +931,101 @@
 .mobile-nav-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .mobile-nav-item {
   display: flex;
   align-items: center;
-  padding: 14px 16px;
-  border-radius: 12px;
+  padding: 16px 20px;
+  padding-left: 24px;
+  border-radius: 14px;
   text-decoration: none;
   color: rgb(var(--color-text-primary));
   font-weight: 500;
   font-size: 1rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   background: transparent;
   -webkit-tap-highlight-color: transparent;
   position: relative;
+  overflow: visible;
 }
 
+/* 左侧彩色指示条 */
 .mobile-nav-item::before {
   content: '';
   position: absolute;
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 3px;
+  width: 4px;
   height: 0;
-  background: rgb(var(--color-accent));
-  border-radius: 0 2px 2px 0;
-  transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(180deg, 
+    rgb(var(--color-accent)) 0%, 
+    rgb(var(--color-primary)) 100%
+  );
+  border-radius: 0 4px 4px 0;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-nav-item:active {
-  background: rgba(var(--color-accent), 0.08);
+  background: rgba(var(--color-accent), 0.06);
   transform: scale(0.98);
 }
 
+/* 选中状态 - Apple 风格：白色卡片 + 立体阴影 */
 .mobile-nav-item.active {
-  background: rgba(var(--color-accent), 0.1);
+  background: rgba(255, 255, 255, 0.98);
   color: rgb(var(--color-accent));
   font-weight: 600;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  border: 0.5px solid rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.dark .mobile-nav-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgb(var(--color-accent));
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
 }
 
 .mobile-nav-item.active::before {
-  height: 24px;
+  height: 32px;
+  box-shadow: 0 0 8px rgba(var(--color-accent), 0.4);
+}
+
+/* 选中状态的微妙渐变背景 */
+.mobile-nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--color-accent), 0.03) 0%, 
+    transparent 50%,
+    rgba(var(--color-primary), 0.02) 100%
+  );
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.dark .mobile-nav-item.active::after {
+  background: linear-gradient(135deg, 
+    rgba(var(--color-accent), 0.08) 0%, 
+    transparent 50%,
+    rgba(var(--color-primary), 0.05) 100%
+  );
 }
 
 /* 移动端操作按钮区 */
