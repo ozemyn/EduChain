@@ -6,7 +6,7 @@
   Cache-Control: no-cache, no-store, must-revalidate
   Service-Worker-Allowed: /
 
-# Next.js 静态资源缓存策略
+# Next.js 静态资源缓存策略（永久缓存，性能最优）
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
@@ -14,7 +14,11 @@
 /favicon.ico
   Cache-Control: public, max-age=86400
 
-# HTML 文件不缓存，确保更新及时
+# 根路径 index.html 短缓存（避免重复跳转）
+/index.html
+  Cache-Control: public, max-age=300
+
+# 其他 HTML 文件不缓存，确保更新及时
 /*.html
   Cache-Control: no-cache, no-store, must-revalidate
 

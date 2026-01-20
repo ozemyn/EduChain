@@ -1,5 +1,17 @@
 # Cloudflare Pages 重定向配置
 # Next.js 静态导出 + Intlayer 国际化路由
 
-# 根路径重定向到默认语言（中文）
+# 静态资源直接访问（不重定向）
+/_next/*  /_next/:splat  200
+/favicon.ico  /favicon.ico  200
+/mockServiceWorker.js  /mockServiceWorker.js  200
+
+# 已有语言前缀的路径，直接访问（不重定向）
+/zh-CN/*  /zh-CN/:splat  200
+/en/*  /en/:splat  200
+
+# 根路径重定向到默认语言
 /  /zh-CN/  302
+
+# 其他所有路径（没有语言前缀的）重定向到中文版本
+/*  /zh-CN/:splat  302
