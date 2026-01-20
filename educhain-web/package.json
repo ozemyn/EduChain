@@ -1,6 +1,7 @@
 {
-  "name": "intlayer-next-16",
-  "version": "0.1.0",
+  "name": "educhain-web",
+  "version": "1.0.0",
+  "description": "EduChain - Blockchain-based Educational Knowledge Sharing Platform",
   "private": true,
   "scripts": {
     "dev": "intlayer watch --with 'next dev'",
