@@ -20,6 +20,9 @@
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
 .search-input-wrapper {

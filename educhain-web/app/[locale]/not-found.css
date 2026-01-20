@@ -268,6 +268,8 @@
   gap: var(--spacing-md);
   max-width: 700px;
   margin: 0 auto;
+  /* 确保网格不会溢出 */
+  width: 100%;
 }
 
 .suggestion-card {

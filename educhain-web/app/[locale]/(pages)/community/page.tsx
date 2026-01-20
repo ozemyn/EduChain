@@ -1,89 +1,118 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { getLocalizedUrl } from '@/lib/i18n-utils';
 import Link from 'next/link';
 import Navbar from '../../../../components/layout/Navbar';
 import Footer from '../../../../components/layout/Footer';
+import communityService, { 
+  Discussion, 
+  CommunityActiveUser, 
+  HotTopic 
+} from '@/services/community';
 import './page.css';
 
 export default function CommunityPage() {
   const content = useIntlayer('community-page');
   const { locale } = useLocale();
   const [activeTab, setActiveTab] = useState<'hot' | 'new' | 'trending'>('hot');
+  const [discussions, setDiscussions] = useState<Discussion[]>([]);
+  const [hotTopics, setHotTopics] = useState<HotTopic[]>([]);
+  const [activeUsers, setActiveUsers] = useState<CommunityActiveUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentLimit, setCurrentLimit] = useState(4);
+  const [hasMore, setHasMore] = useState(true);
 
-  // 热门话题数据
-  const hotTopics = [
-    { name: '前端开发', count: 1234 },
-    { name: 'React', count: 892 },
-    { name: '后端开发', count: 756 },
-    { name: 'TypeScript', count: 645 },
-    { name: '算法学习', count: 534 },
-    { name: '设计模式', count: 423 },
-    { name: '机器学习', count: 389 },
-    { name: 'Vue', count: 312 },
-  ];
+  // 加载社区数据
+  useEffect(() => {
+    loadCommunityData();
+  }, []);
 
-  // 活跃用户数据
-  const activeUsers = [
-    { id: 1, name: '张三', avatar: '', posts: 156, likes: 2341, level: 'LV.8' },
-    { id: 2, name: '李四', avatar: '', posts: 134, likes: 1987, level: 'LV.7' },
-    { id: 3, name: '王五', avatar: '', posts: 98, likes: 1654, level: 'LV.6' },
-    { id: 4, name: '赵六', avatar: '', posts: 87, likes: 1432, level: 'LV.6' },
-  ];
+  // 当切换标签时重新加载数据
+  useEffect(() => {
+    loadDiscussions();
+  }, [activeTab]);
 
-  // 讨论数据
-  const discussions = [
-    {
-      id: 1,
-      title: 'React 18 新特性深度解析',
-      author: '张三',
-      avatar: '',
-      replies: 45,
-      views: 1234,
-      likes: 89,
-      time: '2小时前',
-      tags: ['React', '前端开发'],
-      isHot: true,
-    },
-    {
-      id: 2,
-      title: 'TypeScript 类型体操实战技巧',
-      author: '李四',
-      avatar: '',
-      replies: 32,
-      views: 987,
-      likes: 67,
-      time: '5小时前',
-      tags: ['TypeScript', '前端开发'],
-      isHot: true,
-    },
-    {
-      id: 3,
-      title: '如何优雅地处理异步错误？',
-      author: '王五',
-      avatar: '',
-      replies: 28,
-      views: 756,
-      likes: 54,
-      time: '8小时前',
-      tags: ['JavaScript', '最佳实践'],
-      isHot: false,
-    },
-    {
-      id: 4,
-      title: 'Spring Boot 微服务架构设计',
-      author: '赵六',
-      avatar: '',
-      replies: 23,
-      views: 645,
-      likes: 43,
-      time: '1天前',
-      tags: ['Spring Boot', '后端开发'],
-      isHot: false,
-    },
-  ];
+  const loadCommunityData = async () => {
+    try {
+      setLoading(true);
+      const [feedResponse, topicsResponse, usersResponse] = await Promise.all([
+        communityService.getCommunityFeed(),
+        communityService.getHotTopics(8),
+        communityService.getActiveUsers(4),
+      ]);
+
+      if (feedResponse.success && feedResponse.data) {
+        setDiscussions(feedResponse.data.hotDiscussions.slice(0, currentLimit));
+        setHasMore(feedResponse.data.hotDiscussions.length > currentLimit);
+      }
+
+      if (topicsResponse.success && topicsResponse.data) {
+        setHotTopics(topicsResponse.data);
+      }
+
+      if (usersResponse.success && usersResponse.data) {
+        setActiveUsers(usersResponse.data);
+      }
+    } catch (error) {
+      console.error('Failed to load community data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadDiscussions = async () => {
+    try {
+      setLoading(true);
+      let response;
+      
+      if (activeTab === 'hot') {
+        response = await communityService.getHotDiscussions(currentLimit);
+      } else if (activeTab === 'new') {
+        response = await communityService.getNewDiscussions(currentLimit);
+      } else {
+        response = await communityService.getTrendingDiscussions(currentLimit);
+      }
+
+      if (response.success && response.data) {
+        setDiscussions(response.data);
+        // Mock 数据只有 5 条，所以当请求超过 5 条时就没有更多了
+        setHasMore(response.data.length >= currentLimit && currentLimit < 5);
+      }
+    } catch (error) {
+      console.error('Failed to load discussions:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLoadMore = async () => {
+    try {
+      setLoadingMore(true);
+      const newLimit = currentLimit + 4;
+      setCurrentLimit(newLimit);
+
+      let response;
+      if (activeTab === 'hot') {
+        response = await communityService.getHotDiscussions(newLimit);
+      } else if (activeTab === 'new') {
+        response = await communityService.getNewDiscussions(newLimit);
+      } else {
+        response = await communityService.getTrendingDiscussions(newLimit);
+      }
+
+      if (response.success && response.data) {
+        setDiscussions(response.data);
+        setHasMore(response.data.length >= newLimit && newLimit < 5);
+      }
+    } catch (error) {
+      console.error('Failed to load more discussions:', error);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   // 快速入口
   const quickLinks = [
@@ -129,71 +158,78 @@ export default function CommunityPage() {
           <div className="community-blob community-blob-3"></div>
         </div>
 
-        {/* 英雄区域 */}
-        <section className="community-hero-section">
-          <div className="hero-container">
-            {/* 徽章 */}
-            <div className="hero-badge glass-badge motion-scale-in">
-              <span>{content.hero.badge.value}</span>
-            </div>
-
-            {/* 标题 */}
-            <h1 className="hero-title motion-slide-in-up motion-delay-100">
-              <span className="hero-title-main text-gradient-purple">
-                {content.hero.title.value}
-              </span>
-              <span className="hero-title-sub">
-                {content.hero.subtitle.value}
-              </span>
-            </h1>
-
-            {/* 描述 */}
-            <p className="hero-description motion-slide-in-up motion-delay-150">
-              {content.hero.description.value}
-            </p>
-
-            {/* 行动按钮 */}
-            <div className="hero-actions motion-slide-in-up motion-delay-200">
-              <button 
-                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-                className="hero-action-btn hero-action-primary motion-hover-lift"
-              >
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-                {content.hero.startButton.value}
-              </button>
-              <button 
-                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-                className="hero-action-btn hero-action-secondary motion-hover-scale"
-              >
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
-                {content.hero.exploreButton.value}
-              </button>
-            </div>
-
-            {/* 统计数据 */}
-            <div className="hero-stats motion-slide-in-up motion-delay-250">
-              <div className="stat-item glass-light motion-hover-lift">
-                <div className="stat-value">12,345</div>
-                <div className="stat-label">{content.stats.users.value}</div>
+        <div className="community-content">
+          {/* 英雄区域 */}
+          <section className="community-hero-section">
+            <div className="hero-container">
+              {/* 徽章 */}
+              <div className="hero-badge glass-badge motion-scale-in">
+                <span>{content.hero.badge.value}</span>
               </div>
-              <div className="stat-item glass-light motion-hover-lift motion-delay-100">
-                <div className="stat-value">8,976</div>
-                <div className="stat-label">{content.stats.discussions.value}</div>
-              </div>
-              <div className="stat-item glass-light motion-hover-lift motion-delay-200">
-                <div className="stat-value">45,892</div>
-                <div className="stat-label">{content.stats.replies.value}</div>
+
+              {/* 标题 */}
+              <h1 className="hero-title motion-slide-in-up motion-delay-100">
+                <span className="hero-title-main text-gradient-purple">
+                  {content.hero.title.value}
+                </span>
+                <span className="hero-title-sub">
+                  {content.hero.subtitle.value}
+                </span>
+              </h1>
+
+              {/* 描述 */}
+              <p className="hero-description motion-slide-in-up motion-delay-150">
+                {content.hero.description.value}
+              </p>
+
+              {/* 行动按钮 */}
+              <div className="hero-actions motion-slide-in-up motion-delay-200">
+                <button 
+                  onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                  className="hero-action-btn hero-action-primary motion-hover-lift"
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  {content.hero.startButton.value}
+                </button>
+                <button 
+                  onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                  className="hero-action-btn hero-action-secondary motion-hover-scale"
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  {content.hero.exploreButton.value}
+                </button>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <div className="page-content-wide">
-          <div className="community-main">
+          {/* 统计数据 */}
+          <section className="stats-section motion-slide-in-up motion-delay-300">
+            <div className="stats-container">
+              <div className="stats-grid">
+                <div className="stat-card glass-light motion-hover-lift motion-slide-in-up motion-delay-350">
+                  <div className="stat-value">12,345</div>
+                  <div className="stat-label">{content.stats.users.value}</div>
+                </div>
+                <div className="stat-card glass-light motion-hover-lift motion-slide-in-up motion-delay-400">
+                  <div className="stat-value">8,976</div>
+                  <div className="stat-label">{content.stats.discussions.value}</div>
+                </div>
+                <div className="stat-card glass-light motion-hover-lift motion-slide-in-up motion-delay-450">
+                  <div className="stat-value">45,892</div>
+                  <div className="stat-label">{content.stats.replies.value}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 主要内容区域 */}
+          <section className="community-main-section">
+            <div className="community-container">
+              <div className="community-main">
             {/* 左侧：讨论列表 */}
             <div className="discussions-section">
               {/* 标签页 */}
@@ -229,7 +265,17 @@ export default function CommunityPage() {
 
               {/* 讨论列表 */}
               <div className="discussions-list">
-                {discussions.map((discussion, index) => (
+                {loading ? (
+                  <div className="loading-state">
+                    <div className="loading-spinner"></div>
+                    <p>加载中...</p>
+                  </div>
+                ) : discussions.length === 0 ? (
+                  <div className="empty-state">
+                    <p>暂无讨论</p>
+                  </div>
+                ) : (
+                  discussions.map((discussion, index) => (
                   <div
                     key={discussion.id}
                     className="discussion-item glass-card motion-hover-lift motion-slide-in-up"
@@ -237,8 +283,8 @@ export default function CommunityPage() {
                   >
                     <div className="discussion-header">
                       <div className="author-avatar">
-                        {discussion.avatar ? (
-                          <img src={discussion.avatar} alt={discussion.author} />
+                        {discussion.authorAvatar ? (
+                          <img src={discussion.authorAvatar} alt={discussion.author} />
                         ) : (
                           <svg fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
@@ -292,15 +338,22 @@ export default function CommunityPage() {
                       </span>
                     </div>
                   </div>
-                ))}
+                ))
+                )}
               </div>
 
               {/* 加载更多 */}
-              <div className="load-more motion-fade-in motion-delay-550">
-                <button className="load-more-btn glass-button motion-hover-scale">
-                  {content.loadMore}
-                </button>
-              </div>
+              {hasMore && (
+                <div className="load-more motion-fade-in motion-delay-550">
+                  <button 
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                    className="load-more-btn glass-button motion-hover-scale"
+                  >
+                    {loadingMore ? '加载中...' : content.loadMore}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* 右侧：侧边栏 */}
@@ -390,7 +443,9 @@ export default function CommunityPage() {
                 </div>
               </div>
             </div>
-          </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 

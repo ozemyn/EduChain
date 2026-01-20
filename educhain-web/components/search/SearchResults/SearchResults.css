@@ -204,6 +204,9 @@
   animation: fadeIn var(--transition-base) ease;
   /* 确保每行卡片顶部对齐 */
   align-items: start;
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
 @keyframes fadeIn {

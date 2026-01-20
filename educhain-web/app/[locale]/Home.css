@@ -259,6 +259,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
 .stat-card {
@@ -280,7 +283,7 @@
   font-size: var(--text-base);
 }
 
-/* 功能特性 */
+/* ==================== 功能特性 ==================== */
 .features-section {
   padding: var(--spacing-3xl) var(--spacing-lg);
 }
@@ -315,6 +318,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-xl);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
+  align-items: start;
 }
 
 .feature-card {

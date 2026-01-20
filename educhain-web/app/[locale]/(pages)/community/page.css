@@ -199,41 +199,54 @@
 }
 
 /* 统计数据 */
-.hero-stats {
-  display: flex;
-  gap: var(--spacing-xl);
-  justify-content: center;
-  flex-wrap: wrap;
+.stats-section {
+  padding: 0 var(--spacing-lg) var(--spacing-3xl);
 }
 
-.hero-stats .stat-item {
-  padding: var(--spacing-lg) var(--spacing-2xl);
+.stats-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
+}
+
+.stat-card {
+  padding: var(--spacing-xl);
   text-align: center;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   transition: all var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 150px;
 }
 
-.hero-stats .stat-value {
-  font-size: var(--text-3xl);
+.stat-value {
+  font-size: var(--text-4xl);
   font-weight: 700;
   color: rgb(236, 72, 153);
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
 }
 
-.hero-stats .stat-label {
+.stat-label {
   color: rgb(var(--color-text-secondary));
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
+}
+
+/* ==================== 主要内容区域 ==================== */
+.community-main-section {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+}
+
+.community-container {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* ==================== 内容区域 ==================== */
-
-.community-container {
-  position: relative;
-  z-index: 1;
-  padding-top: var(--spacing-3xl);
-  padding-bottom: var(--spacing-3xl);
-}
 
 .community-main {
   display: grid;
@@ -547,6 +560,50 @@
   border-radius: var(--radius-xl);
   border: none;
   cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  gap: var(--spacing-lg);
+}
+
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid rgba(var(--color-accent), 0.2);
+  border-top-color: rgb(var(--color-accent));
+  border-radius: var(--radius-full);
+  animation: motion-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.loading-state p {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: rgb(var(--color-text-secondary));
+}
+
+.empty-state p {
+  font-size: var(--text-lg);
+  margin: 0;
 }
 
 /* ==================== 侧边栏 ==================== */
@@ -778,18 +835,20 @@
     font-size: var(--text-base);
   }
 
-  .hero-stats {
+  .stats-section {
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
+  }
+
+  .stats-grid {
     gap: var(--spacing-md);
   }
 
-  .hero-stats .stat-item {
-    min-width: 120px;
-    padding: var(--spacing-md) var(--spacing-lg);
+  .stat-card {
+    padding: var(--spacing-lg);
   }
 
-  .community-container {
-    padding-top: var(--spacing-2xl);
-    padding-bottom: var(--spacing-2xl);
+  .community-main-section {
+    padding: var(--spacing-2xl) var(--spacing-md);
   }
 
   .community-main {
@@ -853,25 +912,27 @@
     justify-content: center;
   }
 
-  .hero-stats {
-    flex-direction: column;
+  .stats-section {
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
     gap: var(--spacing-sm);
-    max-width: 320px;
+    max-width: 400px;
     margin: 0 auto;
   }
 
-  .hero-stats .stat-item {
-    width: 100%;
+  .stat-card {
     padding: var(--spacing-md);
   }
 
-  .hero-stats .stat-value {
+  .stat-value {
     font-size: var(--text-2xl);
   }
 
-  .community-container {
-    padding-top: var(--spacing-xl);
-    padding-bottom: var(--spacing-xl);
+  .community-main-section {
+    padding: var(--spacing-xl) var(--spacing-md);
   }
 
   .community-header {
@@ -966,17 +1027,16 @@
     font-size: var(--text-sm);
   }
 
-  .hero-stats .stat-value {
+  .stat-value {
     font-size: var(--text-xl);
   }
 
-  .hero-stats .stat-label {
+  .stat-label {
     font-size: var(--text-xs);
   }
 
-  .community-container {
-    padding-top: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
+  .community-main-section {
+    padding: var(--spacing-lg) var(--spacing-xs);
   }
 
   .community-header {

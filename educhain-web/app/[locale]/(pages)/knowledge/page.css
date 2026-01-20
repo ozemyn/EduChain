@@ -309,6 +309,13 @@
   padding-bottom: var(--spacing-3xl);
 }
 
+/* 确保 page-content-wide 在知识列表页面中正确应用 */
+.knowledge-list-page .page-content-wide {
+  /* 确保容器不会溢出 */
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
 /* 列表头部 */
 .list-header {
   display: flex;
@@ -379,6 +386,9 @@
 /* ==================== 知识列表内容 ==================== */
 .knowledge-list-content {
   position: relative;
+  /* 确保内容不会溢出 */
+  width: 100%;
+  overflow: hidden;
 }
 
 .knowledge-grid {
@@ -390,6 +400,9 @@
   align-items: start;
   /* 增加行间距 */
   row-gap: var(--spacing-3xl);
+  /* 确保网格不会超出容器 */
+  width: 100%;
+  max-width: 100%;
 }
 
 /* 加载遮罩 */
@@ -623,7 +636,8 @@
 
   .knowledge-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-lg);
+    gap: var(--spacing-xl);
+    row-gap: var(--spacing-2xl);
   }
 }
 
@@ -738,7 +752,8 @@
 
   .knowledge-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
+    row-gap: var(--spacing-lg);
   }
 
   .loading-state,

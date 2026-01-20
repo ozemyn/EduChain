@@ -109,12 +109,17 @@
 /* ==================== 内容区域 ==================== */
 .recommendation-content {
   width: 100%;
+  /* 确保内容不会溢出 */
+  overflow: hidden;
 }
 
 .recommendation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--spacing-lg);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
 @media (min-width: 768px) {

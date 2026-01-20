@@ -195,12 +195,18 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--spacing-lg);
+    /* 确保网格不会溢出 */
+    width: 100%;
+    max-width: 100%;
   }
 
   .grid-auto-fill {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: var(--spacing-lg);
+    /* 确保网格不会溢出 */
+    width: 100%;
+    max-width: 100%;
   }
 
   /* 卡片样式 */
@@ -406,13 +412,13 @@
     .page-content-narrow,
     .page-content-wide,
     .page-content-full {
-      padding: calc(var(--spacing-xl) + 64px) var(--spacing-sm) var(--spacing-xl);
+      padding: calc(var(--spacing-xl) + 64px) var(--spacing-md) var(--spacing-xl);
     }
 
     .section-container,
     .section-container-narrow,
     .section-container-wide {
-      padding: var(--spacing-xl) var(--spacing-sm);
+      padding: var(--spacing-xl) var(--spacing-md);
     }
   }
 }

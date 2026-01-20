@@ -339,6 +339,9 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-lg);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
 .stat-card {

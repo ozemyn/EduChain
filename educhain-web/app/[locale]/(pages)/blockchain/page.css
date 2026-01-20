@@ -57,6 +57,11 @@
   opacity: 0.15;
 }
 
+.blockchain-content {
+  position: relative;
+  z-index: 1;
+}
+
 /* ==================== 英雄区域 ==================== */
 .blockchain-hero-section {
   padding: calc(var(--spacing-3xl) + 64px) var(--spacing-lg) var(--spacing-3xl);
@@ -221,16 +226,52 @@
   margin-bottom: var(--spacing-xs);
 }
 
-.hero-stats .stat-label {
+/* 统计数据 */
+.stats-section {
+  padding: 0 var(--spacing-lg) var(--spacing-3xl);
+}
+
+.stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
+}
+
+.stat-card {
+  padding: var(--spacing-xl);
+  text-align: center;
+  border-radius: var(--radius-2xl);
+  transition: all var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-value {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: rgb(236, 72, 153);
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat-label {
   color: rgb(var(--color-text-secondary));
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
+}
+
+/* ==================== 主要内容区域 ==================== */
+.blockchain-main-section {
+  padding: var(--spacing-3xl) var(--spacing-lg);
 }
 
 .blockchain-container {
-  position: relative;
-  z-index: 1;
-  padding-top: var(--spacing-3xl);
-  padding-bottom: var(--spacing-3xl);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* ==================== 页面头部 ==================== */
@@ -348,13 +389,16 @@
   /* 概览样式 */
 }
 
-.stats-grid {
+.overview-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-xl);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
-.stat-card {
+.overview-grid .stat-card {
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
@@ -364,7 +408,7 @@
   cursor: pointer;
 }
 
-.stat-card:hover {
+.overview-grid .stat-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
 }
@@ -420,14 +464,14 @@
   flex: 1;
 }
 
-.stat-label {
+.overview-grid .stat-label {
   font-size: var(--text-sm);
   color: rgb(var(--color-text-secondary));
   margin-bottom: var(--spacing-xs);
   font-weight: 500;
 }
 
-.stat-value {
+.overview-grid .stat-value {
   font-size: var(--text-3xl);
   font-weight: 800;
   color: rgb(var(--color-text-primary));
@@ -702,30 +746,20 @@
     padding: var(--spacing-md) var(--spacing-lg);
   }
 
-  .blockchain-container {
-    padding-top: var(--spacing-2xl);
-    padding-bottom: var(--spacing-2xl);
-  }
-
-  .blockchain-header {
-    padding: var(--spacing-xl);
-  }
-
-  .header-icon {
-    width: 3.5rem;
-    height: 3.5rem;
-  }
-
-  .header-icon svg {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-
-  .page-title {
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  .stats-section {
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
   }
 
   .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .blockchain-main-section {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .overview-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
   }
@@ -792,59 +826,37 @@
     font-size: var(--text-2xl);
   }
 
-  .blockchain-container {
-    padding-top: var(--spacing-xl);
-    padding-bottom: var(--spacing-xl);
-  }
-
-  .blockchain-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: var(--spacing-lg);
-    gap: var(--spacing-md);
-  }
-
-  .header-icon {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  .header-icon svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .page-title {
-    font-size: clamp(1.5rem, 5vw, 2rem);
-  }
-
-  .page-subtitle {
-    font-size: var(--text-sm);
-  }
-
-  .blockchain-tabs {
-    /* 保持桌面端的原始样式，不改变 */
-  }
-
-  .tab-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--text-xs);
-    gap: var(--spacing-xs);
-  }
-
-  .tab-btn svg {
-    width: 1rem;
-    height: 1rem;
+  .stats-section {
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: var(--spacing-sm);
     max-width: 400px;
     margin: 0 auto;
   }
 
   .stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .stat-value {
+    font-size: var(--text-2xl);
+  }
+
+  .blockchain-main-section {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .overview-grid .stat-card {
     flex-direction: column;
     text-align: center;
     padding: var(--spacing-md);
@@ -861,11 +873,11 @@
     height: 1.25rem;
   }
 
-  .stat-label {
+  .overview-grid .stat-label {
     font-size: var(--text-xs);
   }
 
-  .stat-value {
+  .overview-grid .stat-value {
     font-size: var(--text-xl);
   }
 

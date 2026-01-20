@@ -66,6 +66,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--spacing-xl);
+  /* 确保网格不会溢出 */
+  width: 100%;
+  max-width: 100%;
 }
 
 @media (min-width: 1024px) {

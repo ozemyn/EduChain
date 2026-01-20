@@ -178,6 +178,12 @@
     scrollbar-color: rgb(var(--color-border)) rgb(var(--color-background-secondary));
   }
 
+  /* 全局网格布局保护 - 防止溢出 */
+  [style*="display: grid"],
+  [class*="grid"] {
+    box-sizing: border-box;
+  }
+
   [disabled] {
     opacity: 0.5;
     cursor: not-allowed;
