@@ -12,6 +12,7 @@
     "build": "next build",
     "build:mock": "cross-env NEXT_PUBLIC_USE_MOCK=true next build",
     "build:webpack": "next build --webpack",
+    "deploy:cf": "npm run build:mock && wrangler pages deploy out --project-name educhain-web",
     "start": "next start",
     "start:all": "concurrently \"npm run start\" \"npm run start:editor\"",
     "preview": "npx serve@latest out",
