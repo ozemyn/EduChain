@@ -1,0 +1,467 @@
+/* ===================================
+   工单列表页面样式
+   ================================== */
+
+.ticket-list-page {
+  min-height: 100vh;
+  padding: var(--spacing-3xl) 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-primary), 0.03) 0%,
+    rgba(var(--color-secondary), 0.03) 100%
+  );
+}
+
+.ticket-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 页面头部 */
+.ticket-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2xl);
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.header-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+.dark .header-icon {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.header-icon svg {
+  width: 32px;
+  height: 32px;
+  color: rgb(var(--color-accent));
+  stroke-width: 2;
+}
+
+.page-title {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 800;
+  color: rgb(var(--color-text-primary));
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.page-description {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+}
+
+.create-ticket-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-accent)),
+    rgb(var(--color-accent-hover))
+  );
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base) ease;
+  box-shadow: 0 4px 12px rgba(var(--color-accent), 0.3);
+  white-space: nowrap;
+}
+
+.create-ticket-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.create-ticket-btn:hover {
+  box-shadow: 0 6px 20px rgba(var(--color-accent), 0.4);
+  transform: translateY(-2px);
+}
+
+/* 筛选器 */
+.ticket-filters {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.filter-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgb(var(--color-text-secondary));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgb(var(--color-text-secondary));
+  cursor: pointer;
+  transition: all var(--transition-base) ease;
+}
+
+.dark .filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn:hover {
+  border-color: rgba(var(--color-accent), 0.5);
+  color: rgb(var(--color-text-primary));
+}
+
+.filter-btn.active {
+  background: rgb(var(--color-accent));
+  border-color: rgb(var(--color-accent));
+  color: white;
+}
+
+/* 工单列表 */
+.tickets-section {
+  min-height: 400px;
+}
+
+.tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.ticket-card {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all var(--transition-base) ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.ticket-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ticket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.ticket-badges {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.ticket-status,
+.ticket-priority {
+  padding: 4px var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ticket-status.status-open {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.ticket-status.status-progress {
+  background: rgba(251, 146, 60, 0.1);
+  color: rgb(251, 146, 60);
+}
+
+.ticket-status.status-resolved {
+  background: rgba(34, 197, 94, 0.1);
+  color: rgb(34, 197, 94);
+}
+
+.ticket-status.status-closed {
+  background: rgba(107, 114, 128, 0.1);
+  color: rgb(107, 114, 128);
+}
+
+.ticket-priority.priority-low {
+  background: rgba(156, 163, 175, 0.1);
+  color: rgb(107, 114, 128);
+}
+
+.ticket-priority.priority-medium {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.ticket-priority.priority-high {
+  background: rgba(251, 146, 60, 0.1);
+  color: rgb(251, 146, 60);
+}
+
+.ticket-priority.priority-urgent {
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(239, 68, 68);
+}
+
+.ticket-type {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-tertiary));
+  font-weight: 500;
+}
+
+.ticket-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: rgb(var(--color-text-primary));
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ticket-description {
+  font-size: var(--text-sm);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ticket-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: auto;
+}
+
+.dark .ticket-footer {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.ticket-id {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: rgb(var(--color-text-tertiary));
+  font-family: 'Courier New', monospace;
+}
+
+.ticket-time {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-tertiary));
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  gap: var(--spacing-lg);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(var(--color-accent), 0.2);
+  border-top-color: rgb(var(--color-accent));
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-state p {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  text-align: center;
+  gap: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+}
+
+.empty-state svg {
+  width: 80px;
+  height: 80px;
+  color: rgb(var(--color-text-tertiary));
+  opacity: 0.5;
+  stroke-width: 1.5;
+}
+
+.empty-state h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: rgb(var(--color-text-primary));
+  margin: 0;
+}
+
+.empty-state p {
+  font-size: var(--text-base);
+  color: rgb(var(--color-text-secondary));
+  margin: 0;
+  max-width: 400px;
+}
+
+.empty-action-btn {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-accent)),
+    rgb(var(--color-accent-hover))
+  );
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base) ease;
+  box-shadow: 0 4px 12px rgba(var(--color-accent), 0.3);
+}
+
+.empty-action-btn:hover {
+  box-shadow: 0 6px 20px rgba(var(--color-accent), 0.4);
+  transform: translateY(-2px);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .ticket-list-page {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .ticket-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-content {
+    width: 100%;
+  }
+
+  .create-ticket-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ticket-filters {
+    padding: var(--spacing-lg);
+  }
+
+  .tickets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .header-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ticket-card {
+    padding: var(--spacing-lg);
+  }
+
+  .filter-buttons {
+    gap: var(--spacing-xs);
+  }
+
+  .filter-btn {
+    font-size: 0.75rem;
+    padding: 6px var(--spacing-sm);
+  }
+}
+
+/* 性能优化 */
+.ticket-card,
+.filter-btn,
+.create-ticket-btn {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 无障碍支持 */
+@media (prefers-reduced-motion: reduce) {
+  .ticket-card,
+  .filter-btn,
+  .create-ticket-btn,
+  .loading-spinner {
+    animation: none !important;
+    transition: none !important;
+  }
+}

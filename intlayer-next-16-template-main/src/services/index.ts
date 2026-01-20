@@ -34,3 +34,6 @@ export * from './community';
 
 // 管理员服务
 export * from './admin';
+
+// 工单服务
+export * from './ticket';

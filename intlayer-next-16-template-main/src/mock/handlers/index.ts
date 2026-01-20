@@ -15,6 +15,7 @@ import { searchHandlers } from './search';
 import { blockchainHandlers } from './blockchain';
 import { recommendationHandlers } from './recommendation';
 import { communityHandlers } from './community';
+import { ticketHandlers } from './ticket';
 
 // 合并所有 handlers
 export const handlers = [
@@ -30,6 +31,7 @@ export const handlers = [
   ...blockchainHandlers,
   ...recommendationHandlers,
   ...communityHandlers,
+  ...ticketHandlers,
 ];
 
 // 设置 Mock Server
@@ -58,4 +60,5 @@ export {
   blockchainHandlers,
   recommendationHandlers,
   communityHandlers,
+  ticketHandlers,
 };
