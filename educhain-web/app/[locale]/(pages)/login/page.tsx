@@ -226,7 +226,7 @@ export default function LoginPage() {
             </form>
 
             {/* Mock 模式快速登录 */}
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NEXT_PUBLIC_USE_MOCK === 'true' && (
               <div className="mock-login-section">
                 <div className="mock-divider">
                   <span className="mock-divider-text">

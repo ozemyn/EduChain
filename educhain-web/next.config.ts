@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   // 添加 trailing slash（Cloudflare Pages 推荐）
   trailingSlash: true,
   
+  // 优化预加载策略
+  experimental: {
+    optimizePackageImports: ['next-intlayer'],
+  },
+  
   // 可选：如果需要部署到子目录，取消注释以下配置
   // basePath: '/demo',
   // assetPrefix: '/demo',

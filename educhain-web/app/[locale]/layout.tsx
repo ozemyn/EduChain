@@ -11,7 +11,12 @@ const LocaleLayout: NextLayoutIntlayer = async ({ children, params }) => {
   const { locale } = await params;
   return (
     <IntlayerClientProvider locale={locale}>
-      <html lang={locale} dir={getHTMLTextDir(locale)} suppressHydrationWarning>
+      <html 
+        lang={locale} 
+        dir={getHTMLTextDir(locale)} 
+        suppressHydrationWarning
+        data-scroll-behavior="smooth"
+      >
         <head>
           <script
             suppressHydrationWarning

@@ -384,39 +384,42 @@ export default function Navbar() {
 
       {mobileMenuOpen && (
         <>
+          {/* 背景遮罩 */}
           <div 
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-modal-backdrop animate-fade-in"
+            className="mobile-menu-overlay"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
           
+          {/* 移动端菜单 - 从顶部下拉 */}
           <div 
             id="mobile-menu"
-            className="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] glass-modal z-modal animate-slide-in-right"
+            className="mobile-menu-container"
             role="dialog"
             aria-modal="true"
             aria-label={String(content.mobileMenu?.value || 'Mobile menu')}
           >
-            <div className="flex flex-col h-full p-6">
-              <div className="mobile-drawer-header">
-                <span className="navbar-logo-text text-2xl">
+            <div className="mobile-menu-content">
+              {/* 菜单头部 */}
+              <div className="mobile-menu-header">
+                <span className="mobile-menu-logo navbar-logo-text">
                   <span className="logo-edu">Edu</span>
                   <span className="logo-chain">Chain</span>
                 </span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="navbar-action-btn"
+                  className="mobile-menu-close"
                   aria-label={String(content.closeMenu?.value || 'Close menu')}
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
-              {/* 移动端用户信息 */}
+              {/* 用户信息卡片 */}
               {isAuthenticated && user && (
-                <div className="mobile-user-info">
+                <div className="mobile-user-card">
                   {user.avatarUrl ? (
                     <img 
                       src={user.avatarUrl} 
@@ -429,60 +432,63 @@ export default function Navbar() {
                       {(user.fullName || user.username).charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <div className="mobile-user-details">
-                    <span className="mobile-user-name">{user.fullName || user.username}</span>
-                    <span className="mobile-user-email">{user.email}</span>
+                  <div className="mobile-user-info">
+                    <div className="mobile-user-name">{user.fullName || user.username}</div>
+                    <div className="mobile-user-email">{user.email}</div>
                   </div>
                 </div>
               )}
 
-              <nav className="mobile-nav-links" role="navigation" aria-label={String(content.mobileNavigation?.value || 'Mobile navigation')}>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.key}
-                    href={getLocalizedUrl(link.path, locale)}
-                    className="mobile-nav-link"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+              {/* 导航链接 */}
+              <nav className="mobile-nav-section" role="navigation" aria-label={String(content.mobileNavigation?.value || 'Mobile navigation')}>
+                <div className="mobile-nav-list">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.key}
+                      href={getLocalizedUrl(link.path, locale)}
+                      className="mobile-nav-item"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
               </nav>
 
-              <div className="mobile-actions">
-                <div className="flex items-center justify-between mobile-action-btn" style={{ background: 'rgba(255, 255, 255, 0.3)' }}>
-                  <span className="font-medium">{content.theme.value}</span>
-                  <div className="flex items-center gap-2">
+              {/* 操作按钮区 */}
+              <div className="mobile-actions-section">
+                {isAuthenticated && user ? (
+                  <div className="mobile-actions-grid">
+                    <Link 
+                      href={getLocalizedUrl('/knowledge/create', locale)}
+                      className="mobile-action-item mobile-action-primary"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      {content.publish.value}
+                    </Link>
+                    <button 
+                      className="mobile-action-item mobile-action-logout"
+                      onClick={handleLogout}
+                    >
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      {content.logout.value}
+                    </button>
+                  </div>
+                ) : null}
+
+                {/* 主题和语言切换 */}
+                <div className="mobile-settings-row">
+                  <span className="mobile-settings-label">{content.theme?.value || '主题'}</span>
+                  <div className="mobile-settings-controls">
                     <ThemeSwitcher />
                     <LocaleSwitcher />
                   </div>
                 </div>
-
-                {isAuthenticated && user ? (
-                  <>
-                    <Link 
-                      href={getLocalizedUrl('/knowledge/create', locale)}
-                      className="mobile-action-btn navbar-publish-btn"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {content.publish.value}
-                    </Link>
-                    <button 
-                      className="mobile-action-btn mobile-logout-btn"
-                      onClick={handleLogout}
-                    >
-                      {content.logout.value}
-                    </button>
-                  </>
-                ) : (
-                  <Link 
-                    href={getLocalizedUrl('/login', locale)} 
-                    className="mobile-action-btn navbar-login-btn"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {content.login.value}
-                  </Link>
-                )}
               </div>
             </div>
           </div>
