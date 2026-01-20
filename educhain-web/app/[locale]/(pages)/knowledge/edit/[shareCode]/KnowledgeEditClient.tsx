@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { useParams, useRouter } from 'next/navigation';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import {
   RichTextEditor,
   CategorySelector,

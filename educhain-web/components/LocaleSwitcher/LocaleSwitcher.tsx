@@ -1,6 +1,7 @@
 'use client';
 
-import { getHTMLTextDir, getLocalizedUrl } from 'intlayer';
+import { getHTMLTextDir } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import Link from 'next/link';
 import { useIntlayer, useLocale, useLocaleStorage } from 'next-intlayer';
 import { type FC, useRef, useState, useEffect } from 'react';

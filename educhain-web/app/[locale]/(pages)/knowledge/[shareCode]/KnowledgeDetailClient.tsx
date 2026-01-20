@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { useParams, useRouter } from 'next/navigation';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import { InteractionButtons, CommentList } from '../../../../../components/knowledge';
 import { BlockchainCertInfo } from '../../../../../components/blockchain';
 import { MarkdownRenderer } from '../../../../../components/MarkdownRenderer';

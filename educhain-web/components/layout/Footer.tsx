@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useIntlayer, useLocale } from 'next-intlayer';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import './Footer.css';
 
 export default function Footer() {

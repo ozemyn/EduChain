@@ -1,7 +1,7 @@
 'use client';
 
 import { useIntlayer, useLocale } from 'next-intlayer';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import Link from 'next/link';
 import type { KnowledgeItem } from '@/types';
 import './KnowledgeCard.css';

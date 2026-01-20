@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useIntlayer, useLocale } from 'next-intlayer';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import { useRouter } from 'next/navigation';
 import { LocaleSwitcher } from '../LocaleSwitcher/LocaleSwitcher';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';

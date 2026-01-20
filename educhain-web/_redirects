@@ -1,12 +1,30 @@
 # Cloudflare Pages 重定向配置
-# Next.js 静态导出的 SPA 路由支持
+# Next.js 静态导出 + Intlayer 国际化路由支持
 
-# 语言重定向 - 根路径重定向到中文版本
-/  /zh-CN  302
+# 1. 根路径重定向到默认语言（中文）
+/  /zh-CN/  302
 
-# 404 页面处理
-/404.html  /404  200
+# 2. 处理不带语言前缀的路径 - 重定向到中文版本
+/knowledge  /zh-CN/knowledge/  302
+/knowledge/*  /zh-CN/knowledge/:splat  302
+/blockchain  /zh-CN/blockchain/  302
+/blockchain/*  /zh-CN/blockchain/:splat  302
+/community  /zh-CN/community/  302
+/recommendations  /zh-CN/recommendations/  302
+/search  /zh-CN/search/  302
+/login  /zh-CN/login/  302
+/register  /zh-CN/register/  302
+/user/*  /zh-CN/user/:splat  302
+/company/*  /zh-CN/company/:splat  302
+/resources/*  /zh-CN/resources/:splat  302
 
-# 所有其他路径保持原样（Next.js 已经生成了所有静态页面）
-# 如果页面不存在，显示 404
-/*  /404.html  404
+# 3. 404 页面处理
+/404.html  /zh-CN/404/  200
+/zh-CN/404.html  /zh-CN/404/  200
+/en/404.html  /en/404/  200
+
+# 4. 通配符规则（最后）
+# 如果页面不存在，显示对应语言的 404
+/zh-CN/*  /zh-CN/404/  404
+/en/*  /en/404/  404
+/*  /zh-CN/404/  404

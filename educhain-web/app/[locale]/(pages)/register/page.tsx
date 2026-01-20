@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useIntlayer, useLocale } from 'next-intlayer';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import './page.css';

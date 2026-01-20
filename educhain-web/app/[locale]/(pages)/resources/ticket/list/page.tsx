@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { useRouter } from 'next/navigation';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import Navbar from '@/../components/layout/Navbar';
 import Footer from '@/../components/layout/Footer';
 import { useAuth } from '@/contexts/auth-context';

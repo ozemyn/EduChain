@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useIntlayer, useLocale } from 'next-intlayer';
 import { useRouter, useParams } from 'next/navigation';
-import { getLocalizedUrl } from 'intlayer';
+import { getLocalizedUrl } from '@/lib/i18n-utils';
 import { useAuth } from '@/contexts/auth-context';
 import { ticketService } from '@/services/ticket';
 
