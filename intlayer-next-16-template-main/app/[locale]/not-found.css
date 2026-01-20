@@ -1,0 +1,406 @@
+/* ===================================
+   404 Not Found 页面样式
+   ================================== */
+
+.not-found-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-primary), 0.05) 0%,
+    rgba(var(--color-secondary), 0.05) 100%
+  );
+}
+
+/* 动态背景 */
+.not-found-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.not-found-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: float 20s ease-in-out infinite;
+}
+
+.not-found-blob-1 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-accent)));
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.not-found-blob-2 {
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, rgb(var(--color-secondary)), rgb(var(--color-accent)));
+  bottom: -15%;
+  right: -15%;
+  animation-delay: 7s;
+}
+
+.not-found-blob-3 {
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(135deg, rgb(var(--color-accent)), rgb(var(--color-primary)));
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 14s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* 主要内容 */
+.not-found-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2xl);
+}
+
+/* 404 数字 */
+.not-found-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.number-digit {
+  font-size: clamp(80px, 15vw, 160px);
+  font-weight: 900;
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-primary)),
+    rgb(var(--color-accent))
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  text-shadow: 0 10px 30px rgba(var(--color-primary), 0.3);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.number-digit-middle {
+  animation-delay: 0.5s;
+  transform: scale(1.1);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+}
+
+/* 图标装饰 */
+.not-found-icon-wrapper {
+  margin: var(--spacing-xl) 0;
+}
+
+.not-found-icon {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.dark .not-found-icon {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.not-found-icon svg {
+  width: 60px;
+  height: 60px;
+  color: rgb(var(--color-accent));
+  stroke-width: 2;
+}
+
+/* 文字说明 */
+.not-found-text {
+  max-width: 600px;
+}
+
+.not-found-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: rgb(var(--color-text-primary));
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.2;
+}
+
+.not-found-description {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: rgb(var(--color-text-secondary));
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 操作按钮 */
+.not-found-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+}
+
+.not-found-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: none;
+  border-radius: var(--radius-xl);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base) ease;
+  white-space: nowrap;
+}
+
+.not-found-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.not-found-btn-primary {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-accent)),
+    rgb(var(--color-accent-hover))
+  );
+  color: white;
+  box-shadow: 
+    0 4px 12px rgba(var(--color-accent), 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.not-found-btn-primary:hover {
+  box-shadow: 
+    0 6px 20px rgba(var(--color-accent), 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.not-found-btn-secondary {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgb(var(--color-text-primary));
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .not-found-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.not-found-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.dark .not-found-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* 推荐链接 */
+.not-found-suggestions {
+  width: 100%;
+  margin-top: var(--spacing-2xl);
+}
+
+.suggestions-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: rgb(var(--color-text-secondary));
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.suggestion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  text-decoration: none;
+  color: rgb(var(--color-text-primary));
+  transition: all var(--transition-base) ease;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .suggestion-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(var(--color-accent), 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.dark .suggestion-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.suggestion-card svg {
+  width: 32px;
+  height: 32px;
+  color: rgb(var(--color-accent));
+  stroke-width: 2;
+}
+
+.suggestion-card span {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .not-found-page {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .not-found-content {
+    gap: var(--spacing-xl);
+  }
+
+  .not-found-number {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .not-found-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .not-found-icon svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .not-found-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .not-found-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-page {
+    padding: var(--spacing-lg);
+  }
+
+  .not-found-blob {
+    filter: blur(60px);
+  }
+
+  .not-found-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .not-found-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .suggestion-card {
+    padding: var(--spacing-md);
+  }
+
+  .suggestion-card svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* 性能优化 */
+.not-found-blob,
+.number-digit,
+.not-found-icon,
+.not-found-btn,
+.suggestion-card {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 无障碍支持 */
+@media (prefers-reduced-motion: reduce) {
+  .not-found-blob,
+  .number-digit,
+  .not-found-btn,
+  .suggestion-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
