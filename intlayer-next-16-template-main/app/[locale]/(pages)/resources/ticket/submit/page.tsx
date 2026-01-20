@@ -140,7 +140,7 @@ export default function TicketSubmitPage() {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder={String(content.placeholders.title)}
+                  placeholder={content.placeholders.title.value}
                   className={`form-input ${errors.title ? 'error' : ''}`}
                   maxLength={100}
                 />
@@ -199,7 +199,7 @@ export default function TicketSubmitPage() {
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder={String(content.placeholders.description)}
+                  placeholder={content.placeholders.description.value}
                   className={`form-textarea ${errors.description ? 'error' : ''}`}
                   rows={8}
                   maxLength={2000}
@@ -219,7 +219,7 @@ export default function TicketSubmitPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder={String(content.placeholders.email)}
+                  placeholder={content.placeholders.email.value}
                   className={`form-input ${errors.email ? 'error' : ''}`}
                 />
                 {errors.email && <p className="form-error">{errors.email}</p>}

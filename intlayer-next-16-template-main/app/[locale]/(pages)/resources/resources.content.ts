@@ -58,8 +58,9 @@ const resourcesContent = {
       ],
       contact: {
         title: t({ 'zh-CN': '还没找到答案？', en: 'Still need help?' }),
-        description: t({ 'zh-CN': '联系我们的客服团队获取帮助', en: 'Contact our support team for help' }),
-        button: t({ 'zh-CN': '联系客服', en: 'Contact Support' }),
+        description: t({ 'zh-CN': '提交工单或查看您的工单状态', en: 'Submit a ticket or check your ticket status' }),
+        submitTicket: t({ 'zh-CN': '提交工单', en: 'Submit Ticket' }),
+        myTickets: t({ 'zh-CN': '我的工单', en: 'My Tickets' }),
       },
     },
 

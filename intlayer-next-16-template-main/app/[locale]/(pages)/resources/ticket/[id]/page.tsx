@@ -273,7 +273,7 @@ export default function TicketDetailPage() {
                 <textarea
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  placeholder={String(content.placeholders.comment)}
+                  placeholder={content.placeholders.comment.value}
                   className="comment-textarea"
                   rows={4}
                   maxLength={1000}
