@@ -14,6 +14,13 @@ import { knowledgeService, commentService, interactionService } from '@/services
 import type { KnowledgeItem } from '@/types';
 import './page.css';
 
+// 静态路径生成（用于静态导出）
+export async function generateStaticParams() {
+  // 动态导入以避免在客户端执行
+  const { knowledgeStaticPaths, generateLocalizedPaths } = await import('@/../static-paths.config');
+  return generateLocalizedPaths(knowledgeStaticPaths);
+}
+
 export default function KnowledgeDetailPage() {
   const content = useIntlayer('knowledge-detail-page');
   const { locale } = useLocale();

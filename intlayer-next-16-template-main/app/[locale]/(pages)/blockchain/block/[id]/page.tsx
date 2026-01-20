@@ -7,6 +7,12 @@ import Navbar from '../../../../../../components/layout/Navbar';
 import Footer from '../../../../../../components/layout/Footer';
 import './page.css';
 
+// 静态路径生成（用于静态导出）
+export async function generateStaticParams() {
+  const { blockStaticPaths, generateLocalizedPaths } = await import('@/../static-paths.config');
+  return generateLocalizedPaths(blockStaticPaths);
+}
+
 interface BlockDetail {
   index: number;
   hash: string;

@@ -7,6 +7,11 @@ import Navbar from '../../../../../../components/layout/Navbar';
 import Footer from '../../../../../../components/layout/Footer';
 import './page.css';
 
+// 证书验证不需要 SEO，返回空数组（客户端渲染）
+export async function generateStaticParams() {
+  return [];
+}
+
 interface CertificateVerifyData {
   valid: boolean;
   certificateId: string;

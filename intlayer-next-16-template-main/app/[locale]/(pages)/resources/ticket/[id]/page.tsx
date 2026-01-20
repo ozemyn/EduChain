@@ -10,6 +10,11 @@ import { useAuth } from '@/contexts/auth-context';
 import { ticketService } from '@/services/ticket';
 import './page.css';
 
+// 工单详情不需要 SEO，返回空数组（客户端渲染）
+export async function generateStaticParams() {
+  return [];
+}
+
 type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
 type TicketType = 'BUG' | 'FEATURE' | 'QUESTION' | 'OTHER';
 type TicketPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';

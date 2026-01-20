@@ -13,6 +13,11 @@ import {
   MediaUpload,
 } from '../../../../../../components/knowledge';
 import { knowledgeService } from '@/services';
+
+// 编辑页面不需要 SEO，返回空数组（客户端渲染）
+export async function generateStaticParams() {
+  return [];
+}
 import './page.css';
 
 export default function EditKnowledgePage() {
