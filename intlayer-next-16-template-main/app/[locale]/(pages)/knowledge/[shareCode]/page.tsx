@@ -10,7 +10,7 @@ import { InteractionButtons, CommentList, type Comment } from '../../../../../co
 import { BlockchainCertInfo } from '../../../../../components/blockchain';
 import { MarkdownRenderer } from '../../../../../components/MarkdownRenderer';
 import { useAuth } from '@/contexts/auth-context';
-import { knowledgeService } from '@/services';
+import { knowledgeService, commentService, interactionService } from '@/services';
 import type { KnowledgeItem } from '@/types';
 import './page.css';
 
@@ -267,39 +267,74 @@ export default function KnowledgeDetailPage() {
             <CommentList
               knowledgeId={knowledge.id}
               onLoadComments={async (knowledgeId) => {
-                // TODO: 实现加载评论的API调用
-                // const response = await commentService.getComments(knowledgeId);
-                // return response.data || [];
-                return [];
+                try {
+                  const response = await commentService.getComments(knowledgeId);
+                  if (response.success && response.data) {
+                    // 转换 API 数据格式为组件需要的格式
+                    const comments = response.data.content || [];
+                    return comments.map(comment => ({
+                      id: comment.id,
+                      content: comment.content,
+                      userId: comment.userId,
+                      userName: comment.user?.username || `User ${comment.userId}`,
+                      userAvatar: comment.user?.avatarUrl,
+                      createdAt: comment.createdAt,
+                      likeCount: 0, // API 暂时没有这个字段
+                      isLiked: false,
+                      parentId: comment.parentId,
+                    }));
+                  }
+                  return [];
+                } catch (error) {
+                  console.error('Failed to load comments:', error);
+                  return [];
+                }
               }}
               onAddComment={async (knowledgeId, content, parentId) => {
-                // TODO: 实现添加评论的API调用
-                // const response = await commentService.addComment({ knowledgeId, content, parentId });
-                // return response.data;
-                
-                // Mock 数据
-                const newComment: Comment = {
-                  id: Date.now(),
-                  content,
-                  userId: user?.id || 0,
-                  userName: user?.username || 'Anonymous',
-                  userAvatar: user?.avatarUrl,
-                  createdAt: new Date().toISOString(),
-                  likeCount: 0,
-                  isLiked: false,
-                  parentId,
-                };
-                return newComment;
+                try {
+                  const response = await commentService.createComment({
+                    knowledgeId,
+                    content,
+                    parentId,
+                  });
+                  
+                  if (response.success && response.data) {
+                    const comment = response.data;
+                    return {
+                      id: comment.id,
+                      content: comment.content,
+                      userId: comment.userId,
+                      userName: comment.user?.username || user?.username || 'Anonymous',
+                      userAvatar: comment.user?.avatarUrl || user?.avatarUrl,
+                      createdAt: comment.createdAt,
+                      likeCount: 0,
+                      isLiked: false,
+                      parentId: comment.parentId,
+                    };
+                  }
+                  
+                  throw new Error('Failed to create comment');
+                } catch (error) {
+                  console.error('Failed to add comment:', error);
+                  throw error;
+                }
               }}
               onLikeComment={async (commentId) => {
-                // TODO: 实现点赞评论的API调用
-                // await commentService.likeComment(commentId);
-                console.log('Like comment:', commentId);
+                try {
+                  // 评论点赞功能暂时使用互动服务的点赞接口
+                  // 后续可以添加专门的评论点赞接口
+                  await interactionService.like(commentId);
+                } catch (error) {
+                  console.error('Failed to like comment:', error);
+                }
               }}
               onDeleteComment={async (commentId) => {
-                // TODO: 实现删除评论的API调用
-                // await commentService.deleteComment(commentId);
-                console.log('Delete comment:', commentId);
+                try {
+                  await commentService.deleteComment(commentId);
+                } catch (error) {
+                  console.error('Failed to delete comment:', error);
+                  throw error;
+                }
               }}
             />
           </div>
