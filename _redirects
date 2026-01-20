@@ -1,5 +1,5 @@
 # Cloudflare Pages 重定向配置
-# Next.js 静态导出的 SPA 路由支持
+# Next.js 静态导出 + Intlayer 国际化路由
 
-# 语言重定向 - 根路径重定向到中文版本
-/  /zh-CN/  301
+# 根路径重定向到默认语言（中文）
+/  /zh-CN/  302
