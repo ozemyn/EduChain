@@ -1,6 +1,14 @@
-import type { FC, PropsWithChildren } from "react";
+import type { ReactNode } from "react";
 import "./styles/globals.css";
 
-const RootLayout: FC<PropsWithChildren> = ({ children }) => children;
-
-export default RootLayout;
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: ReactNode;
+}>) {
+  return (
+    <html suppressHydrationWarning>
+      <body suppressHydrationWarning>{children}</body>
+    </html>
+  );
+}
